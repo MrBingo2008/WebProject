@@ -33,9 +33,17 @@ public class StatAct {
 	@RequestMapping("/v_stat_list.do")
 	public String stepList(HttpServletRequest request, ModelMap model) {
 		
-		Map<Integer, Material> materials = new HashMap<Integer, Material>();
+		Map<Integer, Material> materialsMap = new HashMap<Integer, Material>();
+		List<Material> materials = materialDao.getList();
+		for(Material m : materials)
+			materialsMap.put(m.getId(), m);
+		
+		model.addAttribute("materials", materials);
 		return "pages/queryStat/stat_list";
 	}
+	
+	@Autowired
+	private MaterialDao materialDao;
 	
 	@Autowired
 	private OrderRecordDao recordDao;

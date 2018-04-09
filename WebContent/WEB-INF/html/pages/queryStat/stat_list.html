@@ -33,6 +33,12 @@
 			</tr>
 		</thead>
 		<tbody>
+			<#list materials as material>
+			<tr target="sid_user" rel="1">
+				<td>${material.id}</td>
+				<td>${material.info}</td>
+			</tr>
+			</#list>
 		</tbody>
 	</table>
 </div>
