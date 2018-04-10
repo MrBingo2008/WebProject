@@ -1,5 +1,7 @@
 package com.berp.mrp.dao;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -37,7 +39,7 @@ public class BatchFlowDao extends HibernateBaseDao<BatchFlow, Integer> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<BatchFlow> getList(Integer materialId, Integer direction, Integer status, Double lessLeftNumber, Integer planId, Integer type) {
+	public List<BatchFlow> getList(Integer materialId, Integer direction, Integer status, Double lessLeftNumber, Integer planId, Integer type, Date start, Date end) {
 		Finder f = Finder.create("select bean from BatchFlow bean where 1=1 ");
 		
 		if (materialId != null) {
@@ -71,6 +73,21 @@ public class BatchFlowDao extends HibernateBaseDao<BatchFlow, Integer> {
 			f.append(" and bean.type=:type");
 			f.setParam("type", type);
 		}
+		
+		if(start != null){
+			f.append(" and (bean.cir != null and bean.cir.billTime >=:start or bean.plan != null and bean.plan.billTime >=:start)");
+			//f.append(" and bean.cir != null");
+			f.setParam("start", start);
+		}
+		
+		if(end != null){
+			Calendar c = Calendar.getInstance();
+			c.setTime(end);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			f.append(" and  (bean.cir != null and bean.cir.billTime <=:end or bean.plan != null and bean.plan.billTime <=:end)");
+			f.setParam("end", c.getTime());
+		}
+		
 		return find(f);
 	}
 	

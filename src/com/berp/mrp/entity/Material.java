@@ -201,12 +201,95 @@ public class Material {
 		this.records = rs;
 	}
 	
-	private Integer purchaseOrder;
-	public Integer getPurchaseOrder(){
+	//for stat
+	private Double purchaseOrder = 0.00;
+	private Double sellOrder = 0.00;
+	private Double purchaseIn = 0.00;
+	private Double purchaseBack = 0.00;
+	private Double sellOut = 0.00;
+	private Double sellBack=0.00;
+	private Double planMaterial = 0.00;
+	private Double planIn = 0.00;
+	private Double checkIn = 0.00;
+	private Double checkOut = 0.00;
+	
+	public Double getPlanMaterial() {
+		return planMaterial;
+	}
+
+	public void setPlanMaterial(Double planMaterial) {
+		this.planMaterial = planMaterial;
+	}
+
+	public Double getPlanIn() {
+		return planIn;
+	}
+
+	public void setPlanIn(Double planIn) {
+		this.planIn = planIn;
+	}
+
+	public Double getCheckIn() {
+		return checkIn;
+	}
+
+	public void setCheckIn(Double checkIn) {
+		this.checkIn = checkIn;
+	}
+
+	public Double getCheckOut() {
+		return checkOut;
+	}
+
+	public void setCheckOut(Double checkOut) {
+		this.checkOut = checkOut;
+	}
+
+	public Double getPurchaseOrder(){
 		return purchaseOrder;
 	}
 	
-	public void setPurchaseOrder(Integer p){
+	public void setPurchaseOrder(Double p){
 		purchaseOrder = p;
+	}
+
+	public Double getSellOrder() {
+		return sellOrder;
+	}
+
+	public void setSellOrder(Double sellOrder) {
+		this.sellOrder = sellOrder;
+	}
+
+	public Double getPurchaseIn() {
+		return purchaseIn;
+	}
+
+	public void setPurchaseIn(Double purchaseIn) {
+		this.purchaseIn = purchaseIn;
+	}
+
+	public Double getPurchaseBack() {
+		return purchaseBack;
+	}
+
+	public void setPurchaseBack(Double purchaseBack) {
+		this.purchaseBack = purchaseBack;
+	}
+
+	public Double getSellOut() {
+		return sellOut;
+	}
+
+	public void setSellOut(Double sellOut) {
+		this.sellOut = sellOut;
+	}
+
+	public Double getSellBack() {
+		return sellBack;
+	}
+
+	public void setSellBack(Double sellBack) {
+		this.sellBack = sellBack;
 	}
 }

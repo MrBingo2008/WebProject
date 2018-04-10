@@ -1,5 +1,7 @@
 package com.berp.mrp.dao;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,7 +38,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		return entity;
 	}
 	
-	public List<OrderRecord> findByCompanyAndMaterial(Integer companyId, Integer materialId, Integer status1, Integer status2){
+	public List<OrderRecord> findByCompanyAndMaterial(Integer companyId, Integer materialId, Integer status1, Integer status2, Date start, Date end){
 		Finder f = Finder.create("select bean from OrderRecord bean where 1=1");
 		if(companyId!=null)
 		{
@@ -54,6 +56,19 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 			f.append(" and bean.status between :status1 and :status2");
 			f.setParam("status1", status1);
 			f.setParam("status2", status2);
+		}
+		
+		if(start != null){
+			f.append(" and bean.ord.billTime >=:start");
+			f.setParam("start", start);
+		}
+		
+		if(end != null){
+			Calendar c = Calendar.getInstance();
+			c.setTime(end);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			f.append(" and bean.ord.billTime <=:end");
+			f.setParam("end", c.getTime());
 		}
 		return find(f);
 	}
@@ -89,7 +104,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 	
 	public void updateFinishNumber (Company company, Material material, Double number) throws Exception{
 		
-		List<OrderRecord> records = findByCompanyAndMaterial(company.getId(), material.getId(), 1, 2);
+		List<OrderRecord> records = findByCompanyAndMaterial(company.getId(), material.getId(), 1, 2, null, null);
 		if(records == null || records.size()<=0)
 			throw new Exception(String.format("'%s'的%s未完成数为0%s，已超出其范围。", company.getName(), material.getName(), material.getUnit()));
 		

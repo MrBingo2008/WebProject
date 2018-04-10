@@ -145,7 +145,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 	public Plan updatePlanIn(Plan bean) throws Exception{
 
 		bean.setFlows(new ArrayList<BatchFlow>());
-		bean.getFlows().addAll(flowDao.getList(null, null, null, null, bean.getId(), BatchFlow.Type.planMaterial.ordinal()));
+		bean.getFlows().addAll(flowDao.getList(null, null, null, null, bean.getId(), BatchFlow.Type.planMaterial.ordinal(), null, null));
 		List<BatchFlow> flows = bean.getPackageFlows();
 		for(BatchFlow flow:flows){
 			//status已经在Act里设置好
