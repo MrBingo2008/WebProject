@@ -50,7 +50,9 @@ public class StatAct {
 				material.setSellOrder(material.getSellOrder() + record.getNumber());
 		}
 
-		List<BatchFlow> flows = flowDao.getList(null, null, 1, null, null, null, startDate, endDate);
+		List<BatchFlow> flows = flowDao.getListByCir(1, startDate, endDate);
+		flows.addAll(flowDao.getListByPlan(1, startDate, endDate));
+		
 		for(BatchFlow flow : flows){
 			Material material = flow.getMaterial();
 			if(flow.getType() == BatchFlow.Type.purchaseIn.ordinal())

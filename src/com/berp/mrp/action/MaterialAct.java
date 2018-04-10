@@ -111,7 +111,7 @@ public class MaterialAct {
 		
 	@RequestMapping("/v_batch_list.do")
 	public String batchAvailableList(Integer materialId, HttpServletRequest request, ModelMap model) {
-		List<BatchFlow> flows = flowDao.getList(materialId, 1, 1, 0.00, null, null, null,null);
+		List<BatchFlow> flows = flowDao.getList(materialId, 1, 1, 0.00, null, null);
 		model.addAttribute("flows", flows);
 		model.addAttribute("type", "lib");
 		return "pages/data_setting/batch_list";
@@ -119,7 +119,7 @@ public class MaterialAct {
 	
 	@RequestMapping("/v_batch_all_list.do")
 	public String batchList(Integer materialId, HttpServletRequest request, ModelMap model) {
-		List<BatchFlow> flows = flowDao.getList(materialId, null, 1, null, null, null, null, null);
+		List<BatchFlow> flows = flowDao.getList(materialId, null, 1, null, null, null);
 		model.addAttribute("flows", flows);
 		model.addAttribute("type", "all");
 		return "pages/data_setting/batch_list";

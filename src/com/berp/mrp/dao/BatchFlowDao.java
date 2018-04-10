@@ -39,7 +39,7 @@ public class BatchFlowDao extends HibernateBaseDao<BatchFlow, Integer> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<BatchFlow> getList(Integer materialId, Integer direction, Integer status, Double lessLeftNumber, Integer planId, Integer type, Date start, Date end) {
+	public List<BatchFlow> getList(Integer materialId, Integer direction, Integer status, Double lessLeftNumber, Integer planId, Integer type) {
 		Finder f = Finder.create("select bean from BatchFlow bean where 1=1 ");
 		
 		if (materialId != null) {
@@ -74,20 +74,53 @@ public class BatchFlowDao extends HibernateBaseDao<BatchFlow, Integer> {
 			f.setParam("type", type);
 		}
 		
-		if(start != null){
-			f.append(" and (bean.cir != null and bean.cir.billTime >=:start or bean.plan != null and bean.plan.billTime >=:start)");
-			//f.append(" and bean.cir != null");
-			f.setParam("start", start);
+		return find(f);
+	}
+	
+	//这个专门为stat设计的，因为设计到时间，所以需要关联到plan或cir，如果同时设定plan和cir的时间的话，需要plan和cir均不为空，无法满足这样的条件
+	@SuppressWarnings("unchecked")
+	public List<BatchFlow> getListByCir(Integer status, Date start, Date end) {
+		Finder f = Finder.create("select bean from BatchFlow bean where bean.cir !=null ");
+		if(status!=null){
+			f.append(" and bean.status=:status");
+			f.setParam("status", status);
 		}
 		
+		if(start != null){
+			f.append(" and bean.cir.billTime >=:start");
+			f.setParam("start", start);
+		}
+				
 		if(end != null){
 			Calendar c = Calendar.getInstance();
 			c.setTime(end);
 			c.add(Calendar.DAY_OF_MONTH, 1);
-			f.append(" and  (bean.cir != null and bean.cir.billTime <=:end or bean.plan != null and bean.plan.billTime <=:end)");
+			f.append(" and bean.cir.billTime <=:end");
 			f.setParam("end", c.getTime());
 		}
+		return find(f);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<BatchFlow> getListByPlan(Integer status, Date start, Date end) {
+		Finder f = Finder.create("select bean from BatchFlow bean where bean.plan !=null ");
+		if(status!=null){
+			f.append(" and bean.status=:status");
+			f.setParam("status", status);
+		}
 		
+		if(start != null){
+			f.append(" and bean.plan.createTime >=:start");
+			f.setParam("start", start);
+		}
+				
+		if(end != null){
+			Calendar c = Calendar.getInstance();
+			c.setTime(end);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			f.append(" and bean.plan.createTime <=:end");
+			f.setParam("end", c.getTime());
+		}
 		return find(f);
 	}
 	
