@@ -1,0 +1,37 @@
+<div class="accordion" fillSpace="sideBar">
+	<@berp_perm url="/v_sell_order">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "sell.order"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/o_sell_order"><li><a href="v_sell_order_add.do" target="navTab" rel="main"><@s.m "sell.order.add"/></a></li></@berp_perm>
+			<@berp_perm url="/v_sell_order"><li><a href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "sell.order.list"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+	
+	<@berp_perm url="/v_sellOut">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "sellOut"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/o_sellOut"><li><a href="v_sellOut_add.do" target="navTab" rel="main"><@s.m "sellOut.add"/></a></li></@berp_perm>
+			<@berp_perm url="/v_sellOut"><li><a href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "sellOut.list"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+	
+	<@berp_perm url="/v_sellBack">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "sellBack"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/o_sellBack"><li><a href="v_sellBack_add.do" target="navTab" rel="main"><@s.m "sellBack.add"/></a></li></@berp_perm>
+			<@berp_perm url="/v_sellBack"><li><a href="v_sellBack_list.do" target="navTab" rel="main"><@s.m "sellBack.list"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+</div>

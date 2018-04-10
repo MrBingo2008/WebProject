@@ -1,0 +1,176 @@
+package com.berp.mrp.dao;
+
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.berp.framework.hibernate3.Finder;
+import com.berp.framework.hibernate3.HibernateBaseDao;
+import com.berp.framework.hibernate3.Updater;
+import com.berp.framework.page.Pagination;
+import com.berp.mrp.entity.Order;
+import com.berp.mrp.entity.OrderRecord;
+import com.berp.mrp.entity.Plan;
+import com.berp.mrp.entity.Cir;
+import com.berp.mrp.entity.Material;
+import com.berp.mrp.entity.Process;
+import com.berp.mrp.entity.RawBatchFlow;
+
+/*
+import com.jeecms.common.hibernate3.Finder;
+import com.jeecms.common.hibernate3.HibernateBaseDao;
+import com.jeecms.common.page.Pagination;
+import com.jeecms.core.dao.CmsUserDao;
+import com.jeecms.core.entity.CmsUser;*/
+
+@Service
+@Transactional
+public class OrderDao extends HibernateBaseDao<Order, Integer> {
+
+	public Order findById(Integer id) { 
+		Order entity = get(id);
+		return entity;
+	}
+
+	//@Transactional
+	public Order save(Order bean){
+		getSession().save(bean);
+		if(bean.getStatus() == 1)
+			this.updateQuatityForOrder(bean);
+		return bean;
+	}
+
+	public Order deleteById(Integer id) {
+		Order entity = get(id);
+		if (entity != null) {
+			getSession().delete(entity);
+		}
+		return entity;
+	}
+	
+	public Order update(Order bean){
+		Updater<Order> updater = new Updater<Order>(bean);
+		bean = updateByUpdater(updater);
+		
+		if(bean.getStatus() == 1)
+			this.updateQuatityForOrder(bean);
+		
+		String hql = "delete from OrderRecord bean where bean.ord.id is null";
+		getSession().createQuery(hql).executeUpdate();
+		return bean;
+	}
+	
+	private void updateQuatityForOrder(Order bean){
+		Integer type = bean.getType();
+		List<OrderRecord> orders = bean.getRecords();
+		if(type == 1){
+			for(OrderRecord record : orders){
+				materialDao.updateNotPurchaseInNumber(record.getMaterial().getId(), record.getNumber());
+			}
+		}else if(type == 2){
+			for(OrderRecord record : orders){
+				materialDao.updateNotSellOutNumber(record.getMaterial().getId(), record.getNumber());
+			}
+		}
+	}
+	
+	public void updateStatusForCir(Integer id){
+		Order order = this.findById(id);
+		boolean isFinish = true;
+		boolean isPart = false;
+		
+		List<OrderRecord> records = order.getRecords();
+		if(records!=null){
+			for(OrderRecord record: records){
+				if(!record.getStatus().equals(3))
+					isFinish = false;
+				
+				if(record.getStatus()>1)
+					isPart = true;
+			}
+			
+			if(isFinish == true)
+				order.setStatus(3);
+			else if(isPart == true)
+				order.setStatus(2);
+		}
+	}
+	
+	public Integer getMaxSerial(String serial){
+		serial = "%"+serial+"%";
+		String hql = "select max(bean.serial) from Order bean where bean.serial like ?";
+		
+		//如果是findUnique(),则hql里必须使用 ?, 而不是:serial，findUnique()应该是没有定义参数名，直接顺序代入
+		String max = (String)this.findUnique(hql, serial);
+		Integer num = 0;
+		try{
+			num = Integer.valueOf(max.split("-")[2]);
+		}catch(Exception ex){
+		}
+		return num;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Order> getList(Integer type) {
+		Finder f = Finder.create("from Order bean");
+		f.append(" where bean.type=:type order by bean.id desc");
+		f.setParam("type", type);
+		return find(f);
+	}
+	
+	public Pagination getPage(Integer type, String name, String recordName, Integer status, Integer status1, Integer pageNo, Integer pageSize) {
+		
+		pageNo = pageNo == null?1:pageNo;
+		pageSize = pageSize == null?20:pageSize;
+		
+		Finder f = Finder.create("select distinct bean from Order bean left join bean.records record where 1=1");
+		if (type != null) {
+			f.append(" and bean.type=:type");
+			f.setParam("type", type);
+		}
+		//notEmpty 包括null和""，notBlank还包括" "
+		if(StringUtils.isNotEmpty(name))
+		{
+			f.append(" and (bean.name like :name or bean.serial like :name) ");
+			f.setParam("name", "%" + name + "%");
+		}
+		
+		if(StringUtils.isNotEmpty(recordName)){
+			f.append(" and (record.material.name like :recordName or record.material.serial like :recordName or record.material.customerSerial like :recordName) ");
+			f.setParam("recordName", "%"+ recordName +"%");
+		}
+		if (status != null && status1 == null) {
+			f.append(" and bean.status=:status");
+			f.setParam("status", status);
+		}else if(status!=null && status1!=null){
+			f.append(" and bean.status>=:status and bean.status <=:status1");
+			f.setParam("status", status);
+			f.setParam("status1", status1);
+		}
+		
+		f.append(" order by bean.id desc");
+		return find(f, pageNo, pageSize);
+	}
+	
+	public int countByStatus(Integer type, Integer status1, Integer status2) {
+		String hql = "select count(*) from Order bean where bean.type=:type and bean.status >=:status1 and bean.status<=:status2";
+		Query query = getSession().createQuery(hql);
+		query.setParameter("type", type);
+		query.setParameter("status1", status1);
+		query.setParameter("status2", status2);
+		int result = ((Number) query.iterate().next()).intValue();
+		return result;
+	}
+	
+	@Override
+	protected Class<Order> getEntityClass() {
+		return Order.class;
+	}
+	
+	@Autowired
+	private MaterialDao materialDao;
+}

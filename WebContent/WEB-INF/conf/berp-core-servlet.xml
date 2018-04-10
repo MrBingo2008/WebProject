@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- commented by stone: 这些文件为unicode编码，可以通过安装eclipse的properties editor来查看和编辑 
+        这是spring支持locale的类，文件内容格式为key=value，通过WebApplicationContext、RequestContext.getMessage可以获取value
+    -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="cacheSeconds" value="-1"/>
+		<property name="basenames">
+			<list>
+				<value>/WEB-INF/languages/messages</value>
+				<value>/WEB-INF/languages/global</value>
+			</list>
+		</property>
+	</bean>
+    
+    <!-- commented by stone: 用于解释执行基于注释的Handler -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<!-- 这个参数一开始是注释掉的，它主要是用于传递Date参数的格式转换，
+		如果没有这个前台提交Date属性的参数到controller的bean，会出现400的错误，而且后台没有任何出错的提示 -->
+		<property name="webBindingInitializer">
+			<bean class="com.berp.framework.springmvc.BindingInitializer"/>
+		</property>
+	</bean>
+	
+	<!-- commented by stone: 用于查找基于注释的Handler -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<!-- 这个interceptor会用到application-context.xml里的sessionProvider -->
+				<ref bean="adminContextInterceptor"/>
+				<!-- <ref bean="adminLocaleIntercept"/>
+				<ref bean="fireWallInterceptor"/> -->
+			</list>
+		</property>
+	</bean>
+    
+    <!-- 做用户权限验证时加的 -->
+    <bean id="adminContextInterceptor" class="com.berp.framework.web.AdminContextInterceptor">
+		<property name="auth" value="true"/>
+		<property name="loginUrl" value="/login.do"/>
+		<property name="returnUrl" value="/index.do"/>
+		<property name="excludeUrls">
+			<list>
+				<value>/login.do</value>
+				<value>/logout.do</value>
+			</list>
+		</property>
+	</bean>
+    
+    <!-- stone: 这个应该跟freemarker没有关系? 
+        这个在jeecms里没有，是默认的view resolver吧？-->
+    <!-- <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+    	<property name="prefix"><value>/WEB-UI/</value></property> 
+    	<property name="suffix"><value>.html</value></property> 
+  	</bean> --> 
+  	
+  	<bean id="freemarkerViewResolver" class="com.berp.framework.springmvc.RichFreeMarkerViewResolver">
+		<!-- 在jeecms里是jeecms_sys，这个文件夹放在WEB-INF里，但是WEB-INF不需要写进去，不明白 -->
+		<property name="prefix" value="/html/"/>
+		<property name="suffix" value=".html"/>
+		<property name="contentType" value="text/html; charset=UTF-8"/>
+		<property name="exposeRequestAttributes" value="false"/>
+		<property name="exposeSessionAttributes" value="false"/>
+		<property name="exposeSpringMacroHelpers" value="true"/>
+	</bean>
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF"/>
+		<property name="freemarkerVariables">
+			<map>
+				<!--在FCK编辑器中需要用到appBase，以确定connector路径。
+				<entry key="appBase" value="/jeeadmin/jeecms"/>-->
+				<entry key="berp_perm" value-ref="berp_perm"/>
+				<!-- <entry key="cms_no_perm" value-ref="cms_no_perm"/>
+				<entry key="text_cut" value-ref="text_cut"/>
+				<entry key="html_cut" value-ref="html_cut"/>-->
+			</map>
+		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_update_delay">0</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<prop key="whitespace_stripping">true</prop>
+				<prop key="auto_import">/ftl/spring.ftl as s</prop>
+			</props>
+		</property>
+	</bean> 
+  	
+    <context:annotation-config/>  
+    
+    <!-- 原来是写着com.berp，所以应该是默认全部annotation（包括action/controller，dao/services,transaction）都自动生成bean，
+    但是这样有个问题就是dao的transaction好像不生效，就是很多更新的操作，包括setProperty、多对一的inverse update没有生效， 
+    现在把com.berp缩小为com.berp.*.action，然后dao这部分bean的生成放在berp-context.xml里，transaction就生效。
+  另外getSession().save()这个函数不需要transaction也可以生效。-->
+	<context:component-scan base-package="com.berp.*.action"></context:component-scan>
+	
+</beans>

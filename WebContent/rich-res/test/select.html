@@ -1,0 +1,28 @@
+<html>
+<head>
+<script src="../js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript">
+function testA(){
+	$("select").each(function(){
+		var $input = $(this);
+		$input.val('1');
+	});
+}
+</script>
+</head>
+
+<body>
+<table>
+						<tr>
+						  
+							<td>
+								<select name='step'>
+									<option value='0'>000</option>
+									<option value='1'>111</option>
+								</select>
+							</td>
+						</tr>	
+					</table>
+					<button type="button" onclick="testA();">保存</button>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<div class="accordion" fillSpace="sideBar">
+	<@berp_perm url="/v_purchase_order">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "purchase.order"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/o_purchase_order"><li><a href="v_purchase_order_add.do" target="navTab" rel="main"><@s.m "purchase.order.add"/></a></li></@berp_perm>
+			<@berp_perm url="/v_purchase_order"><li><a href="v_purchase_order_list.do" target="navTab" rel="main"><@s.m "purchase.order.list"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+	
+	<@berp_perm url="/v_purchaseIn">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "purchaseIn"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/o_purchaseIn"><li><a href="v_purchaseIn_add.do" target="navTab" rel="main"><@s.m "purchaseIn.add"/></a></li></@berp_perm>
+			<@berp_perm url="/v_purchaseIn"><li><a href="v_purchaseIn_list.do" target="navTab" rel="main"><@s.m "purchaseIn.list"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+	
+	<@berp_perm url="/v_purchaseBack">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "purchaseBack"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/o_purchaseBack"><li><a href="v_purchaseBack_add.do" target="navTab" rel="main"><@s.m "purchaseBack.add"/></a></li></@berp_perm>
+			<@berp_perm url="/v_purchaseBack"><li><a href="v_purchaseBack_list.do" target="navTab" rel="main"><@s.m "purchaseBack.list"/></a></li></@berp_perm>			
+		</ul>
+	</div>
+	</@berp_perm>
+</div>

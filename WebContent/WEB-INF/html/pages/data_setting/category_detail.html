@@ -1,0 +1,41 @@
+<script type="text/javascript">
+$(function(){
+	
+	if('${openMode!}' == 'edit'){
+		var actionUrl = "o_category_update.do";
+		$("form").attr("action", actionUrl);
+	}
+	
+});
+</script>
+
+<div class="pageContent">
+	<form method="post" action="o_category_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<p>
+				<input type="hidden" name="rootParentId" value="${rootParentId}"/>
+				<input type="hidden" name="returnTitle" value="<@s.m 'category.${rootParentId}'/>"/>
+				<input type="hidden" name="priority" value="${(category.priority)!}"/>
+				<label>ID:</label>
+				<input name="id" type="text" size="20" value="${(category.id)!}" readonly/>
+			</p>
+			<p>
+				<label><@s.m "category.${rootParentId}.name"/>:</label>
+				<input name="name" type="text" size="20" value="${(category.name)!}" class="required"/>
+			</p>
+			<p>
+			<!-- lookup的命名：input的name必须是完整的名字，比如lookupGroup.XXX，而后台返回的名字只需要XXX就可以，它会根据lookupGroup补全名字 -->
+				<label><@s.m "category.${rootParentId}.parent"/>:</label>
+				<input type="hidden" name="parent.id" value="${(category.parent.id)!}"/>
+				<input type="text" class="required" name="parent.name" value="${(category.parent.name)!}" lookupGroup="parent" readonly/>
+				<a class="btnLook" href="v_category_tree.do?parentId=${rootParentId}" lookupGroup="parent"><@s.m "category.${rootParentId}.parent"/></a>		
+			</p>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a title="<@s.m 'category.${rootParentId}'/>" href="v_category_list.do?rootParentId=${rootParentId}" target="navTab" rel="main"><button type="button" class="close">取消</button></a></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.mrp.entity">
+	<class name="Step" table="step">
+		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
+		<property name="name" column="name" type="string" length="100"/>
+		<property name="serial" column="serial" type="string" not-null="true" length="100"/>
+		<property name="type" column="type" type="integer" not-null="true" length="3"/>
+	</class>
+</hibernate-mapping>

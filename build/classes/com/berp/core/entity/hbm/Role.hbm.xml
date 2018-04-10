@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.core.entity">
+	<class name="Role" table="role">
+		<id name="id" type="integer" column="id"><generator class="identity"/></id>
+		<property name="name" column="name" type="string" not-null="true" length="100"/>
+		<property name="super" column="is_super" type="java.lang.Boolean" not-null="true"/>
+		
+		<!-- 这种set element还比较简单，role_permission没有id，只有role_id
+		修改也比较简单，直接del，然后insert，没有id的问题。也不需要配置inverse和cascade -->
+		<set name="perms" table="role_permission">
+			<key column="role_id" not-null="true"/>
+			<element column="uri" type="string" length="100" not-null="true"/>
+		</set>
+	</class>
+</hibernate-mapping>

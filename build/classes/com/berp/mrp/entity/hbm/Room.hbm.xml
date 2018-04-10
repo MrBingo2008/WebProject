@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.mrp.entity">
+	<class name="Room" table="room">
+		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
+		<property name="name" column="name" type="string" length="100"/>
+		<property name="status" column="status" type="integer" length="10"/>
+		<many-to-one name="parent" column="parent_id" class="com.berp.core.entity.Category"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.core.entity">
+	<class name="Category" table="category">
+		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
+		<property name="priority" column="priority" type="integer" length="10"/>
+		
+		<property name="lft" column="lft" type="java.lang.Integer" not-null="true" length="10"/>
+		<property name="rgt" column="rgt" type="java.lang.Integer" not-null="true" length="10"/>
+		
+		<property name="name" column="name" type="string" length="100"/>
+		<many-to-one name="parent" column="parent_id" class="com.berp.core.entity.Category"/>
+		<list name="children" inverse="true" cascade="none">
+			<key column="parent_id"/>
+			<!-- 如果priority的值为一样的话，只会加载一个 -->
+			<index column="priority" type="integer"></index>
+			<one-to-many class="com.berp.core.entity.Category"/>
+		</list>
+	</class>
+</hibernate-mapping>

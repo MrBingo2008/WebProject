@@ -1,0 +1,5 @@
+2017.8.10
+做hibernate query list时，提示错误antlr没有定义，引入antlr-2.7.7.jar即可，不过版本是否问题？
+
+2017.10.01
+导项目时，提示javax.servlet找不到，把tomcat下面的servlet-api.jar拷贝到项目就可以。

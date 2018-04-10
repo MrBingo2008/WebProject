@@ -1,0 +1,64 @@
+<script type="text/javascript">
+$(function(){
+	
+	if('${openMode!}' == 'edit'){
+		var actionUrl = "o_material_update.do";
+		$("form").attr("action", actionUrl);
+	}
+	
+});
+</script>
+<div class="pageContent">
+	<form method="post" action="o_material_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<p>
+				<label>ID:</label>
+				<input name="id" type="text" size="20" value="${material.id!}" readonly="readonly"/>
+			</p>
+			
+			<p>
+				<label><@s.m "material.customerSerial" />:</label>
+				<input name="customerSerial" type="text" size="20" value="${material.customerSerial!}"/>
+			</p>
+			<p>
+				<label><@s.m "material.serial" />:</label>
+				<input name="serial" type="text" size="20" value="${material.serial!}"/>
+			</p>
+			<p>
+				<label><@s.m "material.name"/>:</label>
+				<input name="name" type="text" size="20" value="${material.name!}"/>
+			</p>
+			<p>
+			<!-- lookup的命名：input的name必须是完整的名字，比如lookupGroup.XXX，而后台返回的名字只需要XXX就可以，它会根据lookupGroup补全名字 -->
+				<label><@s.m "category.1.parent"/>:</label>
+				<input type="hidden" name="parent.id" value="${(material.parent.id)!}"/>
+				<input type="text" class="required" name="parent.name" value="${(material.parent.name)!}" readonly/>
+				<a class="btnLook" href="v_category_tree.do?parentId=1" lookupGroup="parent"><@s.m "category.1.parent"/></a>		
+			</p>
+			<p>
+				<label><@s.m "company"/>:</label>
+				<input type="hidden" name="company.id" value="${(material.company.id)!}"/>
+				<input type="text" name="company.name" value="${(material.company.name)!}" readonly/>
+				<a class="btnLook" href="v_company.do?type=1" lookupGroup="company"><@s.m "company"/></a>		
+			</p>
+			<p>
+				<label><@s.m "material.spec"/>:</label>
+				<input type="text" name="spec" value="${material.spec!}" class="textInput">
+			</p>
+			<p>
+				<label><@s.m "material.dim"/>:</label>
+				<input name="dim" type="text" value="${material.dim!}" size="20"/>
+			</p>
+			<p>
+				<label><@s.m "material.unit"/>:</label>
+				<input class="required" name="unit" type="text" value="${material.unit!}" suggestFields="unit" suggestUrl="v_material_unit.do"/>
+			</p>
+		</div>
+		<div class="formBar">
+			<ul>
+				<@berp_perm url="/v_material_add.do"><li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li></@berp_perm>
+				<li><div class="button"><div class="buttonContent"><a href="v_material.do?type=2" target="navTab" rel="main"><button type="button">取消</button></a></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

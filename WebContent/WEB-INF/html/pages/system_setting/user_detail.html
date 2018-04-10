@@ -1,0 +1,55 @@
+<script type="text/javascript">
+$(function(){
+	
+	if('${openMode!}' == 'edit'){
+		var actionUrl = "o_user_update.do";
+		$("form").attr("action", actionUrl);
+	}
+	
+});
+</script>
+<div class="pageContent">
+	<form method="post" action="o_user_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<p>
+				<label>ID:</label>
+				<input name="id" type="text" size="20" value="${user.id!}" readonly/>
+			</p>
+			<p>
+				<label><@s.m "user.name"/>:</label>
+				<input name="name" type="text" size="20" value="${user.name!}"/>
+			</p>
+			<p>
+				<label><@s.m "user.password"/>:</label>
+				<input name="password" type="password" size="20" value="${user.password!}"/>
+			</p>
+			<p>
+				<label><@s.m "user.lastLoginTime"/>:</label>
+				<span class="viewLabel">${(user.lastLoginTime?string('yyyy-MM-dd hh:mm:ss'))!}</span>
+			</p>
+			<p>
+				<label><@s.m "user.lastLoginIp"/>:</label>
+				<span class="viewLabel">${user.lastLoginIp!}</span>
+			</p>
+			<p>
+				<label><@s.m "user.loginCount"/>:</label>
+				<span class="viewLabel">${user.loginCount!}</span>
+			</p>
+			
+			<div class="divider"></div>
+			<label>角色：</label>
+			<#list roles as role>
+			<input type="checkbox" name="roleIds" value="${role.id}" <#if user.roleIds?seq_contains(role.id)>checked</#if>/>${role.name}
+			</#list>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><a title="<@s.m 'user.list'/>" href="v_user_list.do" target="navTab" rel="main"><button type="button">取消</button></a></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,33 @@
+		<table class="table" width="99%">
+			<thead>
+				<tr>
+					<th width="20">序号</th>
+					<th width="60" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
+					<th width="40"><@s.m "material.name"/></th>
+					<th width="60"><@s.m "batch.serial"/></th>
+					<th width="40"><@s.m "batch.type"/></th>
+					<#if type?? && type=='all'><th width="40"><@s.m "material.number"/></th><#else>
+					<th width="40"><@s.m "material.leftNumber"/></th></#if>
+					<th width="20"><@s.m "material.unit"/></th>
+					<th width="40"><@s.m "room"/></th>
+					<th width="20"><@s.m "global.operate"/></th>				
+				</tr>
+			</thead>
+			<tbody>
+			<#list flows as flow>
+				<tr target="sid_obj" rel="1">
+				    <td>${flow.id}</td>
+					<td>${flow.material.allSerial}</td>
+					<td>${flow.material.name!}</td>
+					<td>${flow.serial!}</td>
+					<td><@s.m "batch.type.${flow.type}"/></td>
+					<#if type?? && type == "all"><td>${flow.number*flow.direct}</td><#else><td>${flow.leftNumber!}</td></#if>
+					<td>${flow.material.unit!}</td>			
+					<td>${(flow.room.name)!}</td>
+					<td>
+						<#if type?? && type == "lib"><a class="btnSelect" href="javascript:$.bringBack({'parent.id':'${flow.id}', 'material.serial':'${flow.material.allSerial!}', 'material.name':'${flow.material.name!}', 'material.id':'${flow.material.id!}', 'serial':'${flow.serial!}', 'material.unit':'${flow.material.unit!}', number:'${flow.leftNumber!}' , numPerBox:'${flow.numPerBox!}', boxNum:'${flow.boxNum!}'})"><@s.m "global.select"/></a></#if>
+					</td>
+				</tr>
+			</#list>
+			</tbody>
+		</table>

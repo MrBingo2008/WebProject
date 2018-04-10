@@ -1,0 +1,185 @@
+<script type="text/javascript">
+$(function(){
+	if('${openMode!}' == 'edit'){
+		var actionUrl = "o_${cirType}_update.do";
+		$("form").attr("action", actionUrl);
+		var status = '${cir.status}';
+		if(status == '1'){
+			$("#formContent input").attr("readonly", "readonly");
+			$("#formContent a").css("display", "none");
+			$("#saveButton, #approvalButton").attr("disabled", "disabled");
+		}
+	}else if('${openMode!}' == 'view'){
+		$("#formContent input").attr("disabled", "disabled");
+		$("#formContent a").css("display", "none");
+		$("#saveButtonLi, #approvalButtonLi").css("display", "none");
+	}	
+});
+
+$("#saveButton").click(function(){
+	$("#statusInput").val("0");
+	$("#cirForm").submit();
+});
+
+$("#approvalButton").click(function(){
+	$("#statusInput").val("1");
+	$("#cirForm").submit();
+});
+
+function calSum(numInput){
+	var numPerBox = $(numInput).parent().parent().find("input[name*=numPerBox]").val();
+	if(isNaN(parseFloat(numPerBox)))
+		return;
+	var npb = parseFloat(numPerBox);
+	
+	var boxNum = $(numInput).parent().parent().find("input[name*=boxNum]").val();
+	if(isNaN(parseInt(boxNum)))
+		return;
+	var bn = parseInt(boxNum);
+	
+	$(numInput).parent().parent().find("input[name*=number]").val(npb*bn);
+}
+
+function calFactor(numInput){
+	var sum = $(numInput).val();
+	if(isNaN(parseFloat(sum)))
+		return;
+	var s = parseFloat(sum);
+	
+	var numPerBox = $(numInput).parent().parent().find("input[name*=numPerBox]").val();
+	var boxNum = $(numInput).parent().parent().find("input[name*=boxNum]").val();
+
+	if(isNaN(parseFloat(numPerBox)) && isNaN(parseFloat(boxNum)))
+		return;
+	else if(!isNaN(parseFloat(numPerBox))){
+		var npb = parseFloat(numPerBox);
+		$(numInput).parent().parent().find("input[name*=boxNum]").val(s/npb);
+	}
+}
+</script>
+
+<div class="pageContent">
+	<form id="cirForm" method="post" action="o_${cirType}_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div id="formContent" class="pageFormContent" layoutH="56">
+			<input id="statusInput" type="hidden" name="status" value="${cir.status}"/>
+			<p>
+				<label><@s.m "global.createTime"/>:</label>
+				<input name="createTime" readonly="readonly" type="text" value="${(cir.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="20" />
+			</p>
+			<p>
+				<label><@s.m "global.createUser"/>:</label>
+				<input readonly="readonly" type="text" value="${(cir.createUser.name)!}" size="20" />
+				<input name="createUser.id" type="hidden" value="${(cir.createUser.id)!}" />
+			</p>
+			
+			<div class="divider"></div>
+			
+			<p>
+				<label>ID:</label>
+				<input name="id" type="text" size="20" value="${cir.id!}" readonly/>
+			</p>
+			<p>
+				<label><@s.m "${cirType}.serial" />:</label>
+				<input name="serial" type="text" size="20" value="${cir.serial!}" readonly/>
+			</p>
+			<p>
+				<label><@s.m "${cirType}.name"/>:</label>
+				<input name="name" type="text" size="20" value="${cir.name!}"/>
+			</p>
+			<#if cirType != "checkIn" && cirType != "checkOut">
+			<p>
+				<label><@s.m "${cirType}.company"/>:</label>
+				<input type="hidden" name="company.id" value="${(cir.company.id)!}"/>
+				<input type="text" name="company.name" value="${(cir.company.name)!}" lookupGroup="company" class="required" readonly/>
+				<a class="btnLook" href="v_company.do?type=1" lookupGroup="company"><@s.m "company"/></a>	
+			</p>
+			</#if>
+			
+			<p>
+				<label><@s.m "${cirType}.time"/>:</label>
+				<input type="text" name="billTime" class="date" value="${(cir.billTime?string('yyyy-MM-dd'))!(cir.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
+			</p>
+			
+			<div class="divider"></div>
+			
+			<div class="panel" style="overflow: auto">
+	            <h1><@s.m "${cirType}.items"/></h1>
+	            <div>
+				<table class="list nowrap itemDetail" addButton="<@s.m '${cirType}.addItem'/>"
+				 buttonDisabled=<#if cir.status == 0 && cirType != 'view'>"false"<#else>"true"</#if> width="100%">
+					<thead>
+						<tr>
+							<th type="label" size="4" display="#index#"><@s.m "global.number"/></th>
+							
+							<th type="lookup" name="flows[#index#].material.serial" size="18"
+								lookupGroup="flows[#index#]" lookuppk="material.id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
+								<#if materialSelectType?? && materialSelectType == 0>aFieldAttrs="{width:'800', height:'700', resizable:'false'}" aTitle="<@s.m 'material.batch'/>"<#else> aTitle="<@s.m 'material'/>"</#if>
+								lookupUrl="v_material.do?type=${materialSelectType!}"><@s.m "material.allSerial"/></th>
+								
+							<#if materialSelectType?? && materialSelectType == 0><th type="hidden" name="flows[#index#].parent.id" style="display:none"></th></#if>	
+							<th type="text" name="flows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							<th type="text" name="flows[#index#].serial" size="24" <#if materialSelectType?? && materialSelectType == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
+							<th type="text" name="flows[#index#].numPerBox" size="12" fieldClass="number" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
+							<th type="text" name="flows[#index#].boxNum" size="6" fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
+							<th type="text" name="flows[#index#].number" size="12" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
+							<th type="text" name="flows[#index#].material.unit" size="6" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
+							
+							<#if materialSelectType?? && materialSelectType == 1>
+							<th type="lookup" name="flows[#index#].room.name" size="8"
+								lookupGroup="flows[#index#].room" lookuppk="id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
+								aTitle="<@s.m 'room'/>" lookupUrl="v_category_tree.do?parentId=3"><@s.m "room"/></th>
+							</#if>
+								
+							<th type="del" width="60"><@s.m "global.operate"/></th>
+						</tr>
+					</thead>
+					<tbody>
+					<#if cir.flows??>
+						<#assign count=0 />
+						<#list cir.flows as flow>
+						<tr class="unitBox">
+						    <td><span class="label" size="4" display="#index#">${count+1}</span>
+						    <input type="hidden" name="flows[${count}].id" value="${flow.id!}"></input></td>
+						    
+							<td>
+								<input type="hidden" name="flows[${count}].material.id" value="${flow.material.id}">
+								<input type="text" name="flows[${count}].material.serial" value="${flow.material.allSerial!}" size="18" class="textInput required" readonly>
+								<a <#if materialSelectType?? && materialSelectType == 0>width='800' height='700' resizable='false' title="<@s.m 'material.batch'/>"<#else> title="<@s.m 'material'/>"</#if> class="btnLook" href="v_material.do?type=${materialSelectType!}" lookupgroup="flows[${count}]" lookuppk="material.id" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
+							</td>
+							
+							<#if materialSelectType?? && materialSelectType == 0><input type="hidden" name="flows[${count}].parent.id" value="${(flow.parent.id)!}"></input></#if>
+							<td><input type="text" name="flows[${count}].material.name" value="${flow.material.name!}" size="12" class="textInput" readonly></td>
+							
+							<td><input type="text" name="flows[${count}].serial" value="${flow.serial!}" size="24" class="textInput" readonly></td>
+							<td><input type="text" name="flows[${count}].numPerBox" value="${flow.numPerBox!}" size="12" class="number textInput" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);"></td>
+							<td><input type="text" name="flows[${count}].boxNum" value="${flow.boxNum!}" size="6" class="digits textInput" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);"></td>
+							<td><input type="text" name="flows[${count}].number" value="${flow.number!}" size="12" class="positiveNumber textInput required"  onkeyup="calFactor(this);" onpaste="calFactor(this);" oncut="calFactor(this);" ondrop="calFactor(this);"></td>
+							<td><input type="text" name="flows[${count}].material.unit" value="${flow.material.unit!}" size="6" class="textInput" readonly></td>
+							
+							<#if materialSelectType?? && materialSelectType == 1>
+							<td>
+								<input type="hidden" name="flows[${count}].room.id" value="${(flow.room.id)!}">
+								<input type="text" name="flows[${count}].room.name" value="${(flow.room.name)!}" size="8" class="textInput required" readonly>
+								<a class="btnLook" href="v_category_tree.do?parentId=3" lookupgroup="flows[${count}].room" lookuppk="id" title="<@s.m 'room'/>"><@s.m "room"/></a>
+							</td>
+							</#if>
+							
+							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
+						</tr>
+						<#assign count=count+1/>
+						</#list>
+					</#if>
+					</tbody>
+				</table>
+				</div>
+			</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
+				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a href="v_${cirType}_list.do" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

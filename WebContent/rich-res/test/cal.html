@@ -1,0 +1,44 @@
+<html>
+<head>
+<script src="../js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript">
+function calSum(numInput){
+	var numPerBox = $(numInput);
+	var test = numPerBox.parent().find("input[name*=numPerBox]").val();
+	if(isNaN(parseFloat(numPerBox)))
+		return;
+	var npb = parseFloat(numPerBox);
+	
+	var boxNum = $(numInput).parent().find("input[name*=boxNum]").val();
+	if(isNaN(parseInt(boxNum)))
+		return;
+	var bn = parseInt(boxNum);
+	
+	$(numInput).parent().find("input[name*=number]").val(npb*bn);
+}
+
+function calFactor(numInput){
+	var sum = $(numInput).val();
+	if(isNaN(parseFloat(sum)))
+		return;
+	var s = parseFloat(sum);
+	
+	var numPerBox = $(numInput).parent().find("input[name*=numPerBox]").val();
+	var boxNum = $(numInput).parent().find("input[name*=boxNum]").val();
+
+	if(isNaN(parseFloat(numPerBox)) && isNaN(parseFloat(boxNum)))
+		return;
+	else if(!isNaN(parseFloat(numPerBox))){
+		var npb = parseFloat(numPerBox);
+		$(numInput).parent().find("input[name*=boxNum]").val(s/npb);
+	}
+}
+</script>
+</head>
+
+<body>
+<input type="text" name="numPerBox" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);">
+<input type="text" name="boxNum" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);">
+<input type="text" name="number" onkeyup="calFactor(this);" onpaste="calFactor(this);" oncut="calFactor(this);" ondrop="calFactor(this);">		
+</body>
+</html>

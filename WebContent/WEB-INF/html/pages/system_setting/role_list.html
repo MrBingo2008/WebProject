@@ -1,0 +1,45 @@
+<form id="pagerForm" method="post" action="v_role_list.do">
+	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
+	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
+</form>
+<div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid">
+<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="v_role_add.do" target="navTab" rel="main"><span><@s.m "role.add"/></span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="99%" layoutH="74" rel="jbsxBox">
+		<thead>
+			<tr>
+				<th width="80">ID</th>
+				<th width="120" orderField="number" class="asc"><@s.m "role.name"/></th>
+				<th width="80"><@s.m "global.operate"/></th>				
+			</tr>
+		</thead>
+		<tbody>
+		<#list pagination.list as role>
+			<tr target="sid_obj" rel="1">
+			    <td>${role.id}</td>
+				<td>${role.name!}</td>
+				<td>
+					<a target="navTab" rel="main" title="<@s.m 'role.edit'/>" href="v_role_edit.do?roleId=${role.id}"><@s.m "global.edit"/></a>
+					<a title="<@s.m 'global.delete'/>" target="ajaxTodo" href=""><@s.m "global.delete"/></a>
+				</td>
+			</tr>
+		</#list>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value}, 'jbsxBox')">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共50条</span>
+		</div>
+		<div class="pagination" rel="jbsxBox" totalCount="200" numPerPage="20" pageNumShown="5" currentPage="1"></div>
+	</div>
+</div>

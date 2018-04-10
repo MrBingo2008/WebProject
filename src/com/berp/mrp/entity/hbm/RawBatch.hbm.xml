@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.mrp.entity">
+	<class name="RawBatch" table="raw_batch">
+		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id> 
+		<property name="serial" column="serial" type="string" length="100"/>
+		<property name="number" column="number" type="java.lang.Double" length="10"/>
+		<property name="leftNum" column="left_num" type="java.lang.Double" length="10"/>
+		<property name="arriveNum" column="arrive_num" type="java.lang.Double" length="10"/>
+		<!-- 这里应该是one-to-one--> 
+		<many-to-one name="plan" column="plan_id" class="com.berp.mrp.entity.Plan" unique="true"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.mrp.entity">
+	<class name="Material" table="material">
+		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
+		<property name="name" column="name" type="string" length="100"/>
+		<property name="serial" column="serial" type="string" length="100"/>
+		<property name="customerSerial" column="customerSerial" type="string" length="100"/>
+		<property name="leftNumber" column="left_number" type="java.lang.Double" length="10"/>
+		<property name="notPurchaseInNumber" column="not_purchaseIn_number" type="java.lang.Double" length="10"/>
+		<property name="notSellOutNumber" column="not_sellOut_number" type="java.lang.Double" length="10"/>
+		<property name="unit" column="unit" type="string" length="30"/>
+		<property name="spec" column="spec" type="string" length="200"/>
+		<property name="dim" column="dim" type="string" length="150"/>
+		<property name="type" column="type" type="integer" length="10"/>
+		<property name="fetchType" column="fetchType" type="integer" length="10"/>
+		<property name="status" column="status" type="integer" length="10"/>
+		<many-to-one name="parent" column="parent_id" class="com.berp.core.entity.Category"/>
+		<many-to-one name="company" column="company_id" class="com.berp.core.entity.Company"/>
+		<set name="records" inverse="true" cascade="none">
+			<key column="material_id"/>
+			<one-to-many class="com.berp.mrp.entity.OrderRecord"/>
+		</set>
+	</class>
+</hibernate-mapping>

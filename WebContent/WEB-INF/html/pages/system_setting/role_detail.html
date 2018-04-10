@@ -1,0 +1,122 @@
+<script type="text/javascript">
+function disablePerms() {
+	//如果为超级用户，则 disable，否则enable
+	if($("input[name=super]:checked").val()=="true") {
+		$("#permsDiv input[type=checkbox]").attr("disabled","disabeld");
+	} else {
+		$("#permsDiv input[type=checkbox]").removeAttr("disabled");
+	}
+}
+
+$(function(){
+	if('${openMode!}' == 'edit'){
+		var actionUrl = "o_role_update.do";
+		$("form").attr("action", actionUrl);
+		
+		var perms = [<#list role.perms as p>"${p}"<#if p_has_next>,</#if></#list>];
+		disablePerms();
+		$("#permsDiv input[type=checkbox]").each(function() {
+			var perm = $(this).val();
+			var index = perm.indexOf(",");		
+			if(index!=-1) {
+				perm = perm.substring(0,index);
+			}
+			for(var i=0,len=perms.length;i<len;i++) {
+				if(perms[i]==perm) {
+					$(this).attr("checked",true);
+					break;
+				}
+			}
+		});
+		$("input[name=super]").bind("click",function(){
+			disablePerms();
+		});
+	}	
+});
+</script>
+<div class="pageContent">
+	<form method="post" action="o_role_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone)">
+		<div class="pageFormContent" layoutH="57">
+			<p>
+				<label>ID:</label>
+				<input name="id" type="text" size="20" value="${(role.id)!}" readonly/>
+			</p>
+			<p>
+				<label><@s.m "user.name"/>:</label>
+				<input name="name" type="text" size="20" value="${(role.name)!}"/>
+			</p>
+			<p style="width:auto">
+				<label>所有权限：</label>
+				<label style="width:auto"><input type="radio" name="super" value="false" <#if role.super?? && !role.super>checked</#if> />否</label>
+				<label style="width:auto"><input type="radio" name="super" value="true" <#if role.super?? && role.super>checked</#if> />是</label>
+			</p>
+			
+			<div id="permsDiv">
+				<!-- perm既用于控制显示，也用于后台权限验证 -->
+				<input type="hidden" name="perms" value="/index.do"/>
+				<input type="hidden" name="perms" value="/v_personal,/o_personal" />
+				
+				<div class="divider"></div>
+				<label><input type="checkbox" name="perms" value="/v_sell.do" /><@s.m "sell.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_sell_order" /><@s.m "sell.order.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_sell_order" /><@s.m "sell.order.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_sellOut" /><@s.m "sellOut.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_sellOut" /><@s.m "sellOut.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_sellBack" /><@s.m "sellBack.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_sellBack" /><@s.m "sellBack.manage" /></label>
+				
+				<div class="divider"></div>
+				<label><input type="checkbox" name="perms" value="/v_purchase.do" /><@s.m "purchase.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_purchase_order" /><@s.m "purchase.order.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_purchase_order" /><@s.m "purchase.order.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_purchaseIn" /><@s.m "purchaseIn.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_purchaseIn" /><@s.m "purchaseIn.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_purchaseBack" /><@s.m "purchaseBack.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_purchaseBack" /><@s.m "purchaseBack.manage" /></label>
+				
+				<div class="divider"></div>
+				<label><input type="checkbox" name="perms" value="/v_manu.do" /><@s.m "manu.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_plan" /><@s.m "plan.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_plan" /><@s.m "plan.manage" /></label>
+				
+				<div class="divider"></div>
+				<label><input type="checkbox" name="perms" value="/v_outside.do" /><@s.m "outside" /></label>
+				<label><input type="checkbox" name="perms" value="/v_outsideOut" /><@s.m "outsideOut.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_outsideOut" /><@s.m "outsideOut.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_outsideIn" /><@s.m "outsideIn.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_outsideIn" /><@s.m "outsideIn.manage" /></label>
+				
+				<div class="divider"></div>
+				<label><input type="checkbox" name="perms" value="/v_lib.do" /><@s.m "lib.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_checkIn" /><@s.m "checkIn.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_checkIn" /><@s.m "checkIn.manage" /></label>
+				<label><input type="checkbox" name="perms" value="/v_checkOut" /><@s.m "checkOut.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_checkOut" /><@s.m "checkOut.manage" /></label>
+				
+				<div class="divider"></div>
+				<label><input type="checkbox" name="perms" value="/v_data_setting.do" /><@s.m "dataSetting" /></label>
+				<label><input type="checkbox" name="perms" value="/v_material,/v_batch,/v_raw_batch" /><@s.m "material.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_material" /><@s.m "material.manage" /></label>
+				
+				<label><input type="checkbox" name="perms" value="/v_company" /><@s.m "company.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_company" /><@s.m "company.manage" /></label>
+				
+				<label><input type="checkbox" name="perms" value="/v_process" /><@s.m "process.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_process" /><@s.m "process.manage" /></label>
+				
+				<label><input type="checkbox" name="perms" value="/v_step" /><@s.m "step.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_step" /><@s.m "step.manage" /></label>
+				
+				<label><input type="checkbox" name="perms" value="/v_category" /><@s.m "category.view" /></label>
+				<label><input type="checkbox" name="perms" value="/o_category" /><@s.m "category.manage" /></label>
+			</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+				<li><div class="button"><div class="buttonContent">
+				<a title="<@s.m 'role.list'/>" href="v_role_list.do" target="navTab" rel="main"><button type="button">取消</button></a></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

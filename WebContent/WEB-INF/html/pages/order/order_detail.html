@@ -1,0 +1,136 @@
+<script type="text/javascript">
+
+$(function(){
+	
+	if('${openMode!}' == 'edit'){
+		var actionUrl = "o_${orderType}_order_update.do";
+		$("form").attr("action", actionUrl);
+		
+		var status = '${order.status}';
+		if(status >= 1){
+			$("#formContent input").attr("readonly", "readonly");
+			$("#formContent a").css("display", "none");
+			$("#saveButton, #approvalButton").attr("disabled", "disabled");
+		}
+	}else if('${openMode!}' == 'view'){
+		$("#formContent input").attr("disabled", "disabled");
+		$("#formContent a").css("display", "none");
+		$("#saveButtonLi, #approvalButtonLi").css("display", "none");
+	}
+	
+});
+
+$("#saveButton").click(function(){
+	$("#statusInput").val("0");
+	$("#orderForm").submit();
+});
+
+$("#approvalButton").click(function(){
+	$("#statusInput").val("1");
+	$("#orderForm").submit();
+});
+</script>
+<div class="pageContent">
+	<form id="orderForm" method="post" action="o_${orderType}_order_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<input id="statusInput" type="hidden" name="status" value="${order.status}"/>
+		<div id = "formContent" class="pageFormContent" layoutH="56">
+			<p>
+				<label><@s.m "global.createTime"/>:</label>
+				<input name="createTime" readonly="readonly" type="text" value="${(order.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="20" />
+			</p>
+			<p>
+				<label><@s.m "global.createUser"/>:</label>
+				<input readonly="readonly" type="text" value="${(order.createUser.name)!}" size="20" />
+				<input name="createUser.id" type="hidden" value="${(order.createUser.id)!}" />
+			</p>
+			
+			<div class="divider"></div>
+			
+			<p>
+				<label>ID:</label>
+				<input name="id" type="text" size="20" value="${order.id!}" readonly="readonly"/>
+			</p>
+			<p>
+				<label><@s.m "${orderType}.order.serial" />:</label>
+				<input name="serial" type="text" size="20" value="${order.serial!}" readonly/>
+			</p>
+			<p>
+				<label><@s.m "${orderType}.order.name"/>:</label>
+				<input name="name" type="text" size="20" value="${order.name!}"/>
+			</p>
+			
+			<p>
+				<label><@s.m "${orderType}.order.company"/>:</label>
+				<input type="hidden" name="company.id" value="${(order.company.id)!}"/>
+				<input type="text" name="company.name" value="${(order.company.name)!}" lookupGroup="company" class="required" readonly/>
+				<a class="btnLook" href="v_company.do?type=1" lookupGroup="company"><@s.m "company"/></a>		
+			</p>
+			
+			<p>
+				<label><@s.m "${orderType}.order.time"/>:</label>
+				<input type="text" name="billTime" class="date" value="${(order.billTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
+			</p>
+
+			<p>
+				<label><@s.m "global.comment"/>:</label>
+				<input name="comment" type="text" size="20" value="${order.comment!}"/>
+			</p>
+			
+			<div class="divider"></div>
+			
+			<div class="panel" style="overflow: auto">
+	            <h1><@s.m "${orderType}.order.items"/></h1>
+	            <div>
+				<table class="list nowrap itemDetail" addButton="<@s.m '${orderType}.order.addItem'/>" buttonDisabled=<#if order.status == 0 && orderType != 'view'>"false"<#else>"true"</#if>
+					width="100%">
+					<thead>
+						<tr>
+							<th type="label" name="records[#index#].id" size="2" display="#index#"><@s.m "global.number"/></th>
+							
+							<th type="lookup" name="records[#index#].material.serial" size="20"
+								lookupGroup="records[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=1" aTitle="<@s.m 'material'/>"
+								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "material.allSerial"/></th>
+								
+							<th type="text" name="records[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							<th type="text" name="records[#index#].number" size="12" fieldClass="positiveNumber required"><@s.m "material.number"/></th>
+							<#if order.status gt 0><th type="text" name="records[#index#].finishNumber" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "${orderType}.order.finishNumber"/></th></#if>
+							<th type="text" name="records[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
+								
+							<th type="del" width="60"><@s.m "global.operate"/></th>
+						</tr>
+					</thead>
+					<tbody>
+					<#if order.records??>
+						<#assign count=0 />
+						<#list order.records as record>
+						<tr class="unitBox">
+						    <td><span class="label" display="#index#">${count+1}</span>
+						    <input type="hidden" name="records[${count}].id" value="${record.id}"></input></td>
+							<td>
+								<input type="text" name="records[${count}].material.serial" value="${record.material.allSerial!}" size="20" class="textInput required" readonly>
+								<a class="btnLook" href="v_material.do?type=1" lookupgroup="records[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>
+							</td>
+							<td><input type="text" name="records[${count}].material.name" value="${record.material.name!}" size="12" class="textInput" readonly>
+							<input type="hidden" name="records[${count}].material.id" value="${record.material.id!}" class="textInput"></td>
+							<td><input type="text" name="records[${count}].number" value="${record.number!}" size="12" class="positiveNumber textInput required"></td>
+							<#if order.status gt 0><td><input type="text" name="records[${count}].finishNumber" value="${record.finishNumber!}" size="12" readonly></td></#if>
+							<td><input type="text" name="records[${count}].material.unit" value="${record.material.unit!}" size="12" class="textInput" readonly></td>
+							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
+						</tr>
+						<#assign count=count+1/>
+						</#list>
+					</#if>
+					</tbody>
+				</table>
+				</div>
+			</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
+				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a href="v_${orderType}_order_list.do" target="navTab" rel="main" title="<@s.m '${orderType}.order.list'/>"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

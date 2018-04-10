@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.mrp.entity">
+	<class name="Cir" table="cir">
+		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
+		<property name="name" column="name" type="string" length="100"/>
+		<property name="serial" column="serial" type="string" not-null="true" length="100"/>
+		
+		<many-to-one name="createUser" column="create_user_id" class="com.berp.core.entity.User"/>
+		<property name="createTime" column="create_time" type="timestamp" length="19"/>
+		
+		<property name="billTime" column="bill_time" type="timestamp" length="19"/>
+		<property name="type" column="type" type="integer" not-null="true" length="3"/>
+		<property name="status" column="status" type="integer" not-null="true" length="3"/>
+		<property name="comment" column="comment" type="string" length="200"/>
+		
+		<property name="direction" column="direction" type="integer" not-null="true" length="3"/>
+		
+		<many-to-one name="order" column="order_id" class="com.berp.mrp.entity.Order"/>
+		<many-to-one name="company" column="company_id" class="com.berp.core.entity.Company"/>
+		
+		<list name="flows" inverse="false" cascade="all">
+			<key column="cir_id"/>
+			<index column="priority" type="integer"></index>
+			<one-to-many class="com.berp.mrp.entity.BatchFlow"/>
+		</list>
+		
+		<list name="rawFlows" inverse="false" cascade="all">
+			<key column="cir_id"/>
+			<index column="priority" type="integer"></index>
+			<one-to-many class="com.berp.mrp.entity.RawBatchFlow"/>
+		</list> 
+	</class>
+</hibernate-mapping>

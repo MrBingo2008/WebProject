@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<title>生产管理系统</title>
+
+<link href="${richRes}/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="${richRes}/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="${richRes}/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
+<link href="${richRes}/uploadify/css/uploadify.css" rel="stylesheet" type="text/css" media="screen"/>
+<!--[if IE]>
+<link href="${richRes}/themes/css/ieHack.css" rel="stylesheet" type="text/css" media="screen"/>
+<![endif]-->
+<style type="text/css">
+	#header{height:85px}
+	#leftside, #container, #splitBar, #splitBarProxy{top:90px}
+</style>
+
+<!--[if lt IE 9]><script src="${richRes}/js/speedup.js" type="text/javascript"></script><script src="${richRes}/js/jquery-1.11.3.min.js" type="text/javascript"></script><![endif]-->
+<!--[if gte IE 9]><!--><script src="${richRes}/js/jquery-2.1.4.min.js" type="text/javascript"></script><!--<![endif]-->
+
+<script src="${richRes}/js/jquery.cookie.js" type="text/javascript"></script>
+<script src="${richRes}/js/jquery.validate.js" type="text/javascript"></script>
+<script src="${richRes}/js/jquery.bgiframe.js" type="text/javascript"></script>
+<script src="${richRes}/xheditor/xheditor-1.2.2.min.js" type="text/javascript"></script>
+<script src="${richRes}/xheditor/xheditor_lang/zh-cn.js" type="text/javascript"></script>
+<script src="${richRes}/uploadify/scripts/jquery.uploadify.min.js" type="text/javascript"></script>
+
+<script src="${richRes}/js/dwz.core.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.util.date.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.validate.method.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.barDrag.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.barDragH.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.drag.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.tree.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.accordion.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.ui.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.theme.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.switchEnv.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.alertMsg.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.contextmenu.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.navTab.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.tab.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.resize.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.dialog.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.dialogDrag.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.sortDrag.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.cssTable.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.stable.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.taskBar.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.ajax.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.pagination.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.database.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.datepicker.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.effects.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.panel.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.checkbox.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.history.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.combox.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.file.js" type="text/javascript"></script>
+<script src="${richRes}/js/dwz.print.js" type="text/javascript"></script>
+
+<!-- script src="${richRes}/bin/dwz.min.js" type="text/javascript"></script  -->
+<script src="${richRes}/js/dwz.regional.zh.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+$(function(){
+	DWZ.init("${richRes}/dwz.frag.xml", {
+		loginUrl:"login_dialog.html", loginTitle:"登录",	// 弹出登录对话框
+//		loginUrl:"login.html",	// 跳到登录页面
+		statusCode:{ok:200, error:300, timeout:301}, //【可选】
+		keys: {statusCode:"statusCode", message:"message"}, //【可选】
+		pageInfo:{pageNum:"pageNum", numPerPage:"numPerPage", orderField:"orderField", orderDirection:"orderDirection"}, //【可选】
+		debug:false,	// 调试模式 【true|false】
+		callback:function(){
+			initEnv();
+			$("#themeList").theme({themeBase:"themes"});
+			//setTimeout(function() {$("#sidebar .toggleCollapse div").trigger("click");}, 10);
+			setTimeout(function() {$("#navMenu .selected a").trigger("click");}, 10);
+		}
+	});
+});
+</script>
+</head>
+
+<body scroll="no">
+	<div id="layout">
+		<div id="header">
+			<div class="headerNav">
+				<a class="logo" href="http://j-ui.com">标志</a>
+				<ul class="nav">
+					<li>您好, ${user.name!}</li>
+					<li><a href="logout.do">退出</a></li>
+				</ul>
+			</div>
+		
+			<div id="navMenu">
+				<ul>
+					<li class="selected"><a href="v_personal.do"><span><@s.m "personal"/></span></a></li>
+					<@berp_perm url="/v_purchase.do"><li><a href="v_purchase.do"><span><@s.m "purchase.manage"/></span></a></li></@berp_perm>
+					<@berp_perm url="/v_sell.do"><li><a href="v_sell.do"><span><@s.m "sell.manage"/></span></a></li></@berp_perm>
+					<@berp_perm url="/v_manu.do"><li><a href="v_manu.do"><span><@s.m "manu.manage"/></span></a></li></@berp_perm>
+					<@berp_perm url="/v_lib.do"><li><a href="v_lib.do"><span><@s.m "lib.manage"/></span></a></li></@berp_perm>
+					<!-- <@berp_perm url="/v_queryStat.do"><li><a href="v_queryStat.do"><span><@s.m "queryStat"/></span></a></li></@berp_perm> -->
+					<@berp_perm url="/v_data_setting.do"><li><a href="v_data_setting.do"><span><@s.m "dataSetting"/></span></a></li></@berp_perm>
+					<@berp_perm url="/v_system_setting.do"><li><a href="v_system_setting.do"><span><@s.m "systemSetting"/></span></a></li></@berp_perm>
+				</ul>
+			</div>
+		</div>
+
+		<div id="leftside">
+			<div id="sidebar_s">
+				<div class="collapse">
+					<div class="toggleCollapse"><div></div></div>
+				</div>
+			</div>
+			<div id="sidebar">
+				<div class="toggleCollapse"><h2>菜单栏</h2><div>收缩</div></div>
+				<!-- 这个地方插入左侧菜单栏 -->
+			</div>
+		</div>
+		<div id="container">
+			<div id="navTab" class="tabsPage">
+				<div class="tabsPageHeader">
+					<div class="tabsPageHeaderContent"><!-- 显示左右控制时添加 class="tabsPageHeaderMargin" -->
+						<ul class="navTab-tab">
+							<li tabid="main" class="main"><a href="javascript:;"><span><span class="home_icon">我的主页</span></span></a></li>
+						</ul>
+					</div>
+					<div class="tabsLeft">left</div><!-- 禁用只需要添加一个样式 class="tabsLeft tabsLeftDisabled" -->
+					<div class="tabsRight">right</div><!-- 禁用只需要添加一个样式 class="tabsRight tabsRightDisabled" -->
+					<!-- <div class="tabsMore">more</div> -->
+				</div>
+				
+				<!-- <ul class="tabsMoreList">
+					<li><a href="javascript:;">个人信息</a></li>
+				</ul> -->
+				
+				<div class="navTab-panel tabsPageContent layoutBox">
+					<div class="page unitBox">
+						<div class="accountInfo">
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+
+	</div>
+
+	<div id="footer">Copyright &copy; 2017. 生产管理系统</div>
+
+</body>
+</html>

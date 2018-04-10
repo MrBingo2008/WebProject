@@ -1,0 +1,23 @@
+<div class="accordion" fillSpace="sideBar">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "personal.task"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<li><a id="personalTips" href="v_personal_tips.do" target="navTab" rel="main"><@s.m "personal.tips"/></a></li>
+		</ul>
+	</div>
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "personal.info"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<li><a href="v_personal_change_pwd.do" target="dialog" mask="true" width="600"><@s.m "personal.passwordSetting"/></a></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	$(function(){
+		setTimeout(function() {$("#personalTips").trigger("click");}, 10);
+	});
+	</script>
+</div>

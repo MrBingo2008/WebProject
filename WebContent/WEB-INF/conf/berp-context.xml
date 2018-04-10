@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+	default-lazy-init="true">
+	
+	<!--后来加的，HttpSession，这只是一个辅助类，针对http的session，session的值存放在request里面-->
+	<bean id="sessionProvider" class="com.berp.framework.web.session.HttpSessionProvider"/>
+		
+	<bean id="pwdEncoder" class="com.berp.framework.security.Md5PwdEncoder"/>
+	
+	<!-- 在servlet.xml里的freemarker引用 -->
+	<bean id="berp_perm" class="com.berp.framework.web.directive.PermistionDirective"/>
+	
+	<!-- 考虑写在context:component-scan里 -->
+	<bean id="userDao" class="com.berp.core.dao.UserDao"/>
+	<bean id="roleDao" class="com.berp.core.dao.RoleDao"/>
+	<bean id="companyDao" class="com.berp.core.dao.CompanyDao"/>
+	<bean id="categoryDao" class="com.berp.core.dao.CategoryDao"/>
+	
+	<bean id="materialDao" class="com.berp.mrp.dao.MaterialDao"/>
+	<bean id="batchDao" class="com.berp.mrp.dao.BatchDao"/>
+	<bean id="batchFlowDao" class="com.berp.mrp.dao.BatchFlowDao"/>
+	<bean id="rawBatchDao" class="com.berp.mrp.dao.RawBatchDao"/>
+	<bean id="rawBatchFlowDao" class="com.berp.mrp.dao.RawBatchFlowDao"/>
+	<bean id="processDao" class="com.berp.mrp.dao.ProcessDao"/>
+	<bean id="stepDao" class="com.berp.mrp.dao.StepDao"/>
+	<bean id="planDao" class="com.berp.mrp.dao.PlanDao"/>
+	<bean id="planStepDao" class="com.berp.mrp.dao.PlanStepDao"/>
+	<bean id="cirDao" class="com.berp.mrp.dao.CirDao"/>
+	<bean id="orderDao" class="com.berp.mrp.dao.OrderDao"/>
+	<bean id="orderRecordDao" class="com.berp.mrp.dao.OrderRecordDao"/>
+</beans>

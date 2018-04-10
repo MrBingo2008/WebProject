@@ -1,0 +1,72 @@
+
+<div class="pageFormContent">
+	
+	<@berp_perm url="/o_purchase_order">
+	<h2 class="contentTitle" style="margin-top:5px;"><@s.m "purchase.manage"/></h2>
+	
+	<div class="todo"><@s.m "purchase.order"/><span style="color:red">未审核</span>数量：${purchaseNotApprovalNumber!0}个。  
+	<#if purchaseNotApprovalNumber gt 0><a title="<@s.m 'purchase.order.list'/>" href="v_purchase_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "purchase.order"/><span style="color:red">未完成收货</span>数量：${purchaseNotFinishNumber!0}个。  
+	<#if purchaseNotFinishNumber gt 0><a title="<@s.m 'purchase.order.list'/>" href="v_purchase_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "purchaseIn"/><span style="color:red">未审核</span>数量：${purchaseInNotApprovalNumber!0}个。
+	<#if purchaseInNotApprovalNumber gt 0><a title="<@s.m 'purchaseIn.list'/>" href="v_purchaseIn_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "purchaseBack"/><span style="color:red">未审核</span>数量：${purchaseBackNotApprovalNumber!0}个。
+	<#if purchaseBackNotApprovalNumber gt 0><a title="<@s.m 'purchaseBack.list'/>" href="v_purchaseBack_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	</@berp_perm>
+		
+	<@berp_perm url="/o_sell_order">
+	<h2 class="contentTitle"><@s.m "sell.manage"/></h2>
+	<div class="todo">客户订单<span style="color:red">未审核</span>数量：${sellNotApprovalNumber!0}个。  
+	<#if sellNotApprovalNumber gt 0><a title="<@s.m 'sell.order.list'/>" href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	<div class="todo">客户订单<span style="color:red">未完成发货</span>数量：${sellNotFinishNumber!0}个。  
+	<#if sellNotFinishNumber gt 0><a title="<@s.m 'sell.order.list'/>" href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "sellOut"/><span style="color:red">未审核</span>数量：${sellOutNotApprovalNumber!0}个。
+	<#if sellOutNotApprovalNumber gt 0><a title="<@s.m 'sellOut.list'/>" href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "sellBack"/><span style="color:red">未审核</span>数量：${sellBackNotApprovalNumber!0}个。
+	<#if sellBackNotApprovalNumber gt 0><a title="<@s.m 'sellBack.list'/>" href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	</@berp_perm>
+	
+	<@berp_perm url="/o_plan">
+	<h2 class="contentTitle" style="margin-top:5px;"><@s.m "manu.manage"/></h2>
+	
+	<div class="todo">生产任务<span style="color:red">未审核</span>数量：${planNotApprovalNumber!0}个。 
+	<#if planNotApprovalNumber gt 0><a title="<@s.m 'plan.list'/>" href="v_plan_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo">生产任务<span style="color:red">未完成下料</span>数量：${planNotMaterialNumber!0}个。 
+	<#if planNotMaterialNumber gt 0><a title="<@s.m 'plan.list'/>" href="v_plan_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo">生产任务<span style="color:red">未完成生产</span>数量：${planNotFinishNumber!0}个。 
+	<#if planNotFinishNumber gt 0><a title="<@s.m 'plan.list'/>" href="v_plan_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo">生产任务<span style="color:red">未完成委外外送</span>数量：${planNotOutsideOutNumber!0}个。
+	<#if planNotOutsideOutNumber gt 0><a title="<@s.m 'plan.list'/>" href="v_plan_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo">生产任务<span style="color:red">未完成委外回收</span>数量：${planNotOutsideInNumber!0}个。 
+	<#if planNotOutsideInNumber gt 0><a title="<@s.m 'plan.list'/>" href="v_plan_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo">生产任务<span style="color:red">未完成入库</span>数量：${planNotPackageNumber!0}个。 
+	<#if planNotPackageNumber gt 0><a title="<@s.m 'plan.list'/>" href="v_plan_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "outsideOut"/><span style="color:red">未审核</span>数量：${outsideOutNotApprovalNumber!0}个。
+	<#if outsideOutNotApprovalNumber gt 0><a title="<@s.m 'outsideOut.list'/>" href="v_outsideOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "outsideIn"/><span style="color:red">未审核</span>数量：${outsideInNotApprovalNumber!0}个。
+	<#if outsideInNotApprovalNumber gt 0><a  title="<@s.m 'outsideIn.list'/>" href="v_outsideIn_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	</@berp_perm>
+
+	<!-- 这里不大合理 -->
+	<@berp_perm url="/o_checkIn">
+	<h2 class="contentTitle" style="margin-top:5px;"><@s.m "lib.manage"/></h2>
+	<div class="todo">盘点报溢单<span style="color:red">未审核</span>数量：${checkInNotApprovalNumber!0}个。  
+	<#if checkInNotApprovalNumber gt 0><a title="<@s.m 'checkIn.list'/>" href="v_checkIn_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	<div class="todo">盘点报损单<span style="color:red">未审核</span>数量：${checkOutNotFinishNumber!0}个。  
+	<#if checkOutNotApprovalNumber gt 0><a title="<@s.m 'checkOut.list'/>" href="v_checkOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	</@berp_perm>
+	
+</div>

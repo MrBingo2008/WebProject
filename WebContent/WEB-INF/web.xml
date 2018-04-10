@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  	
+  	<display-name>berp</display-name>
+  	<welcome-file-list>
+    	<welcome-file>index.html</welcome-file>
+    	<welcome-file>default.html</welcome-file>
+    	<welcome-file>default.jsp</welcome-file>
+  	</welcome-file-list>
+  	
+  	<!--commented by stone: the load sequence is "context- param -> listener -> filter -> servlet" -->
+  	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/conf/berp-application-context.xml
+			/WEB-INF/conf/berp-context.xml
+		</param-value>
+	</context-param>
+  	
+  	<!-- commented by stone: 
+  	1、listener WebApplicationContext是spring的核心，spring的bean都放在这里。
+  	2、ServletContext是Servlet和Servlet容器之间的接口，每个Web应用有唯一一个ServletContext对象
+  	3、通过ServletContext可以获取WebApplicationContext
+  	4、例子：
+  		WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
+  		DataSource ds = ctx.getBean(DataSource.class)-->
+  	<listener>  
+    	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  	</listener>
+  	
+  	<listener>
+  		<listener-class>com.berp.core.web.TestListener</listener-class>
+  	</listener>
+  	 
+  	<!-- filter -->
+	<filter>
+		<filter-name>processTime</filter-name>
+		<filter-class>com.berp.core.web.ProcessTimeFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>processTime</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+ 
+	<filter>
+		<filter-name>osivFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	
+	<!-- servlet -->
+    <servlet>  
+    	<servlet-name>berpCoreServlet</servlet-name>  
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+	        <param-name>contextConfigLocation</param-name>
+	        <param-value>/WEB-INF/conf/berp-core-servlet.xml</param-value>
+	    </init-param>  
+        <load-on-startup>1</load-on-startup>  
+    </servlet>  
+    <servlet-mapping>  
+    	<servlet-name>berpCoreServlet</servlet-name>  
+    	<!-- 这里如果针对所有请求的话，不能写成/*（会产生死循环），应该为/，另外好像*只能放前面和后面，不能放中间 -->
+    	<url-pattern>*.do</url-pattern>  
+    </servlet-mapping>
+</web-app>

@@ -1,0 +1,48 @@
+<div class="accordion" fillSpace="sideBar">
+	<@berp_perm url="/v_material">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "material.data"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/v_material"><li><a href="v_material.do?type=2" target="navTab" rel="main"><@s.m "material"/></a></li></@berp_perm>
+			<@berp_perm url="/v_category"><li><a href="v_category_list.do?rootParentId=1" target="navTab" rel="main"><@s.m "category.1"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+	
+	<@berp_perm url="/v_company">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "company.data"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/v_company"><li><a href="v_company.do?type=2" target="navTab" rel="main"><@s.m "company"/></a></li></@berp_perm>
+			<@berp_perm url="/v_category"><li><a href="v_category_list.do?rootParentId=2" target="navTab" rel="main"><@s.m "company.category"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+	
+	<@berp_perm url="/v_category">	
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "room.data"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/v_category"><li><a href="v_category_list.do?rootParentId=3" target="navTab" rel="main"><@s.m "room"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+	
+	<@berp_perm url="/v_process">
+	<div class="accordionHeader">
+		<h2><span>Folder</span><@s.m "process.data"/></h2>
+	</div>
+	<div class="accordionContent">
+		<ul class="tree treeFolder">
+			<@berp_perm url="/v_process"><li><a href="v_process_list.do" target="navTab" rel="main"><@s.m "process"/></a></li></@berp_perm>
+			<@berp_perm url="/v_step"><li><a href="v_step_list.do?type=1" target="navTab" rel="main"><@s.m "step"/></a></li></@berp_perm>
+		</ul>
+	</div>
+	</@berp_perm>
+</div>
