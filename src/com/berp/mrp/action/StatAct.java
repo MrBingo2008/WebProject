@@ -1,6 +1,8 @@
 package com.berp.mrp.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.dao.MaterialDao;
+import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.dao.StepDao;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.Plan;
@@ -29,6 +32,11 @@ public class StatAct {
 	
 	@RequestMapping("/v_stat_list.do")
 	public String stepList(HttpServletRequest request, ModelMap model) {
+		
+		Map<Integer, Material> materials = new HashMap<Integer, Material>();
 		return "pages/queryStat/stat_list";
 	}
+	
+	@Autowired
+	private OrderRecordDao recordDao;
 }

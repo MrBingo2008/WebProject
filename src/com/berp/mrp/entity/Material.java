@@ -193,12 +193,20 @@ public class Material {
 	}
 	
 	//order record
-	
 	public Set<OrderRecord> getRecords(){
 		return this.records;
 	}
 	
 	public void setRecords(Set<OrderRecord> rs){
 		this.records = rs;
+	}
+	
+	private Integer purchaseOrder;
+	public Integer getPurchaseOrder(){
+		return purchaseOrder;
+	}
+	
+	public void setPurchaseOrder(Integer p){
+		purchaseOrder = p;
 	}
 }
