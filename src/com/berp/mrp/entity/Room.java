@@ -1,4 +1,3 @@
-﻿//just for test git hub
 package com.berp.mrp.entity;
 
 import com.berp.core.entity.Category;

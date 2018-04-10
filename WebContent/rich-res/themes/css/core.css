@@ -492,6 +492,8 @@ body { overflow:hidden;}
 .searchBar .subBar { height:25px;}
 .searchBar .subBar ul { float:right;}
 .searchBar .subBar li { float:left; margin-left:5px;}
+/*added by stone，主要是日期input不float left的话，后面a会跳到前面*/
+.searchBar .textInput { float:left;}
 .pageContent { display:block;overflow:auto;position:relative;}
 
 .dateRange input{width:72px;}
