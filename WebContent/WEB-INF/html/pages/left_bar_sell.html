@@ -1,12 +1,13 @@
-<div class="accordion" fillSpace="sideBar">
+
+<div id="left_bar_sell" class="accordion" fillSpace="sideBar">
 	<@berp_perm url="/v_sell_order">
 	<div class="accordionHeader">
 		<h2><span>Folder</span><@s.m "sell.order"/></h2>
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/o_sell_order"><li><a href="v_sell_order_add.do" target="navTab" rel="main"><@s.m "sell.order.add"/></a></li></@berp_perm>
 			<@berp_perm url="/v_sell_order"><li><a href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "sell.order.list"/></a></li></@berp_perm>
+			<@berp_perm url="/o_sell_order"><li><a href="v_sell_order_add.do" target="navTab" rel="main"><@s.m "sell.order.add"/></a></li></@berp_perm>
 		</ul>
 	</div>
 	</@berp_perm>
@@ -34,4 +35,11 @@
 		</ul>
 	</div>
 	</@berp_perm>
+	
+	<!-- 必须放在这个位置，要不显示会又问题。必须用#left_bar_sell，要不会定位到 index.HTML里的第一个a -->
+	<script type="text/javascript">
+	$(function(){
+		setTimeout(function() {$("#left_bar_sell a:first").trigger("click");}, 10);
+	});
+	</script>
 </div>
