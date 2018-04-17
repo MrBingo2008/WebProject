@@ -32,7 +32,10 @@ public class StepAct {
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
 		
-		Pagination pagination = stepDao.getPage(searchName, pageNum, numPerPage);
+		Boolean surface = null;
+		if(type!=null && type == 2)
+			surface = true;
+		Pagination pagination = stepDao.getPage(searchName, pageNum, numPerPage, surface);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("type", type);
@@ -43,6 +46,7 @@ public class StepAct {
 	public String stepAdd(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("openMode", "add");
 		Step step = new Step();
+		
 		model.addAttribute("step", step);
 		return "pages/manu/step_detail";
 	}

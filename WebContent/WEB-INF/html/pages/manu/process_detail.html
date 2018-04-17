@@ -40,7 +40,7 @@ $(function(){
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>			
 							<th type="lookup" name="steps[#index#].serial" size="20" fieldClass="textInput required"
-								lookupGroup="steps[#index#]" lookupUrl="v_step_list.do?type=0" aTitle="<@s.m 'step'/>"><@s.m "step.serial"/></th>
+								lookupGroup="steps[#index#]" lookupUrl="v_step_list.do?type=1" aTitle="<@s.m 'step'/>"><@s.m "step.serial"/></th>
 							<th type="text" name="steps[#index#].name" size="20"><@s.m "step.name"/></th>
 							<th type="enum" name="steps[#index#].type"
 								enumUrl="<select class='combox'>
@@ -59,7 +59,7 @@ $(function(){
 						    <input type="hidden" name="steps[${count}].id" value="${step.id}"></input></td>
 							<td>
 								<input type="text" name="steps[${count}].serial" value="${step.serial!}" size="20" class="textInput required">
-								<a class="btnLook" href="v_step_list.do?type=0" lookupgroup="steps[${count}]" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
+								<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[${count}]" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
 							</td>
 							<td><input type="text" name="steps[${count}].name" value="${step.name!}" size="20" class="textInput">
 							<td>

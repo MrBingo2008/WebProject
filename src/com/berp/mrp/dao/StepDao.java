@@ -48,14 +48,18 @@ public class StepDao extends HibernateBaseDao<Step, Integer> {
 		return entity;
 	}
 
-	public Pagination getPage(String name, Integer pageNo, Integer pageSize) {
+	public Pagination getPage(String name, Integer pageNo, Integer pageSize, Boolean surface) {
 		Finder f = Finder.create("select bean from Step bean where 1=1");
 		if(name != null && name != "")
 		{
 			f.append(" and (bean.name like :name or bean.serial like :name) ");
 			f.setParam("name", "%" + name + "%");
 		}
-	
+		if(surface!=null)
+		{
+			f.append(" and bean.surface=:surface");
+			f.setParam("surface", surface);
+		}
 		return find(f, pageNo, pageSize);
 	}
 	

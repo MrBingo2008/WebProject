@@ -6,5 +6,6 @@
 		<property name="name" column="name" type="string" length="100"/>
 		<property name="serial" column="serial" type="string" not-null="true" length="100"/>
 		<property name="type" column="type" type="integer" not-null="true" length="3"/>
+		<property name="surface" column="is_surface" type="java.lang.Boolean" not-null="true"/>
 	</class>
 </hibernate-mapping>

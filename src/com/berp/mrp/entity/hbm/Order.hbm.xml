@@ -8,8 +8,9 @@
 		
 		<many-to-one name="createUser" column="create_user_id" class="com.berp.core.entity.User"/>
 		<property name="createTime" column="create_time" type="timestamp" length="19"/>
-		
 		<property name="billTime" column="bill_time" type="timestamp" length="19"/>
+		<property name="deadlineTime" column="deadline_time" type="timestamp" length="19"/>
+		
 		<property name="type" column="type" type="integer" not-null="true" length="3"/>
 		<property name="status" column="status" type="integer" not-null="true" length="3"/>
 		<property name="comment" column="comment" type="string" length="200"/>

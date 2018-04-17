@@ -28,12 +28,17 @@ $(function(){
 					<option value='1' <#if '${step.type!}' == '1'>selected="selected"</#if>><@s.m 'step.type.1'/></option>
 				</select>
 			</p>
+			<p style="width:auto">
+				<label><@s.m "step.isSurface"/>:</label>
+				<label style="width:auto"><input type="radio" name="surface" value="false" <#if step.surface?? && !step.surface>checked</#if> />否</label>
+				<label style="width:auto"><input type="radio" name="surface" value="true" <#if step.surface?? && step.surface>checked</#if> />是</label>
+			</p>
 		</div>
 		<div class="formBar">
 			<ul>
 				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
 				<li>
-					<div class="button"><div class="buttonContent"><a href="v_step_list.do?type=1" target="navTab" rel="main" title="<@s.m 'step'/>"><button type="button">取消</button></a></div></div>
+					<div class="button"><div class="buttonContent"><a href="v_step_list.do?type=0" target="navTab" rel="main" title="<@s.m 'step'/>"><button type="button">取消</button></a></div></div>
 				</li>
 			</ul>
 		</div>

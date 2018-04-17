@@ -70,6 +70,11 @@ $("#approvalButton").click(function(){
 				<label><@s.m "${orderType}.order.time"/>:</label>
 				<input type="text" name="billTime" class="date" value="${(order.billTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
 			</p>
+			
+			<p>
+				<label><@s.m "${orderType}.deadline.time"/>:</label>
+				<input type="text" name="deadlineTime" class="date" value="${(order.deadlineTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
+			</p>
 
 			<p>
 				<label><@s.m "global.comment"/>:</label>
@@ -92,6 +97,13 @@ $("#approvalButton").click(function(){
 								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "material.allSerial"/></th>
 								
 							<th type="text" name="records[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							
+							<th type="lookup" name="records[#index#].surface.name" size="20"
+								lookupGroup="records[#index#].surface" lookuppk="id" lookupUrl="v_step_list.do?type=2" aTitle="<@s.m 'step.surface'/>"
+								fieldAttrs="{readonly:'readonly'}"><@s.m "step.surface"/></th>
+								
+							<th type="text" name="records[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							
 							<th type="text" name="records[#index#].number" size="12" fieldClass="positiveNumber required"><@s.m "material.number"/></th>
 							<#if order.status gt 0><th type="text" name="records[#index#].finishNumber" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "${orderType}.order.finishNumber"/></th></#if>
 							<th type="text" name="records[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>

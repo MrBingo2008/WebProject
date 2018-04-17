@@ -5,7 +5,7 @@
 </form>
 
 <div class="pageHeader">
-	<form rel="pagerForm" onsubmit="return <#if type?? && type == 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_step_list.do?type=${type}" method="post">
+	<form rel="pagerForm" onsubmit="return <#if type?? && type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_step_list.do?type=${type}" method="post">
 	<div class="searchBar">
 		<ul class="searchContent">
 			<li>
@@ -24,7 +24,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<#if type == 1><@berp_perm url="/o_step"><li><a class="add" href="v_step_add.do" target="navTab" rel="main"><span><@s.m "step.add"/></span></a></li></@berp_perm></#if>
+			<#if type == 0><@berp_perm url="/o_step"><li><a class="add" href="v_step_add.do" target="navTab" rel="main"><span><@s.m "step.add"/></span></a></li></@berp_perm></#if>
 		</ul>
 	</div>
 	<table class="table" width="99%" layoutH="138">
@@ -34,6 +34,7 @@
 				<th width="40" orderField="accountNo" class="asc"><@s.m "step.serial"/></th>
 				<th width="40"><@s.m "step.name"/></th>
 				<th width="40"><@s.m "step.type"/></th>
+				<th width="60"><@s.m "step.isSurface"/></th>
 				<th width="40"><@s.m "global.operate"/></th>
 			</tr>
 		</thead>
@@ -44,12 +45,13 @@
 				<td>${step.serial}</td>
 				<td>${step.name}</td>
 				<td><@s.m "step.type.${step.type}"/></td>
+				<td><#if step.surface>是<#else>否</#if></td>
 				<td>
 				<#if type == 0>
-					<a class="btnSelect" href="javascript:$.bringBack({serial:'${step.serial}', name:'${step.name!}', type:'${step.type}'})">选择</a>
-				<#elseif type == 1>
 					<@berp_perm url="/o_step"><a title="<@s.m 'step.edit'/>" target="navTab" rel="main" href="v_step_edit.do?stepId=${step.id}"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" rel="main" href="o_step_delete.do?stepId=${step.id}"><@s.m "global.delete"/></a></@berp_perm>
+				<#else>
+					<a class="btnSelect" href="javascript:$.bringBack({serial:'${step.serial}', name:'${step.name!}', type:'${step.type}', id:'${step.id}'})">选择</a>
 				</td>
 				</#if>
 			</tr>

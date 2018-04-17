@@ -238,7 +238,7 @@ function calFactor(numInput){
 							<th type="label" name="steps[#index#].priority" size="2" display="#index#"><@s.m "global.number"/></th>							
 							<th type="lookup" name="steps[#index#].name" size="12"
 								lookupGroup="steps[#index#]"
-								lookupUrl="v_step_list.do?type=0" aTitle="<@s.m 'step'/>"><@s.m "step"/></th>
+								lookupUrl="v_step_list.do?type=1" aTitle="<@s.m 'step'/>"><@s.m "step"/></th>
 
 							<th type="enum" name="steps[#index#].type"
 								enumUrl="<select class='combox'>
@@ -271,7 +271,7 @@ function calFactor(numInput){
 						    <#if plan.status == 0>
 								<td>
 									<input type="text" name="steps[${count}].name" value="${step.name}" lookuppk="id" size="12" class="textInput">
-									<a class="btnLook" href="v_step_list.do?type=0" lookupgroup="steps[0]" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
+									<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[0]" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
 								</td>
 								<td>
 									<select class='combox' name='steps[${count}].type'>

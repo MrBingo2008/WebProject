@@ -6,6 +6,7 @@ public class Step {
 	private String serial;
 	
 	private Integer type;
+	private boolean surface;
 	
 	public Step(){
 		
@@ -46,5 +47,14 @@ public class Step {
 
 	public void setType(java.lang.Integer type) {
 		this.type = type;
+	}
+	
+	//surface
+	public boolean getSurface() {
+		return surface;
+	}
+
+	public void setSurface(boolean surface) {
+		this.surface = surface;
 	}
 }

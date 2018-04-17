@@ -12,6 +12,7 @@ public class Order extends BaseBill {
 	
 	private Integer direction=1;
 	
+	private Date deadlineTime;
 	private Company company;
 	private List<OrderRecord> records;
 	
@@ -24,15 +25,6 @@ public class Order extends BaseBill {
 		this.setId(id);
 	}
 	
-	//company
-	public Company getCompany(){
-		return this.company;
-	}
-	
-	public void setCompany(Company company){
-		this.company = company;
-	}
-	
 	//direction
 	public java.lang.Integer getDirection() {
 		return direction;
@@ -40,6 +32,24 @@ public class Order extends BaseBill {
 
 	public void setDirection(java.lang.Integer direction) {
 		this.direction = direction;
+	}
+	
+	//deadline
+	public Date getDeadlineTime() {
+		return deadlineTime;
+	}
+
+	public void setDeadlineTime(Date deadlineTime) {
+		this.deadlineTime = deadlineTime;
+	}
+	
+	//company
+	public Company getCompany(){
+		return this.company;
+	}
+	
+	public void setCompany(Company company){
+		this.company = company;
 	}
 	
 	//records	
