@@ -1,12 +1,13 @@
-<div class="accordion" fillSpace="sideBar">
+<div id="left_bar_manu" class="accordion" fillSpace="sideBar">
 	<@berp_perm url="/v_plan">
 	<div class="accordionHeader">
 		<h2><span>Folder</span><@s.m "plan"/></h2>
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/o_plan"><li><a href="v_plan_gen_list.do" target="navTab" rel="main"><@s.m "plan.gen"/></a></li></@berp_perm>
 			<@berp_perm url="/v_plan"><li><a href="v_plan_list.do" target="navTab" rel="main"><@s.m "plan.list"/></a></li></@berp_perm>
+			<@berp_perm url="/o_plan"><li><a href="v_plan_gen_list.do" target="navTab" rel="main"><@s.m "plan.gen"/></a></li></@berp_perm>
+			<@berp_perm url="/o_plan"><li><a href="v_plan_add.do" target="navTab" rel="main"><@s.m "plan.add"/></a></li></@berp_perm>		
 		</ul>
 	</div>
 	</@berp_perm>
@@ -17,11 +18,17 @@
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/o_outsideOut"><li><a href="v_outsideOut_add.do" target="navTab" rel="main"><@s.m "outsideOut.add"/></a></li></@berp_perm>
 			<@berp_perm url="/v_outsideOut"><li><a href="v_outsideOut_list.do" target="navTab" rel="main"><@s.m "outsideOut.list"/></a></li></@berp_perm>
-			<@berp_perm url="/o_outsideIn"><li><a href="v_outsideIn_add.do" target="navTab" rel="main"><@s.m "outsideIn.add"/></a></li></@berp_perm>
+			<@berp_perm url="/o_outsideOut"><li><a href="v_outsideOut_add.do" target="navTab" rel="main"><@s.m "outsideOut.add"/></a></li></@berp_perm>
+			
 			<@berp_perm url="/v_outsideIn"><li><a href="v_outsideIn_list.do" target="navTab" rel="main"><@s.m "outsideIn.list"/></a></li></@berp_perm>
+			<@berp_perm url="/o_outsideIn"><li><a href="v_outsideIn_add.do" target="navTab" rel="main"><@s.m "outsideIn.add"/></a></li></@berp_perm>
 		</ul>
 	</div>
 	</@berp_perm>
+	<script type="text/javascript">
+	$(function(){
+		setTimeout(function() {$("#left_bar_manu a:first").trigger("click");}, 10);
+	});
+	</script>
 </div>

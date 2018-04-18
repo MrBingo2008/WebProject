@@ -18,8 +18,8 @@
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/o_sellOut"><li><a href="v_sellOut_add.do" target="navTab" rel="main"><@s.m "sellOut.add"/></a></li></@berp_perm>
 			<@berp_perm url="/v_sellOut"><li><a href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "sellOut.list"/></a></li></@berp_perm>
+			<@berp_perm url="/o_sellOut"><li><a href="v_sellOut_add.do" target="navTab" rel="main"><@s.m "sellOut.add"/></a></li></@berp_perm>
 		</ul>
 	</div>
 	</@berp_perm>
@@ -30,13 +30,14 @@
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/o_sellBack"><li><a href="v_sellBack_add.do" target="navTab" rel="main"><@s.m "sellBack.add"/></a></li></@berp_perm>
 			<@berp_perm url="/v_sellBack"><li><a href="v_sellBack_list.do" target="navTab" rel="main"><@s.m "sellBack.list"/></a></li></@berp_perm>
+			<@berp_perm url="/o_sellBack"><li><a href="v_sellBack_add.do" target="navTab" rel="main"><@s.m "sellBack.add"/></a></li></@berp_perm>
 		</ul>
 	</div>
 	</@berp_perm>
 	
-	<!-- 必须放在这个位置，要不显示会又问题。必须用#left_bar_sell，要不会定位到 index.HTML里的第一个a -->
+	<!-- 必须放在这个位置，要不显示会又问题。必须用#left_bar_sell，要不会定位到 index.HTML里的第一个a
+	material的tree也用到这个函数，不过用的是.first() -->
 	<script type="text/javascript">
 	$(function(){
 		setTimeout(function() {$("#left_bar_sell a:first").trigger("click");}, 10);

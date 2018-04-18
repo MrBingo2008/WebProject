@@ -88,7 +88,6 @@ public class ManuAct {
 			}
 		}
 		
-		
 		Plan plan = new Plan();
 		plan.setSerial(defaultSerial);
 		plan.setStatus(0);
@@ -110,6 +109,27 @@ public class ManuAct {
 				steps.add(ps);
 			}
 		plan.setSteps(steps);
+		model.addAttribute("plan", plan);
+		
+		return "pages/manu/plan_detail";
+	}
+	
+	@RequestMapping("/v_plan_add.do")
+	public String planAdd(Integer orderRecordId, Integer materialId, HttpServletRequest request, ModelMap model) {
+		model.addAttribute("openMode", "add");
+		
+		String serial = String.format("SCRW-%s", DateUtils.getCurrentDayString());
+		Integer maxSerial = planDao.getMaxSerial(serial);
+		String defaultSerial = String.format("SCRW-%s-%03d", DateUtils.getCurrentDayString(), maxSerial+1);
+		
+		Plan plan = new Plan();
+		plan.setSerial(defaultSerial);
+		plan.setStatus(0);
+		
+		plan.setCreateTime(new Date());
+		User user = RequestInfoUtils.getUser(request);
+		plan.setCreateUser(user);
+
 		model.addAttribute("plan", plan);
 		
 		return "pages/manu/plan_detail";

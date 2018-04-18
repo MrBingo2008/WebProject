@@ -152,19 +152,25 @@ function calFactor(numInput){
 				<label><@s.m "company.customer"/>:</label>
 				<span class="viewLabel">${(plan.orderRecord.ord.company.name)!}</span>
 			</p>
+			<!-- <p>
+				<label><@s.m "plan.order"/>:</label>
+				<span class="viewLabel">${(plan.orderRecord.ord.serial)!}/${(plan.orderRecord.ord.name)!}</span>
+				<input type="hidden" name="orderRecord.id" value="${(plan.orderRecord.id)!}" />
+			</p> -->
 			<p>
 				<label><@s.m "plan.order"/>:</label>
-				<span class="viewLabel">${plan.orderRecord.ord.serial!}/${plan.orderRecord.ord.name!}</span>
-				<input type="hidden" name="orderRecord.id" value="${(plan.orderRecord.id)!}" />
+				<input type="hidden" name="orderRecord.id" value="${(plan.orderRecord.id)!}"/>
+				<input type="text" name="orderRecord.ord.name" value="${(plan.orderRecord.ord.name)!}" lookupGroup="orderRecord" class="required" readonly/>
+				<a class="btnLook" href="v_sell_order_list.do?type=1" lookupGroup="orderRecord"><@s.m "sell.order"/></a>		
 			</p>
 			<p>
 				<label><@s.m "product.info"/>:</label>
-				<span class="viewLabel">${plan.material.info!}</span>
-				<input type="hidden" name="material.id" value="${plan.material.id!}" />
+				<span class="viewLabel">${(plan.material.info)!}</span>
+				<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 			</p>
 			<p>
 				<label><@s.m "material.orderNumber"/>:</label>
-				<span class="viewLabel">${plan.orderRecord.number!}</span>
+				<span class="viewLabel">${(plan.orderRecord.number)!}</span>
 			</p>
 			<p>
 				<label><@s.m "material.manuNumber"/>:</label>
@@ -259,7 +265,7 @@ function calFactor(numInput){
 						</tr>
 					</thead>
 					<tbody>
-						
+						<#if plan.steps??>
 						<#assign count=0 /><#assign hasButton=0 />
 						<#list plan.steps as step>
 						<tr class="unitBox">
@@ -327,12 +333,13 @@ function calFactor(numInput){
 						</tr>
 						<#assign count=count+1/>
 						</#list>
+						</#if>
 					</tbody>
 				</table>
 				</div>
 			</div>
 			
-            <!-- 生产入库  -->
+            <!-- 生产入库  如果是add plan，这个也会加载，也会用到plan.material，只不过不显示而已，好像不大合理-->
             <div id="planIn" class="panel" style="overflow: auto;">
 				<h1><@s.m "plan.in"/><span style="margin:2px; color:red;"><#if plan.status gt 4>（已完成入库）<#elseif plan.status == 4>（正在入库中）</#if></span></h1>
 				<div>
@@ -346,7 +353,7 @@ function calFactor(numInput){
 							<th type="text" name="packageFlows[#index#].numPerBox" size="12" defaultVal="${(plan.rawBatchFlow.number)!}" fieldClass="positiveNumber" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
 							<th type="text" name="packageFlows[#index#].boxNum" size="12"  defaultVal="1" fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
 							<th type="text" name="packageFlows[#index#].number" size="12" defaultVal="${(plan.rawBatchFlow.number)!}" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
-							<th type="text" name="packageFlows[#index#].material.unit" size="12" defaultVal="${plan.material.unit!}" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
+							<th type="text" name="packageFlows[#index#].material.unit" size="12" defaultVal="${(plan.material.unit)!}" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							<th type="lookup" name="packageFlows[#index#].room.name" size="12"
 								lookupGroup="packageFlows[#index#].room" lookuppk="id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
 								aTitle="<@s.m 'room'/>" lookupUrl="v_category_tree.do?parentId=3"><@s.m "room"/></th>

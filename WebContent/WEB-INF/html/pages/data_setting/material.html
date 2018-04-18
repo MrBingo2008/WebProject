@@ -23,6 +23,7 @@ function getTree(data){
 $(function(){	
 	var data = ${tree};
 	$("#leftMaterialCategoryTree").html(getTree(data));
+	//left_bar那里有用到，但用的是:first
 	setTimeout(function () {$("#leftMaterialCategoryTree a").first().trigger("click");}, 20);
 });
 </script>

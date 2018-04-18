@@ -1,10 +1,8 @@
-<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'jbsxBox');" action="v_raw_batch_list.do?type=${type}">
-	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
-	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
+<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'jbsxBox');" action="v_sell_record_list.do?type=${type}">
 	<input type="hidden" name="searchName" value="${searchName!}"/>
 </form>
 <div class="pageHeader" style="border:1px #B8D0D6 solid">
-	<form onsubmit="return divSearch(this, 'jbsxBox');" action="v_raw_batch_list.do?type=${type}" method="post">
+	<form onsubmit="return divSearch(this, 'jbsxBox');" action="v_sell_record_list.do?type=${type}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -25,27 +23,27 @@
 				<th width="40">ID</th>
 				<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 				<th width="100"><@s.m "material.name"/></th>
-				<th width="160"><@s.m "rawFlow.serial"/></th>
+				<th width="160"><@s.m "material.number"/></th>
 				<th width="40"><@s.m "material.unit"/></th>
-				<th width="100"><@s.m "material.manuNumber"/></th>
+				<!-- <th width="100"><@s.m "material.manuNumber"/></th>
 				<th width="100"><@s.m "rawFlow.leftNumber"/></th>
 				<th width="100"><@s.m "rawFlow.arriveNumber"/></th>
-				<th width="100"><@s.m "rawFlow.notArriveNumber"/></th>
+				<th width="100"><@s.m "rawFlow.notArriveNumber"/></th> -->
 				<th width="60"><@s.m "global.operate"/></th>				
 			</tr>
 		</thead>
 		<tbody>
 		<#list pagination.list as rawFlow>
 			<tr target="sid_obj" rel="1">
-			    <td>${rawFlow.material.id}</td>
-				<td>${rawFlow.material.allSerial!}</td>
-				<td>${rawFlow.material.name!}</td>
-				<td>${rawFlow.serial!}</td>
+			    <td>${record.material.id}</td>
+				<td>${record.material.allSerial!}</td>
+				<td>${record.material.name!}</td>
+				<td>${record.material.number!}</td>
 				<td>${rawFlow.material.unit!}</td>
-				<td>${rawFlow.number!}</td>
+				<!-- <td>${rawFlow.number!}</td>
 				<td>${rawFlow.leftNumber!}</td>
 				<td>${rawFlow.arriveNumber!}</td>
-				<td>${rawFlow.notArriveNumber!}</td>			
+				<td>${rawFlow.notArriveNumber!}</td> -->			
 				<td>
 					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'serial':'${rawFlow.serial!}', 'material.unit':'${rawFlow.material.unit!}',
 					 number:'<#if type == "1">${rawFlow.leftNumber!}<#elseif type=="2">${rawFlow.notArriveNumber!}</#if>' , 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
