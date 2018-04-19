@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.berp.mrp.dao.BatchDao;
 import com.berp.mrp.dao.BatchFlowDao;
 import com.berp.mrp.dao.MaterialDao;
+import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.dao.RawBatchDao;
 import com.berp.mrp.dao.RawBatchFlowDao;
 import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Material;
+import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.RawBatch;
 import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.core.dao.CategoryDao;
@@ -108,7 +110,14 @@ public class MaterialAct {
 		}
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_material.do?type=2", "物料").toString());
 	}
-		
+	
+	@RequestMapping("/v_record_list.do")
+	public String recordList(HttpServletRequest request, ModelMap model) {
+		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, 1, 2, null, null);
+		model.addAttribute("records", records);
+		return "pages/data_setting/record_list";
+	}
+	
 	@RequestMapping("/v_batch_list.do")
 	public String batchAvailableList(Integer materialId, HttpServletRequest request, ModelMap model) {
 		List<BatchFlow> flows = flowDao.getList(materialId, 1, 1, 0.00, null, null);
@@ -172,4 +181,7 @@ public class MaterialAct {
 	
 	@Autowired
 	private MaterialDao materialDao;
+	
+	@Autowired
+	private OrderRecordDao recordDao;
 }

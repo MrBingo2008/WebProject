@@ -33,20 +33,20 @@
 			</tr>
 		</thead>
 		<tbody>
-		<#list pagination.list as rawFlow>
+		<#list records as record>
 			<tr target="sid_obj" rel="1">
 			    <td>${record.material.id}</td>
 				<td>${record.material.allSerial!}</td>
 				<td>${record.material.name!}</td>
 				<td>${record.material.number!}</td>
-				<td>${rawFlow.material.unit!}</td>
+				<td>${record.material.unit!}</td>
 				<!-- <td>${rawFlow.number!}</td>
 				<td>${rawFlow.leftNumber!}</td>
 				<td>${rawFlow.arriveNumber!}</td>
 				<td>${rawFlow.notArriveNumber!}</td> -->			
 				<td>
 					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'serial':'${rawFlow.serial!}', 'material.unit':'${rawFlow.material.unit!}',
-					 number:'<#if type == "1">${rawFlow.leftNumber!}<#elseif type=="2">${rawFlow.notArriveNumber!}</#if>' , 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
+					 number:'${record.number!}' , 'parent.id':'${record.id}'})"><@s.m "global.select"/></a>
 				</td>
 			</tr>
 		</#list>
