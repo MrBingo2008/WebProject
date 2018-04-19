@@ -114,7 +114,7 @@ function calFactor(numInput){
 							<th type="lookup" name="flows[#index#].material.serial" size="18"
 								lookupGroup="flows[#index#]" lookuppk="material.id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
 								<#if materialSelectType?? && materialSelectType == 0>aFieldAttrs="{width:'800', height:'700', resizable:'false'}" aTitle="<@s.m 'material.batch'/>"<#else> aTitle="<@s.m 'material'/>"</#if>
-								lookupUrl="v_material.do?type=${materialSelectType!}"><@s.m "material.allSerial"/></th>
+								lookupUrl="v_record_list.do?type=${materialSelectType!}"><@s.m "material.allSerial"/></th>
 								
 							<#if materialSelectType?? && materialSelectType == 0><th type="hidden" name="flows[#index#].parent.id" style="display:none"></th></#if>	
 							<th type="text" name="flows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>

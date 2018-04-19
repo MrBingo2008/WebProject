@@ -115,6 +115,8 @@ public class MaterialAct {
 	public String recordList(HttpServletRequest request, ModelMap model) {
 		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, 1, 2, null, null);
 		model.addAttribute("records", records);
+		model.addAttribute("type", 0);
+		model.addAttribute("orderType", "purchase");
 		return "pages/data_setting/record_list";
 	}
 	

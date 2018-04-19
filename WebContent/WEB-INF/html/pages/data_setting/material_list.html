@@ -60,6 +60,7 @@ $(function(){
 				<td>${m.notSellOutNumber!}</td>
 				<td>${m.unit!}</td>
 				<td>${m.parent.name}</td>
+				<!-- 考虑全部都换成0为管理的list， 大于0为选择模式 -->
 				<#if type == 0>			
 					<td><a href="v_batch_list.do?materialId=${m.id}" onclick="openBatchDetail()" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
 				<#elseif type == 1>
