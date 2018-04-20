@@ -33,12 +33,13 @@ public class CirAct {
 			String orderType, Integer type,
 			HttpServletRequest request, ModelMap model) {
 		model.addAttribute("orderType", orderType);
-		
-		Pagination pagination = orderDao.getPage(type, searchName, searchRecordName, searchStatus, null, pageNum, numPerPage);
+			
+		Pagination pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, searchStatus, null, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("searchRecordName", searchRecordName);
 		model.addAttribute("searchStatus", searchStatus);
+		model.addAttribute("type", type);
 		
 		return "pages/order/order_list";
 	}
@@ -128,8 +129,12 @@ public class CirAct {
 	}
 	
 	//cir add
-	public String cirAdd(String cirType, Integer materialSelectType, String serialTitle, HttpServletRequest request, ModelMap model) {
+	public String cirAdd(String cirType, /*String orderType,*/ Integer materialSelectType, String serialTitle, HttpServletRequest request, ModelMap model) {
+		//4种可能:purchaseIn/back sellOut/back
 		model.addAttribute("cirType", cirType);
+		//purchase, sell
+		//model.addAttribute("orderType", orderType);
+		//in out
 		model.addAttribute("materialSelectType", materialSelectType);
 		model.addAttribute("openMode", "add");
 		

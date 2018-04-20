@@ -76,11 +76,15 @@ $(function(){
 				<td>${(order.billTime?string('yyyy-MM-dd'))!}</td>
 				<td<#if order.status==0> style="color:red"</#if>><@s.m "${orderType}.order.status.${order.status}"/></td>
 				<td>${(order.createUser.name)!}</td>
+				<#if type?? && type==1>
+					<td><a class="btnSelect" href="javascript:$.bringBack({'serial':'${order.serial!}', 'name':'${order.name!}', 'id':'${order.id}'})"><@s.m "global.select"/></a></td>
+				<#else>
 				<td>
 					<a title="<@s.m '${orderType}.order.view'/>" target="navTab" href="v_${orderType}_order_view.do?orderId=${order.id}" rel="main"><@s.m "global.view"/></a>
 					<@berp_perm url="/o_${orderType}_order"><a title="<@s.m '${orderType}.order.edit'/>" target="navTab" href="v_${orderType}_order_edit.do?orderId=${order.id}" rel="main"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${orderType}_order_delete.do?orderId=${order.id}"><@s.m "global.delete"/></a></@berp_perm>
 				</td>
+				</#if>
 			</tr>
 			</#list>
 		</tbody>

@@ -15,8 +15,8 @@ import com.berp.mrp.entity.Order;
 public class SellAct extends CirAct {
 	
 	@RequestMapping("/v_sell_order_list.do")
-	public String orderList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sell", 2, request, model);
+	public String orderList(Integer type, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sell", type, request, model);
 	}
 	
 	@RequestMapping("/v_sell_order_add.do")
@@ -52,7 +52,7 @@ public class SellAct extends CirAct {
 	//sell out
 	@RequestMapping("/v_sellOut_add.do")
 	public String sellOutAdd(HttpServletRequest request, ModelMap model) {
-		return this.cirAdd("sellOut", 0, "KHFH", request, model);
+		return this.cirAdd("sellOut", /*"sell",*/ 0, "KHFH", request, model);
 	}
 	
 	@RequestMapping("/o_sellOut_save.do")
@@ -88,7 +88,7 @@ public class SellAct extends CirAct {
 	//sell back
 	@RequestMapping("/v_sellBack_add.do")
 	public String sellBackAdd(HttpServletRequest request, ModelMap model) {
-		return this.cirAdd("sellBack", 1, "KHTH", request, model);
+		return this.cirAdd("sellBack", /*"sell",*/ 1, "KHTH", request, model);
 	}
 	
 	@RequestMapping("/o_sellBack_save.do")

@@ -1,8 +1,8 @@
-<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'jbsxBox');" action="v_record_list.do?type=${type}">
+<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'jbsxBox');" action="v_record_list.do?type=${type!}">
 	<input type="hidden" name="searchName" value="${searchName!}"/>
 </form>
 <div class="pageHeader" style="border:1px #B8D0D6 solid">
-	<form onsubmit="return divSearch(this, 'jbsxBox');" action="v_record_list.do?type=${type}" method="post">
+	<form onsubmit="return divSearch(this, 'jbsxBox');" action="v_record_list.do?type=${type!}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -23,9 +23,10 @@
 				<th width="40">ID</th>
 				<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 				<th width="100"><@s.m "material.name"/></th>
-				<th width="160"><@s.m "${orderType}.order.company"/></th>
-				<th width="160"><@s.m "${orderType}.order.number"/></th>
-				<th width="160"><@s.m "${orderType}.order.notFinishNumber"/></th>
+				<th width="80"><@s.m "${orderType}.order.company"/></th>
+				<th width="140"><@s.m "${orderType}.order.serial"/></th>
+				<th width="100"><@s.m "${orderType}.order.number"/></th>
+				<th width="100"><@s.m "${orderType}.order.notFinishNumber"/></th>
 				<th width="40"><@s.m "material.unit"/></th>
 				<th width="60"><@s.m "global.operate"/></th>				
 			</tr>
@@ -37,6 +38,7 @@
 				<td>${record.material.allSerial!}</td>
 				<td>${record.material.name!}</td>
 				<td>${record.ord.company.name!}</td>
+				<td>${record.ord.serial!}</td>
 				<td>${record.number!}</td>
 				<td>${record.notFinishNumber!}</td>
 				<td>${record.material.unit!}</td>		

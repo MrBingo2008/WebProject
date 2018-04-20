@@ -58,7 +58,14 @@ $("#approvalButton").click(function(){
 				<label><@s.m "${orderType}.order.name"/>:</label>
 				<input name="name" type="text" size="20" value="${order.name!}"/>
 			</p>
-			
+			<#if '${orderType}'=='purchase'>
+			<p>
+				<label><@s.m "sell.order"/>:</label>
+				<input type="hidden" name="sellOrder.id" value="${(order.sellOrder.id)!}"/>
+				<input type="text" name="sellOrder.serial" value="${(order.sellOrder.serial)!}" lookupGroup="sellOrder" readonly/>
+				<a class="btnLook" href="v_sell_order_list.do?type=1" lookupGroup="sellOrder"><@s.m "sell.order"/></a>		
+			</p>
+			</#if>
 			<p>
 				<label><@s.m "${orderType}.order.company"/>:</label>
 				<input type="hidden" name="company.id" value="${(order.company.id)!}"/>

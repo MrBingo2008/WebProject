@@ -16,8 +16,8 @@ public class PurchaseAct extends CirAct {
 	
 	//purchase order
 	@RequestMapping("/v_purchase_order_list.do")
-	public String orderList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchase", 1, request, model);
+	public String orderList(Integer type, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchase", type, request, model);
 	}
 	
 	@RequestMapping("/v_purchase_order_add.do")
@@ -53,7 +53,7 @@ public class PurchaseAct extends CirAct {
 	//purchase in
 	@RequestMapping("/v_purchaseIn_add.do")
 	public String purchaseInAdd(HttpServletRequest request, ModelMap model) {
-		return this.cirAdd("purchaseIn", 1, "CGDH", request, model);
+		return this.cirAdd("purchaseIn", /*"purchase",*/ 1, "CGDH", request, model);
 	}
 	
 	@RequestMapping("/o_purchaseIn_save.do")
@@ -89,7 +89,7 @@ public class PurchaseAct extends CirAct {
 	//purchase back
 	@RequestMapping("/v_purchaseBack_add.do")
 	public String purchaseBackAdd(HttpServletRequest request, ModelMap model) {
-		return this.cirAdd("purchaseBack", 0, "CGTH", request, model);
+		return this.cirAdd("purchaseBack", /*"purchase",*/ 0, "CGTH", request, model);
 	}
 	
 	@RequestMapping("/o_purchaseBack_save.do")

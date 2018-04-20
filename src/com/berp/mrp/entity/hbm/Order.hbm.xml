@@ -17,6 +17,8 @@
 		
 		<property name="direction" column="direction" type="integer" not-null="true" length="3"/>
 		<many-to-one name="company" column="company_id" class="com.berp.core.entity.Company"/>
+		<many-to-one name="sellOrder" column="sell_order_id" class="com.berp.mrp.entity.Order"/>
+		
 		<list name="records" inverse="false" cascade="all">
 			<key column="ord_id"/>
 			<index column="priority" type="integer"></index>

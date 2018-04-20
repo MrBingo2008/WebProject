@@ -15,7 +15,8 @@ public class Order extends BaseBill {
 	private Date deadlineTime;
 	private Company company;
 	private List<OrderRecord> records;
-	
+	private Order sellOrder;
+
 	public static enum Status{notApproval, approval, partFinish, finish};
 	
 	public Order(){
@@ -71,4 +72,12 @@ public class Order extends BaseBill {
 		return sb.toString();
 	}
 
+	//sell order
+	public Order getSellOrder() {
+		return sellOrder;
+	}
+
+	public void setSellOrder(Order sellOrder) {
+		this.sellOrder = sellOrder;
+	}
 }
