@@ -157,4 +157,8 @@ public class Plan extends BaseBill {
 	public void setRawBatchFlow(RawBatchFlow rb){
 		this.rawBatchFlow = rb;
 	}
+	
+	public String getDetail(){
+		return String.format("%s:%s:%s", this.getMaterial().getAllSerial(), this.getStatus(), this.getNumber());
+	}
 }

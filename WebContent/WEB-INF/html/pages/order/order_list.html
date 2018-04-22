@@ -4,7 +4,7 @@ $(function(){
 	$("#statusSelect").val(status);
 });
 </script>
-<form id="pagerForm" method="post" action="v_${orderType}_order_list.do">
+<form id="pagerForm" method="post" action="v_${orderType}_order_list.do?type=${type}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 	<input type="hidden" name="searchName" value="${searchName!}"/>
@@ -14,7 +14,7 @@ $(function(){
 
 <div class="pageHeader">
 	<!-- navTabSearch就是获取pageNum和numPerPage，然后提交 -->
-	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="v_${orderType}_order_list.do" method="post">
+	<form rel="pagerForm" onsubmit="return <#if type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_${orderType}_order_list.do?type=${type}" method="post">
 	<div class="searchBar">
 		<ul class="searchContent">
 			<li>
@@ -25,6 +25,7 @@ $(function(){
 				<label><@s.m "recordSerialOrName"/>：</label>
 				<input type="text" name="searchRecordName" value="${searchRecordName!}"/>
 			</li>
+			<#if type == 0>
 			<li>
 			<label><@s.m "${orderType}.order.status"/>：</label>
 			<select id="statusSelect" class="combox" name="searchStatus">
@@ -35,6 +36,7 @@ $(function(){
 				<option value="3"><@s.m "${orderType}.order.status.3"/></option>
 			</select>
 			</li>
+			</#if>
 		</ul>
 		<div class="subBar">
 			<ul>
@@ -47,7 +49,9 @@ $(function(){
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
+		<#if type == 0>
 			<@berp_perm url="/o_${orderType}_order"><li><a class="add" href="v_${orderType}_order_add.do" target="navTab" rel="main"><span><@s.m "${orderType}.order.add"/></span></a></li></@berp_perm>
+		</#if>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="138">
@@ -55,13 +59,19 @@ $(function(){
 			<tr>
 				<th width="20"><@s.m "global.id"/></th>
 				<th width="80" orderField="accountNo" class="asc"><@s.m "${orderType}.order.serial"/></th>
-				<th width="80"><@s.m "${orderType}.order.name"/></th>
-				<th width="80"><@s.m "${orderType}.order.items"/></th>
-				<th width="80"><@s.m "${orderType}.order.company"/></th>
-				<th width="80"><@s.m "${orderType}.order.time"/></th>
-				<th width="80"><@s.m "${orderType}.order.status"/></th>
-				<th width="80"><@s.m "global.createUser"/></th>
-				<th width="80"><@s.m "global.operate"/></th>
+				<th width="40"><@s.m "${orderType}.order.name"/></th>
+				<th width="80"><@s.m "${orderType}.order.details"/></th>
+				<th width="20"><@s.m "${orderType}.order.company"/></th>
+				<th width="40"><@s.m "${orderType}.order.time"/></th>
+				
+				<#if '${orderType}' == 'sell' && type == 0>
+				<th width="80"><@s.m "purchase.order.details"/></th>
+				<th width="80"><@s.m "plan.details"/></th>
+				</#if>
+				
+				<th width="40"><@s.m "${orderType}.order.status"/></th>
+				<th width="20"><@s.m "global.createUser"/></th>
+				<th width="60"><@s.m "global.operate"/></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -71,9 +81,31 @@ $(function(){
 				
 				<td>${order.serial}</td>
 				<td>${order.name!}</td>
-				<td>${order.items!}</td>
+				<td>
+					<#list order.records as record>
+					<span style="width:70px;display:inline-block;line-height:21px">${record.material.showName!}</span><span>${record.number} / ${record.finishNumber!} ${record.material.unit}</span><br>
+					</#list>
+				</td>
 				<td>${order.company.name!}</td>
 				<td>${(order.billTime?string('yyyy-MM-dd'))!}</td>
+				
+				<#if '${orderType}'=='sell' && type == 0>
+				<td>
+					<#list order.purchaseOrders as purchaseOrder>
+						<#list purchaseOrder.records as pRecord>
+						<span style="width:70px;display:inline-block;line-height:21px">${pRecord.material.showName!}</span><span>${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
+						</#list>
+					</#list>
+				</td>
+				<td>
+					<#list order.records as record>
+						<#list record.plans as plan>
+						<span style="width:70px;display:inline-block;line-height:21px">${plan.material.showName!}</span><span>${plan.number}${plan.material.unit} / <@s.m "plan.status.${plan.status}"/></span><br>
+						</#list>
+					</#list>
+				</td>
+				</#if>
+				
 				<td<#if order.status==0> style="color:red"</#if>><@s.m "${orderType}.order.status.${order.status}"/></td>
 				<td>${(order.createUser.name)!}</td>
 				<#if type?? && type==1>
@@ -91,6 +123,6 @@ $(function(){
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}张，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" targetType="navTab" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" targetType="<#if type gt 0>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>

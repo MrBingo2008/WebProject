@@ -73,9 +73,12 @@ public class Material {
 	}
 	
 	public String getAllSerial(){
-		String s1 = StringUtils.isBlank(this.serial)?"":this.serial;
-		String s2 = StringUtils.isBlank(this.customerSerial)?"":this.customerSerial;
-		return s2 + " / " + s1;
+		if(StringUtils.isBlank(this.serial))
+			return this.customerSerial;
+		if(StringUtils.isBlank(this.customerSerial))
+			return this.serial;
+		
+		return this.serial + " / " + this.customerSerial;
 	}
 	
 	public String getInfo(){
@@ -83,6 +86,15 @@ public class Material {
 		if(this.name != null && !this.name.equals(""))
 			result = result + " (" +this.name + ")";
 		return result;
+	}
+	
+	public String getShowName(){
+		if(!StringUtils.isBlank(this.name))
+			return this.name;
+		if(!StringUtils.isBlank(this.customerSerial))
+			return this.customerSerial;
+
+		return this.serial;
 	}
 	
 	//leftNumber

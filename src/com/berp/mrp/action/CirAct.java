@@ -33,8 +33,12 @@ public class CirAct {
 			String orderType, Integer type,
 			HttpServletRequest request, ModelMap model) {
 		model.addAttribute("orderType", orderType);
-			
-		Pagination pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, searchStatus, null, pageNum, numPerPage);
+		Pagination pagination = null;
+		//2018-4-22：假设type>0都是选择未完成的订单
+		if(type > 0){
+			pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, Order.Status.approval.ordinal(), Order.Status.partFinish.ordinal(), pageNum, numPerPage);
+		}else
+			pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, searchStatus, null, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("searchRecordName", searchRecordName);

@@ -23,6 +23,11 @@
 			<key column="ord_id"/>
 			<index column="priority" type="integer"></index>
 			<one-to-many class="com.berp.mrp.entity.OrderRecord"/>
-		</list> 
+		</list>
+		
+		<set name="purchaseOrders" inverse="true" cascade="none">
+			<key column="sell_order_id"/>
+			<one-to-many class="com.berp.mrp.entity.Order"/>
+		</set>
 	</class>
 </hibernate-mapping>

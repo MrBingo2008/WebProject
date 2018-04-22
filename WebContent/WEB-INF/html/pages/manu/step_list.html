@@ -3,7 +3,7 @@
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 	<input type="hidden" name="searchName" value="${searchName!}"/>
 </form>
-
+<!-- 2018-4-22 原来type==0是dialog的，现在统一成0为navTab list，大于0为dialog list -->
 <div class="pageHeader">
 	<form rel="pagerForm" onsubmit="return <#if type?? && type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_step_list.do?type=${type}" method="post">
 	<div class="searchBar">
@@ -60,6 +60,6 @@
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}张，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" targetType="<#if type lt 1>dialog<#else>navTab</#if>"  totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" targetType="<#if type gt 0>dialog<#else>navTab</#if>"  totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>

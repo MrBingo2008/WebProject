@@ -83,4 +83,12 @@ public class OrderRecord {
 	public void setPlans(Set<Plan> plans){
 		this.plans = plans;
 	}
+	
+	public String getPlansDetail(){
+		StringBuilder result = new StringBuilder();
+		for(Plan plan : plans){
+			result.append(plan.getDetail()+"<br>");
+		}
+		return result.toString();
+	}
 }
