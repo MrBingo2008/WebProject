@@ -111,21 +111,20 @@ function calFactor(numInput){
 						<tr>
 							<th type="label" size="4" display="#index#"><@s.m "global.number"/></th>
 							
-							<th type="lookup" name="flows[#index#].material.serial" size="18"
+							<th type="lookup" name="flows[#index#].material.serial" size="18" aTitle="<@s.m '${cirType}.selectMaterial'/>"
 								lookupGroup="flows[#index#]" lookuppk="material.id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
-								<#if materialSelectType?? && materialSelectType == 0>
+								<#if direction == 2>
 									aFieldAttrs="{width:'800', height:'700', resizable:'false'}" </#if>
 								<#if cirType == 'purchaseIn' || cirType =='sellBack'>
-									lookupUrl="v_record_list.do?type=${materialSelectType!}"
+									lookupUrl="v_record_list.do?direction=${direction}"
 								<#else>	
-									lookupUrl="v_material.do?type=${materialSelectType!}"
+									lookupUrl="v_material.do?type=${direction}"
 								</#if>
-								aTitle="<@s.m '${cirType}.selectMaterial'/>"
 								><@s.m "material.allSerial"/></th>
-								
-							<#if materialSelectType?? && materialSelectType == 0><th type="hidden" name="flows[#index#].parent.id" style="display:none"></th></#if>	
+							<!-- direction=1表示进， 2出 -->	
+							<#if direction == 2><th type="hidden" name="flows[#index#].parent.id" style="display:none"></th></#if>	
 							<th type="text" name="flows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
-							<th type="text" name="flows[#index#].serial" size="24" <#if materialSelectType?? && materialSelectType == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
+							<th type="text" name="flows[#index#].serial" size="24" <#if direction == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
 							<th type="text" name="flows[#index#].numPerBox" size="12" fieldClass="number" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
 							<th type="text" name="flows[#index#].boxNum" size="6" fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
 							<th type="text" name="flows[#index#].number" size="12" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
@@ -151,10 +150,16 @@ function calFactor(numInput){
 							<td>
 								<input type="hidden" name="flows[${count}].material.id" value="${flow.material.id}">
 								<input type="text" name="flows[${count}].material.serial" value="${flow.material.allSerial!}" size="18" class="textInput required" readonly>
-								<a <#if materialSelectType?? && materialSelectType == 0>width='800' height='700' resizable='false' title="<@s.m 'material.batch'/>"<#else> title="<@s.m 'material'/>"</#if> class="btnLook" href="v_material.do?type=${materialSelectType!}" lookupgroup="flows[${count}]" lookuppk="material.id" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
+								<a class="btnLook" lookupgroup="flows[${count}]" lookuppk="material.id" title="<@s.m '${cirType}.selectMaterial'/>"
+								<#if direction == 2>width='800' height='700' resizable='false'</#if> 
+								<#if cirType == 'purchaseIn' || cirType =='sellBack'>
+									href="v_record_list.do?direction=${direction}"
+								<#else>	
+									href="v_material.do?type=${direction}"
+								</#if>><@s.m "material.allSerial"/></a>
 							</td>
 							
-							<#if materialSelectType?? && materialSelectType == 0><input type="hidden" name="flows[${count}].parent.id" value="${(flow.parent.id)!}"></input></#if>
+							<#if direction == 2><input type="hidden" name="flows[${count}].parent.id" value="${(flow.parent.id)!}"></input></#if>
 							<td><input type="text" name="flows[${count}].material.name" value="${flow.material.name!}" size="12" class="textInput" readonly></td>
 							
 							<td><input type="text" name="flows[${count}].serial" value="${flow.serial!}" size="24" class="textInput" readonly></td>
@@ -163,7 +168,7 @@ function calFactor(numInput){
 							<td><input type="text" name="flows[${count}].number" value="${flow.number!}" size="12" class="positiveNumber textInput required"  onkeyup="calFactor(this);" onpaste="calFactor(this);" oncut="calFactor(this);" ondrop="calFactor(this);"></td>
 							<td><input type="text" name="flows[${count}].material.unit" value="${flow.material.unit!}" size="6" class="textInput" readonly></td>
 							
-							<#if materialSelectType?? && materialSelectType == 1>
+							<#if direction == 1>
 							<td>
 								<input type="hidden" name="flows[${count}].room.id" value="${(flow.room.id)!}">
 								<input type="text" name="flows[${count}].room.name" value="${(flow.room.name)!}" size="8" class="textInput required" readonly>

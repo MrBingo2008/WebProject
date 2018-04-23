@@ -112,10 +112,11 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/v_record_list.do")
-	public String recordList(Integer materialSelectType, HttpServletRequest request, ModelMap model) {
-		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, 1, 2, null, null);
+	//direction表示方向，1为进，2为出
+	public String recordList(Integer direction, HttpServletRequest request, ModelMap model) {
+		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, direction, 1, 2, null, null);
 		model.addAttribute("records", records);
-		model.addAttribute("type", materialSelectType);
+		model.addAttribute("direction", direction);
 		//这个是为了选择窗口的预定数量label
 		model.addAttribute("orderType", "purchase");
 		return "pages/data_setting/record_list";

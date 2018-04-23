@@ -148,10 +148,10 @@ function calFactor(numInput){
 				<label><@s.m "plan.status"/>:</label>
 				<span class="viewLabel"><@s.m "plan.status.${plan.status!0}"/></span>
 			</p>
-			<p>
+			<!-- <p>
 				<label><@s.m "company.customer"/>:</label>
 				<span class="viewLabel">${(plan.orderRecord.ord.company.name)!}</span>
-			</p>
+			</p> -->
 			<!-- <p>
 				<label><@s.m "plan.order"/>:</label>
 				<span class="viewLabel">${(plan.orderRecord.ord.serial)!}/${(plan.orderRecord.ord.name)!}</span>
@@ -160,18 +160,17 @@ function calFactor(numInput){
 			<p>
 				<label><@s.m "plan.order"/>:</label>
 				<input type="hidden" name="orderRecord.id" value="${(plan.orderRecord.id)!}"/>
-				<input type="text" name="orderRecord.ord.name" value="${(plan.orderRecord.ord.name)!}" lookupGroup="orderRecord" class="required" readonly/>
-				<a class="btnLook" href="v_sell_order_list.do?type=1" lookupGroup="orderRecord"><@s.m "sell.order"/></a>		
+				<input type="text" size="20" name="orderRecord.order.info" value="${(plan.orderRecord.ord.info)!}" lookupGroup="orderRecord" class="required" readonly/>
+				<a class="btnLook" href="v_record_list.do?direction=2" lookupGroup="orderRecord"><@s.m "sell.order"/></a>		
 			</p>
 			<p>
 				<label><@s.m "product.info"/>:</label>
-				<span class="viewLabel">${(plan.material.info)!}</span>
+				<input type="text" name="orderRecord.material.name" value="${(plan.material.name)!}" readonly/>
 				<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 			</p>
 			<p>
-				<label><@s.m "material.orderNumber"/>:</label>
-				<span class="viewLabel">${(plan.orderRecord.number)!}</span>
-			</p>
+				<label><@s.m "sell.order.number"/>:</label>
+				<input type="text" name="orderRecord.number" value="${(plan.orderRecord.number)!}" readonly/>			</p>
 			<p>
 				<label><@s.m "material.manuNumber"/>:</label>
 				<input type="text" name="number" value="${plan.number!}" class="positiveNumber required"/>

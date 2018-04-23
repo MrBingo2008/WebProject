@@ -75,6 +75,9 @@ public class Order extends BaseBill {
 		return sb.toString();
 	}
 
+	public String getInfo(){
+		return this.getSerial() + "/" + this.company.getName();
+	}
 	//sell order
 	public Order getSellOrder() {
 		return sellOrder;

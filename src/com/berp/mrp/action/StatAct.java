@@ -41,7 +41,7 @@ public class StatAct {
 		
 		List<Material> materials = materialDao.getList();
 		
-		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, 1, 3, startDate, endDate);
+		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, null, 1, 3, startDate, endDate);
 		for(OrderRecord record: records){
 			Material material = record.getMaterial();
 			if(record.getOrd().getType() == 1)

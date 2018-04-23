@@ -34,6 +34,9 @@ public class CirAct {
 			HttpServletRequest request, ModelMap model) {
 		model.addAttribute("orderType", orderType);
 		Pagination pagination = null;
+		
+		if(type == null)
+			type = 0;
 		//2018-4-22：假设type>0都是选择未完成的订单
 		if(type > 0){
 			pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, Order.Status.approval.ordinal(), Order.Status.partFinish.ordinal(), pageNum, numPerPage);
@@ -43,6 +46,7 @@ public class CirAct {
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("searchRecordName", searchRecordName);
 		model.addAttribute("searchStatus", searchStatus);
+		
 		model.addAttribute("type", type);
 		
 		return "pages/order/order_list";
@@ -69,7 +73,7 @@ public class CirAct {
 		return "pages/order/order_detail";
 	}
 	
-	public void orderSave(Order order, Integer type, String returnUrl, String returnTitle, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void orderSave(Order order, Integer orderType, String returnUrl, String returnTitle, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(order.getRecords()==null || order.getRecords().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("明细不能为空").toString());
 			return;
@@ -78,7 +82,7 @@ public class CirAct {
 			record.setOrd(order);
 			record.setStatus(order.getStatus());
 		}
-		order.setType(type);
+		order.setType(orderType);
 		orderDao.save(order);
 		
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
@@ -133,13 +137,13 @@ public class CirAct {
 	}
 	
 	//cir add
-	public String cirAdd(String cirType, /*String orderType,*/ Integer materialSelectType, String serialTitle, HttpServletRequest request, ModelMap model) {
+	public String cirAdd(String cirType, /*String orderType,*/ Integer direction, String serialTitle, HttpServletRequest request, ModelMap model) {
 		//4种可能:purchaseIn/back sellOut/back
 		model.addAttribute("cirType", cirType);
 		//purchase, sell
 		//model.addAttribute("orderType", orderType);
 		//in out
-		model.addAttribute("materialSelectType", materialSelectType);
+		model.addAttribute("direction", direction);
 		model.addAttribute("openMode", "add");
 		
 		String serial = String.format("%s-%s", serialTitle, DateUtils.getCurrentDayString());
@@ -178,20 +182,20 @@ public class CirAct {
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
 	}
 	
-	public String cirView(Integer cirId, String cirType, Integer materialSelectType, HttpServletRequest request, ModelMap model) {
+	public String cirView(Integer cirId, String cirType, Integer direction, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", cirType);
 		model.addAttribute("openMode", "view");
-		model.addAttribute("materialSelectType", materialSelectType);
+		model.addAttribute("direction", direction);
 		
 		Cir cir = cirDao.findById(cirId);	
 		model.addAttribute("cir", cir);
 		return "pages/cir/cir_flow_detail";
 	}
 	
-	public String cirEdit(Integer cirId, String cirType, Integer materialSelectType, HttpServletRequest request, ModelMap model) {
+	public String cirEdit(Integer cirId, String cirType, Integer direction, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", cirType);
 		model.addAttribute("openMode", "edit");
-		model.addAttribute("materialSelectType", materialSelectType);
+		model.addAttribute("direction", direction);
 		
 		Cir cir = cirDao.findById(cirId);	
 		model.addAttribute("cir", cir);

@@ -23,7 +23,9 @@
 <div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
 	<div class="panelBar">
 		<ul class="toolBar">
+		<#if type == 0>
 			<@berp_perm url="/o_company"><li><a class="add" href="v_company_add.do" target="navTab" rel="main"><span><@s.m "company.add"/></span></a></li></@berp_perm>
+		</#if>
 		</ul>
 	</div>
 	<table class="table" width="99%" layoutH="117" rel="jbsxBox">
@@ -43,11 +45,11 @@
 				<td>${m.name!}</td>
 				<td>${m.parent.name!}</td>
 				<td>${m.tel!}</td>
-				<#if type == 1>
-					<td><a class="btnSelect" href="javascript:$.bringBack({name:'${m.name!}', id:'${m.id}'})"><@s.m "global.select"/></a></td>
-				<#elseif type == 2>			
+				<#if type == 0>
 					<@berp_perm url="/o_company"><td><a title="<@s.m 'company.edit'/>" href="v_company_edit.do?companyId=${m.id}" target="navTab" rel="main"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_company_delete.do?companyId=${m.id}"><@s.m "global.delete"/></a></td></@berp_perm>
+				<#elseif type == 1>			
+					<td><a class="btnSelect" href="javascript:$.bringBack({name:'${m.name!}', id:'${m.id}'})"><@s.m "global.select"/></a></td>					
 				</#if>
 			</tr>
 		</#list>
@@ -55,6 +57,6 @@
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}张，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" targetType="<#if type lt 2>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" targetType="<#if type gt 0>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>

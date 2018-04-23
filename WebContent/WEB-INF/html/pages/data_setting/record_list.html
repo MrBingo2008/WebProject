@@ -44,7 +44,7 @@
 				<td>${record.material.unit!}</td>		
 				<td>
 					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}', 'material.unit':'${record.material.unit!}',
-					 number:'${record.number!}' , 'parent.id':'${record.id}'})"><@s.m "global.select"/></a>
+					 'order.info':'${record.ord.info!}', 'number':'${record.number!}' , 'id':'${record.id}'})"><@s.m "global.select"/></a>
 				</td>
 			</tr>
 		</#list>

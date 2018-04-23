@@ -26,7 +26,7 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/o_sell_order_save.do")
 	public void orderSave(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderSave(order, 2, "v_sell_order_list.do", "查询客户订单", request, response, model);
+		this.orderSave(order, 2, "v_sell_order_list.do?type=0", "查询客户订单", request, response, model);
 	}
 	
 	@RequestMapping("/v_sell_order_view.do")
@@ -41,12 +41,12 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/o_sell_order_update.do")
 	public void orderUpdate(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderUpdate(order, 2, "v_sell_order_list.do", "查询客户订单", request, response, model);
+		this.orderUpdate(order, 2, "v_sell_order_list.do?type=0", "查询客户订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_sell_order_delete.do")
 	public void orderDelete(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderDeleteBase(orderId, "v_sell_order_list.do", "查询客户订单", request, response, model);
+		this.orderDeleteBase(orderId, "v_sell_order_list.do?type=0", "查询客户订单", request, response, model);
 	}
 	
 	//sell out

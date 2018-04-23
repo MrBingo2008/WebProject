@@ -16,6 +16,7 @@ public class PurchaseAct extends CirAct {
 	
 	//purchase order
 	@RequestMapping("/v_purchase_order_list.do")
+	//type表示select和list模式
 	public String orderList(Integer type, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchase", type, request, model);
 	}
@@ -27,7 +28,7 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchase_order_save.do")
 	public void orderSave(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderSave(order, 1, "v_purchase_order_list.do", "查询采购订单", request, response, model);
+		this.orderSave(order, 1, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 
 	@RequestMapping("/v_purchase_order_view.do")
@@ -42,12 +43,12 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchase_order_update.do")
 	public void orderUpdate(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderUpdate(order, 1, "v_purchase_order_list.do", "查询采购订单", request, response, model);
+		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_delete.do")
 	public void orderDelete(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderDeleteBase(orderId, "v_purchase_order_list.do", "查询采购订单", request, response, model);
+		this.orderDeleteBase(orderId, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 	
 	//purchase in

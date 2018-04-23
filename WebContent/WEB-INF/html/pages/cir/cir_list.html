@@ -69,7 +69,11 @@ $(function(){
 				<td>${cir.id}</td>
 				<td>${cir.serial}</td>
 				<td>${cir.name}</td>
-				<td>${cir.items!}</td>
+				<td>
+					<#list cir.flows as flow>
+					<span style="width:70px;display:inline-block;line-height:21px">${flow.material.showName!}</span><span>${flow.number}${flow.material.unit}</span><br>
+					</#list>
+				</td>
 				<#if cirType != "checkIn" && cirType != "checkOut"><td>${(cir.company.name)!}</td></#if>
 				<td>${(cir.billTime?string('yyyy-MM-dd'))!}</td>
 				<td <#if cir.status==0> style="color:red"</#if>><@s.m "cir.status.${cir.status}"/></td>

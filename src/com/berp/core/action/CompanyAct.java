@@ -46,6 +46,8 @@ public class CompanyAct {
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
 
+		if(type==null)
+			type = 0;
 		model.addAttribute("type", type);
 		Pagination pagination = companyDao.getPage(parentId, searchName, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
@@ -66,7 +68,7 @@ public class CompanyAct {
 	@RequestMapping("/o_company_save.do")
 	public void companySave(Company company, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		companyDao.save(company);
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存往来单位成功!", "v_company.do?type=2", "往来单位").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存往来单位成功!", "v_company.do?type=0", "往来单位").toString());
 	}
 	
 	@RequestMapping("/v_company_edit.do")
@@ -80,7 +82,7 @@ public class CompanyAct {
 	@RequestMapping("/o_company_update.do")
 	public void companyUpdate(Company company, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		companyDao.update(company);
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存往来单位成功!", "v_company.do?type=2", "往来单位").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存往来单位成功!", "v_company.do?type=0", "往来单位").toString());
 	}
 	
 	@RequestMapping("/o_company_delete.do")
@@ -91,7 +93,7 @@ public class CompanyAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_company.do?type=1", "往来单位").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_company.do?type=0", "往来单位").toString());
 	}
 	
 	@Autowired
