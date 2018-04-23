@@ -97,7 +97,7 @@ public class ManuAct {
 		plan.setCreateUser(user);
 		
 		plan.setMaterial(material);
-		plan.setOrderRecord(orderRecord);
+		plan.setRecord(orderRecord);
 		plan.setNumber(orderRecord.getNumber());
 		
 		List<PlanStep> steps = new ArrayList<PlanStep>();

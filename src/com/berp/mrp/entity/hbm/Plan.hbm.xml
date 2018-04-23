@@ -16,7 +16,7 @@
 		<many-to-one name="material" column="material_id" class="com.berp.mrp.entity.Material"/>
 		<property name="number" column="num" type="java.lang.Double" length="10"/>
 		
-		<many-to-one name="orderRecord" column="rec_id" class="com.berp.mrp.entity.OrderRecord"/>
+		<many-to-one name="record" column="rec_id" class="com.berp.mrp.entity.OrderRecord"/>
 		
 		<list name="steps" inverse="false" cascade="all">
 			<key column="plan_id"/>

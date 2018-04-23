@@ -55,11 +55,11 @@ public class Plan extends BaseBill {
 	}
 	
 	//orderRecord
-	public OrderRecord getOrderRecord(){
+	public OrderRecord getRecord(){
 		return this.orderRecord;
 	}
 	
-	public void setOrderRecord(OrderRecord orderRecord){
+	public void setRecord(OrderRecord orderRecord){
 		this.orderRecord = orderRecord;
 	}
 	

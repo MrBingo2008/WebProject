@@ -159,18 +159,19 @@ function calFactor(numInput){
 			</p> -->
 			<p>
 				<label><@s.m "plan.order"/>:</label>
-				<input type="hidden" name="orderRecord.id" value="${(plan.orderRecord.id)!}"/>
-				<input type="text" size="20" name="orderRecord.order.info" value="${(plan.orderRecord.ord.info)!}" lookupGroup="orderRecord" class="required" readonly/>
-				<a class="btnLook" href="v_record_list.do?direction=2" lookupGroup="orderRecord"><@s.m "sell.order"/></a>		
+				<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
+				<input type="text" size="20" name="record.order.info" value="${(plan.record.ord.info)!}" class="required" readonly/>
+				<a class="btnLook" href="v_record_list.do?direction=2" lookupGroup=""><@s.m "sell.order"/></a>		
 			</p>
 			<p>
 				<label><@s.m "product.info"/>:</label>
-				<input type="text" name="orderRecord.material.name" value="${(plan.material.name)!}" readonly/>
+				<input type="text" name="material.name" value="${(plan.material.name)!}" readonly/>
 				<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 			</p>
 			<p>
 				<label><@s.m "sell.order.number"/>:</label>
-				<input type="text" name="orderRecord.number" value="${(plan.orderRecord.number)!}" readonly/>			</p>
+				<input type="text" name="record.number" value="${(plan.record.number)!}" readonly/>			
+			</p>
 			<p>
 				<label><@s.m "material.manuNumber"/>:</label>
 				<input type="text" name="number" value="${plan.number!}" class="positiveNumber required"/>

@@ -43,8 +43,9 @@
 				<td>${record.notFinishNumber!}</td>
 				<td>${record.material.unit!}</td>		
 				<td>
+				<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
 					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}', 'material.unit':'${record.material.unit!}',
-					 'order.info':'${record.ord.info!}', 'number':'${record.number!}' , 'id':'${record.id}'})"><@s.m "global.select"/></a>
+					 'record.order.info':'${record.ord.info!}', 'record.number':'${record.number!}' , 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
 				</td>
 			</tr>
 		</#list>
