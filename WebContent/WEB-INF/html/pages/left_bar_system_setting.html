@@ -1,11 +1,11 @@
-<div class="accordion" fillSpace="sideBar">	
+<div id="left_bar_system_setting" class="accordion" fillSpace="sideBar">	
 	<div class="accordionHeader">
 		<h2><span>Folder</span><@s.m "user.manage"/></h2>
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<li><a href="v_user_add.do" target="navTab" rel="main"><@s.m "user.add"/></a></li>
 			<li><a href="v_user_list.do" target="navTab" rel="main"><@s.m "user.list"/></a></li>
+			<li><a href="v_user_add.do" target="navTab" rel="main"><@s.m "user.add"/></a></li>
 		</ul>
 	</div>
 	
@@ -14,8 +14,13 @@
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<li><a href="v_role_add.do" target="navTab" rel="main"><@s.m "role.add"/></a></li>
 			<li><a href="v_role_list.do" target="navTab" rel="main"><@s.m "role.list"/></a></li>
+			<li><a href="v_role_add.do" target="navTab" rel="main"><@s.m "role.add"/></a></li>
 		</ul>
 	</div>
+	<script type="text/javascript">
+	$(function(){
+		setTimeout(function() {$("#left_bar_system_setting a:first").trigger("click");}, 300);
+	});
+	</script>
 </div>

@@ -11,6 +11,7 @@ public class OrderRecord {
 	private Integer status=0;
 	
 	private Material material;
+	private Step surface;
 	private Order order;
 	private Set<Plan> plans;
 	
@@ -60,12 +61,22 @@ public class OrderRecord {
 		this.status = status;
 	}
 	
+	//material
 	public Material getMaterial () {
 		return material;
 	}
 
 	public void setMaterial (Material m) {
 		this.material = m;
+	}
+	
+	//surface
+	public Step getSurface() {
+		return surface;
+	}
+
+	public void setSurface(Step surface) {
+		this.surface = surface;
 	}
 	
 	public Order getOrd () {

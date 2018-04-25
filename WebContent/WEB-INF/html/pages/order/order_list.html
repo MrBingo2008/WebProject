@@ -62,7 +62,7 @@ $(function(){
 				<th width="40"><@s.m "${orderType}.order.name"/></th>
 				<th width="80"><@s.m "${orderType}.order.details"/></th>
 				<th width="20"><@s.m "${orderType}.order.company"/></th>
-				<th width="40"><@s.m "${orderType}.order.time"/></th>
+				<th width="40"><@s.m "${orderType}.order.allTime"/></th>
 				
 				<#if '${orderType}' == 'sell' && type == 0>
 				<th width="80"><@s.m "purchase.order.details"/></th>
@@ -87,7 +87,7 @@ $(function(){
 					</#list>
 				</td>
 				<td>${order.company.name!}</td>
-				<td>${(order.billTime?string('yyyy-MM-dd'))!}</td>
+				<td>${(order.billTime?string('yyyy-MM-dd'))!} / ${(order.deadlineTime?string('yyyy-MM-dd'))!}</td>
 				
 				<#if '${orderType}'=='sell' && type == 0>
 				<td>

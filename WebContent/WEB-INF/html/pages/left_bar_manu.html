@@ -6,7 +6,6 @@
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
 			<@berp_perm url="/v_plan"><li><a href="v_plan_list.do" target="navTab" rel="main"><@s.m "plan.list"/></a></li></@berp_perm>
-			<@berp_perm url="/o_plan"><li><a href="v_plan_gen_list.do" target="navTab" rel="main"><@s.m "plan.gen"/></a></li></@berp_perm>
 			<@berp_perm url="/o_plan"><li><a href="v_plan_add.do" target="navTab" rel="main"><@s.m "plan.add"/></a></li></@berp_perm>		
 		</ul>
 	</div>
@@ -28,7 +27,7 @@
 	</@berp_perm>
 	<script type="text/javascript">
 	$(function(){
-		setTimeout(function() {$("#left_bar_manu a:first").trigger("click");}, 10);
+		setTimeout(function() {$("#left_bar_manu a:first").trigger("click");}, 300);
 	});
 	</script>
 </div>

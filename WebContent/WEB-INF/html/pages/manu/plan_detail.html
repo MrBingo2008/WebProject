@@ -87,9 +87,6 @@ $(function(){
 		var recordId = $("input[name='record.id']").val();
 		$("tbody#processItems").loadUrl("v_process_items.do?recordId=" + recordId, {}, function(){});
 	});
-	$("input[name='record.number']").change(function(){
-		$("input[name=number]").val($(this).val());
-	});
 });
 
 function calSum(numInput){
@@ -161,7 +158,7 @@ function calFactor(numInput){
 				<label><@s.m "plan.order"/>:</label>
 				<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
 				<input id="orderInput" type="text" size="20" name="record.order.info" value="${(plan.record.ord.info)!}" class="required" readonly/>
-				<a class="btnLook" href="v_record_list.do?direction=2" lookupGroup=""><@s.m "sell.order"/></a>		
+				<a class="btnLook" href="v_record_list.do?direction=2" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
 			</p>
 			<p>
 				<label><@s.m "product.info"/>:</label>

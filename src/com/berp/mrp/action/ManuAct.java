@@ -33,6 +33,7 @@ import com.berp.mrp.entity.PlanStep;
 import com.berp.mrp.entity.Process;
 import com.berp.mrp.entity.ProcessStep;
 import com.berp.mrp.entity.RawBatchFlow;
+import com.berp.mrp.entity.Step;
 import com.berp.core.dao.UserDao;
 import com.berp.core.entity.Category;
 import com.berp.core.entity.User;
@@ -90,6 +91,14 @@ public class ManuAct {
 				ps.setType(step.getType());
 				steps.add(ps);
 			}
+	    Step surface = orderRecord.getSurface()!=null?orderRecord.getSurface():material.getSurface();
+		if(surface!=null)
+		{
+			PlanStep ps1 = new PlanStep();
+			ps1.setName(surface.getName());
+			ps1.setType(surface.getType());
+			steps.add(ps1);
+		}
 		model.addAttribute("steps", steps);
 		return "pages/manu/process_items";
 	}

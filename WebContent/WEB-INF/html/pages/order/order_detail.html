@@ -79,7 +79,7 @@ $("#approvalButton").click(function(){
 			</p>
 			
 			<p>
-				<label><@s.m "${orderType}.deadline.time"/>:</label>
+				<label><@s.m "${orderType}.order.deadline"/>:</label>
 				<input type="text" name="deadlineTime" class="date" value="${(order.deadlineTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
 			</p>
 
@@ -105,6 +105,7 @@ $("#approvalButton").click(function(){
 								
 							<th type="text" name="records[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
 							
+							<!-- lookupGroup跟material不一样，为records[].surface，因为step的input name有可能为steps[].name或record.surface.name，所以step list返回的key只能为name -->
 							<#if '${orderType}'=='sell'>
 							<th type="lookup" name="records[#index#].surface.name" size="20"
 								lookupGroup="records[#index#].surface" lookuppk="id" lookupUrl="v_step_list.do?type=2" aTitle="<@s.m 'step.surface'/>"
@@ -132,7 +133,13 @@ $("#approvalButton").click(function(){
 							<td><input type="text" name="records[${count}].material.name" value="${record.material.name!}" size="12" class="textInput" readonly>
 							<input type="hidden" name="records[${count}].material.id" value="${record.material.id!}" class="textInput"></td>
 							
-							<#if '${orderType}'=='sell'></#if>
+							<#if '${orderType}'=='sell'>
+							<td>
+								<input type="hidden" name="records[${count}].surface.id" value="${record.surface.id!}" class="textInput">
+								<input type="text" name="records[${count}].surface.name" value="${record.surface.name!}" size="20" class="textInput" readonly>
+								<a class="btnLook" href="v_step_list.do?type=2" lookupgroup="records[${count}].surface" lookuppk="id" title="<@s.m 'step.surface'/>"><@s.m 'step.surface'/></a>
+							</td>
+							</#if>
 							
 							<td><input type="text" name="records[${count}].number" value="${record.number!}" size="12" class="positiveNumber textInput required"></td>
 							<#if order.status gt 0><td><input type="text" name="records[${count}].finishNumber" value="${record.finishNumber!}" size="12" readonly></td></#if>
