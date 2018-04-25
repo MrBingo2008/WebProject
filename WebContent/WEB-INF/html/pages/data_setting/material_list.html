@@ -30,7 +30,7 @@ $(function(){
 <div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<@berp_perm url="/o_material"><#if type == 2><@berp_perm url="/v_material_add.do"><li><a class="add" href="v_material_add.do" target="navTab" rel="main"><span><@s.m "material.add"/></span></a></li></@berp_perm></#if></@berp_perm>
+			<@berp_perm url="/o_material"><#if type == 0><@berp_perm url="/v_material_add.do"><li><a class="add" href="v_material_add.do" target="navTab" rel="main"><span><@s.m "material.add"/></span></a></li></@berp_perm></#if></@berp_perm>
 		</ul>
 	</div>
 	<table class="table" width="99%" layoutH="119" rel="jbsxBox">
@@ -39,12 +39,12 @@ $(function(){
 				<th width="30"><@s.m "global.id"/></th>
 				<th width="115"><@s.m "material.allSerial"/></th>
 				<th width="70"><@s.m "material.name"/></th>
+				<th width="40"><@s.m "material.category"/></th>
 				<th width="115"><@s.m "material.spec"/></th>
 				<th width="50"><@s.m "material.leftNumber"/></th>
 				<th width="70"><@s.m "purchase.order.notFinishNumber"/></th>
 				<th width="70"><@s.m "sell.order.notFinishNumber"/></th>
 				<th width="35"><@s.m "material.unit"/></th>
-				<th width="40"><@s.m "material.category"/></th>
 				<th width="70"><@s.m "global.operate"/></th>				
 			</tr>
 		</thead>
@@ -54,12 +54,12 @@ $(function(){
 			    <td>${m.id}</td>
 			    <td>${m.allSerial!}</td>
 				<td>${m.name!}</td>
+				<td>${m.parent.name}</td>
 				<td>${m.spec!}</td>
 				<td>${m.leftNumber!}</td>
 				<td>${m.notPurchaseInNumber!}</td>
 				<td>${m.notSellOutNumber!}</td>
 				<td>${m.unit!}</td>
-				<td>${m.parent.name}</td>
 				<!-- 考虑全部都换成0为管理的list， 大于0为选择模式 -->
 				<#if type == 0>			
 					<td>
@@ -79,6 +79,6 @@ $(function(){
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}张，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" rel="jbsxBox" targetType="<#if type lt 2>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" rel="jbsxBox" targetType="<#if type gt 0>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>

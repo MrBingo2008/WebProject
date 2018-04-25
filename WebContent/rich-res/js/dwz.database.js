@@ -35,7 +35,9 @@
 							//$input.prev().html("test");
 							//$input.attr("value", args[key]);
 						}
-						$input.val(args[key]);
+						//2018-4-25: stone:增加change()是为了手动触发input的change事件，让plan自动生成items
+						//$input.val(args[key]);
+						$input.val(args[key]).change();
 						break;
 					}
 				}

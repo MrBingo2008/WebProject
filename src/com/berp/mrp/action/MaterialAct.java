@@ -77,7 +77,7 @@ public class MaterialAct {
 			material.setCompany(null);
 		materialDao.save(material);
 
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=2", "物料").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
 	}
 
 	@RequestMapping("/v_material_edit.do")
@@ -97,7 +97,7 @@ public class MaterialAct {
 			material.setCompany(null);
 		materialDao.update(material);
 
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=2", "物料").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
 	}
 	
 	@RequestMapping("/o_material_delete.do")
@@ -108,7 +108,7 @@ public class MaterialAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_material.do?type=2", "物料").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_material.do?type=0", "物料").toString());
 	}
 	
 	@RequestMapping("/v_record_list.do")
@@ -118,7 +118,7 @@ public class MaterialAct {
 		model.addAttribute("records", records);
 		model.addAttribute("direction", direction);
 		//这个是为了选择窗口的预定数量label
-		model.addAttribute("orderType", "purchase");
+		model.addAttribute("orderType", direction==1?"purchase":"sell");
 		return "pages/data_setting/record_list";
 	}
 	

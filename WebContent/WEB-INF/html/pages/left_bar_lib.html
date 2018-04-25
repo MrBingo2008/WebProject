@@ -1,4 +1,4 @@
-<div class="accordion" fillSpace="sideBar">
+<div id="left_bar_lib" class="accordion" fillSpace="sideBar">
 	
 	<@berp_perm url="/v_checkIn">
 	<div class="accordionHeader">
@@ -6,8 +6,8 @@
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/o_checkIn"><li><a href="v_checkIn_add.do" target="navTab" rel="main"><@s.m "checkIn.add"/></a></li></@berp_perm>
 			<@berp_perm url="/v_checkIn"><li><a href="v_checkIn_list.do" target="navTab" rel="main"><@s.m "checkIn.list"/></a></li></@berp_perm>
+			<@berp_perm url="/o_checkIn"><li><a href="v_checkIn_add.do" target="navTab" rel="main"><@s.m "checkIn.add"/></a></li></@berp_perm>
 		</ul>
 	</div>
 	</@berp_perm>
@@ -18,12 +18,13 @@
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/o_checkOut"><li><a href="v_checkOut_add.do" target="navTab" rel="main"><@s.m "checkOut.add"/></a></li></@berp_perm>
 			<@berp_perm url="/v_checkOut"><li><a href="v_checkOut_list.do" target="navTab" rel="main"><@s.m "checkOut.list"/></a></li></@berp_perm>
+			<@berp_perm url="/o_checkOut"><li><a href="v_checkOut_add.do" target="navTab" rel="main"><@s.m "checkOut.add"/></a></li></@berp_perm>
 		</ul>
 	</div>
 	</@berp_perm>
 	
+	<@berp_perm url="v_material">
 	<div class="accordionHeader">
 		<h2><span>Folder</span><@s.m "lib.query.manage"/></h2>
 	</div>
@@ -32,5 +33,11 @@
 			<li><a href="v_material.do?type=3" target="navTab" rel="main"><@s.m "lib.query.list"/></a></li>
 		</ul>
 	</div>
+	</@berp_perm>
 	
+	<script type="text/javascript">
+	$(function(){
+		setTimeout(function() {$("#left_bar_lib a:first").trigger("click");}, 10);
+	});
+	</script>
 </div>

@@ -56,8 +56,8 @@ $(function(){
 			<p>
 				<label><@s.m "step.surface"/>:</label>
 				<input type="hidden" name="surface.id" value="${(material.surface.id)!}"></input>
-				<input type="text" name="surface.name" value="${(material.surface.name)!}" size="20" class="textInput">
-				<a class="btnLook" href="v_step_list.do?type=2" lookupgroup="surface" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
+				<input type="text" name="surface.name" value="${(material.surface.name)!}" size="20" class="textInput" readonly>
+				<a class="btnLook" href="v_step_list.do?type=2" lookupgroup="surface" lookuppk="id" title="<@s.m 'step.surface'/><@s.m 'step'/>"><@s.m 'step'/></a>
 			</p>
 		</div>
 		<div class="formBar">

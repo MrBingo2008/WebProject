@@ -1,0 +1,22 @@
+<#assign count=0 />
+<#list steps as step>
+<tr class="unitBox">
+    <td>
+    	<!-- display=index这个一定要，删除时就是靠这个来重新计数 -->
+    	<span class="label" display="#index#">${count+1}</span>
+    	<input type="hidden" name="steps[${count}].id" value="${(step.id)!}"/>
+    </td>
+	<td>
+		<input type="text" name="steps[${count}].name" value="${step.name}" lookuppk="id" size="12" class="textInput">
+		<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[${count}]" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
+	</td>
+	<td>
+		<select class='combox' name='steps[${count}].type'>
+			<option value='0' <#if step.type == 0>selected="selected"</#if>><@s.m 'step.type.0'/></option>
+			<option value='1' <#if step.type == 1>selected="selected"</#if>><@s.m 'step.type.1'/></option>
+		</select>
+	</td> 
+	<td><a href="javascript:void(0)" class="btnDel ">删除</a></td>
+</tr>
+<#assign count=count+1/>
+</#list>

@@ -1,11 +1,11 @@
-<div class="accordion" fillSpace="sideBar">
+<div id="left_bar_data_setting" class="accordion" fillSpace="sideBar">
 	<@berp_perm url="/v_material">
 	<div class="accordionHeader">
 		<h2><span>Folder</span><@s.m "material.data"/></h2>
 	</div>
 	<div class="accordionContent">
 		<ul class="tree treeFolder">
-			<@berp_perm url="/v_material"><li><a href="v_material.do?type=2" target="navTab" rel="main"><@s.m "material"/></a></li></@berp_perm>
+			<@berp_perm url="/v_material"><li><a href="v_material.do?type=0" target="navTab" rel="main"><@s.m "material"/></a></li></@berp_perm>
 			<@berp_perm url="/v_category"><li><a href="v_category_list.do?rootParentId=1" target="navTab" rel="main"><@s.m "category.1"/></a></li></@berp_perm>
 		</ul>
 	</div>
@@ -45,4 +45,9 @@
 		</ul>
 	</div>
 	</@berp_perm>
+	<script type="text/javascript">
+	$(function(){
+		setTimeout(function() {$("#left_bar_data_setting a:first").trigger("click");}, 10);
+	});
+	</script>
 </div>

@@ -67,6 +67,33 @@ public class ManuAct {
 		return "pages/manu/plan_list";
 	}
 	
+	@RequestMapping("/v_process_items.do")
+	public String processItems(Integer recordId,  String test, HttpServletRequest request, ModelMap model) {
+		OrderRecord orderRecord = orderRecordDao.findById(recordId);
+		Material material = orderRecord.getMaterial();
+		
+		Process process = new Process();
+		List<Category> parents = material.getParent().getNodeList();
+		for(Category category : parents){
+			List<Process> processes = processDao.getListByCategory(category.getId());
+			if(processes != null && processes.size()>0){
+				process = processes.get(0);
+				break;
+			}
+		}
+		
+		List<PlanStep> steps = new ArrayList<PlanStep>();
+		if(process.getSteps()!=null)
+			for(ProcessStep step: process.getSteps()){
+				PlanStep ps = new PlanStep();
+				ps.setName(step.getName());
+				ps.setType(step.getType());
+				steps.add(ps);
+			}
+		model.addAttribute("steps", steps);
+		return "pages/manu/process_items";
+	}
+	
 	@RequestMapping("/v_plan_gen.do")
 	public String planGen(Integer orderRecordId, Integer materialId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("openMode", "add");

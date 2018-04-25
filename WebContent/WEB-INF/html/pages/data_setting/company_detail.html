@@ -21,7 +21,7 @@ $(function(){
 			<p>
 				<label><@s.m "category.2.parent"/>:</label>
 				<input type="hidden" name="parent.id" value="${(company.parent.id)!}"/>
-				<input type="text" class="required" name="parent.name" value="${(company.parent.name)!}"/>
+				<input type="text" class="required" name="parent.name" value="${(company.parent.name)!}" readonly/>
 				<a class="btnLook" href="v_category_tree.do?parentId=2" lookupGroup="parent"><@s.m "category.2.parent"/></a>		
 			</p>
 			<p>
@@ -30,7 +30,7 @@ $(function(){
 			</p>
 			<p>
 				<label><@s.m "company.address"/>:</label>
-				<input name="address" value="${company.address!}" type="text" size="30"/>
+				<input name="address" value="${company.address!}" type="text" size="20"/>
 			</p>
 		</div>
 		<div class="formBar">

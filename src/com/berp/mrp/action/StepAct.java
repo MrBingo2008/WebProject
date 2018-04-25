@@ -27,6 +27,7 @@ import com.berp.framework.web.ResponseUtils;
 @Controller
 public class StepAct {
 	
+	//type=0 navTab list  1 plan process select  2 surface select 
 	@RequestMapping("/v_step_list.do")
 	public String stepList(Integer type, Integer pageNum, Integer numPerPage, String searchName, String searchStatus, HttpServletRequest request, ModelMap model) {
 		pageNum = pageNum == null?1:pageNum;
@@ -80,11 +81,11 @@ public class StepAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_step_list.do?type=1", "工序").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_step_list.do?type=0", "工序").toString());
 	}
 	
 	private void reload(HttpServletResponse response){
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_step_list.do?type=1", "工序").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_step_list.do?type=0", "工序").toString());
 	}
 	
 	@Autowired
