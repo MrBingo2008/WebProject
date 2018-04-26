@@ -1,27 +1,7 @@
 <script type="text/javascript">
 $(function(){
 	//2018-4-26，如果之前打开过sidebarH，重新加载时需要隐藏
-	var bar = $("#sidebarH");
-	if(bar.css("display") != "none"){
-		var tempBarHeight = bar.outerHeight();
-		var container = $("#jbsxBox");
-        var gridScroller = $("#gridScroller");
-		
-        var cheight = container.outerHeight();
-		cheight = cheight + tempBarHeight;
-		container.css("height", cheight+"px");
-		
-		var theight = gridScroller.outerHeight();
-		theight = theight + tempBarHeight;
-		container.css("height", theight+"px");
-		
-	    var gLayoutH = parseInt(gridScroller.attr("layoutH"));
-	    gridScroller.attr("layoutH", gLayoutH-tempBarHeight);
-	    gLayoutH = parseInt(gridScroller.attr("layoutH"));
-		
-		$("#sidebarH").css("height", "0px");
-		$("#sidebarH").css("display", "none");
-	}
+	closeH();
 	
 	if ($.fn.jBarH) {
 		$("#listDetailContain").jBarH({minW:150, maxW:700});

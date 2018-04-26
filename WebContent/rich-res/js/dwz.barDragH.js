@@ -101,3 +101,27 @@ function openBatchDetail(){
 	});
 	return true;
 }
+
+function closeH(){
+	var bar = $("#sidebarH");
+	if(bar.css("display") != "none"){
+		var tempBarHeight = bar.outerHeight();
+		var container = $("#jbsxBox");
+        //var gridScroller = $("#gridScroller");
+		
+        var cheight = container.outerHeight();
+		cheight = cheight + tempBarHeight;
+		container.css("height", cheight+"px");
+		/*
+		var theight = gridScroller.outerHeight();
+		theight = theight + tempBarHeight;
+		gridScroller.css("height", theight+"px");
+		
+	    var gLayoutH = parseInt(gridScroller.attr("layoutH"));
+	    gridScroller.attr("layoutH", gLayoutH-tempBarHeight);
+	    gLayoutH = parseInt(gridScroller.attr("layoutH"));
+		*/
+		$("#sidebarH").css("height", "0px");
+		$("#sidebarH").css("display", "none");
+	}
+}
