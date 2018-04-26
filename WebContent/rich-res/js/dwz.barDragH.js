@@ -99,5 +99,5 @@ function openBatchDetail(){
 		container.animate({height: cheight},50);
 		gridScroller.animate({height: theight}, 50);
 	});
-	return false;
+	return true;
 }

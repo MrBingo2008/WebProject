@@ -51,7 +51,7 @@ public class PurchaseAct extends CirAct {
 		this.orderDeleteBase(orderId, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 	
-	//purchase in
+	//purchase in, type(direction)表示方向，统一1为进，2为出
 	@RequestMapping("/v_purchaseIn_add.do")
 	public String purchaseInAdd(HttpServletRequest request, ModelMap model) {
 		return this.cirAdd("purchaseIn", /*"purchase",*/ 1, "CGDH", request, model);
@@ -90,7 +90,7 @@ public class PurchaseAct extends CirAct {
 	//purchase back
 	@RequestMapping("/v_purchaseBack_add.do")
 	public String purchaseBackAdd(HttpServletRequest request, ModelMap model) {
-		return this.cirAdd("purchaseBack", /*"purchase",*/ 0, "CGTH", request, model);
+		return this.cirAdd("purchaseBack", /*"purchase",*/ 2, "CGTH", request, model);
 	}
 	
 	@RequestMapping("/o_purchaseBack_save.do")
@@ -100,12 +100,12 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/v_purchaseBack_view.do")
 	public String purchaseBackView(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirView(cirId, "purchaseBack", 0, request, model);
+		return this.cirView(cirId, "purchaseBack", 2, request, model);
 	}
 	
 	@RequestMapping("/v_purchaseBack_edit.do")
 	public String purchaseBackEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirEdit(cirId, "purchaseBack", 0, request, model);
+		return this.cirEdit(cirId, "purchaseBack", 2, request, model);
 	}
 	
 	@RequestMapping("/o_purchaseBack_update.do")

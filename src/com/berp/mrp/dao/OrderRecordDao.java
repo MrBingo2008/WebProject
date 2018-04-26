@@ -38,7 +38,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		return entity;
 	}
 	
-	public List<OrderRecord> findByCompanyAndMaterial(Integer companyId, Integer materialId, Integer orderType, Integer status1, Integer status2, Date start, Date end){
+	public List<OrderRecord> findByCompanyAndMaterial(Integer companyId, Integer materialId, String name, Integer orderType, Integer status1, Integer status2, Date start, Date end){
 		Finder f = Finder.create("select bean from OrderRecord bean where 1=1");
 		if(companyId!=null)
 		{
@@ -48,6 +48,12 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		if(materialId!=null){
 			f.append(" and bean.material.id=:materialId");
 			f.setParam("materialId", materialId);
+		}
+		
+		if(StringUtils.isNotEmpty(name))
+		{
+			f.append(" and (bean.ord.name like :name or bean.ord.serial like :name or bean.material.serial like :name or bean.material.customerSerial like :name or bean.material.name like :name) ");
+			f.setParam("name", "%" + name + "%");
 		}
 		
 		if(orderType!=null){
@@ -112,7 +118,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 	
 	public void updateFinishNumber (Company company, Material material, Double number) throws Exception{
 		
-		List<OrderRecord> records = findByCompanyAndMaterial(company.getId(), material.getId(), null, 1, 2, null, null);
+		List<OrderRecord> records = findByCompanyAndMaterial(company.getId(), material.getId(), null, null, 1, 2, null, null);
 		if(records == null || records.size()<=0)
 			throw new Exception(String.format("'%s'的%s未完成数为0%s，已超出其范围。", company.getName(), material.getName(), material.getUnit()));
 		

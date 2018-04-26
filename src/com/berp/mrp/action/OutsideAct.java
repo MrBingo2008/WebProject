@@ -29,6 +29,7 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideOut_add.do")
 	public String outsideOutAdd(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideOut");
+		model.addAttribute("type", 2);
 		model.addAttribute("openMode", "add");
 		
 		String serial = String.format("WWCH-%s", DateUtils.getCurrentDayString());
@@ -81,6 +82,8 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideOut_edit.do")
 	public String outsideOutEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideOut");
+		model.addAttribute("type", 2);
+		
 		model.addAttribute("openMode", "edit");
 		Cir cir = cirDao.findById(cirId);
 		model.addAttribute("cir", cir);
@@ -131,6 +134,8 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideIn_add.do")
 	public String outsideInAdd(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideIn");
+		model.addAttribute("type", 1);
+		
 		model.addAttribute("openMode", "add");
 		
 		String serial = String.format("WWDH-%s", DateUtils.getCurrentDayString());
@@ -182,6 +187,8 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideIn_edit.do")
 	public String purchaseInEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideIn");
+		model.addAttribute("type", 1);
+		
 		model.addAttribute("openMode", "edit");
 		Cir cir = cirDao.findById(cirId);
 		model.addAttribute("cir", cir);

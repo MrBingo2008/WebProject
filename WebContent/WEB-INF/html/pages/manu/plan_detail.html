@@ -128,11 +128,11 @@ function calFactor(numInput){
 			<div id="basicInfo">
 			<p>
 				<label><@s.m "global.createTime"/>:</label>
-				<input name="createTime" readonly="readonly" type="text" value="${(plan.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="20" />
+				<input name="createTime" readonly="readonly" type="text" value="${(plan.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="30" />
 			</p>
 			<p>
 				<label><@s.m "global.createUser"/>:</label>
-				<input readonly="readonly" type="text" value="${(plan.createUser.name)!}" size="20" />
+				<input readonly="readonly" type="text" value="${(plan.createUser.name)!}" size="30" />
 				<input name="createUser.id" type="hidden" value="${(plan.createUser.id)!}" />
 			</p>
 			
@@ -140,15 +140,15 @@ function calFactor(numInput){
 			
 			<p>
 				<label>ID:</label>
-				<input name="id" type="text" size="20" value="${plan.id!}" readonly/>
+				<input name="id" type="text" size="30" value="${plan.id!}" readonly/>
 			</p>
 			<p>
 				<label><@s.m "plan.serial" />:</label>
-				<input name="serial" type="text" size="20" value="${plan.serial!}" readonly/>
+				<input name="serial" type="text" size="30" value="${plan.serial!}" readonly/>
 			</p>
 			<p>
 				<label><@s.m "plan.name"/>:</label>
-				<input name="name" type="text" size="20" value="${plan.name!}"/>
+				<input name="name" type="text" size="30" value="${plan.name!}"/>
 			</p>
 			<p>
 				<label><@s.m "plan.status"/>:</label>
@@ -157,21 +157,21 @@ function calFactor(numInput){
 			<p>
 				<label><@s.m "plan.order"/>:</label>
 				<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
-				<input id="orderInput" type="text" size="20" name="record.order.info" value="${(plan.record.ord.info)!}" class="required" readonly/>
-				<a class="btnLook" href="v_record_list.do?direction=2" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
+				<input id="orderInput" type="text" size="30" name="record.order.info" value="${(plan.record.ord.info)!}" class="required" readonly/>
+				<a class="btnLook" href="v_record_list.do?direction=1" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
 			</p>
 			<p>
 				<label><@s.m "product.info"/>:</label>
-				<input type="text" name="material.name" value="${(plan.material.name)!}" readonly/>
+				<input type="text" name="material.name" value="${(plan.material.name)!}" size ="30" readonly/>
 				<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 			</p>
 			<p>
 				<label><@s.m "sell.order.number"/>:</label>
-				<input type="text" name="record.number" value="${(plan.record.number)!}" readonly/>			
+				<input type="text" name="record.number" value="${(plan.record.number)!}" size ="30" readonly/>			
 			</p>
 			<p>
 				<label><@s.m "material.manuNumber"/>:</label>
-				<input type="text" name="number" value="${plan.number!}" class="positiveNumber required"/>
+				<input type="text" name="number" value="${plan.number!}" size ="30" class="positiveNumber required"/>
 			</p>
 			</div>
 
@@ -189,7 +189,7 @@ function calFactor(numInput){
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
 							<th type="lookup" name="materialFlows[#index#].material.serial" size="20" fieldClass="required" 
 							fieldAttrs="{readonly:'readonly'}" aFieldAttrs="{width:'800', height:'700', resizable:'false'}" aTitle="<@s.m 'material.batch'/>"
-							lookupGroup="materialFlows[#index#]" lookupUrl="v_material.do?type=0" lookuppk="material.id"><@s.m "material.allSerial"/></th>
+							lookupGroup="materialFlows[#index#]" lookupUrl="v_material.do?type=2" lookuppk="material.id"><@s.m "material.allSerial"/></th>
 								
 							<th type="hidden" name="materialFlows[#index#].parent.id" style="display:none"></th>
 							<th type="text" name="materialFlows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
@@ -211,7 +211,7 @@ function calFactor(numInput){
 							<td>
 								<input type="text" name="materialFlows[${count}].material.serial" value="${flow.material.allSerial!}" lookuppk="material.id" size="20" class="textInput required" readonly=readonly>
 								<input type="hidden" name="materialFlows[${count}].material.id" value="${flow.material.id!}">
-								<a class="btnLook" href="v_material.do?type=0" lookupgroup="materialFlows[${count}]" lookuppk="material.id" width="800" height="700" resizable="false" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
+								<a class="btnLook" href="v_material.do?type=2" lookupgroup="materialFlows[${count}]" lookuppk="material.id" width="800" height="700" resizable="false" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
 							</td>
 							<input type="hidden" name="materialFlows[${count}].parent.id" value="${(flow.parent.id)!}">
 							<td><input type="text" name="materialFlows[${count}].material.name" value="${flow.material.name!}" size="12" class="textInput" readonly=readonly></td>

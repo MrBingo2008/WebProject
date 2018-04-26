@@ -36,11 +36,11 @@ $("#approvalButton").click(function(){
 		<div id = "formContent" class="pageFormContent" layoutH="56">
 			<p>
 				<label><@s.m "global.createTime"/>:</label>
-				<input name="createTime" readonly="readonly" type="text" value="${(order.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="20" />
+				<input name="createTime" readonly="readonly" type="text" value="${(order.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="30" />
 			</p>
 			<p>
 				<label><@s.m "global.createUser"/>:</label>
-				<input readonly="readonly" type="text" value="${(order.createUser.name)!}" size="20" />
+				<input readonly="readonly" type="text" value="${(order.createUser.name)!}" size="30" />
 				<input name="createUser.id" type="hidden" value="${(order.createUser.id)!}" />
 			</p>
 			
@@ -48,44 +48,44 @@ $("#approvalButton").click(function(){
 			
 			<p>
 				<label>ID:</label>
-				<input name="id" type="text" size="20" value="${order.id!}" readonly="readonly"/>
+				<input name="id" type="text" size="30" value="${order.id!}" readonly="readonly"/>
 			</p>
 			<p>
 				<label><@s.m "${orderType}.order.serial" />:</label>
-				<input name="serial" type="text" size="20" value="${order.serial!}" readonly/>
+				<input name="serial" type="text" size="30" value="${order.serial!}" readonly/>
 			</p>
 			<p>
 				<label><@s.m "${orderType}.order.name"/>:</label>
-				<input name="name" type="text" size="20" value="${order.name!}"/>
+				<input name="name" type="text" size="30" value="${order.name!}"/>
 			</p>
 			<#if '${orderType}'=='purchase'>
 			<p>
 				<label><@s.m "purchase.order.forSell"/>:</label>
 				<input type="hidden" name="sellOrder.id" value="${(order.sellOrder.id)!}"/>
-				<input type="text" name="sellOrder.serial" value="${(order.sellOrder.serial)!}" lookupGroup="sellOrder" readonly/>
-				<a class="btnLook" href="v_sell_order_list.do?type=1" lookupGroup="sellOrder"><@s.m "sell.order"/></a>		
+				<input type="text" name="sellOrder.info" value="${(order.sellOrder.info)!}" lookupGroup="sellOrder" size="30" readonly/>
+				<a class="btnLook" href="v_sell_order_list.do?type=1" lookupGroup="sellOrder" title="<@s.m 'purchase.order.selectSellOrder'/>"><@s.m "sell.order"/></a>		
 			</p>
 			</#if>
 			<p>
 				<label><@s.m "${orderType}.order.company"/>:</label>
 				<input type="hidden" name="company.id" value="${(order.company.id)!}"/>
-				<input type="text" name="company.name" value="${(order.company.name)!}" lookupGroup="company" class="required" readonly/>
+				<input type="text" name="company.name" value="${(order.company.name)!}" lookupGroup="company" class="required" size="30" readonly/>
 				<a class="btnLook" href="v_company.do?type=1" lookupGroup="company"><@s.m "company"/></a>		
 			</p>
 			
 			<p>
 				<label><@s.m "${orderType}.order.time"/>:</label>
-				<input type="text" name="billTime" class="date" value="${(order.billTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
+				<input type="text" name="billTime" class="date" value="${(order.billTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="30" /><a class="inputDateButton" href="javascript:;">选择</a>
 			</p>
 			
 			<p>
 				<label><@s.m "${orderType}.order.deadline"/>:</label>
-				<input type="text" name="deadlineTime" class="date" value="${(order.deadlineTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
+				<input type="text" name="deadlineTime" class="date" value="${(order.deadlineTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="30" /><a class="inputDateButton" href="javascript:;">选择</a>
 			</p>
 
 			<p>
 				<label><@s.m "global.comment"/>:</label>
-				<input name="comment" type="text" size="20" value="${order.comment!}"/>
+				<input name="comment" type="text" size="30" value="${order.comment!}"/>
 			</p>
 			
 			<div class="divider"></div>
@@ -135,8 +135,8 @@ $("#approvalButton").click(function(){
 							
 							<#if '${orderType}'=='sell'>
 							<td>
-								<input type="hidden" name="records[${count}].surface.id" value="${record.surface.id!}" class="textInput">
-								<input type="text" name="records[${count}].surface.name" value="${record.surface.name!}" size="20" class="textInput" readonly>
+								<input type="hidden" name="records[${count}].surface.id" value="${(record.surface.id)!}" class="textInput">
+								<input type="text" name="records[${count}].surface.name" value="${(record.surface.name)!}" size="20" class="textInput" readonly>
 								<a class="btnLook" href="v_step_list.do?type=2" lookupgroup="records[${count}].surface" lookuppk="id" title="<@s.m 'step.surface'/>"><@s.m 'step.surface'/></a>
 							</td>
 							</#if>

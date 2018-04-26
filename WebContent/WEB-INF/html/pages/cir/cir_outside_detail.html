@@ -80,7 +80,7 @@ $("#saveButton").click(function(){
 							
 							<th type="lookup" name="rawFlows[#index#].material.serial" size="20"
 								lookupGroup="rawFlows[#index#]" lookuppk="material.id"  fieldAttrs="{readonly:'readonly'}"
-								lookupUrl="v_raw_batch_list.do?type=${cirType}" aTitle="<@s.m 'product'/>"><@s.m "product.allSerial"/></th>
+								lookupUrl="v_raw_batch_list.do?type=${type}" aTitle="<@s.m '${cirType}.selectRaw'/>"><@s.m "product.allSerial"/></th>
 								
 							<th type="hidden" name="rawFlows[#index#].parent.id" style="display:none"></th>
 							<th type="text" name="rawFlows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "product.name"/></th>
@@ -101,7 +101,7 @@ $("#saveButton").click(function(){
 						    <input type="hidden" name="rawFlows[${count}].id" value="${rawFlow.id!}"></input></td>
 							<td>
 								<input type="text" name="rawFlows[${count}].material.serial" value="${rawFlow.material.allSerial!}" size="20" class="textInput" readonly=readonly>
-								<a class="btnLook" href="v_raw_batch_list.do?type=${cirType}" lookupgroup="rawFlows[${count}]" lookuppk="material.id" title="<@s.m 'product'/>"></a>
+								<a class="btnLook" href="v_raw_batch_list.do?type=${type}" lookupgroup="rawFlows[${count}]" lookuppk="material.id" title="<@s.m '${cirType}.selectRaw'/>"></a>
 								<input type="hidden" name="rawFlows[${count}].material.id" value="${rawFlow.material.id!}">
 							</td>
 							<td><input type="text" name="rawFlows[${count}].material.name" value="${rawFlow.material.name!}" size="12" class="textInput" readonly=readonly>

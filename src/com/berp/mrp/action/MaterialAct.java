@@ -113,10 +113,11 @@ public class MaterialAct {
 	
 	@RequestMapping("/v_record_list.do")
 	//direction表示方向，1为进，2为出
-	public String recordList(Integer direction, HttpServletRequest request, ModelMap model) {
-		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, direction, 1, 2, null, null);
+	public String recordList(Integer direction, String searchName, HttpServletRequest request, ModelMap model) {
+		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, searchName, direction, 1, 2, null, null);
 		model.addAttribute("records", records);
 		model.addAttribute("direction", direction);
+		model.addAttribute("searchName", searchName);
 		//这个是为了选择窗口的预定数量label
 		model.addAttribute("orderType", direction==1?"purchase":"sell");
 		return "pages/data_setting/record_list";
@@ -138,18 +139,17 @@ public class MaterialAct {
 		return "pages/data_setting/batch_list";
 	}
 	
+	//type=1 in; type=2 out，只用type作为参数就可以，cirType根据type再定
 	@RequestMapping("/v_raw_batch_list.do")
-	public String rawBatchList(String type, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+	public String rawBatchList(Integer type, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
 		
 		Pagination pagination = rawFlowDao.getPage(0, 1,2, searchName, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
-		if(type.equals("outsideOut"))
-			model.addAttribute("type", "1");
-		else if (type.equals("outsideIn"))
-			model.addAttribute("type", "2");
+		model.addAttribute("type", type);
+		model.addAttribute("cirType", type==1?"outsideIn":"outsideOut");
 		return "pages/data_setting/raw_batch_list";
 	}
 	

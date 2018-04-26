@@ -20,3 +20,10 @@
 </tr>
 <#assign count=count+1/>
 </#list>
+
+<script type="text/javascript">
+$(function(){
+	//重新绑定del时间
+	setTimeout(function() {if ($.fn.itemDetail) $("table.itemDetail").itemDetail();}, 40);
+});
+</script>

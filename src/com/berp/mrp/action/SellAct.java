@@ -14,6 +14,7 @@ import com.berp.mrp.entity.Order;
 @Controller
 public class SellAct extends CirAct {
 	
+	//只需要type就可以，cirType根据它再定
 	@RequestMapping("/v_sell_order_list.do")
 	public String orderList(Integer type, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sell", type, request, model);
@@ -52,7 +53,7 @@ public class SellAct extends CirAct {
 	//sell out
 	@RequestMapping("/v_sellOut_add.do")
 	public String sellOutAdd(HttpServletRequest request, ModelMap model) {
-		return this.cirAdd("sellOut", /*"sell",*/ 0, "KHFH", request, model);
+		return this.cirAdd("sellOut", /*"sell",*/ 2, "KHFH", request, model);
 	}
 	
 	@RequestMapping("/o_sellOut_save.do")
@@ -62,12 +63,12 @@ public class SellAct extends CirAct {
 
 	@RequestMapping("/v_sellOut_view.do")
 	public String sellOutView(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirView(cirId, "sellOut", 0, request, model);
+		return this.cirView(cirId, "sellOut", 2, request, model);
 	}
 	
 	@RequestMapping("/v_sellOut_edit.do")
 	public String sellOutEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirEdit(cirId, "sellOut", 0, request, model);
+		return this.cirEdit(cirId, "sellOut", 2, request, model);
 	}
 	
 	@RequestMapping("/o_sellOut_update.do")

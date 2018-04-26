@@ -70,9 +70,15 @@ $(function(){
 				<td>${cir.serial}</td>
 				<td>${cir.name}</td>
 				<td>
-					<#list cir.flows as flow>
-					<span style="width:70px;display:inline-block;line-height:21px">${flow.material.showName!}</span><span>${flow.number}${flow.material.unit}</span><br>
-					</#list>
+					<#if cirType != 'outsideOut' && cirType != 'outsideIn'>
+						<#list cir.flows as flow>
+						<span style="width:70px;display:inline-block;line-height:21px">${flow.material.showName!}</span><span>${flow.number}${flow.material.unit}</span><br>
+						</#list>
+					<#else>
+						<#list cir.rawFlows as rawFlow>
+						<span style="width:70px;display:inline-block;line-height:21px">${rawFlow.material.showName!}</span><span>${rawFlow.number}${rawFlow.material.unit}</span><br>
+						</#list>
+					</#if>
 				</td>
 				<#if cirType != "checkIn" && cirType != "checkOut"><td>${(cir.company.name)!}</td></#if>
 				<td>${(cir.billTime?string('yyyy-MM-dd'))!}</td>

@@ -1,5 +1,28 @@
 <script type="text/javascript">
 $(function(){
+	//2018-4-26，如果之前打开过sidebarH，重新加载时需要隐藏
+	var bar = $("#sidebarH");
+	if(bar.css("display") != "none"){
+		var tempBarHeight = bar.outerHeight();
+		var container = $("#jbsxBox");
+        var gridScroller = $("#gridScroller");
+		
+        var cheight = container.outerHeight();
+		cheight = cheight + tempBarHeight;
+		container.css("height", cheight+"px");
+		
+		var theight = gridScroller.outerHeight();
+		theight = theight + tempBarHeight;
+		container.css("height", theight+"px");
+		
+	    var gLayoutH = parseInt(gridScroller.attr("layoutH"));
+	    gridScroller.attr("layoutH", gLayoutH-tempBarHeight);
+	    gLayoutH = parseInt(gridScroller.attr("layoutH"));
+		
+		$("#sidebarH").css("height", "0px");
+		$("#sidebarH").css("display", "none");
+	}
+	
 	if ($.fn.jBarH) {
 		$("#listDetailContain").jBarH({minW:150, maxW:700});
 	}
@@ -60,7 +83,7 @@ $(function(){
 				<td>${m.notPurchaseInNumber!}</td>
 				<td>${m.notSellOutNumber!}</td>
 				<td>${m.unit!}</td>
-				<!-- 考虑全部都换成0为管理的list， 大于0为选择模式 -->
+				<!-- type换成0为管理的list， 大于0为选择模式 -->
 				<#if type == 0>			
 					<td>
 					<@berp_perm url="/o_material"><a title="<@s.m 'material.edit'/>" target="navTab" href="v_material_edit.do?materialId=${m.id}" rel="main"><@s.m "global.edit"/></a>

@@ -1,10 +1,10 @@
-<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'jbsxBox');" action="v_raw_batch_list.do?type=${type}">
+<form id="pagerForm" method="post" onsubmit="return dwzSearch(this, 'dialog');" action="v_raw_batch_list.do?type=${type}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 	<input type="hidden" name="searchName" value="${searchName!}"/>
 </form>
 <div class="pageHeader" style="border:1px #B8D0D6 solid">
-	<form onsubmit="return divSearch(this, 'jbsxBox');" action="v_raw_batch_list.do?type=${type}" method="post">
+	<form onsubmit="return dwzSearch(this, 'dialog');" action="v_raw_batch_list.do?type=${type}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -48,7 +48,7 @@
 				<td>${rawFlow.notArriveNumber!}</td>			
 				<td>
 					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'serial':'${rawFlow.serial!}', 'material.unit':'${rawFlow.material.unit!}',
-					 number:'<#if type == "1">${rawFlow.leftNumber!}<#elseif type=="2">${rawFlow.notArriveNumber!}</#if>' , 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
+					 number:'<#if type == 2>${rawFlow.leftNumber!}<#elseif type==1>${rawFlow.notArriveNumber!}</#if>' , 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
 				</td>
 			</tr>
 		</#list>
@@ -56,6 +56,6 @@
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}张，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" rel="jbsxBox" targetType="dialog" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" targetType="dialog" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>
