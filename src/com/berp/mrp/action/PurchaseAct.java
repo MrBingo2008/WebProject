@@ -28,6 +28,8 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchase_order_save.do")
 	public void orderSave(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		if(order.getSellOrder().getId() == null)
+			order.setSellOrder(null);
 		this.orderSave(order, 1, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 
@@ -43,6 +45,8 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchase_order_update.do")
 	public void orderUpdate(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		if(order.getSellOrder().getId() == null)
+			order.setSellOrder(null);
 		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 	

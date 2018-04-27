@@ -131,11 +131,14 @@ public class MaterialAct {
 		return "pages/data_setting/record_list";
 	}
 	
+	//recordId不合理
 	@RequestMapping("/v_batch_list.do")
-	public String batchAvailableList(Integer materialId, HttpServletRequest request, ModelMap model) {
+	public String batchAvailableList(Integer materialId, Integer recordId, String orderSerial, HttpServletRequest request, ModelMap model) {
 		List<BatchFlow> flows = flowDao.getList(materialId, 1, 1, 0.00, null, null);
 		model.addAttribute("flows", flows);
 		model.addAttribute("type", "lib");
+		model.addAttribute("recordId", recordId);
+		model.addAttribute("orderSerial", orderSerial);
 		return "pages/data_setting/batch_list";
 	}
 	

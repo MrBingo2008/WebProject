@@ -19,6 +19,7 @@ import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.Plan;
 import com.berp.mrp.entity.Batch;
+import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.Process;
 
@@ -157,6 +158,27 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 			//刚修改record的数据，就马上去修改order的status(status需要靠record来判断)，应该是没问题
 			orderDao.updateStatusForCir(record.getOrd().getId());
 		}
+	}
+	
+	public void updateFinishNumber (BatchFlow flow) throws Exception{
+		
+		OrderRecord record = findById(flow.getRecord().getId());
+		Double finishNumber = record.getFinishNumber();
+		Double newFinishNumber = finishNumber + flow.getNumber();
+		
+		if(newFinishNumber<record.getNumber()){
+			//order.setStatus(Order.Status.partFinish.ordinal());
+			record.setFinishNumber(newFinishNumber);
+			record.setStatus(2);
+		}
+		else if(newFinishNumber.equals(record.getNumber())){
+			record.setFinishNumber(record.getNumber());
+			record.setStatus(3);
+		}else{
+			throw new Exception(String.format("'%s'的%s未完成数为%.0f%s，已超出其范围。", record.getOrd().getSerial(), record.getMaterial().getName(), record.getNotFinishNumber(), record.getMaterial().getUnit()));	
+		}
+		//刚修改record的数据，就马上去修改order的status(status需要靠record来判断)，应该是没问题
+		orderDao.updateStatusForCir(record.getOrd().getId());
 	}
 	
 	@Override

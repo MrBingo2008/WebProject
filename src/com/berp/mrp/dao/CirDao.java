@@ -86,9 +86,17 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 	private void sellOutUpdate(Cir bean) throws Exception{
 		List<BatchFlow> flows = bean.getFlows();
 		for(BatchFlow flow: flows){
-			Double number = flow.getNumber();
+			OrderRecord record = recordDao.findById(flow.getRecord().getId());
+			Order ord = record.getOrd();
+			if(ord.getCompany().getId().equals(bean.getCompany().getId()) == false){
+				throw new Exception(String.format("'%s'订单的供应商为%s，与本发货单供应商%s不一致。", ord.getSerial(), ord.getCompany().getName(), bean.getCompany().getName()));	
+			}
+			BatchFlow f = flowDao.findById(flow.getId());
+			if(record.getSurface()!=null && !record.getSurface().getId().equals(f.getDefaultSurfaceId())){
+				throw new Exception(String.format("'%s'订单的%s表面处理为%s，与该批次的产品不一致。", ord.getSerial(), record.getMaterial().getName(), record.getSurface().getName()));
+			}
 			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getNumber());
-			recordDao.updateFinishNumber(bean.getCompany(), flow.getMaterial(), number);
+			recordDao.updateFinishNumber(flow);
 			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, flow.getNumber());
 		}
 	}
@@ -114,7 +122,12 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			return;
 		for(BatchFlow flow : flows){
 			//flow.setStatus(1);
-			recordDao.updateFinishNumber(bean.getCompany(), flow.getMaterial(), flow.getNumber());
+			OrderRecord record = recordDao.findById(flow.getRecord().getId());
+			Order ord = record.getOrd();
+			if(ord.getCompany().getId().equals(bean.getCompany().getId()) == false){
+				throw new Exception(String.format("'%s'订单的客户为%s，与本到货单客户%s不一致。", ord.getSerial(), ord.getCompany().getName(), bean.getCompany().getName()));	
+			}
+			recordDao.updateFinishNumber(flow);
 			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), flow.getNumber(), null);
 		}
 	}
@@ -297,6 +310,9 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 	protected Class<Cir> getEntityClass() {
 		return Cir.class;
 	}
+	
+	@Autowired
+	private OrderDao orderDao;
 	
 	@Autowired
 	private OrderRecordDao recordDao;

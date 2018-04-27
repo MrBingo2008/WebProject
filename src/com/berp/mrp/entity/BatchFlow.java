@@ -42,4 +42,23 @@ public class BatchFlow extends BaseBatchFlow {
 	public void setParent (BatchFlow parent) {
 		this.parent = parent;
 	}
+	
+	public Step getDefaultSurface(){
+		if(this.surface!=null)
+			return surface;
+		if(this.getMaterial().getSurface()!=null)
+			return this.getMaterial().getSurface();
+		return null;
+	}
+	
+	//纯粹为了做参数用
+	private Integer defaultSurfaceId;
+
+	public Integer getDefaultSurfaceId() {
+		return defaultSurfaceId;
+	}
+
+	public void setDefaultSurfaceId(Integer defaultSurfaceId) {
+		this.defaultSurfaceId = defaultSurfaceId;
+	}
 }

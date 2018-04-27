@@ -116,6 +116,8 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 			f.setParam("name", "%" + name + "%");
 		}
 		
+		f.append(" order by bean.id desc");
+		
 		return find(f, pageNo, pageSize);
 	}
 	

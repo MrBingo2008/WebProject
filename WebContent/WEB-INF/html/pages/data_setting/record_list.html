@@ -39,7 +39,7 @@
 			<tbody>
 			<#list records as record>
 				<tr target="sid_obj" rel="1">
-				    <td>${record.material.id}</td>
+				    <td>${record.id}</td>
 					<td>${record.material.allSerial!}</td>
 					<td>${record.material.name!}</td>
 					<#if direction != 1>
@@ -52,12 +52,12 @@
 					<td>${record.material.unit!}</td>		
 					<td>
 					<#if direction == 2>
-						<a href="v_batch_list.do?materialId=${record.material.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a>
+						<a href="v_batch_list.do?materialId=${record.material.id}&recordId=${record.id}&orderSerial=${record.ord.info}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a>
 					<#else>
 						<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
 						<!-- 返回number，可以满足(plan)number和(cir).flows[].number -->
 						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}', 'material.unit':'${record.material.unit!}',
-						 'record.order.info':'${record.ord.info!}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
+						 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
 					</#if>
 					</td>
 				</tr>
