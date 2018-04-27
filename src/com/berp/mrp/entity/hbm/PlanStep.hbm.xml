@@ -8,6 +8,7 @@
 		<property name="type" column="type" type="integer" not-null="true" length="3"/>
 		<property name="status" column="status" type="integer" not-null="true" length="3"/>
 		<many-to-one name="plan" column="plan_id" class="com.berp.mrp.entity.Plan"/>
+		<many-to-one name="step" column="step_id" class="com.berp.mrp.entity.Step"/>
 		<property name="finishTime" column="finish_time" type="timestamp" length="19"/>
 		<property name="number" column="number" type="double" length="11"/>
 	</class>

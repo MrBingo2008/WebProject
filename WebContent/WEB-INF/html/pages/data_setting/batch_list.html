@@ -5,6 +5,7 @@
 					<th width="60" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 					<th width="40"><@s.m "material.name"/></th>
 					<th width="60"><@s.m "batch.serial"/></th>
+					<th width="40"><@s.m "step.surface"/></th>
 					<th width="40"><@s.m "batch.type"/></th>
 					<#if type?? && type=='all'><th width="40"><@s.m "material.number"/></th><#else>
 					<th width="40"><@s.m "material.leftNumber"/></th></#if>
@@ -20,6 +21,9 @@
 					<td>${flow.material.allSerial}</td>
 					<td>${flow.material.name!}</td>
 					<td>${flow.serial!}</td>
+					
+					<td>${(flow.surface.name)!(flow.material.surface.name)!}</td>
+					
 					<td><@s.m "batch.type.${flow.type}"/></td>
 					<#if type?? && type == "all"><td>${flow.number*flow.direct}</td><#else><td>${flow.leftNumber!}</td></#if>
 					<td>${flow.material.unit!}</td>			

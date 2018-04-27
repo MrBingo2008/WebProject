@@ -25,6 +25,9 @@
 					<th width="40">ID</th>
 					<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 					<th width="100"><@s.m "material.name"/></th>
+					<#if direction != 1>
+						<th width="60"><@s.m "sell.order.surface"/></th>
+					</#if>
 					<th width="80"><@s.m "${orderType}.order.company"/></th>
 					<th width="140"><@s.m "${orderType}.order.serial"/></th>
 					<th width="100"><@s.m "${orderType}.order.number"/></th>
@@ -39,19 +42,22 @@
 				    <td>${record.material.id}</td>
 					<td>${record.material.allSerial!}</td>
 					<td>${record.material.name!}</td>
+					<#if direction != 1>
+						<td>${(record.surface.name)!}</td>
+					</#if>
 					<td>${record.ord.company.name!}</td>
 					<td>${record.ord.serial!}</td>
 					<td>${record.number!}</td>
 					<td>${record.notFinishNumber!}</td>
 					<td>${record.material.unit!}</td>		
 					<td>
-					<#if direction == 1>
-					<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
-					<!-- 返回number，可以满足(plan)number和(cir).flows[].number -->
-						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}', 'material.unit':'${record.material.unit!}',
-						 'record.order.info':'${record.ord.info!}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
+					<#if direction == 2>
+						<a href="v_batch_list.do?materialId=${record.material.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a>
 					<#else>
-						<a href="v_batch_list.do?materialId=${record.material.id}" onclick="test();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a>
+						<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
+						<!-- 返回number，可以满足(plan)number和(cir).flows[].number -->
+						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}', 'material.unit':'${record.material.unit!}',
+						 'record.order.info':'${record.ord.info!}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
 					</#if>
 					</td>
 				</tr>

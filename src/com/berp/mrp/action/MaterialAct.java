@@ -75,6 +75,10 @@ public class MaterialAct {
 		material.setStatus(0);
 		if(material.getCompany().getId() == null)
 			material.setCompany(null);
+		
+		if(material.getSurface().getId() == null)
+			material.setSurface(null);
+		
 		materialDao.save(material);
 
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
@@ -95,6 +99,10 @@ public class MaterialAct {
 		material.setStatus(0);
 		if(material.getCompany().getId() == null)
 			material.setCompany(null);
+		
+		if(material.getSurface().getId() == null)
+			material.setSurface(null);
+		
 		materialDao.update(material);
 
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
@@ -112,9 +120,9 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/v_record_list.do")
-	//direction表示方向，1为进，2为出
+	//direction表示方向，1为进，2为出 0为生产选择
 	public String recordList(Integer direction, String searchName, HttpServletRequest request, ModelMap model) {
-		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, searchName, direction, 1, 2, null, null);
+		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, searchName, direction==1?1:2, 1, 2, null, null);
 		model.addAttribute("records", records);
 		model.addAttribute("direction", direction);
 		model.addAttribute("searchName", searchName);

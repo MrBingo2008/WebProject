@@ -8,14 +8,8 @@ public class ProcessStep {
 	private Process process;
 	private Integer type = 0;
 	private String serial;
-	/*private String unit;
-	private String spec;
-	private String dim;
-	
-	
-	private Integer fetchType;
-	private Integer status;*/
-	
+	private Step step;
+
 	public ProcessStep(){
 		
 	}
@@ -64,46 +58,14 @@ public class ProcessStep {
 	public void setSerial (java.lang.String serial) {
 		this.serial = serial;
 	}
-/*
-	public java.lang.String getUnit () {
-		return unit;
-	}
 
-	public void setUnit (java.lang.String unit) {
-		this.unit = unit;
-	}
+	//step
 	
-	public java.lang.String getSpec () {
-		return spec;
+	public Step getStep() {
+		return step;
 	}
 
-	public void setSpec (java.lang.String spec) {
-		this.spec = spec;
+	public void setStep(Step step) {
+		this.step = step;
 	}
-	
-	public java.lang.String getDim() {
-		return dim;
-	}
-
-	public void setDim (java.lang.String dim) {
-		this.dim = dim;
-	}
-	
-	//fetchType
-	public java.lang.Integer getFetchType() {
-		return fetchType;
-	}
-
-	public void setFetchType(java.lang.Integer fetchType) {
-		this.fetchType = fetchType;
-	}
-	
-	//status
-	public java.lang.Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(java.lang.Integer status) {
-		this.status = status;
-	}*/
 }

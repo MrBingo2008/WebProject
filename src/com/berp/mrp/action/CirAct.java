@@ -79,10 +79,13 @@ public class CirAct {
 			return;
 		}	
 		for(OrderRecord record : order.getRecords()){
+			if(record.getSurface() ==null || record.getSurface().getId() == null)
+				record.setSurface(null);
 			record.setOrd(order);
 			record.setStatus(order.getStatus());
 		}
 		order.setType(orderType);
+		
 		orderDao.save(order);
 		
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
@@ -112,6 +115,9 @@ public class CirAct {
 		}	
 		
 		for(OrderRecord record : order.getRecords()){
+			if(record.getSurface() ==null || record.getSurface().getId() == null)
+				record.setSurface(null);
+			
 			record.setOrd(order);
 			record.setStatus(order.getStatus());
 		}

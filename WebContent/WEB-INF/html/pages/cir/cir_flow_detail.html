@@ -130,7 +130,7 @@ function calFactor(numInput){
 							<th type="text" name="flows[#index#].number" size="12" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
 							<th type="text" name="flows[#index#].material.unit" size="6" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
-							<#if materialSelectType?? && materialSelectType == 1>
+							<#if direction == 1>
 							<th type="lookup" name="flows[#index#].room.name" size="8"
 								lookupGroup="flows[#index#].room" lookuppk="id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
 								aTitle="<@s.m 'room'/>" lookupUrl="v_category_tree.do?parentId=3"><@s.m "room"/></th>

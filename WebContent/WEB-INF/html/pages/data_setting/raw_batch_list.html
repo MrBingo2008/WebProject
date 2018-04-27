@@ -9,7 +9,7 @@
 		<table class="searchContent">
 			<tr>
 				<td>
-					<label><@s.m "serialOrName"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
+					<label><@s.m "material.serialOrName"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
 				</td>
 				<td><div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div></td>
 			</tr>
@@ -25,7 +25,7 @@
 				<th width="40">ID</th>
 				<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 				<th width="100"><@s.m "material.name"/></th>
-				<th width="160"><@s.m "rawFlow.serial"/></th>
+				<th width="160"><@s.m "plan.serial"/></th>
 				<th width="40"><@s.m "material.unit"/></th>
 				<th width="100"><@s.m "material.manuNumber"/></th>
 				<th width="100"><@s.m "rawFlow.leftNumber"/></th>
@@ -37,7 +37,7 @@
 		<tbody>
 		<#list pagination.list as rawFlow>
 			<tr target="sid_obj" rel="1">
-			    <td>${rawFlow.material.id}</td>
+			    <td>${rawFlow.id}</td>
 				<td>${rawFlow.material.allSerial!}</td>
 				<td>${rawFlow.material.name!}</td>
 				<td>${rawFlow.serial!}</td>

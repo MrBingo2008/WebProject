@@ -73,6 +73,7 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideOut_view.do")
 	public String outsideOutView(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideOut");
+		model.addAttribute("type", 2);
 		model.addAttribute("openMode", "view");
 		Cir cir = cirDao.findById(cirId);
 		model.addAttribute("cir", cir);
@@ -178,6 +179,7 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideIn_view.do")
 	public String outsideInView(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideIn");
+		model.addAttribute("type", 1);
 		model.addAttribute("openMode", "view");
 		Cir cir = cirDao.findById(cirId);
 		model.addAttribute("cir", cir);

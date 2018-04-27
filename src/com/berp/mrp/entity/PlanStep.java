@@ -15,6 +15,7 @@ public class PlanStep {
 	
 	private Integer status = 0;
 	private Plan plan;
+	private Step step;
 	
 	private java.util.Date finishTime;
 	private Double number;
@@ -97,5 +98,16 @@ public class PlanStep {
 
 	public void setNumber(java.lang.Double number) {
 		this.number = number;
+	}
+	
+
+	//step
+	
+	public Step getStep() {
+		return step;
+	}
+
+	public void setStep(Step step) {
+		this.step = step;
 	}
 }

@@ -15,11 +15,14 @@ $(function(){
 			break;
 		case '1':
 			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
 			actionUrl="o_plan_material_update.do";
 			break;
 		case '2':
 			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
@@ -27,6 +30,8 @@ $(function(){
 			break;
 		case '3':
 			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
@@ -34,6 +39,8 @@ $(function(){
 			break;
 		case '4':
 			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
@@ -158,12 +165,16 @@ function calFactor(numInput){
 				<label><@s.m "plan.order"/>:</label>
 				<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
 				<input id="orderInput" type="text" size="30" name="record.order.info" value="${(plan.record.ord.info)!}" class="required" readonly/>
-				<a class="btnLook" href="v_record_list.do?direction=1" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
+				<a class="btnLook" href="v_record_list.do?direction=0" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
 			</p>
 			<p>
 				<label><@s.m "product.info"/>:</label>
-				<input type="text" name="material.name" value="${(plan.material.name)!}" size ="30" readonly/>
+				<input type="text" name="material.fullShowName" value="${(plan.material.fullShowName)!}" size ="30" readonly/>
 				<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
+			</p>
+			<p>
+				<label><@s.m "sell.order.surface"/>:</label>
+				<input type="text" name="record.surface.name" value="${(plan.record.surface.name)!}" size ="30" readonly/>
 			</p>
 			<p>
 				<label><@s.m "sell.order.number"/>:</label>
@@ -238,18 +249,14 @@ function calFactor(numInput){
 				 width="100%">
 					<thead>
 						<tr>
-							<th type="label" name="steps[#index#].priority" size="2" display="#index#"><@s.m "global.number"/></th>							
-							<th type="lookup" name="steps[#index#].name" size="12"
-								lookupGroup="steps[#index#]"
+						<!-- process steps那里没有name=priority这个  name="steps[#index#].priority"-->
+							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
+							<th type="lookup" name="steps[#index#].step.name" size="12"  fieldAttrs="{readonly:'readonly'}"
+								lookupGroup="steps[#index#].step" fieldClass="textInput required" lookuppk="id" 
 								lookupUrl="v_step_list.do?type=1" aTitle="<@s.m 'step'/>"><@s.m "step"/></th>
 
-							<th type="enum" name="steps[#index#].type"
-								enumUrl="<select class='combox'>
-									<option value='0'><@s.m 'step.type.0'/></option>
-									<option value='1'><@s.m 'step.type.1'/></option></select>" 
-									size="12"><@s.m "step.type"/></th>
-							
-							<!--  th type="text" name="steps[#index#].workshop" defaultVal="0.8" size="12"><@s.m "workshop"/></th -->
+							<th type="text" name="steps[#index#].step.dType" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "step.type"/></th>
+							<th type="text" name="steps[#index#].step.dSurface" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "step.isSurface"/></th>						
 							
 							<!-- 审核后出现 status>0 -->
 							<#if plan.status gt 0>
@@ -273,22 +280,20 @@ function calFactor(numInput){
 						    </td>
 						    <#if plan.status == 0>
 								<td>
-									<input type="text" name="steps[${count}].name" value="${step.name}" lookuppk="id" size="12" class="textInput">
-									<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[${count}]" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
+									<input type="hidden" name="steps[${count}].step.id" value="${step.step.id}">
+									<input type="text" name="steps[${count}].step.name" value="${step.step.name!}" size="12" class="textInput required" readonly>
+									<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[${count}].step" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
 								</td>
-								<td>
-									<select class='combox' name='steps[${count}].type'>
-										<option value='0' <#if step.type == 0>selected="selected"</#if>><@s.m 'step.type.0'/></option>
-										<option value='1' <#if step.type == 1>selected="selected"</#if>><@s.m 'step.type.1'/></option>
-									</select>
-								</td> 
+								<td><input type="text" name="steps[${count}].step.dType" value="<@s.m 'step.type.${step.step.type}'/>" size="20" class="textInput" readonly>
+								<td><input type="text" name="steps[${count}].step.dSurface" value="<#if step.step.surface>是<#else>否</#if>" size="20" class="textInput" readonly>
+							
 								<!-- workshop是跟step name and type放在一起的，一开始就有，跟后面的操作没有关系 -->
 								<!-- td><input type="text" name="steps[${count}].workshop" value="" size="12" class="number textInput"></td-->
 								<td><a href="javascript:void(0)" class="btnDel ">删除</a></td>
 							<#else>
-								<td>${step.name!}</td>
-								<td><@s.m "step.type.${step.type}"/></td>
-								<!-- td>${step.workshop!}</td -->
+								<td>${step.step.name!}</td>
+								<td><@s.m "step.type.${step.step.type}"/></td>
+								<td><#if step.step.surface>是<#else>否</#if></td>
 							</#if>
 							
 							<!-- 这是表格的右半部分，用料完成后才出现  status >= 2-->

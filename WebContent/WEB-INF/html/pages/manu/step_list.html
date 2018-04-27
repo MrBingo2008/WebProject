@@ -9,7 +9,7 @@
 	<div class="searchBar">
 		<ul class="searchContent">
 			<li>
-				<label><@s.m "serialOrName"/>：</label>
+				<label><@s.m "step.serialOrName"/>：</label>
 				<input type="text" name="searchName" value="${searchName!}"/>
 			</li>
 		</ul>
@@ -51,7 +51,7 @@
 					<@berp_perm url="/o_step"><a title="<@s.m 'step.edit'/>" target="navTab" rel="main" href="v_step_edit.do?stepId=${step.id}"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" rel="main" href="o_step_delete.do?stepId=${step.id}"><@s.m "global.delete"/></a></@berp_perm>
 				<#else>
-					<a class="btnSelect" href="javascript:$.bringBack({serial:'${step.serial}', name:'${step.name!}', type:'${step.type}', id:'${step.id}'})">选择</a>
+					<a class="btnSelect" href="javascript:$.bringBack({serial:'${step.serial}', name:'${step.name!}', dType:'<@s.m 'step.type.${step.type}'/>', id:'${step.id}', dSurface:'<#if step.surface>是<#else>否</#if>'})">选择</a>
 				</td>
 				</#if>
 			</tr>

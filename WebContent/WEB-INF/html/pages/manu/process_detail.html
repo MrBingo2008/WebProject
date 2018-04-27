@@ -39,14 +39,11 @@ $(function(){
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>			
-							<th type="lookup" name="steps[#index#].serial" size="20" fieldClass="textInput required"
-								lookupGroup="steps[#index#]" lookupUrl="v_step_list.do?type=1" aTitle="<@s.m 'step'/>"><@s.m "step.serial"/></th>
-							<th type="text" name="steps[#index#].name" size="20"><@s.m "step.name"/></th>
-							<th type="enum" name="steps[#index#].type"
-								enumUrl="<select class='combox'>
-									<option value='0'><@s.m 'step.type.0'/></option>
-									<option value='1'><@s.m 'step.type.1'/></option></select>" 
-									size="12"><@s.m "step.type"/></th>						
+							<th type="lookup" name="steps[#index#].step.serial" size="20" fieldClass="textInput required"
+								lookupGroup="steps[#index#].step" lookuppk="id" lookupUrl="v_step_list.do?type=1" aTitle="<@s.m 'step'/>" fieldAttrs="{readonly:'readonly'}"><@s.m "step.serial"/></th>
+							<th type="text" name="steps[#index#].step.name" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "step.name"/></th>
+							<th type="text" name="steps[#index#].step.dType" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "step.type"/></th>
+							<th type="text" name="steps[#index#].step.dSurface" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "step.isSurface"/></th>						
 							<th type="del" width="60"><@s.m "global.operate"/></th>
 						</tr>
 					</thead>
@@ -58,16 +55,13 @@ $(function(){
 						    <td><span class="label" display="#index#">${count+1}</span>
 						    <input type="hidden" name="steps[${count}].id" value="${step.id}"></input></td>
 							<td>
-								<input type="text" name="steps[${count}].serial" value="${step.serial!}" size="20" class="textInput required">
-								<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[${count}]" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
+								<input type="hidden" name="steps[${count}].step.id" value="${step.step.id}">
+								<input type="text" name="steps[${count}].step.serial" value="${step.step.serial!}" size="20" class="textInput required" readonly>
+								<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[${count}].step" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
 							</td>
-							<td><input type="text" name="steps[${count}].name" value="${step.name!}" size="20" class="textInput">
-							<td>
-								<select class='combox' name='steps[${count}].type'>
-									<option value='0' <#if step.type == 0>selected="selected"</#if>><@s.m 'step.type.0'/></option>
-									<option value='1' <#if step.type == 1>selected="selected"</#if>><@s.m 'step.type.1'/></option>
-								</select>
-							</td> 
+							<td><input type="text" name="steps[${count}].step.name" value="${step.step.name!}" size="20" class="textInput" readonly>
+							<td><input type="text" name="steps[${count}].step.dType" value="<@s.m 'step.type.${step.step.type}'/>" size="20" class="textInput" readonly>
+							<td><input type="text" name="steps[${count}].step.dSurface" value="<#if step.step.surface>是<#else>否</#if>" size="20" class="textInput" readonly>
 							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
 						</tr>
 						<#assign count=count+1/>

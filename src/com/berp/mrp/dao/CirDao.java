@@ -149,7 +149,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 				
 				Plan plan = parentFlow.getPlan();
 				PlanStep planStep = plan.getCurrentStep();
-				if(planStep.getType() != 1)
+				if(planStep.getStep().getType() != 1)
 					throw new Exception("生产数据不一致");
 				planStep.setFinishTime(bean.getCreateTime());
 				planStep.setNumber(parentFlow.getNumber());
@@ -163,7 +163,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 				if(steps.indexOf(planStep) == steps.size()-1){
 					plan.setStatus(Plan.Status.manuFinish.ordinal());
 				}
-				else if(steps.get(steps.indexOf(planStep)+1).getType() == 1){
+				else if(steps.get(steps.indexOf(planStep)+1).getStep().getType() == 1){
 					//这是重设outside的一套动作
 					parentFlow.setArriveNumber(0.00);
 					parentFlow.setLeftNumber(parentFlow.getNumber());

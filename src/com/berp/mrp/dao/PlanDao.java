@@ -24,6 +24,7 @@ import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.Process;
 import com.berp.mrp.entity.RawBatch;
 import com.berp.mrp.entity.RawBatchFlow;
+import com.berp.mrp.entity.Step;
 
 /*
 import com.jeecms.common.hibernate3.Finder;
@@ -83,7 +84,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		//在这里嵌套transaction，但是仍然等同一个transaction，如果把这个放在plan update前面也是一样
 		if(bean.getStatus() == Plan.Status.materialFinish.ordinal()){
 			try{
-				if(bean.getSteps().get(0).getType() == 1)
+				if(bean.getSteps().get(0).getStep().getType() == 1)
 					bean.setStatus(Plan.Status.outside.ordinal());
 				
 				List<BatchFlow> flows = bean.getMaterialFlows();
@@ -123,7 +124,8 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			rawFlow.setLeftNumber(step.getNumber());
 			if(stepIndex == steps.size()-1)
 				bean.setStatus(Plan.Status.manuFinish.ordinal());
-			else if(stepIndex < steps.size() - 1 && stepDao.findById(steps.get(stepIndex+1).getId()).getType() == 1){
+			//else if(stepIndex < steps.size() - 1 && stepDao.findById(steps.get(stepIndex+1).getId()).getType() == 1){
+			else if(stepIndex < steps.size() - 1 && plan.getSteps().get(stepIndex+1).getStep().getType() == 1){
 				//因为有可能之前有委外而且已经处理了
 				rawFlow.setStatus(1);
 				rawFlow.setArriveNumber(0.00);

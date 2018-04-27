@@ -57,6 +57,8 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 			f.setParam("name", "%" + name + "%");
 		}
 		
+		f.append(" order by bean.id desc");
+		
 		return find(f, pageNo, pageSize);
 	}
 	

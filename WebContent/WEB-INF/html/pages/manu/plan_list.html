@@ -17,11 +17,11 @@ $(function(){
 	<div class="searchBar">
 		<ul class="searchContent">
 			<li>
-				<label><@s.m "serialOrName"/>：</label>
+				<label><@s.m "bill.serialOrName"/>：</label>
 				<input type="text" name="searchName" value="${searchName!}"/>
 			</li>
 			<li>
-				<label><@s.m "productSerialOrName"/>：</label>
+				<label><@s.m "product.serialOrName"/>：</label>
 				<input type="text" name="searchProductName" value="${searchProductName!}"/>
 			</li>
 			<li>
@@ -58,6 +58,7 @@ $(function(){
 				<th width="80"><@s.m "plan.name"/></th>
 				<th width="80"><@s.m "sell.order.company"/></th>
 				<th width="80"><@s.m "product.info"/></th>
+				<th width="80"><@s.m "sell.order.surface"/></th>
 				<th width="60"><@s.m "material.manuNumber"/></th>
 				<th width="80"><@s.m "global.createTime"/></th>
 				<th width="80"><@s.m "plan.status"/></th>
@@ -70,8 +71,9 @@ $(function(){
 				<td>${plan.id}</td>
 				<td>${plan.serial}</td>
 				<td>${(plan.name)!}</td>
-				<td>${(plan.orderRecord.ord.company.name)!}</td>
-				<td>${plan.material.info!}</td>
+				<td>${(plan.record.ord.company.name)!}</td>
+				<td>${plan.material.fullShowName!}</td>
+				<td>${(plan.record.surface.name)!}</td>
 				<td>${plan.number!}</td>
 				<td>${(plan.createTime?string('yyyy-MM-dd'))!}</td>
 				<td<#if plan.status==0> style="color:red"</#if>><@s.m "plan.status.${plan.status}"/></td>

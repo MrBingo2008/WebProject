@@ -46,14 +46,6 @@ import com.berp.framework.web.ResponseUtils;
 
 @Controller
 public class ManuAct {
-	
-	@RequestMapping("/v_plan_gen_list.do")
-	public String planGenList(Integer pageNum, Integer numPerPage, String searchName, HttpServletRequest request, ModelMap model) {
-		Pagination pagination = orderRecordDao.getPage(2, searchName, 1, 2, pageNum, numPerPage);
-		model.addAttribute("pagination", pagination);
-		model.addAttribute("searchName", searchName);
-		return "pages/manu/plan_gen_list";
-	}
 
 	@RequestMapping("/v_plan_list.do")
 	public String planList(Integer pageNum, Integer numPerPage, String searchName, String searchProductName, Integer searchStatus, HttpServletRequest request, ModelMap model) {
@@ -83,71 +75,30 @@ public class ManuAct {
 			}
 		}
 		
-		List<PlanStep> steps = new ArrayList<PlanStep>();
+		/*List<PlanStep> steps = new ArrayList<PlanStep>();
 		if(process.getSteps()!=null)
 			for(ProcessStep step: process.getSteps()){
 				PlanStep ps = new PlanStep();
 				ps.setName(step.getName());
 				ps.setType(step.getType());
 				steps.add(ps);
-			}
+			}*/
 	    Step surface = orderRecord.getSurface()!=null?orderRecord.getSurface():material.getSurface();
-		if(surface!=null)
-		{
-			PlanStep ps1 = new PlanStep();
-			ps1.setName(surface.getName());
-			ps1.setType(surface.getType());
-			steps.add(ps1);
+		if(surface!=null){
+			ProcessStep ps = new ProcessStep();
+			ps.setStep(surface);
+			if(process.getSteps()!=null && process.getSteps().size()>0){
+				int lastIndex = process.getSteps().size()-1;
+				ProcessStep lastStep = process.getSteps().get(lastIndex);
+				if(lastStep.getStep().getSurface() == true)
+					process.getSteps().remove(lastIndex);
+			}
+			process.getSteps().add(ps);
+			
 		}
-		model.addAttribute("steps", steps);
+		
+		model.addAttribute("steps", process.getSteps());
 		return "pages/manu/process_items";
-	}
-	
-	@RequestMapping("/v_plan_gen.do")
-	public String planGen(Integer orderRecordId, Integer materialId, HttpServletRequest request, ModelMap model) {
-		model.addAttribute("openMode", "add");
-		
-		String serial = String.format("SCRW-%s", DateUtils.getCurrentDayString());
-		Integer maxSerial = planDao.getMaxSerial(serial);
-		String defaultSerial = String.format("SCRW-%s-%03d", DateUtils.getCurrentDayString(), maxSerial+1);
-		
-		OrderRecord orderRecord = orderRecordDao.findById(orderRecordId);
-		Material material = materialDao.findById(materialId);
-		
-		Process process = new Process();
-		List<Category> parents = material.getParent().getNodeList();
-		for(Category category : parents){
-			List<Process> processes = processDao.getListByCategory(category.getId());
-			if(processes != null && processes.size()>0){
-				process = processes.get(0);
-				break;
-			}
-		}
-		
-		Plan plan = new Plan();
-		plan.setSerial(defaultSerial);
-		plan.setStatus(0);
-		
-		plan.setCreateTime(new Date());
-		User user = RequestInfoUtils.getUser(request);
-		plan.setCreateUser(user);
-		
-		plan.setMaterial(material);
-		plan.setRecord(orderRecord);
-		plan.setNumber(orderRecord.getNumber());
-		
-		List<PlanStep> steps = new ArrayList<PlanStep>();
-		if(process.getSteps()!=null)
-			for(ProcessStep step: process.getSteps()){
-				PlanStep ps = new PlanStep();
-				ps.setName(step.getName());
-				ps.setType(step.getType());
-				steps.add(ps);
-			}
-		plan.setSteps(steps);
-		model.addAttribute("plan", plan);
-		
-		return "pages/manu/plan_detail";
 	}
 	
 	@RequestMapping("/v_plan_add.do")
@@ -330,6 +281,14 @@ public class ManuAct {
 		for(BatchFlow flow: plan.getPackageFlows()){
 			flow.setPlan(plan);
 			flow.setMaterial(planDao.findById(plan.getId()).getMaterial());
+			
+			List<PlanStep> steps = plan.getSteps();
+			if(steps!=null && steps.size()>0){
+				PlanStep lstep = stepDao.findById(steps.get(steps.size()-1).getId());;
+				if(lstep.getStep().getSurface() == true)
+					flow.setSurface(lstep.getStep());
+			}
+			
 			flow.setType(BatchFlow.Type.planIn.ordinal());
 			flow.setLeftNumber(flow.getNumber());
 			flow.setStatus(1);
@@ -359,5 +318,5 @@ public class ManuAct {
 	private OrderRecordDao orderRecordDao;
 	
 	@Autowired
-	private MaterialDao materialDao;
+	private PlanStepDao stepDao;
 }

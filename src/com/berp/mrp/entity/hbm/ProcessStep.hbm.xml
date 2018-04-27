@@ -6,13 +6,7 @@
 		<property name="serial" column="step_serial" type="string" length="50"/>
 		<property name="name" column="step_name" type="string" length="100"/>
 		<many-to-one name="process" column="process_id" class="com.berp.mrp.entity.Process"/>
+		<many-to-one name="step" column="step_id" class="com.berp.mrp.entity.Step"/>
 		<property name="type" column="type" type="integer" not-null="true" length="3"/>
-		<!--<property name="serial" column="serial" type="string" not-null="true" length="100"/>
-		<property name="unit" column="unit" type="string" length="30"/>
-		<property name="spec" column="spec" type="string" length="200"/>
-		<property name="dim" column="dim" type="string" length="150"/>
-		
-		<property name="fetchType" column="fetchType" type="integer" not-null="true" length="10"/>
-		<property name="status" column="status" type="integer" length="10"/>-->
 	</class>
 </hibernate-mapping>

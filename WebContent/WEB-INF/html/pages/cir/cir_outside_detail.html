@@ -5,8 +5,8 @@ $(function(){
 		$("form").attr("action", actionUrl);
 		var status = '${cir.status}';
 		if(status == '1'){
-			$("#cirForm input").attr("readonly", "readonly");
-			$("#cirForm a").css("display", "none");
+			$("#formContent input").attr("readonly", "readonly");
+			$("#formContent a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled", "disabled");
 		}
 	}else if('${openMode!}' == 'view'){

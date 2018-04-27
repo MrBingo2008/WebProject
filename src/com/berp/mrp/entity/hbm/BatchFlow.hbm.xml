@@ -16,9 +16,12 @@
 		<property name="boxNum" column="box_num" type="java.lang.Integer" length="10"/>
 		
 		<many-to-one name="material" column="material_id" class="com.berp.mrp.entity.Material"/>
+		<many-to-one name="surface" column="surface_id" class="com.berp.mrp.entity.Step"/>
+		
 		<many-to-one name="parent" column="parent_id" class="com.berp.mrp.entity.BatchFlow"/>
 		<many-to-one name="cir" column="cir_id" class="com.berp.mrp.entity.Cir"/>
 		<many-to-one name="plan" column="plan_id" class="com.berp.mrp.entity.Plan"/>
+		<many-to-one name="record" column="record_id" class="com.berp.mrp.entity.OrderRecord"/>
 		
 		<many-to-one name="room" column="room_id" class="com.berp.core.entity.Category"/>
 	</class>

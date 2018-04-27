@@ -99,6 +99,10 @@ function openBatchDetail(){
 		container.animate({height: cheight},50);
 		gridScroller.animate({height: theight}, 50);
 	});
+	
+	setTimeout(function() {
+		$(".sidebarHeader").css("padding", "0px");
+		$("#sidebarContentH").css("padding", "0px");}, 20);
 	return true;
 }
 
