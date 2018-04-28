@@ -111,7 +111,7 @@ function calFactor(numInput){
 						<tr>
 							<th type="label" size="4" display="#index#"><@s.m "global.number"/></th>
 							
-							<th type="lookup" name="flows[#index#].material.serial" size="18" aTitle="<@s.m '${cirType}.selectMaterial'/>"
+							<th type="lookup" name="flows[#index#].material.serial" size="16" aTitle="<@s.m '${cirType}.selectMaterial'/>"
 								lookupGroup="flows[#index#]" lookuppk="material.id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
 								<#if direction == 2>
 									aFieldAttrs="{width:'800', height:'600', resizable:'false'}" </#if>
@@ -123,18 +123,18 @@ function calFactor(numInput){
 								><@s.m "material.allSerial"/></th>
 							<!-- direction=1表示进， 2出 -->	
 							<#if direction == 2><th type="hidden" name="flows[#index#].parent.id" style="display:none"></th></#if>	
-							<th type="text" name="flows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
-							<th type="text" name="flows[#index#].serial" size="24" <#if direction == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
+							<th type="text" name="flows[#index#].material.name" size="10" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							<th type="text" name="flows[#index#].serial" size="18" <#if direction == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
 
 							<#if cirType == 'sellOut' || cirType == 'purchaseIn'>
 								<th type="text" name="flows[#index#].record.orderSerial" size="24" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.order.serial"/></th>
 								<th type="hidden" name="flows[#index#].record.id" style="display:none"></th>
 								<th type="hidden" name="flows[#index#].defaultSurfaceId" style="display:none"></th>
 							</#if>
-							<th type="text" name="flows[#index#].numPerBox" size="12" fieldClass="number" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
-							<th type="text" name="flows[#index#].boxNum" size="6" fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
-							<th type="text" name="flows[#index#].number" size="12" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
-							<th type="text" name="flows[#index#].material.unit" size="6" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
+							<th type="text" name="flows[#index#].numPerBox" size="4" fieldClass="number" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
+							<th type="text" name="flows[#index#].boxNum" size="4" fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
+							<th type="text" name="flows[#index#].number" size="6" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
+							<th type="text" name="flows[#index#].material.unit" size="4" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
 							<#if direction == 1>
 							<th type="lookup" name="flows[#index#].room.name" size="8"
@@ -142,7 +142,7 @@ function calFactor(numInput){
 								aTitle="<@s.m 'room'/>" lookupUrl="v_category_tree.do?parentId=3"><@s.m "room"/></th>
 							</#if>
 								
-							<th type="del" width="60"><@s.m "global.operate"/></th>
+							<th type="del" size="4"><@s.m "global.operate"/></th>
 						</tr>
 					</thead>
 					<tbody>

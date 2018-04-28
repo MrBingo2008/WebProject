@@ -72,13 +72,8 @@ public class Material {
 		this.customerSerial = serial;
 	}
 	
-	public String getAllSerial(){
-		if(StringUtils.isBlank(this.serial))
-			return this.customerSerial;
-		if(StringUtils.isBlank(this.customerSerial))
-			return this.serial;
-		
-		return this.customerSerial + " / " + this.serial;
+	public String getAllSerial(){		
+		return String.format("%s / %s", this.customerSerial==null?"":this.customerSerial, this.serial==null?"":this.serial);
 	}
 	
 	public String getInfo(){
