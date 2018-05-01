@@ -81,9 +81,11 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		return material;
 	}
 	
-	public Material updateNotSellOutNumber (Integer materialId, Double notSellOutNumber){
+	public Material updateNotSellOutNumber (Integer materialId, Double notSellOutNumber) throws Exception{
 		Material material = this.findById(materialId);
 		if(notSellOutNumber!=null){
+			if(material.getNotSellOutNumber() + notSellOutNumber < 0)
+				throw new Exception(material.getInfo() + "未发货数量为负.");
 			material.setNotSellOutNumber(material.getNotSellOutNumber()+ notSellOutNumber);
 		}
 		return material;

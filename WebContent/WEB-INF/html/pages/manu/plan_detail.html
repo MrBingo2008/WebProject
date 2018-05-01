@@ -199,7 +199,7 @@ function calFactor(numInput){
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
 							<th type="lookup" name="materialFlows[#index#].material.serial" size="20" fieldClass="required" 
-							fieldAttrs="{readonly:'readonly'}" aFieldAttrs="{width:'800', height:'700', resizable:'false'}" aTitle="<@s.m 'material.batch'/>"
+							fieldAttrs="{readonly:'readonly'}" aFieldAttrs="{width:'900', height:'700', resizable:'false'}" aTitle="<@s.m 'material.batch'/>"
 							lookupGroup="materialFlows[#index#]" lookupUrl="v_material.do?type=2" lookuppk="material.id"><@s.m "material.allSerial"/></th>
 								
 							<th type="hidden" name="materialFlows[#index#].parent.id" style="display:none"></th>
@@ -222,7 +222,7 @@ function calFactor(numInput){
 							<td>
 								<input type="text" name="materialFlows[${count}].material.serial" value="${flow.material.allSerial!}" lookuppk="material.id" size="20" class="textInput required" readonly=readonly>
 								<input type="hidden" name="materialFlows[${count}].material.id" value="${flow.material.id!}">
-								<a class="btnLook" href="v_material.do?type=2" lookupgroup="materialFlows[${count}]" lookuppk="material.id" width="800" height="700" resizable="false" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
+								<a class="btnLook" href="v_material.do?type=2" lookupgroup="materialFlows[${count}]" lookuppk="material.id" width="900" height="700" resizable="false" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
 							</td>
 							<input type="hidden" name="materialFlows[${count}].parent.id" value="${(flow.parent.id)!}">
 							<td><input type="text" name="materialFlows[${count}].material.name" value="${flow.material.name!}" size="12" class="textInput" readonly=readonly></td>

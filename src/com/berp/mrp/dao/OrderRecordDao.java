@@ -117,6 +117,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		return find(f, pageNo, pageSize);
 	}
 	
+	//这个现在暂时不用
 	public void updateFinishNumber (Company company, Material material, Double number) throws Exception{
 		
 		List<OrderRecord> records = findByCompanyAndMaterial(company.getId(), material.getId(), null, null, 1, 2, null, null);
@@ -160,6 +161,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		}
 	}
 	
+	//收到货是以record为主的
 	public void updateFinishNumber (BatchFlow flow) throws Exception{
 		
 		OrderRecord record = findById(flow.getRecord().getId());

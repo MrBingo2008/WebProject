@@ -114,7 +114,7 @@ function calFactor(numInput){
 							<th type="lookup" name="flows[#index#].material.serial" size="16" aTitle="<@s.m '${cirType}.selectMaterial'/>"
 								lookupGroup="flows[#index#]" lookuppk="material.id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
 								<#if direction == 2>
-									aFieldAttrs="{width:'800', height:'600', resizable:'false'}" </#if>
+									aFieldAttrs="{width:'900', height:'600', resizable:'false'}" </#if>
 								<#if cirType == 'purchaseIn' || cirType =='sellOut'>
 									lookupUrl="v_record_list.do?direction=${direction}"
 								<#else>	
@@ -157,7 +157,7 @@ function calFactor(numInput){
 								<input type="hidden" name="flows[${count}].material.id" value="${flow.material.id}">
 								<input type="text" name="flows[${count}].material.serial" value="${flow.material.allSerial!}" size="18" class="textInput required" readonly>
 								<a class="btnLook" lookupgroup="flows[${count}]" lookuppk="material.id" title="<@s.m '${cirType}.selectMaterial'/>"
-								<#if direction == 2>width='800' height='600' resizable='false'</#if> 
+								<#if direction == 2>width='900' height='700' resizable:'false'</#if> 
 								<#if cirType == 'purchaseIn' || cirType =='sellOut'>
 									href="v_record_list.do?direction=${direction}"
 								<#else>	
@@ -173,7 +173,7 @@ function calFactor(numInput){
 								<td>
 								<input type="text" name="flows[${count}].record.orderSerial" value="${(flow.record.ord.info)!}" size="24" class="textInput" readonly>
 								<input type="hidden" name="flows[${count}].record.id" value="${(flow.record.id)!}">
-								<input type="hidden" name="flows[${count}].defaultSurfaceId" value="${(flow.defaultSurfaceId)!}">
+								<input type="hidden" name="flows[${count}].defaultSurfaceId" value="${(flow.defaultSurface.id)!}">
 								</td>
 							</#if>
 							

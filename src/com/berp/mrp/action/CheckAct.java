@@ -50,7 +50,7 @@ public class CheckAct extends CirAct {
 	//check out
 	@RequestMapping("/v_checkOut_add.do")
 	public String checkOutAdd(HttpServletRequest request, ModelMap model) {
-		return this.cirAdd("checkOut", 0, "PDBS", request, model);
+		return this.cirAdd("checkOut", 2, "PDBS", request, model);
 	}
 	
 	@RequestMapping("/o_checkOut_save.do")
@@ -60,12 +60,12 @@ public class CheckAct extends CirAct {
 
 	@RequestMapping("/v_checkOut_view.do")
 	public String checkOutView(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirView(cirId, "checkOut", 0, request, model);
+		return this.cirView(cirId, "checkOut", 2, request, model);
 	}
 	
 	@RequestMapping("/v_checkOut_edit.do")
 	public String checkOutEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirEdit(cirId, "checkOut", 0, request, model);
+		return this.cirEdit(cirId, "checkOut", 2, request, model);
 	}
 	
 	@RequestMapping("/o_checkOut_update.do")

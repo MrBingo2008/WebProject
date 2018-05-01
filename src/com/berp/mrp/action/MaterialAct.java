@@ -36,11 +36,19 @@ import com.berp.framework.web.ResponseUtils;
 @Controller
 public class MaterialAct {
 	@RequestMapping("/v_material.do")
-	public String material(Integer type, HttpServletRequest request, ModelMap model) {
+	public String material(Integer type, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		Category category = categoryDao.findById(1);
 		JSONObject object = categoryDao.getCategoryTree(category);
 		model.addAttribute("tree", object.toString());
 		model.addAttribute("type", type);
+		
+		model.addAttribute("searchName", searchName);
+		
+		if(parentId == null)
+			parentId = category.getId();
+		model.addAttribute("parentId", parentId);
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("numPerPage", numPerPage);
 		
 		return "pages/data_setting/material";
 	}
@@ -85,15 +93,21 @@ public class MaterialAct {
 	}
 
 	@RequestMapping("/v_material_edit.do")
-	public String materialEdit(Integer materialId, HttpServletRequest request, ModelMap model) {
+	public String materialEdit(Integer materialId, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		Material m = materialDao.findById(materialId);
 		model.addAttribute("material", m);
 		model.addAttribute("openMode", "edit");
+		
+		model.addAttribute("searchName", searchName);
+		model.addAttribute("parentId", parentId);
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("numPerPage", numPerPage);
+		
 		return "pages/data_setting/material_detail";
 	}
 	
 	@RequestMapping("/o_material_update.do")
-	public void materialUpdate(Material material, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void materialUpdate(Material material, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		
 		//stone: how to deal with exception, need to re-organize
 		material.setStatus(0);
@@ -104,8 +118,8 @@ public class MaterialAct {
 			material.setSurface(null);
 		
 		materialDao.update(material);
-
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
+		String url = String.format("v_material.do?type=0&searchName=%s&parentId=%d&pageNum=%d&numPerPage=%d", searchName, parentId, pageNum, numPerPage).toString();
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", url, "物料").toString());
 	}
 	
 	@RequestMapping("/o_material_delete.do")
@@ -133,12 +147,14 @@ public class MaterialAct {
 	
 	//recordId不合理
 	@RequestMapping("/v_batch_list.do")
-	public String batchAvailableList(Integer materialId, Integer recordId, String orderSerial, HttpServletRequest request, ModelMap model) {
+	public String batchAvailableList(Integer materialId, Integer recordId, HttpServletRequest request, ModelMap model) {
 		List<BatchFlow> flows = flowDao.getList(materialId, 1, 1, 0.00, null, null);
 		model.addAttribute("flows", flows);
 		model.addAttribute("type", "lib");
 		model.addAttribute("recordId", recordId);
-		model.addAttribute("orderSerial", orderSerial);
+		if(recordId!=null){
+			model.addAttribute("orderSerial", recordDao.findById(recordId).getOrd().getInfo());
+		}
 		return "pages/data_setting/batch_list";
 	}
 	

@@ -14,7 +14,8 @@ public class OrderRecord {
 	private Step surface;
 	private Order order;
 	private Set<Plan> plans;
-	
+	private Set<BatchFlow> flows;
+
 	public OrderRecord(){
 		
 	}
@@ -95,10 +96,35 @@ public class OrderRecord {
 		this.plans = plans;
 	}
 	
+	//flows
+	public Set<BatchFlow> getFlows() {
+		return flows;
+	}
+
+	public void setFlows(Set<BatchFlow> flows) {
+		this.flows = flows;
+	}
+	
 	public String getPlansDetail(){
 		StringBuilder result = new StringBuilder();
 		for(Plan plan : plans){
 			result.append(plan.getDetail()+"<br>");
+		}
+		return result.toString();
+	}
+	
+	public String getPlanSerials(){
+		StringBuilder result = new StringBuilder();
+		for(Plan plan : plans){
+			result.append(plan.getSerial() + " ");
+		}
+		return result.toString();
+	}
+	
+	public String getFlowSerials(){
+		StringBuilder result = new StringBuilder();
+		for(BatchFlow flow : flows){
+			result.append(flow.getSerial() + " ");
 		}
 		return result.toString();
 	}

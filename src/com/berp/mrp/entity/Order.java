@@ -76,7 +76,7 @@ public class Order extends BaseBill {
 	}
 
 	public String getInfo(){
-		return this.getSerial() + "/" + this.company.getName();
+		return String.format("%s/%s", this.getSerial(), this.company.getName());
 	}
 	//sell order
 	public Order getSellOrder() {
@@ -94,6 +94,16 @@ public class Order extends BaseBill {
 
 	public void setPurchaseOrders(Set<Order> purchaseOrders) {
 		this.purchaseOrders = purchaseOrders;
+	}
+	
+	public String getPurchaseOrderSerials(){
+		StringBuilder serials = new StringBuilder();
+		if(purchaseOrders!=null){
+			for(Order pOrder : this.purchaseOrders){
+				serials.append(pOrder.getSerial() + " ");
+			}
+		}
+		return serials.toString();
 	}
 
 }

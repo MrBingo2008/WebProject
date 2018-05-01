@@ -91,8 +91,10 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			if(ord.getCompany().getId().equals(bean.getCompany().getId()) == false){
 				throw new Exception(String.format("'%s'订单的供应商为%s，与本发货单供应商%s不一致。", ord.getSerial(), ord.getCompany().getName(), bean.getCompany().getName()));	
 			}
-			BatchFlow f = flowDao.findById(flow.getId());
-			if(record.getSurface()!=null && !record.getSurface().getId().equals(f.getDefaultSurfaceId())){
+			//这里不能重新查询flow，因为如果是update cir的时候，flows会重新建，如果重新查的话，在内存里就会有相同Id，但是不一样的flow
+			//所以专门在flow设一个defaultSurfaceId，从页面那里接收过来
+			//BatchFlow f = flowDao.findById(flow.getId());
+			if(record.getSurface()!=null && (flow.getDefaultSurfaceId() ==null || !record.getSurface().getId().equals(flow.getDefaultSurfaceId())) ){
 				throw new Exception(String.format("'%s'订单的%s表面处理为%s，与该批次的产品不一致。", ord.getSerial(), record.getMaterial().getName(), record.getSurface().getName()));
 			}
 			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getNumber());

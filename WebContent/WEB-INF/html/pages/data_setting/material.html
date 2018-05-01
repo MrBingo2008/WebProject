@@ -6,8 +6,11 @@
 <script type="text/javascript">
 
 function getTree(data){   
-    var tree = "";  
-    tree += "<li><a href='v_material_list.do?type=${type}&parentId="+data.id+"' target='ajax' rel='jbsxBox'>"+data.name+"</a>";   
+    var tree = "";
+    var selectClass = "";
+    if(data.id=='${parentId!}')
+    	selectClass = "class='selected'";
+    tree += "<li " +selectClass+ "><a href='v_material_list.do?type=${type}&parentId="+data.id+"' target='ajax' rel='jbsxBox'>"+data.name+"</a>";   
     if(data.hasOwnProperty("children")){
     	tree += "<ul>";
     	var childrenVal = eval(data.children);
@@ -25,8 +28,12 @@ $(function(){
 	$("#leftMaterialCategoryTree").html(getTree(data));
 	//left_bar那里有用到，但用的是:first
 	setTimeout(function () {
-		$("#leftMaterialCategoryTree a").first().trigger("click");
-		}, 20);
+		//$("#leftMaterialCategoryTree a").first().trigger("click");
+		$("#jbsxBox").loadUrl("v_material_list.do?type=${type!}&searchName=${searchName!}&parentId=${parentId!}&pageNum=${pageNum!}&numPerPage=${numPerPage!}", {}, function(){
+			//异步获取后，不会自动计算layoutH的高度
+			$("#jbsxBox").find("[layoutH]").layoutH();
+		});
+		}, 200);
 });
 </script>
 

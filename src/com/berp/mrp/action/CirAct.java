@@ -85,9 +85,11 @@ public class CirAct {
 			record.setStatus(order.getStatus());
 		}
 		order.setType(orderType);
-		
-		orderDao.save(order);
-		
+		try{
+			orderDao.save(order);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败"+ex.getMessage()).toString());
+		}
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
 	}
 
@@ -123,14 +125,18 @@ public class CirAct {
 		}
 		
 		order.setType(type);
+		try{
 		orderDao.update(order);
+		}catch (Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("已审核的订单无法删除."+ex.getMessage()).toString());
+		}
 		
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
 	}
 	
 	public void orderDeleteBase(Integer orderId, String returnUrl, String returnTitle, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(orderDao.findById(orderId).getStatus() >= Order.Status.approval.ordinal()){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("已审核的订单无法删除.").toString());
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("已审核的订单无法删除，请先弃核.").toString());
 			return;
 		}
 		try{

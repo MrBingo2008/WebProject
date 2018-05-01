@@ -15,5 +15,9 @@
 			<key column="rec_id"/>
 			<one-to-many class="com.berp.mrp.entity.Plan"/>
 		</set>
+		<set name="flows" inverse="true" cascade="none">
+			<key column="record_id"/>
+			<one-to-many class="com.berp.mrp.entity.BatchFlow"/>
+		</set>
 	</class>
 </hibernate-mapping>

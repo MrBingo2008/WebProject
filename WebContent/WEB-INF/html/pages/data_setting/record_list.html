@@ -52,7 +52,7 @@
 					<td>${record.material.unit!}</td>		
 					<td>
 					<#if direction == 2>
-						<a href="v_batch_list.do?materialId=${record.material.id}&recordId=${record.id}&orderSerial=${record.ord.info}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a>
+						<a href="v_batch_list.do?materialId=${record.material.id}&recordId=${record.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a>
 					<#else>
 						<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
 						<!-- 返回number，可以满足(plan)number和(cir).flows[].number -->

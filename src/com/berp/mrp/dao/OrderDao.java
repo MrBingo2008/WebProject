@@ -12,6 +12,8 @@ import com.berp.framework.hibernate3.Finder;
 import com.berp.framework.hibernate3.HibernateBaseDao;
 import com.berp.framework.hibernate3.Updater;
 import com.berp.framework.page.Pagination;
+import com.berp.framework.web.DwzJsonUtils;
+import com.berp.framework.web.ResponseUtils;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.Plan;
@@ -28,7 +30,7 @@ import com.jeecms.core.dao.CmsUserDao;
 import com.jeecms.core.entity.CmsUser;*/
 
 @Service
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class OrderDao extends HibernateBaseDao<Order, Integer> {
 
 	public Order findById(Integer id) { 
@@ -37,10 +39,10 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 	}
 
 	//@Transactional
-	public Order save(Order bean){
+	public Order save(Order bean) throws Exception{
 		getSession().save(bean);
 		if(bean.getStatus() == 1)
-			this.updateQuatityForOrder(bean);
+			this.updateMaterialQuatity(bean);
 		return bean;
 	}
 
@@ -52,19 +54,20 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 		return entity;
 	}
 	
-	public Order update(Order bean){
+	public Order update(Order bean) throws Exception{
 		Updater<Order> updater = new Updater<Order>(bean);
 		bean = updateByUpdater(updater);
 		
 		if(bean.getStatus() == 1)
-			this.updateQuatityForOrder(bean);
+			this.updateMaterialQuatity(bean);
 		
 		String hql = "delete from OrderRecord bean where bean.ord.id is null";
 		getSession().createQuery(hql).executeUpdate();
 		return bean;
 	}
 	
-	private void updateQuatityForOrder(Order bean){
+	//更新material的notPurchaseIn和notSellOut数据
+	private void updateMaterialQuatity(Order bean) throws Exception{
 		Integer type = bean.getType();
 		List<OrderRecord> orders = bean.getRecords();
 		if(type == 1){
@@ -78,6 +81,43 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 		}
 	}
 	
+	//做个测试：orderDao和materialDao都不加rollback=exception，然后materialDao.updateNotSellNumber后抛出异常，结果updateNotSellNumber生效
+	//如果orderDao加rollback=exception，而materialDao不加，然后materialDao.updateNotSellNumber后抛出异常，结果updateNotSellNumber不生效，这是嵌套后，以外面一个为主的意思吧？
+	//更新material的notPurchaseIn和notSellOut数据
+	public void cancelApproval(Integer orderId) throws Exception{
+		Order order = findById(orderId);
+		
+		Integer type = order.getType();
+		List<OrderRecord> orders = order.getRecords();
+		if(type == 1){
+			//todo
+		}else if(type == 2){
+			for(OrderRecord record : orders){
+				if(record.getFlows() != null && record.getFlows().size()>0)
+					throw new Exception("请先删除相关联的发货单" + record.getPlanSerials());
+				
+				if(record.getPlans() != null && record.getPlans().size()>0)
+					throw new Exception("请先删除相关联的生产任务" + record.getPlanSerials());
+			}
+		}
+		
+		if(order.getPurchaseOrders()!=null && order.getPurchaseOrders().size()>0)
+			throw new Exception("请先删除相关联的采购订单" + order.getPurchaseOrderSerials());
+		
+		order.setStatus(0);
+		if(type == 1){
+			for(OrderRecord record : orders){
+				materialDao.updateNotPurchaseInNumber(record.getMaterial().getId(), -record.getNumber());
+			}
+		}else if(type == 2){
+			for(OrderRecord record : orders){
+				//也会throw exception
+				materialDao.updateNotSellOutNumber(record.getMaterial().getId(), -record.getNumber());
+			}
+		}
+	}
+	
+	//根据record的收到货情况，更新order的状态
 	public void updateStatusForCir(Integer id){
 		Order order = this.findById(id);
 		boolean isFinish = true;

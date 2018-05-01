@@ -47,6 +47,8 @@ public class Material {
 	}
 
 	public java.lang.String getName () {
+		if(StringUtils.isBlank(name))
+			return "";
 		return name;
 	}
 
@@ -77,10 +79,18 @@ public class Material {
 	}
 	
 	public String getInfo(){
-		String result = this.getAllSerial();
+		if(!StringUtils.isBlank(this.serial))
+			return String.format("%s ( %s )", this.getName(),this.serial);
+		if(!StringUtils.isBlank(this.dim))
+			return String.format("%s ( %s )", this.getName(),this.dim);
+		if(!StringUtils.isBlank(this.customerSerial))
+			return String.format("%s ( %s )", this.getName(),this.customerSerial);
+		return this.getName();
+		
+		/*String result = this.getAllSerial();
 		if(this.name != null && !this.name.equals(""))
 			result = result + " (" +this.name + ")";
-		return result;
+		return result;*/
 	}
 	
 	public String getFullShowName(){
@@ -96,8 +106,8 @@ public class Material {
 	
 	public String getShowName(){
 		String result = this.getFullShowName();
-		if(!StringUtils.isBlank(result) && result.length()>6)
-			result = String.format("%s..", result.substring(0, 6));
+		if(!StringUtils.isBlank(result) && result.length()>12)
+			result = String.format("%s..", result.substring(0, 12));
 		return result;
 	}
 	

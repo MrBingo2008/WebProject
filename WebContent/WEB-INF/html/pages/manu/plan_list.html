@@ -50,7 +50,7 @@ $(function(){
 			<@berp_perm url="/o_plan"><li><a class="add" href="v_plan_add.do" target="navTab" rel="main"><span><@s.m "plan.add"/></span></a></li></@berp_perm>
 		</ul>
 	</div>
-	<table class="list" width="100%" layoutH="138">
+	<table class="table" width="100%" layoutH="138">
 		<thead>
 			<tr>
 				<th width="20"><@s.m "global.id"/></th>
@@ -72,7 +72,7 @@ $(function(){
 				<td>${plan.serial}</td>
 				<td>${(plan.name)!}</td>
 				<td>${(plan.record.ord.company.name)!}</td>
-				<td>${plan.material.fullShowName!}</td>
+				<td>${plan.material.info!}</td>
 				<td>${(plan.record.surface.name)!}</td>
 				<td>${plan.number!}</td>
 				<td>${(plan.createTime?string('yyyy-MM-dd'))!}</td>

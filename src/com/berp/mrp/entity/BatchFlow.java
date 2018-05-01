@@ -53,7 +53,7 @@ public class BatchFlow extends BaseBatchFlow {
 	
 	//纯粹为了做参数用
 	private Integer defaultSurfaceId;
-
+	
 	public Integer getDefaultSurfaceId() {
 		return defaultSurfaceId;
 	}

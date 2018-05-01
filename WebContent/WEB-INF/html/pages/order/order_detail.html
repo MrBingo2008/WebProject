@@ -1,7 +1,9 @@
 <script type="text/javascript">
 
 $(function(){
-	
+	if('${openMode!}' == 'add'){
+		$("#cancelApprovalButton").attr("disabled", "disabled");
+	}
 	if('${openMode!}' == 'edit'){
 		var actionUrl = "o_${orderType}_order_update.do";
 		$("form").attr("action", actionUrl);
@@ -11,16 +13,19 @@ $(function(){
 			$("#formContent input").attr("readonly", "readonly");
 			$("#formContent a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled", "disabled");
+		}else{
+			$("#cancelApprovalButton").attr("disabled", "disabled");
 		}
 	}else if('${openMode!}' == 'view'){
 		$("#formContent input").attr("disabled", "disabled");
 		$("#formContent a").css("display", "none");
-		$("#saveButtonLi, #approvalButtonLi").css("display", "none");
+		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
 	}
 	
 });
 
 $("#saveButton").click(function(){
+	//用户有可能审核失败，然后就再保存，所以要先把status设为0
 	$("#statusInput").val("0");
 	$("#orderForm").submit();
 });
@@ -29,6 +34,13 @@ $("#approvalButton").click(function(){
 	$("#statusInput").val("1");
 	$("#orderForm").submit();
 });
+/*
+$("#cancelApprovalButton").click(function(){
+	var actionUrl = "o_${orderType}_order_cancelApproval.do";
+	$("form").attr("action", actionUrl);
+	$("#statusInput").val("0");
+	$("#orderForm").submit();
+});*/
 </script>
 <div class="pageContent">
 	<form id="orderForm" method="post" action="o_${orderType}_order_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
@@ -158,6 +170,8 @@ $("#approvalButton").click(function(){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
+				<!-- li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></div></div></li-->
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${orderType}_order_cancelApproval.do?orderId=${order.id!}" target="navTab" rel="main"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_${orderType}_order_list.do?type=${type!}" target="navTab" rel="main" title="<@s.m '${orderType}.order.list'/>"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

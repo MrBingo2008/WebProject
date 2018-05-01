@@ -40,14 +40,14 @@ $(function(){
 		<thead>
 			<tr>
 				<th width="30"><@s.m "global.id"/></th>
-				<th width="115"><@s.m "material.allSerial"/></th>
+				<th width="60"><@s.m "material.allSerial"/></th>
 				<th width="70"><@s.m "material.name"/></th>
 				<th width="40"><@s.m "material.category"/></th>
 				<th width="60"><@s.m "material.spec"/></th>
 				<th width="50"><@s.m "material.leftNumber"/></th>
-				<th width="70"><@s.m "purchase.order.notFinishNumber"/></th>
-				<th width="70"><@s.m "sell.order.notFinishNumber"/></th>
-				<!-- <th width="50"><@s.m "step.surface"/></th> -->
+				<th width="60"><@s.m "purchase.order.notFinishNumber"/></th>
+				<th width="60"><@s.m "sell.order.notFinishNumber"/></th>
+				<th width="50"><@s.m "step.surface"/></th>
 				<th width="35"><@s.m "material.unit"/></th>
 				<th width="60"><@s.m "global.operate"/></th>				
 			</tr>
@@ -63,12 +63,12 @@ $(function(){
 				<td>${m.leftNumber!}</td>
 				<td>${m.notPurchaseInNumber!}</td>
 				<td>${m.notSellOutNumber!}</td>
-				<!-- <td>${(m.surface.name)!}</td> -->
+				<td>${(m.surface.name)!}</td>
 				<td>${m.unit!}</td>
 				<!-- type换成0为管理的list， 大于0为选择模式 -->
 				<#if type == 0>			
 					<td>
-					<@berp_perm url="/o_material"><a title="<@s.m 'material.edit'/>" target="navTab" href="v_material_edit.do?materialId=${m.id}" rel="main"><@s.m "global.edit"/></a>
+					<@berp_perm url="/o_material"><a title="<@s.m 'material.edit'/>" target="navTab" href="v_material_edit.do?materialId=${m.id}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}&parentId=${parentId!}&searchName=${searchName!}" rel="main"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_material_delete.do?materialId=${m.id}"><@s.m "global.delete"/></a></@berp_perm>
 					</td>
 				<#elseif type == 1>

@@ -58,8 +58,8 @@ $(function(){
 		<thead>
 			<tr>
 				<th width="20"><@s.m "global.id"/></th>
-				<th width="60" orderField="accountNo" class="asc"><@s.m "${orderType}.order.serialAndName"/></th>
-				<th width="80"><@s.m "${orderType}.order.details"/></th>
+				<th width="60"><@s.m "${orderType}.order.serialAndName"/></th>
+				<th width="100"><@s.m "${orderType}.order.details"/></th>
 				<th width="20"><@s.m "${orderType}.order.company"/></th>
 				<th width="80"><@s.m "${orderType}.order.allTime"/></th>
 				
@@ -78,10 +78,10 @@ $(function(){
 			<tr target="sid_user" rel="1">
 				<td>${order.id}</td>
 				
-				<td>${order.serial}/${order.name!}</td>
+				<td>${order.serial} / ${order.name!}</td>
 				<td>
 					<#list order.records as record>
-					<span style="width:70px;display:inline-block;line-height:21px">${record.material.showName!}</span><span>${record.number} / ${record.finishNumber!} ${record.material.unit}</span><br>
+					<span style="width:130px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${record.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${record.number} / ${record.finishNumber!} ${record.material.unit}</span><br>
 					</#list>
 				</td>
 				<td>${order.company.name!}</td>
@@ -91,14 +91,14 @@ $(function(){
 				<td>
 					<#list order.purchaseOrders as purchaseOrder>
 						<#list purchaseOrder.records as pRecord>
-						<span style="width:70px;display:inline-block;line-height:21px">${pRecord.material.showName!}</span><span>${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
+						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${pRecord.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
 						</#list>
 					</#list>
 				</td>
 				<td>
 					<#list order.records as record>
 						<#list record.plans as plan>
-						<span style="width:70px;display:inline-block;line-height:21px">${plan.material.showName!}</span><span>${plan.number}${plan.material.unit} / <@s.m "plan.status.${plan.status}"/></span><br>
+						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${plan.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${plan.number}${plan.material.unit} / <@s.m "plan.status.${plan.status}"/></span><br>
 						</#list>
 					</#list>
 				</td>

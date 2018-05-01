@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.berp.framework.web.DwzJsonUtils;
+import com.berp.framework.web.ResponseUtils;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Order;
 
@@ -43,6 +46,17 @@ public class SellAct extends CirAct {
 	@RequestMapping("/o_sell_order_update.do")
 	public void orderUpdate(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.orderUpdate(order, 2, "v_sell_order_list.do?type=0", "查询客户订单", request, response, model);
+	}
+	
+	@RequestMapping("/o_sell_order_cancelApproval.do")
+	public void orderCancelApproval(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			orderDao.cancelApproval(orderId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_sell_order_edit.do?orderId=", "编辑客户订单").toString());
 	}
 	
 	@RequestMapping("/o_sell_order_delete.do")
