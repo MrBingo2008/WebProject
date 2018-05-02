@@ -1,18 +1,23 @@
 <script type="text/javascript">
 $(function(){
-	if('${openMode!}' == 'edit'){
+	if('${openMode!}' == 'add'){
+		$("#cancelApprovalButton").attr("disabled", "disabled");
+	}
+	else if('${openMode!}' == 'edit'){
 		var actionUrl = "o_${cirType}_update.do";
 		$("form").attr("action", actionUrl);
 		var status = '${cir.status}';
-		if(status == '1'){
+		if(status >= 1){
 			$("#formContent input").attr("readonly", "readonly");
 			$("#formContent a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled", "disabled");
+		}else{
+			$("#cancelApprovalButton").attr("disabled", "disabled");
 		}
 	}else if('${openMode!}' == 'view'){
 		$("#formContent input").attr("disabled", "disabled");
 		$("#formContent a").css("display", "none");
-		$("#saveButtonLi, #approvalButtonLi").css("display", "none");
+		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
 	}	
 });
 
@@ -204,6 +209,7 @@ function calFactor(numInput){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${cirType}_cancelApproval.do?cirId=${cir.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_${cirType}_list.do" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

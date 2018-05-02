@@ -22,6 +22,7 @@ import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Cir.CirType;
+import com.berp.mrp.entity.Material;
 
 /*
 import com.jeecms.common.hibernate3.Finder;
@@ -131,6 +132,29 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			}
 			recordDao.updateFinishNumber(flow);
 			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), flow.getNumber(), null);
+		}
+	}
+	
+	public void purchaseInCancelApproval(Integer cirId) throws Exception{
+		Cir cir = findById(cirId);
+		Integer type = cir.getType();
+		
+		List<BatchFlow> flows = cir.getFlows();
+		for(BatchFlow flow: flows){
+			if(flow.getFlows()!=null && flow.getFlows().size()>0){
+				throw new Exception("请先删除相关联的单据" + flow.getCir()==null?flow.getPlan().getSerial():flow.getCir().getSerial());
+			}
+		}
+		cir.setStatus(0);
+		for(BatchFlow flow:flows){
+			//要再测测这两个函数的异常情况
+			if(type == Cir.CirType.purchaseIn.ordinal()){
+				recordDao.cancelFinishNumber(flow);
+				materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), - flow.getDirect() * flow.getNumber(), null);
+			}else if(type == Cir.CirType.purchaseBack.ordinal()){
+				//需要更新父flow的东西
+				materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
+			}
 		}
 	}
 	

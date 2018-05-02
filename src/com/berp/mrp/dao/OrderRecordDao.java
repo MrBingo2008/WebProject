@@ -183,6 +183,29 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		orderDao.updateStatusForCir(record.getOrd().getId());
 	}
 	
+	//用于cir的弃核
+	public void cancelFinishNumber (BatchFlow flow) throws Exception{
+		
+		OrderRecord record = findById(flow.getRecord().getId());
+		Double finishNumber = record.getFinishNumber();
+		Double newFinishNumber = finishNumber - flow.getNumber();
+		
+		if(newFinishNumber == 0){
+			//order.setStatus(Order.Status.partFinish.ordinal());
+			record.setFinishNumber(newFinishNumber);
+			int status = Order.Status.approval.ordinal();
+			record.setStatus(status);
+		}
+		else if(newFinishNumber < record.getNumber()){
+			record.setFinishNumber(newFinishNumber);
+			record.setStatus(Order.Status.partFinish.ordinal());
+		}else{
+			throw new Exception(String.format("'%s'的%s完成数为%.0f%s，已超出其范围。", record.getOrd().getSerial(), record.getMaterial().getName(), record.getFinishNumber(), record.getMaterial().getUnit()));	
+		}
+		//刚修改record的数据，就马上去修改order的status(status需要靠record来判断)，应该是没问题
+		orderDao.updateStatusForCir(record.getOrd().getId());
+	}
+	
 	@Override
 	protected Class<OrderRecord> getEntityClass() {
 		return OrderRecord.class;

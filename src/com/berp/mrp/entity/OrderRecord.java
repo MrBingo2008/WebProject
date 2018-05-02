@@ -121,10 +121,10 @@ public class OrderRecord {
 		return result.toString();
 	}
 	
-	public String getFlowSerials(){
+	public String getCirSerials(){
 		StringBuilder result = new StringBuilder();
 		for(BatchFlow flow : flows){
-			result.append(flow.getSerial() + " ");
+			result.append(flow.getCir().getSerial() + " ");
 		}
 		return result.toString();
 	}

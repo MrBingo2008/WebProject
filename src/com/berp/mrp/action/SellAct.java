@@ -56,7 +56,7 @@ public class SellAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_sell_order_edit.do?orderId=", "编辑客户订单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_sell_order_edit.do?orderId="+orderId, "编辑客户订单").toString());
 	}
 	
 	@RequestMapping("/o_sell_order_delete.do")

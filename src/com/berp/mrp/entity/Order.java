@@ -100,7 +100,8 @@ public class Order extends BaseBill {
 		StringBuilder serials = new StringBuilder();
 		if(purchaseOrders!=null){
 			for(Order pOrder : this.purchaseOrders){
-				serials.append(pOrder.getSerial() + " ");
+				if(pOrder.getStatus() == 1)
+					serials.append(pOrder.getSerial() + " ");
 			}
 		}
 		return serials.toString();

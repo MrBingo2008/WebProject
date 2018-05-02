@@ -90,15 +90,19 @@ $(function(){
 				<#if '${orderType}'=='sell' && type == 0>
 				<td>
 					<#list order.purchaseOrders as purchaseOrder>
+					<#if purchaseOrder.status == 1>
 						<#list purchaseOrder.records as pRecord>
 						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${pRecord.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
 						</#list>
+					</#if>
 					</#list>
 				</td>
 				<td>
 					<#list order.records as record>
 						<#list record.plans as plan>
+						<#if plan.status gt 0>
 						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${plan.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${plan.number}${plan.material.unit} / <@s.m "plan.status.${plan.status}"/></span><br>
+						</#if>
 						</#list>
 					</#list>
 				</td>

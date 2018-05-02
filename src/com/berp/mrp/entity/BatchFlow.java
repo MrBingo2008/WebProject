@@ -1,11 +1,14 @@
 package com.berp.mrp.entity;
 
+import java.util.Set;
+
 public class BatchFlow extends BaseBatchFlow {
 
 	private BatchFlow parent;
 	private Step surface;
 	private OrderRecord record;
-	
+	private Set<BatchFlow> flows;
+
 	public static enum Type{purchaseIn, purchaseBack, sellOut, sellBack, planMaterial, planIn, checkIn, checkOut}
 	
 	public BatchFlow(){
@@ -60,5 +63,14 @@ public class BatchFlow extends BaseBatchFlow {
 
 	public void setDefaultSurfaceId(Integer defaultSurfaceId) {
 		this.defaultSurfaceId = defaultSurfaceId;
+	}
+	
+	//flows
+	public Set<BatchFlow> getFlows() {
+		return flows;
+	}
+
+	public void setFlows(Set<BatchFlow> flows) {
+		this.flows = flows;
 	}
 }

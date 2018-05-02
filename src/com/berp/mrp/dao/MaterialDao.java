@@ -46,6 +46,7 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 	}
 	
 	//这是针对出入库的
+	//弃核也会调用到此方法
 	public Material updateNumber (Integer materialId, Double number,  Double purchaseInNumber, Double sellOutNumber) throws Exception{
 		Material material = this.findById(materialId);
 		
@@ -58,14 +59,15 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		
 		if(purchaseInNumber!=null){
 			Double notPurchaseInNumber = material.getNotPurchaseInNumber();
-			if(notPurchaseInNumber < purchaseInNumber)
+			//如果是弃核的话，purchaseInNumber为负，所以应该不会throw exception，所以这个exception message不会用到
+			if(notPurchaseInNumber - purchaseInNumber < 0)
 				throw new Exception(material.getInfo() + "超出采购订单数量");
 			material.setNotPurchaseInNumber(notPurchaseInNumber - purchaseInNumber);
 		}
 		
 		if(sellOutNumber!=null){
 			Double notSellOutNumber = material.getNotSellOutNumber();
-			if(notSellOutNumber < sellOutNumber)
+			if(notSellOutNumber - sellOutNumber < 0)
 				throw new Exception(material.getInfo() + "超出客户订单数量");
 			material.setNotSellOutNumber(notSellOutNumber - sellOutNumber);
 		}

@@ -24,5 +24,10 @@
 		<many-to-one name="record" column="record_id" class="com.berp.mrp.entity.OrderRecord"/>
 		
 		<many-to-one name="room" column="room_id" class="com.berp.core.entity.Category"/>
+		
+		<set name="flows" inverse="true" cascade="none">
+			<key column="parent_id"/>
+			<one-to-many class="com.berp.mrp.entity.BatchFlow"/>
+		</set>
 	</class>
 </hibernate-mapping>

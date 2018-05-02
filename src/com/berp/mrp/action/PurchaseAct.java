@@ -9,6 +9,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.entity.Order;
+import com.berp.framework.web.DwzJsonUtils;
+import com.berp.framework.web.ResponseUtils;
 import com.berp.mrp.entity.Cir;
 
 @Controller
@@ -50,6 +52,17 @@ public class PurchaseAct extends CirAct {
 		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 	
+	@RequestMapping("/o_purchase_order_cancelApproval.do")
+	public void orderCancelApproval(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			orderDao.cancelApproval(orderId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchase_order_edit.do?orderId="+orderId, "编辑采购订单").toString());
+	}
+	
 	@RequestMapping("/o_purchase_order_delete.do")
 	public void orderDelete(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.orderDeleteBase(orderId, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
@@ -79,6 +92,28 @@ public class PurchaseAct extends CirAct {
 	@RequestMapping("/o_purchaseIn_update.do")
 	public void purchaseInUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.cirUpdate(cir, Cir.CirType.purchaseIn.ordinal(), "v_purchaseIn_list.do", "查询采购到货单", request, response, model);
+	}
+	
+	@RequestMapping("/o_purchaseIn_cancelApproval.do")
+	public void purchaseInCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.purchaseInCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单").toString());
+	}
+	
+	@RequestMapping("/o_purchaseBack_cancelApproval.do")
+	public void purchaseBackCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.purchaseInCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单").toString());
 	}
 	
 	@RequestMapping("/v_purchaseIn_list.do")
