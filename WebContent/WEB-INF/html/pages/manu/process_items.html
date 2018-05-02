@@ -1,3 +1,4 @@
+<#if steps??>
 <#assign count=0 />
 <#list steps as step>
 <tr class="unitBox">
@@ -17,7 +18,7 @@
 </tr>
 <#assign count=count+1/>
 </#list>
-
+</#if>
 <script type="text/javascript">
 $(function(){
 	//重新绑定del时间

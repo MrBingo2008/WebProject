@@ -3,6 +3,7 @@ $(function(){
 	var actionUrl;
 	if('${openMode}'=='add'){
 		$("#planMaterial, #package, #planIn").css("display","none");
+		$("#cancelApprovalButton").attr("disabled", "disabled");
 		actionUrl = "o_plan_save.do";
 	}else if('${openMode}' == 'edit'){
 		var status = '${(plan.status)!}';
@@ -11,6 +12,7 @@ $(function(){
 		switch(status){
 		case '0':
 			$("#planMaterial, #planIn").css("display","none");
+			$("#cancelApprovalButton").attr("disabled", "disabled");
 			actionUrl = "o_plan_update.do";
 			break;
 		case '1':
@@ -25,7 +27,7 @@ $(function(){
 			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_step_update.do";
 			break;
 		case '3':
@@ -34,7 +36,7 @@ $(function(){
 			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_step_update.do";
 			break;
 		case '4':
@@ -43,7 +45,7 @@ $(function(){
 			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_finish_package.do";
 			break;
 		//入库完成
@@ -53,7 +55,7 @@ $(function(){
 			$("#planMaterial input").attr("readonly", "readonly");
 			$("#planIn a").css("display", "none");
 			$("#planIn input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_finish_package.do";
 			break;	
 		default:
@@ -72,7 +74,7 @@ $(function(){
 		
 		$("#planIn a").css("display", "none");
 		$("#planIn input").attr("readonly", "readonly");
-		$("#saveButtonLi, #approvalButtonLi").css("display", "none");
+		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
 	}
 	
 	$("form").attr("action", actionUrl);
@@ -396,6 +398,7 @@ function calFactor(numInput){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_plan_cancelApproval.do?planId=${plan.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

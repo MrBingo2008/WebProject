@@ -54,13 +54,7 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchase_order_cancelApproval.do")
 	public void orderCancelApproval(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		try{
-			orderDao.cancelApproval(orderId);
-		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
-			return;
-		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchase_order_edit.do?orderId="+orderId, "编辑采购订单").toString());
+		this.orderCancelApprovalBase(orderId, "v_purchase_order_edit.do?orderId="+orderId, "编辑采购订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_delete.do")
@@ -96,24 +90,12 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchaseIn_cancelApproval.do")
 	public void purchaseInCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		try{
-			cirDao.purchaseInCancelApproval(cirId);
-		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
-			return;
-		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单").toString());
+		this.cirCancelApprovalBase(cirId, "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchaseBack_cancelApproval.do")
 	public void purchaseBackCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		try{
-			cirDao.purchaseInCancelApproval(cirId);
-		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
-			return;
-		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单").toString());
+		this.cirCancelApprovalBase(cirId, "v_purchaseBack_edit.do?cirId="+cirId, "编辑采购到货单", request, response, model);
 	}
 	
 	@RequestMapping("/v_purchaseIn_list.do")

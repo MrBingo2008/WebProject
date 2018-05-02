@@ -134,6 +134,17 @@ public class CirAct {
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
 	}
 	
+	//sellAct 和 purchaseAct都用到这个函数，而且都差不多
+	public void orderCancelApprovalBase(Integer orderId, String returnUrl, String returnTitle, HttpServletRequest request, HttpServletResponse response, ModelMap model){
+		try{
+			orderDao.cancelApproval(orderId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", returnUrl, returnTitle).toString());
+	}
+	
 	public void orderDeleteBase(Integer orderId, String returnUrl, String returnTitle, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(orderDao.findById(orderId).getStatus() >= Order.Status.approval.ordinal()){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("已审核的订单无法删除，请先弃核.").toString());
@@ -265,6 +276,16 @@ public class CirAct {
 			flow.setType(BatchFlow.Type.checkOut.ordinal());
 		}
 		flow.setStatus(status);
+	}
+	
+	public void cirCancelApprovalBase(Integer cirId, String returnUrl, String returnTitle,  HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.cancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", returnUrl, returnTitle).toString());
 	}
 	
 	public void cirDeleteBase(Integer cirId, String returnUrl, String returnTitle, HttpServletRequest request, HttpServletResponse response, ModelMap model) {

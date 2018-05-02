@@ -170,8 +170,7 @@ $("#cancelApprovalButton").click(function(){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
-				<!-- li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></div></div></li-->
-				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${orderType}_order_cancelApproval.do?orderId=${order.id!}" target="ajaxTodo" rel="main"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${orderType}_order_cancelApproval.do?orderId=${order.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_${orderType}_order_list.do?type=${type!}" target="navTab" rel="main" title="<@s.m '${orderType}.order.list'/>"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

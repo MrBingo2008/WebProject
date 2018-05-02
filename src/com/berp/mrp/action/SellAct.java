@@ -50,13 +50,7 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/o_sell_order_cancelApproval.do")
 	public void orderCancelApproval(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		try{
-			orderDao.cancelApproval(orderId);
-		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
-			return;
-		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_sell_order_edit.do?orderId="+orderId, "编辑客户订单").toString());
+		this.orderCancelApprovalBase(orderId, "v_sell_order_edit.do?orderId="+orderId, "编辑客户订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_sell_order_delete.do")

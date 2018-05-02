@@ -135,7 +135,19 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		}
 	}
 	
-	public void purchaseInCancelApproval(Integer cirId) throws Exception{
+	private void purchaseBackUpdate(Cir bean) throws Exception{
+		List<BatchFlow> flows = bean.getFlows();
+		for(BatchFlow flow: flows){
+			//setStatus在PurchaseAct里设置，但是弃核的话，是在cirDao里设置
+			//flow.setStatus(1);
+			Double number = flow.getNumber();
+			materialDao.updateNumber(flow.getMaterial().getId(), -number, null, null);
+			flowDao.updateLeftNumber(flow.getParent().getId(), number);
+		}
+	}
+
+	//统一到一个函数
+	public void cancelApproval(Integer cirId) throws Exception{
 		Cir cir = findById(cirId);
 		Integer type = cir.getType();
 		
@@ -147,24 +159,15 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		}
 		cir.setStatus(0);
 		for(BatchFlow flow:flows){
+			flow.setStatus(0);
 			//要再测测这两个函数的异常情况
 			if(type == Cir.CirType.purchaseIn.ordinal()){
 				recordDao.cancelFinishNumber(flow);
 				materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), - flow.getDirect() * flow.getNumber(), null);
 			}else if(type == Cir.CirType.purchaseBack.ordinal()){
-				//需要更新父flow的东西
+				flowDao.updateLeftNumber(flow.getParent().getId(), - flow.getDirect() * flow.getNumber());
 				materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
 			}
-		}
-	}
-	
-	private void purchaseBackUpdate(Cir bean) throws Exception{
-		List<BatchFlow> flows = bean.getFlows();
-		for(BatchFlow flow: flows){
-			//flow.setStatus(1);
-			Double number = flow.getNumber();
-			materialDao.updateNumber(flow.getMaterial().getId(), -number, null, null);
-			flowDao.updateLeftNumber(flow.getParent().getId(), number);
 		}
 	}
 	
