@@ -165,6 +165,22 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		getSession().createQuery(hql).executeUpdate();
 		return bean;
 	}
+	
+	public void cancelPlanIn(Integer planId) throws Exception{
+		Plan plan = this.findById(planId);
+		List<BatchFlow> packageFlows = plan.getPackageFlows();
+		for(BatchFlow flow: packageFlows){
+			if(flow.getFlows()!=null && flow.getFlows().size()>0){
+				throw new Exception("请先删除相关联的单据" + flow.getCir()==null?flow.getPlan().getSerial():flow.getCir().getSerial());
+			}
+		}
+		
+		for(BatchFlow flow: packageFlows){
+			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
+			flow.setStatus(0);
+		}
+		plan.setStatus(Plan.Status.manuFinish.ordinal());
+	}
 
 	public Pagination getPage(String name, String productName, Integer status, Integer pageNo, Integer pageSize) {
 		Finder f = Finder.create("from Plan bean where 1=1");

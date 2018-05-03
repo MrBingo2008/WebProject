@@ -75,14 +75,6 @@ public class ManuAct {
 			}
 		}
 		
-		/*List<PlanStep> steps = new ArrayList<PlanStep>();
-		if(process.getSteps()!=null)
-			for(ProcessStep step: process.getSteps()){
-				PlanStep ps = new PlanStep();
-				ps.setName(step.getName());
-				ps.setType(step.getType());
-				steps.add(ps);
-			}*/
 	    Step surface = orderRecord.getSurface()!=null?orderRecord.getSurface():material.getSurface();
 		if(surface!=null){
 			ProcessStep ps = new ProcessStep();
@@ -302,6 +294,17 @@ public class ManuAct {
 			return;
 		}
 		reload(response, plan.getId());
+	}
+	
+	@RequestMapping("/o_plan_cancelApproval.do")
+	public void planCancelApproval(Integer planId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			planDao.cancelPlanIn(planId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+planId, "修改生产任务").toString());
 	}
 	
 	private void reload(HttpServletResponse response, Integer id){
