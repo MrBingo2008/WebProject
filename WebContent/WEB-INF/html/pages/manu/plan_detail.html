@@ -51,6 +51,8 @@ $(function(){
 		//入库完成
 		case '5':
 			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
 			$("#planIn a").css("display", "none");
@@ -64,6 +66,7 @@ $(function(){
 	}else if('${openMode!}' == 'view'){
 		//button、a直接隐藏，input就设为readonly或disable
 		$("#basicInfo input").attr("readonly", "readonly");
+		$("#basicInfo a").css("display", "none");
 		$("#planMaterial a").css("display", "none");
 		$("#planMaterial input").attr("readonly", "readonly");
 		
@@ -171,7 +174,7 @@ function calFactor(numInput){
 			</p>
 			<p>
 				<label><@s.m "product.info"/>:</label>
-				<input type="text" name="material.fullShowName" value="${(plan.material.fullShowName)!}" size ="30" readonly/>
+				<input type="text" name="material.info" value="${(plan.material.info)!}" size ="30" readonly/>
 				<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 			</p>
 			<p>

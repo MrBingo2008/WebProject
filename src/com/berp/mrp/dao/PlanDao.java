@@ -171,7 +171,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		List<BatchFlow> packageFlows = plan.getPackageFlows();
 		for(BatchFlow flow: packageFlows){
 			if(flow.getFlows()!=null && flow.getFlows().size()>0){
-				throw new Exception("请先删除相关联的单据" + flow.getCir()==null?flow.getPlan().getSerial():flow.getCir().getSerial());
+				throw new Exception("请先删除相关联的单据" + flow.getFlowsParentSerial());
 			}
 		}
 		

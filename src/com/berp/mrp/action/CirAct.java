@@ -277,7 +277,7 @@ public class CirAct {
 		}
 		flow.setStatus(status);
 	}
-	
+	/*
 	public void cirCancelApprovalBase(Integer cirId, String returnUrl, String returnTitle,  HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
 			cirDao.cancelApproval(cirId);
@@ -286,7 +286,7 @@ public class CirAct {
 			return;
 		}
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", returnUrl, returnTitle).toString());
-	}
+	}*/
 	
 	public void cirDeleteBase(Integer cirId, String returnUrl, String returnTitle, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(cirDao.findById(cirId).getStatus() >= 1){

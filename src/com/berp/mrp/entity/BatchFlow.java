@@ -73,4 +73,14 @@ public class BatchFlow extends BaseBatchFlow {
 	public void setFlows(Set<BatchFlow> flows) {
 		this.flows = flows;
 	}
+	
+	//获取他的子flows所属的业务单号
+	public String getFlowsParentSerial(){
+		StringBuilder sb = new StringBuilder();
+		for(BatchFlow flow : this.getFlows()){
+			sb.append(flow.getCir()==null?flow.getPlan().getSerial() : flow.getCir().getSerial());
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
 }

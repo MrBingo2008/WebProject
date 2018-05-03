@@ -90,12 +90,24 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchaseIn_cancelApproval.do")
 	public void purchaseInCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.cirCancelApprovalBase(cirId, "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单", request, response, model);
+		try{
+			cirDao.purchaseInCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单").toString());
 	}
 	
 	@RequestMapping("/o_purchaseBack_cancelApproval.do")
 	public void purchaseBackCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.cirCancelApprovalBase(cirId, "v_purchaseBack_edit.do?cirId="+cirId, "编辑采购到货单", request, response, model);
+		try{
+			cirDao.purchaseBackCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseBack_edit.do?cirId="+cirId, "编辑采购退货单").toString());
 	}
 	
 	@RequestMapping("/v_purchaseIn_list.do")

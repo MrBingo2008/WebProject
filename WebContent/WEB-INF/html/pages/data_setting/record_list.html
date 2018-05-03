@@ -56,7 +56,7 @@
 					<#else>
 						<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
 						<!-- 返回number，可以满足(plan)number和(cir).flows[].number -->
-						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}', 'material.unit':'${record.material.unit!}',
+						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}','material.info':'${record.material.info!}', 'material.unit':'${record.material.unit!}',
 						 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
 					</#if>
 					</td>
