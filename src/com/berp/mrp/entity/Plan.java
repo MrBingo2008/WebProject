@@ -23,7 +23,7 @@ public class Plan extends BaseBill {
 	private List<Batch> batchs;
 	
 	private RawBatchFlow rawBatchFlow;
-	
+
 	public static enum Status{edit, approval, materialFinish, outside, manuFinish, packageFinish};
 	
 	public Plan(){
@@ -105,24 +105,6 @@ public class Plan extends BaseBill {
 	public void setMaterialFlows(List<BatchFlow> fs){
 		this.materialFlows = fs;
 	}
-	
-	/*
-	public void updateMaterialFlows(){
-		if(flows == null){
-			flows = new ArrayList<BatchFlow>();
-			flows.addAll(this.materialFlows);
-		}else{
-			List<BatchFlow> listDel = new ArrayList<BatchFlow>();
-			for(BatchFlow flow: flows){
-				if(flow.getType() == BatchFlow.Type.planMaterial.ordinal())
-					listDel.add(flow);
-			}
-			for(BatchFlow flowDel: listDel)
-				flows.remove(flowDel);
-			
-			flows.addAll(packageFlows);
-		}
-	}*/
 	
 	//packageFlows
 	public List<BatchFlow> getPackageFlows(){

@@ -93,6 +93,12 @@ $(function(){
 		$("#stepStatus").val("1");
 		$("#pagerForm").submit();
 	});
+	//因为可能要传status和packageFlows、steps等信息，所以改成form submit，而不用a link
+	$("#cancelApprovalButton").click(function(){
+		//修改action后应该不需要再改回去，因为弃核后会重新加载
+		$("form").attr("action", "o_plan_cancelApproval.do");
+		$("#pagerForm").submit();
+	});
 	
 	$("#orderInput").change(function(){
 		//record.id应该加引号
@@ -401,14 +407,14 @@ function calFactor(numInput){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
-				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_plan_cancelApproval.do?planId=${plan.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button">
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button">
 				<@s.m "global.cancelApproval"/>
 				(<#if plan.status lt 2><@s.m "plan.basic"/>
 					<#elseif plan.status == 2><@s.m "plan.material"/>
 					<#elseif plan.status == 3 || plan.status == 4><@s.m "process"/>
 					<#elseif plan.status == 5><@s.m "plan.in"/>
 					</#if>)
-				</button></a></div></div></li>
+				</button></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

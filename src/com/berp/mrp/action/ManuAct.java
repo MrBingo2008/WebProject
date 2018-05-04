@@ -297,14 +297,18 @@ public class ManuAct {
 	}
 	
 	@RequestMapping("/o_plan_cancelApproval.do")
-	public void planCancelApproval(Integer planId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void planCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
-			planDao.cancelPlanIn(planId);
+			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
+				planDao.cancelPlanIn(plan.getId());
+			else if(plan.getStatus() == Plan.Status.manuFinish.ordinal()){
+				planDao.cancelPlanStep(plan.getId());
+			}
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+planId, "修改生产任务").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
 	}
 	
 	private void reload(HttpServletResponse response, Integer id){

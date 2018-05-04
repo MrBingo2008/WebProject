@@ -1,10 +1,14 @@
 package com.berp.mrp.entity;
 
+import java.util.Set;
+
 public class RawBatchFlow extends BaseBatchFlow {
 	
 	private Double arriveNumber;
 	private RawBatchFlow parent;
-	
+
+	private Set<RawBatchFlow> children;
+
 	public static enum Type{produce, outsideOut, outsideIn}
 	
 	public RawBatchFlow(){}
@@ -38,5 +42,24 @@ public class RawBatchFlow extends BaseBatchFlow {
 	
 	public Double getNotArriveNumber(){
 		return this.getNumber() - this.getArriveNumber() - this.getLeftNumber();
+	}
+	
+	//children
+	public Set<RawBatchFlow> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<RawBatchFlow> children) {
+		this.children = children;
+	}
+	
+	//获取他的子flows所属的业务单号
+	public String getchildrenParentSerial(){
+		StringBuilder sb = new StringBuilder();
+		for(RawBatchFlow flow : this.getChildren()){
+			sb.append(flow.getCir()==null?flow.getPlan().getSerial() : flow.getCir().getSerial());
+			sb.append(" ");
+		}
+		return sb.toString();
 	}
 }

@@ -79,8 +79,8 @@ public class Material {
 	}
 	
 	public String getInfo(){
-		if(!StringUtils.isBlank(this.dim))
-			return String.format("%s ( %s )", this.getName(),this.dim);
+		if(!StringUtils.isBlank(this.spec))
+			return String.format("%s ( %s )", this.getName(),this.spec);
 		if(!StringUtils.isBlank(this.serial))
 			return String.format("%s ( %s )", this.getName(),this.serial);
 		if(!StringUtils.isBlank(this.customerSerial))

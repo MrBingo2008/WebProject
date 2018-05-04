@@ -124,9 +124,10 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			rawFlow.setLeftNumber(step.getNumber());
 			if(stepIndex == steps.size()-1)
 				bean.setStatus(Plan.Status.manuFinish.ordinal());
-			//else if(stepIndex < steps.size() - 1 && stepDao.findById(steps.get(stepIndex+1).getId()).getType() == 1){
+			//step type = 1表示委外
 			else if(stepIndex < steps.size() - 1 && plan.getSteps().get(stepIndex+1).getStep().getType() == 1){
 				//因为有可能之前有委外而且已经处理了
+				//rawFlow的状态 0未审核 1已经审核 2部分到货 3全部到货
 				rawFlow.setStatus(1);
 				rawFlow.setArriveNumber(0.00);
 				rawFlow.setLeftNumber(rawFlow.getNumber());
@@ -142,6 +143,27 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		stepDao.updateFinish(step, stepIndex);
 		
 		return bean;
+	}
+	
+	//弃核（生产流程）
+	public void cancelPlanStep(Integer planId) throws Exception{
+		Plan plan = this.findById(planId);
+		//先要删除package flows
+		plan.setFlows(new ArrayList<BatchFlow>());
+		plan.getFlows().addAll(flowDao.getList(null, null, null, null, plan.getId(), BatchFlow.Type.planIn.ordinal()));
+		
+		//再删除outside
+		RawBatchFlow rawFlow = plan.getRawBatchFlow();
+		if(rawFlow.getChildren()!=null && rawFlow.getChildren().size()>0){
+			throw new Exception("请先删除相关的外加工单据" + rawFlow.getchildrenParentSerial());
+		}
+		
+		List<PlanStep> steps = plan.getSteps();
+		for(PlanStep step: steps){
+			step.setStatus(PlanStep.Status.notFinish.ordinal());
+		}
+		
+		plan.setStatus(Plan.Status.materialFinish.ordinal());
 	}
 	
 	public Plan updatePlanIn(Plan bean) throws Exception{
@@ -166,6 +188,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		return bean;
 	}
 	
+	//弃核（生产入库）
 	public void cancelPlanIn(Integer planId) throws Exception{
 		Plan plan = this.findById(planId);
 		List<BatchFlow> packageFlows = plan.getPackageFlows();
@@ -248,6 +271,10 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 	protected Class<Plan> getEntityClass() {
 		return Plan.class;
 	}
+	
+	@Autowired
+	CirDao cirDao;
+	
 	@Autowired
 	MaterialDao materialDao;
 	
