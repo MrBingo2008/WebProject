@@ -301,9 +301,12 @@ public class ManuAct {
 		try{
 			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
 				planDao.cancelPlanIn(plan.getId());
-			else if(plan.getStatus() == Plan.Status.manuFinish.ordinal()){
+			else if(plan.getStatus() == Plan.Status.manuFinish.ordinal())
 				planDao.cancelPlanStep(plan.getId());
-			}
+			else if(plan.getStatus() == Plan.Status.materialFinish.ordinal() || plan.getStatus() == Plan.Status.outside.ordinal())
+				planDao.cancelPlanMaterial(plan.getId());
+			else if(plan.getStatus() == Plan.Status.approval.ordinal())
+				planDao.cancelBasic(plan.getId());
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;

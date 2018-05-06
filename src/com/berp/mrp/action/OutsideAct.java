@@ -29,12 +29,12 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideOut_add.do")
 	public String outsideOutAdd(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideOut");
-		model.addAttribute("type", 2);
+		model.addAttribute("type", 1);
 		model.addAttribute("openMode", "add");
 		
-		String serial = String.format("WWCH-%s", DateUtils.getCurrentDayString());
+		String serial = String.format("WJGCH-%s", DateUtils.getCurrentDayString());
 		Integer maxSerial = cirDao.getMaxSerial(serial);
-		String defaultSerial = String.format("WWCH-%s-%03d", DateUtils.getCurrentDayString(), maxSerial+1);
+		String defaultSerial = String.format("WJGCH-%s-%03d", DateUtils.getCurrentDayString(), maxSerial+1);
 		
 		Cir cir = new Cir();
 		cir.setSerial(defaultSerial);
@@ -66,14 +66,14 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideOut_list.do", "查询委外出货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideOut_list.do", "查询外加工出货单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 
 	@RequestMapping("/v_outsideOut_view.do")
 	public String outsideOutView(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideOut");
-		model.addAttribute("type", 2);
+		model.addAttribute("type", 1);
 		model.addAttribute("openMode", "view");
 		Cir cir = cirDao.findById(cirId);
 		model.addAttribute("cir", cir);
@@ -83,7 +83,7 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideOut_edit.do")
 	public String outsideOutEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideOut");
-		model.addAttribute("type", 2);
+		model.addAttribute("type", 1);
 		
 		model.addAttribute("openMode", "edit");
 		Cir cir = cirDao.findById(cirId);
@@ -111,7 +111,7 @@ public class OutsideAct extends CirAct {
 			return;
 		}
 		
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideOut_list.do", "查询委外出货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideOut_list.do", "查询外加工出货单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 	
@@ -123,7 +123,7 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outsideOut_list.do", "查询委外出货单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outsideOut_list.do", "查询外加工出货单").toString());
 	}
 	
 	@RequestMapping("/v_outsideOut_list.do")
@@ -135,13 +135,13 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideIn_add.do")
 	public String outsideInAdd(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideIn");
-		model.addAttribute("type", 1);
+		model.addAttribute("type", 2);
 		
 		model.addAttribute("openMode", "add");
 		
-		String serial = String.format("WWDH-%s", DateUtils.getCurrentDayString());
+		String serial = String.format("WJGDH-%s", DateUtils.getCurrentDayString());
 		Integer maxSerial = cirDao.getMaxSerial(serial);
-		String defaultSerial = String.format("WWDH-%s-%03d", DateUtils.getCurrentDayString(), maxSerial+1);
+		String defaultSerial = String.format("WJGDH-%s-%03d", DateUtils.getCurrentDayString(), maxSerial+1);
 		
 		Cir cir = new Cir();
 		cir.setSerial(defaultSerial);
@@ -172,14 +172,14 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideIn_list.do", "查询委外到货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideIn_list.do", "查询外加工到货单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 	
 	@RequestMapping("/v_outsideIn_view.do")
 	public String outsideInView(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideIn");
-		model.addAttribute("type", 1);
+		model.addAttribute("type", 2);
 		model.addAttribute("openMode", "view");
 		Cir cir = cirDao.findById(cirId);
 		model.addAttribute("cir", cir);
@@ -189,7 +189,7 @@ public class OutsideAct extends CirAct {
 	@RequestMapping("/v_outsideIn_edit.do")
 	public String purchaseInEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideIn");
-		model.addAttribute("type", 1);
+		model.addAttribute("type", 2);
 		
 		model.addAttribute("openMode", "edit");
 		Cir cir = cirDao.findById(cirId);
@@ -216,10 +216,21 @@ public class OutsideAct extends CirAct {
 			return;
 		}
 		
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideIn_list.do", "查询委外到货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideIn_list.do", "查询外加工到货单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 
+	@RequestMapping("/o_outsideIn_cancelApproval.do")
+	public void outsideInCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.outsideInCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_outsideIn_edit.do?cirId="+cirId, "编辑外加工到货单").toString());
+	}
+	
 	@RequestMapping("/o_outsideIn_delete.do")
 	public void outsideInDelete(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
@@ -228,7 +239,7 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outsideIn_list.do", "查询委外到货单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outsideIn_list.do", "查询外加工到货单").toString());
 	}
 	
 	@RequestMapping("/v_outsideIn_list.do")

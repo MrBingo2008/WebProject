@@ -166,17 +166,17 @@ public class MaterialAct {
 		return "pages/data_setting/batch_list";
 	}
 	
-	//type=1 in; type=2 out，只用type作为参数就可以，cirType根据type再定
+	//type=1 out; type=2 in，0预留，只用type作为参数就可以，cirType根据type再定
 	@RequestMapping("/v_raw_batch_list.do")
 	public String rawBatchList(Integer type, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
 		
-		Pagination pagination = rawFlowDao.getPage(0, 1,2, searchName, pageNum, numPerPage);
+		Pagination pagination = rawFlowDao.getPage(type-1, 1,2, searchName, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("type", type);
-		model.addAttribute("cirType", type==1?"outsideIn":"outsideOut");
+		model.addAttribute("cirType", type==2?"outsideIn":"outsideOut");
 		return "pages/data_setting/raw_batch_list";
 	}
 	

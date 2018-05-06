@@ -34,6 +34,14 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		return entity;
 	}
 
+	public RawBatchFlow deleteById(Integer id) {
+		RawBatchFlow entity = get(id);
+		if (entity != null) {
+			getSession().delete(entity);
+		}
+		return entity;
+	}
+	
 	public Pagination getPage(Integer type, Integer status1, Integer status2, String name, Integer pageNo, Integer pageSize) {
 		Finder f = Finder.create("select bean from RawBatchFlow bean  where 1=1");
 	
@@ -100,7 +108,7 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		return flow;
 	}
 	
-	//更新前两级的flow
+	//这个暂时不用
 	public RawBatchFlow updateArriveNumber (Integer parentFlowId, Double arriveNumber, Company outsideCompany) throws Exception{
 		RawBatchFlow batch = findById(parentFlowId);
 		Double notArriveNum = batch.getNotArriveNumber();
@@ -156,6 +164,42 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		else if(batch.getArriveNumber()<batch.getNumber()&&batch.getArriveNumber()>0)
 			batch.setStatus(2);
 		return batch;
+	}
+	
+	//更新到达数量
+	//注意下跟cirDao的分工，cirDao可能主要处理他底下的flow的更新，而rawBatchFlowDao处理相关联flow的更新
+	//arriveNumber可以为负数，支持cancelApproval
+	public RawBatchFlow updateArriveNumber (Integer parentFlowId, Double arriveNumber) throws Exception{
+		RawBatchFlow flow = findById(parentFlowId);
+		Double notArriveNum = flow.getNotArriveNumber();
+		if(notArriveNum == null || notArriveNum ==0)
+			throw new Exception(String.format("%s到货数不能为空或0。", flow.getMaterial().getName()));
+		else if(arriveNumber > notArriveNum)
+			throw new Exception(String.format("%s未回收数为%.2f%s，已超出其范围。", flow.getSerial(), notArriveNum, flow.getMaterial().getUnit()));
+		else if(arriveNumber<notArriveNum){
+			//order.setStatus(Order.Status.partFinish.ordinal());
+			flow.setArriveNumber(flow.getArriveNumber() + arriveNumber);
+			flow.setStatus(2);
+		}
+		else{
+			flow.setArriveNumber(flow.getNumber());
+			flow.setStatus(3);
+		}
+		
+		//更新cir的状态
+		cirDao.updateStatusByRawFlow(flow.getCir().getId());
+		
+		//更新爷爷节点flow的状态
+	    RawBatchFlow flowParent = flow.getParent(); 
+		flowParent.setArriveNumber(flowParent.getArriveNumber() + arriveNumber);
+		//两个Double的对比要用equal...
+		if(flowParent.getArriveNumber().equals(flowParent.getNumber()))
+			flowParent.setStatus(3);
+		else if(flowParent.getArriveNumber()<flowParent.getNumber()&&flowParent.getArriveNumber()>0)
+			flowParent.setStatus(2);
+		else
+			flowParent.setStatus(1);
+		return flowParent;
 	}
 	
 	@Override

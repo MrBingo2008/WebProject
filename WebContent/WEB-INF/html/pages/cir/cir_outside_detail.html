@@ -1,18 +1,23 @@
 <script type="text/javascript">
 $(function(){
-	if('${openMode!}' == 'edit'){
+	if('${openMode!}' == 'add'){
+		$("#cancelApprovalButton").attr("disabled", "disabled");
+	}
+	else if('${openMode!}' == 'edit'){
 		var actionUrl = "o_${cirType}_update.do";
 		$("form").attr("action", actionUrl);
 		var status = '${cir.status}';
-		if(status == '1'){
+		if(status >= 1){
 			$("#formContent input").attr("readonly", "readonly");
 			$("#formContent a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled", "disabled");
+		}else{
+			$("#cancelApprovalButton").attr("disabled", "disabled");
 		}
 	}else if('${openMode!}' == 'view'){
 		$("#formContent input").attr("disabled", "disabled");
 		$("#formContent a").css("display", "none");
-		$("#saveButtonLi, #approvalButtonLi").css("display", "none");
+		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
 	}	
 });
 
@@ -81,10 +86,13 @@ $("#saveButton").click(function(){
 							<th type="lookup" name="rawFlows[#index#].material.serial" size="20"
 								lookupGroup="rawFlows[#index#]" lookuppk="material.id"  fieldAttrs="{readonly:'readonly'}"
 								lookupUrl="v_raw_batch_list.do?type=${type}" aTitle="<@s.m '${cirType}.selectRaw'/>"><@s.m "product.allSerial"/></th>
-								
-							<th type="hidden" name="rawFlows[#index#].parent.id" style="display:none"></th>
+							
 							<th type="text" name="rawFlows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "product.name"/></th>
-							<th type="text" name="rawFlows[#index#].serial" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "rawFlow.serial"/></th>
+							<!-- 一般出去的，只需要库存的批次号，但是对于外加工的，还是重新编号，因为回收时还要用到 -->
+							<th type="text" name="rawFlows[#index#].serial" defaultVal="${cir.serial!}" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "rawFlow.serial"/></th>
+							
+							<th type="hidden" name="rawFlows[#index#].parent.id" style="display:none"></th>
+							<th type="text" name="rawFlows[#index#].parent.info" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.for"/></th>
 							<th type="text" name="rawFlows[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
 							<th type="text" name="rawFlows[#index#].number" size="12" fieldClass="positiveNumber required"><@s.m "material.number"/></th>
@@ -105,9 +113,11 @@ $("#saveButton").click(function(){
 								<input type="hidden" name="rawFlows[${count}].material.id" value="${rawFlow.material.id!}">
 							</td>
 							<td><input type="text" name="rawFlows[${count}].material.name" value="${rawFlow.material.name!}" size="12" class="textInput" readonly=readonly>
-							<input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}"></td>
-							
 							<td><input type="text" name="rawFlows[${count}].serial" value="${rawFlow.serial!}" size="20" class="textInput" readonly=readonly></td>
+							
+							<input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}"></td>
+							<td><input type="text" name="rawFlows[${count}].parent.info" value="${(rawFlow.parent.info)!}" size="20" class="textInput" readonly=readonly></td>
+							
 							<td><input type="text" name="rawFlows[${count}].material.unit" value="${rawFlow.material.unit!}" size="12" class="textInput" readonly=readonly></td>
 							<td><input type="text" name="rawFlows[${count}].number" value="${rawFlow.number!}" size="12" class="positiveNumber textInput required"></td>
 							<#if cir.status gt 0 && cirType == "outsideOut"><td><input type="text" name="rawFlows[${count}].arriveNumber" value="${rawFlow.arriveNumber!}" size="12" readonly></td></#if>
@@ -126,6 +136,7 @@ $("#saveButton").click(function(){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${cirType}_cancelApproval.do?cirId=${cir.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a title="<@s.m '${cirType}.list'/>" href="v_${cirType}_list.do" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

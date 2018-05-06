@@ -1,3 +1,4 @@
+<!-- type=2为出货单，1为到货单 -->
 <form id="pagerForm" method="post" onsubmit="return dwzSearch(this, 'dialog');" action="v_raw_batch_list.do?type=${type}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
@@ -39,7 +40,7 @@
 			<tr target="sid_obj" rel="1">
 			    <td>${rawFlow.id}</td>
 				<td>${rawFlow.material.allSerial!}</td>
-				<td>${rawFlow.material.name!}</td>
+				<td>${rawFlow.material.info!}</td>
 				<td>${rawFlow.serial!}</td>
 				<td>${rawFlow.material.unit!}</td>
 				<td>${rawFlow.number!}</td>
@@ -47,8 +48,8 @@
 				<td>${rawFlow.arriveNumber!}</td>
 				<td>${rawFlow.notArriveNumber!}</td>			
 				<td>
-					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'serial':'${rawFlow.serial!}', 'material.unit':'${rawFlow.material.unit!}',
-					 number:'<#if type == 2>${rawFlow.leftNumber!}<#elseif type==1>${rawFlow.notArriveNumber!}</#if>' , 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
+					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'material.unit':'${rawFlow.material.unit!}',
+					 number:'<#if type == 1>${rawFlow.leftNumber!}<#elseif type==2>${rawFlow.notArriveNumber!}</#if>', 'parent.info':'${rawFlow.info!}', 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
 				</td>
 			</tr>
 		</#list>

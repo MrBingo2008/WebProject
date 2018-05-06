@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.berp.core.entity.Company;
 import com.berp.framework.hibernate3.Finder;
 import com.berp.framework.hibernate3.HibernateBaseDao;
 import com.berp.framework.hibernate3.Updater;
@@ -141,8 +142,9 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			//setStatus在PurchaseAct里设置，但是弃核的话，是在cirDao里设置
 			//flow.setStatus(1);
 			Double number = flow.getNumber();
-			materialDao.updateNumber(flow.getMaterial().getId(), -number, null, null);
+			
 			flowDao.updateLeftNumber(flow.getParent().getId(), number);
+			materialDao.updateNumber(flow.getMaterial().getId(), -number, null, null);
 		}
 	}
 
@@ -172,8 +174,8 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		cir.setStatus(0);
 		for(BatchFlow flow:cir.getFlows()){
 			flow.setStatus(0);
-			flowDao.updateLeftNumber(flow.getParent().getId(), - flow.getDirect() * flow.getNumber());
-			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
+			flowDao.updateLeftNumber(flow.getParent().getId(), - flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, null);
 		}
 	}
 	
@@ -184,15 +186,24 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			rawFlowDao.updateLeftNumber(rawFlow.getParent().getId(), rawFlow.getNumber());
 		}
 	}
+	/*
+	 * |-----leftnumber---->
+	 * |                      <---arriveNumber---|
+	 * */
 	
 	private void outsideInUpdate(Cir bean) throws Exception{
 		List<RawBatchFlow> rawFlows = bean.getRawFlows();
 		
 		for(RawBatchFlow rawFlow : rawFlows){
+			RawBatchFlow parent1Flow = rawFlowDao.findById(rawFlow.getParent().getId());
+			Company flowCompany = parent1Flow.getCir().getCompany(); 
+			if(flowCompany.getId().equals(bean.getCompany().getId()) == false){
+				throw new Exception(String.format("出货批次%s的外加工单位为%s，与本到货单%s不一致。", rawFlow.getCir().getSerial(), flowCompany.getName(), bean.getCompany().getName()));	
+			}
 			//rawFlow.setStatus(1);
 			
 			//更新前两级的flow
-			RawBatchFlow parentFlow = rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), rawFlow.getNumber(), bean.getCompany());
+			RawBatchFlow parentFlow = rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), rawFlow.getNumber());
 			if(parentFlow.getArriveNumber().equals(parentFlow.getNumber())){
 				
 				Plan plan = parentFlow.getPlan();
@@ -225,6 +236,22 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		}
 	}
 
+	public void outsideInCancelApproval(Integer cirId) throws Exception{
+		
+		Cir cir = this.findById(cirId);
+		
+		List<RawBatchFlow> rawFlows = cir.getRawFlows();
+		
+		for(RawBatchFlow rawFlow : rawFlows){
+			rawFlow.setStatus(0);
+			
+			//更新前两级的flow
+			RawBatchFlow parentFlow = rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), -rawFlow.getNumber(), cir.getCompany());
+			if(parentFlow.getNumber() != 0)
+				parentFlow.getPlan().setStatus(Plan.Status.outside.ordinal());
+		}
+	}
+	
 	private void checkInUpdate(Cir bean) throws Exception{
 		List<BatchFlow> flows = bean.getFlows();
 		if(flows ==null)
@@ -338,6 +365,8 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 				cir.setStatus(3);
 			else if(isPart == true)
 				cir.setStatus(2);
+			else
+				cir.setStatus(1);
 		}
 	}
 	

@@ -130,6 +130,7 @@ public class BatchFlowDao extends HibernateBaseDao<BatchFlow, Integer> {
 		//如果有setProperty的操作，都会反映到数据库
 		//Updater有min mid max三种级别，通过级别来判断是否setProperty
 		//为什么这两行会被注释掉？
+		//如果是弃核的话，会丢失这两个数据
 		batch.setNumPerBox(null);
 		batch.setBoxNum(null);
 		

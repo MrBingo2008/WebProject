@@ -22,6 +22,12 @@ public class RawBatchFlow extends BaseBatchFlow {
 		this.arriveNumber = 0.00;
 	}
 	
+	public String getInfo(){
+		if(this.getCir()!=null)
+			return String.format("%s / %s", this.getSerial(), this.getCir().getCompany().getName());
+		return this.getSerial();
+	}
+	
 	//parent
 	public RawBatchFlow getParent () {
 		return parent;
@@ -41,6 +47,7 @@ public class RawBatchFlow extends BaseBatchFlow {
 	}
 	
 	public Double getNotArriveNumber(){
+		//对于type=0，也适用于type=1， leftNumber=0
 		return this.getNumber() - this.getArriveNumber() - this.getLeftNumber();
 	}
 	

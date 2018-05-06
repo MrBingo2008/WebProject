@@ -70,6 +70,13 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		return entity;
 	}
 	
+	//弃核（基本信息）
+	public void cancelBasic(Integer planId) throws Exception{
+		Plan plan = this.findById(planId);
+		plan.setFlows(new ArrayList<BatchFlow>());
+		plan.setStatus(Plan.Status.edit.ordinal());
+	}
+	
 	public Plan updateMaterial(Plan bean) throws Exception{
 		
 		bean.setFlows(new ArrayList<BatchFlow>());
@@ -90,12 +97,13 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 				List<BatchFlow> flows = bean.getMaterialFlows();
 				for(BatchFlow flow : flows){
 					flow.setStatus(1);
-					materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
 					flowDao.updateLeftNumber(flow.getParent().getId(), (Double)flow.getNumber());
+					materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
 				}
 				//重新获取 material,以供rawFlow使用
 				bean.setMaterial(this.get(bean.getId()).getMaterial());
 				RawBatchFlow rawFlow = new RawBatchFlow(bean.getSerial(), bean.getNumber(), bean);
+				//status=1为已审核
 				rawFlow.setStatus(1);
 				rawFlowDao.save(rawFlow);
 			}catch(Exception ex){
@@ -106,6 +114,34 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
 		return bean;
+	}
+	
+	//弃核（生产下料）
+	public void cancelPlanMaterial(Integer planId) throws Exception{
+		Plan plan = this.findById(planId);
+
+		plan.setStatus(Plan.Status.approval.ordinal());
+		
+		//删除上一步plansteps，然后再考虑cancelStep那里是不是做得合理
+		RawBatchFlow rawFlow = plan.getRawBatchFlow();
+		if(rawFlow.getChildren()!=null && rawFlow.getChildren().size()>0){
+			throw new Exception("请先删除相关的外加工单据" + rawFlow.getchildrenParentSerial());
+		}	
+		List<PlanStep> steps = plan.getSteps();
+		for(PlanStep step: steps){
+			step.setStatus(PlanStep.Status.notFinish.ordinal());
+		}
+		//end 删除
+		
+		List<BatchFlow> materialFlows = plan.getMaterialFlows();
+		for(BatchFlow flow: materialFlows){
+			flow.setStatus(0);
+			//注意，这里两个方向是不一样的
+			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getDirect() * flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
+		}
+		
+		rawFlowDao.deleteById(plan.getRawBatchFlow().getId());
 	}
 	
 	//处理plan_detail里的，与outsideIn区分
@@ -149,9 +185,10 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 	public void cancelPlanStep(Integer planId) throws Exception{
 		Plan plan = this.findById(planId);
 		//先要删除package flows
-		plan.setFlows(new ArrayList<BatchFlow>());
-		plan.getFlows().addAll(flowDao.getList(null, null, null, null, plan.getId(), BatchFlow.Type.planIn.ordinal()));
+		//这个地方如果先setFlows(null)，再add(flowDao.find(materialFlowType, planId))，这样是不行的，set null会反映到持久层，导致所有materialFlows和planInFlows都清空，使用flowDao查找出来都是空的
+		plan.setFlows(plan.getMaterialFlows());
 		
+		//弃核planstep比较特殊，要把全部step都清空
 		//再删除outside
 		RawBatchFlow rawFlow = plan.getRawBatchFlow();
 		if(rawFlow.getChildren()!=null && rawFlow.getChildren().size()>0){

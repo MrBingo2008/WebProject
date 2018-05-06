@@ -410,8 +410,9 @@ function calFactor(numInput){
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button">
 				<@s.m "global.cancelApproval"/>
 				(<#if plan.status lt 2><@s.m "plan.basic"/>
-					<#elseif plan.status == 2><@s.m "plan.material"/>
-					<#elseif plan.status == 3 || plan.status == 4><@s.m "process"/>
+				<!-- 2为物料完成，3为委外 -->
+					<#elseif plan.status == 2 || plan.status == 3><@s.m "plan.material"/>
+					<#elseif plan.status == 4><@s.m "process"/>
 					<#elseif plan.status == 5><@s.m "plan.in"/>
 					</#if>)
 				</button></div></div></li>
