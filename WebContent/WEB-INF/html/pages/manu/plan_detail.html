@@ -358,7 +358,10 @@ function calFactor(numInput){
 				<div>
 				<table class="list nowrap itemDetail" addButton='<@s.m "plan.in.new"/>' buttonDisabled=<#if plan.status == 4 && openMode != 'view'>"false"<#else>"true"</#if> 
 				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_in_update.do' 
-				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_in_approval.do' width="100%">
+				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_in_approval.do'
+				  cancelApplyButton='<@s.m "global.cancelApproval"/>' cancelApplyAction='o_plan_cancelApproval.do' 
+				  cancelButtonDisabled=<#if plan.status == 5 && openMode != 'view'>"false"<#else>"true"</#if>
+				  width="100%">
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							

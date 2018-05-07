@@ -102,12 +102,21 @@ public class PlanStep {
 	
 
 	//step
-	
 	public Step getStep() {
 		return step;
 	}
 
 	public void setStep(Step step) {
 		this.step = step;
+	}
+	
+	public Boolean getIsLastApply(){
+		List<PlanStep> steps = plan.getSteps();
+		for(int i=0;i<steps.size();i++){
+			if(steps.get(i).getStatus() == PlanStep.Status.notFinish.ordinal())
+			{
+				
+			}
+		}
 	}
 }

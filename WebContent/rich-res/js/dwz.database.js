@@ -294,7 +294,8 @@
 				var butDisabledTxt = "";
 				if(butDisabled !=null && butDisabled == "true"){
 					butDisabledTxt = ' disabled="disabled"';
-					return;
+					//2018-5-7
+					//return;
 				}
 				if (addButTxt) {
 
@@ -336,6 +337,21 @@
 					var applyAction = $table.attr('applyAction');
 					$applyBut.click(function(){
 						$("#pagerForm").attr("action", applyAction);	
+					});
+				}
+				
+				var cancelButtonDisabled = $table.attr('cancelButtonDisabled');
+				var cancelButtonDisabledTxt = "";
+				if(cancelButtonDisabled !=null && cancelButtonDisabled == "true"){
+					cancelButtonDisabledTxt = ' disabled="disabled"';
+				}
+				
+				var cancelApplyButTxt = $table.attr('cancelApplyButton');
+				if (cancelApplyButTxt) {
+					var $cancelApplyBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +cancelButtonDisabledTxt+ '>'+cancelApplyButTxt+'</button></div></div>').insertBefore($table).find("button");
+					var cancelApplyAction = $table.attr('cancelApplyAction');
+					$cancelApplyBut.click(function(){
+						$("#pagerForm").attr("action", cancelApplyAction);	
 					});
 				}
 
