@@ -264,6 +264,18 @@ public class ManuAct {
 		reload(response, plan.getId());
 	}
 	
+	@RequestMapping("/o_plan_step_cancel_approval.do")
+	public void planStepCancelApproval(Integer stepId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		try{
+			Plan plan = planDao.cancelPlanStep(stepId);
+			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+	}
+	
 	@RequestMapping("/o_plan_in_approval.do")
 	public void planInApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
 		if(plan.getPackageFlows()==null || plan.getPackageFlows().size()<=0){
@@ -294,6 +306,18 @@ public class ManuAct {
 			return;
 		}
 		reload(response, plan.getId());
+	}
+
+	@RequestMapping("/o_plan_in_cancel_approval.do")
+	public void planInCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
+				planDao.cancelPlanIn(plan.getId());
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
 	}
 	
 	@RequestMapping("/o_plan_cancelApproval.do")

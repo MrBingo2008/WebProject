@@ -112,11 +112,21 @@ public class PlanStep {
 	
 	public Boolean getIsLastApply(){
 		List<PlanStep> steps = plan.getSteps();
+		int currentIndex = 0;
 		for(int i=0;i<steps.size();i++){
 			if(steps.get(i).getStatus() == PlanStep.Status.notFinish.ordinal())
 			{
-				
+				currentIndex = i;
+				break;
 			}
 		}
+		if(currentIndex > 0)
+			currentIndex --;
+		else//没找到，currentIndex = 0，就是全部都完成，就选最后一个
+			currentIndex = steps.size() - 1;
+		if(steps.get(currentIndex).equals(this))
+			return true;
+		else
+			return false;
 	}
 }

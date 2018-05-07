@@ -292,69 +292,64 @@
 				var addButTxt = $table.attr('addButton') || "Add New";
 				var butDisabled = $table.attr('buttonDisabled');
 				var butDisabledTxt = "";
-				if(butDisabled !=null && butDisabled == "true"){
-					butDisabledTxt = ' disabled="disabled"';
-					//2018-5-7
-					//return;
-				}
-				if (addButTxt) {
+				if(butDisabled ==null || butDisabled == "false"){
+					if (addButTxt) {
 
-					var $addBut = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>').insertBefore($table).find("button");
-					//var $rowNum = $('<input type="text" name="dwz_rowNum" class="textInput" style="margin:2px;" value="1" size="2"/>').insertBefore($table);
-					
-					var trTm = "";
-					$addBut.click(function(){
-						if (! trTm) trTm = trHtml(fields);
-						var rowNum = 1;
-						//try{rowNum = parseInt($rowNum.val())} catch(e){}
+						var $addBut = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>').insertBefore($table).find("button");
+						//var $rowNum = $('<input type="text" name="dwz_rowNum" class="textInput" style="margin:2px;" value="1" size="2"/>').insertBefore($table);
+						
+						var trTm = "";
+						$addBut.click(function(){
+							if (! trTm) trTm = trHtml(fields);
+							var rowNum = 1;
+							//try{rowNum = parseInt($rowNum.val())} catch(e){}
 
-						for (var i=0; i<rowNum; i++){
-							var $tr = $(trTm);
-							$tr.appendTo($tbody).initUI().find("a.btnDel").click(function(){
-								$(this).parents("tr:first").remove();
-								initSuffix($tbody);
-								return false;
-							});
-						}
-						initSuffix($tbody);
-					});
-				}
-			
-				var saveButTxt = $table.attr('saveButton');
-				if (saveButTxt) {
-					var $saveBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +butDisabledTxt+ '>'+saveButTxt+'</button></div></div>').insertBefore($table).find("button");
-					var saveAction = $table.attr('saveAction');
-					$saveBut.click(function(){
-						//这里写死了好像不大好
-						$("#pagerForm").attr("action", saveAction);
-						//$("#planForm").submit();
-					});
-				}
+							for (var i=0; i<rowNum; i++){
+								var $tr = $(trTm);
+								$tr.appendTo($tbody).initUI().find("a.btnDel").click(function(){
+									$(this).parents("tr:first").remove();
+									initSuffix($tbody);
+									return false;
+								});
+							}
+							initSuffix($tbody);
+						});
+					}
 				
-				var applyButTxt = $table.attr('applyButton');
-				if (applyButTxt) {
-					var $applyBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +butDisabledTxt+ '>'+applyButTxt+'</button></div></div>').insertBefore($table).find("button");
-					var applyAction = $table.attr('applyAction');
-					$applyBut.click(function(){
-						$("#pagerForm").attr("action", applyAction);	
-					});
+					var saveButTxt = $table.attr('saveButton');
+					if (saveButTxt) {
+						var $saveBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +butDisabledTxt+ '>'+saveButTxt+'</button></div></div>').insertBefore($table).find("button");
+						var saveAction = $table.attr('saveAction');
+						$saveBut.click(function(){
+							//这里写死了好像不大好
+							$("#pagerForm").attr("action", saveAction);
+							//$("#planForm").submit();
+						});
+					}
+					
+					var applyButTxt = $table.attr('applyButton');
+					if (applyButTxt) {
+						var $applyBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +butDisabledTxt+ '>'+applyButTxt+'</button></div></div>').insertBefore($table).find("button");
+						var applyAction = $table.attr('applyAction');
+						$applyBut.click(function(){
+							$("#pagerForm").attr("action", applyAction);	
+						});
+					}
 				}
+
 				
 				var cancelButtonDisabled = $table.attr('cancelButtonDisabled');
 				var cancelButtonDisabledTxt = "";
-				if(cancelButtonDisabled !=null && cancelButtonDisabled == "true"){
-					cancelButtonDisabledTxt = ' disabled="disabled"';
+				if(cancelButtonDisabled ==null || cancelButtonDisabled == "false"){
+					var cancelApplyButTxt = $table.attr('cancelApplyButton');
+					if (cancelApplyButTxt) {
+						var $cancelApplyBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +cancelButtonDisabledTxt+ '>'+cancelApplyButTxt+'</button></div></div>').insertBefore($table).find("button");
+						var cancelApplyAction = $table.attr('cancelApplyAction');
+						$cancelApplyBut.click(function(){
+							$("#pagerForm").attr("action", cancelApplyAction);	
+						});
+					}
 				}
-				
-				var cancelApplyButTxt = $table.attr('cancelApplyButton');
-				if (cancelApplyButTxt) {
-					var $cancelApplyBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +cancelButtonDisabledTxt+ '>'+cancelApplyButTxt+'</button></div></div>').insertBefore($table).find("button");
-					var cancelApplyAction = $table.attr('cancelApplyAction');
-					$cancelApplyBut.click(function(){
-						$("#pagerForm").attr("action", cancelApplyAction);	
-					});
-				}
-
 			});
 			
 			/**

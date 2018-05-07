@@ -182,7 +182,25 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 	}
 	
 	//弃核（生产流程）
-	public void cancelPlanStep(Integer planId) throws Exception{
+	public Plan cancelPlanStep(Integer stepId) throws Exception{
+		PlanStep step = stepDao.findById(stepId);
+		Plan plan = step.getPlan();
+		
+		if(step.getType() == 1)
+			throw new Exception("请先删除相关的外加工单据");
+		
+		step.setStatus(0);	
+		
+		//先要删除package flows
+		//这个地方如果先setFlows(null)，再add(flowDao.find(materialFlowType, planId))，这样是不行的，set null会反映到持久层，导致所有materialFlows和planInFlows都清空，使用flowDao查找出来都是空的
+		plan.setFlows(plan.getMaterialFlows());
+		
+		plan.setStatus(Plan.Status.materialFinish.ordinal());
+		
+		return plan;
+	}
+	
+	/*public void cancelPlanStep(Integer planId) throws Exception{
 		Plan plan = this.findById(planId);
 		//先要删除package flows
 		//这个地方如果先setFlows(null)，再add(flowDao.find(materialFlowType, planId))，这样是不行的，set null会反映到持久层，导致所有materialFlows和planInFlows都清空，使用flowDao查找出来都是空的
@@ -201,7 +219,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		}
 		
 		plan.setStatus(Plan.Status.materialFinish.ordinal());
-	}
+	}*/
 	
 	public Plan updatePlanIn(Plan bean) throws Exception{
 
