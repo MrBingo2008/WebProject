@@ -93,6 +93,10 @@ $("#saveButton").click(function(){
 							
 							<th type="hidden" name="rawFlows[#index#].parent.id" style="display:none"></th>
 							<th type="text" name="rawFlows[#index#].parent.info" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.for"/></th>
+							
+							<th type="hidden" name="rawFlows[#index#].planStep.id" style="display:none"></th>
+							<th type="text" name="rawFlows[#index#].planStep.name" size="10" fieldAttrs="{readonly:'readonly'}"><@s.m "step.outside"/></th>
+							
 							<th type="text" name="rawFlows[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
 							<th type="text" name="rawFlows[#index#].number" size="12" fieldClass="positiveNumber required"><@s.m "material.number"/></th>
@@ -117,6 +121,9 @@ $("#saveButton").click(function(){
 							
 							<input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}"></td>
 							<td><input type="text" name="rawFlows[${count}].parent.info" value="${(rawFlow.parent.info)!}" size="20" class="textInput" readonly=readonly></td>
+							
+							<input type="hidden" name="rawFlows[${count}].planStep.id" value="${rawFlow.planStep.id}"></td>
+							<td><input type="text" name="rawFlows[${count}].planStep.name" value="${(rawFlow.planStep.step.name)!}" size="10" class="textInput" readonly=readonly></td>
 							
 							<td><input type="text" name="rawFlows[${count}].material.unit" value="${rawFlow.material.unit!}" size="12" class="textInput" readonly=readonly></td>
 							<td><input type="text" name="rawFlows[${count}].number" value="${rawFlow.number!}" size="12" class="positiveNumber textInput required"></td>

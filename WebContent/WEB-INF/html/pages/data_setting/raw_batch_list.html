@@ -49,7 +49,9 @@
 				<td>${rawFlow.notArriveNumber!}</td>			
 				<td>
 					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'material.unit':'${rawFlow.material.unit!}',
-					 number:'<#if type == 1>${rawFlow.leftNumber!}<#elseif type==2>${rawFlow.notArriveNumber!}</#if>', 'parent.info':'${rawFlow.info!}', 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
+					 <#if type == 1>number:'${rawFlow.leftNumber!}', 'planStep.id':'${(rawFlow.plan.currentStep.id)!}', 'planStep.name':'${(rawFlow.plan.currentStep.step.name)!}',
+					 <#elseif type==2>number:'${rawFlow.notArriveNumber!}', 'planStep.id':'${(rawFlow.parent.plan.currentStep.id)!}', 'planStep.name':'${(rawFlow.parent.plan.currentStep.step.name)!}',</#if>
+					 'parent.info':'${rawFlow.info!}', 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>
 				</td>
 			</tr>
 		</#list>

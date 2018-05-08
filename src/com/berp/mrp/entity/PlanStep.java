@@ -117,14 +117,14 @@ public class PlanStep {
 			if(steps.get(i).getStatus() == PlanStep.Status.notFinish.ordinal())
 			{
 				currentIndex = i;
-				break;
+				break; 
 			}
 		}
 		if(currentIndex > 0)
 			currentIndex --;
 		else//没找到，currentIndex = 0，就是全部都完成，就选最后一个
 			currentIndex = steps.size() - 1;
-		if(steps.get(currentIndex).equals(this))
+		if(steps.get(currentIndex).getId().equals(this.getId()))
 			return true;
 		else
 			return false;

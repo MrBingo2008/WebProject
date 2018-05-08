@@ -314,7 +314,7 @@ function calFactor(numInput){
 								<td><span><@s.m "plan.step.status.${step.status}"/></span></td>
 								<td>
 									<!-- 如果是plan.status大于等于5（入库完成）就不需要了 -->
-									<#if plan.status lt 5 && step.isLastApply && step.type == 0>
+									<#if plan.status lt 5 && step.isLastApply && step.step.type == 0>
 									<div class="button"><div class="buttonContent"><a href="o_plan_step_cancel_approval.do?stepId=${step.id}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>"><button type="button"><@s.m "global.cancelApproval"/></button></a></div></div>
 									</#if>
 								</td>

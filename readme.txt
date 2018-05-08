@@ -15,3 +15,9 @@ sell order detail等操作增加v_step_list.do
 material detail增加v_step_list.do
 
 role:sellOut、purchaseIn、plan.manage等角色加了v_record
+
+2018-4-28：
+更新版本
+
+2018-5-8：
+增加raw_batch_flow表的plan_step_id

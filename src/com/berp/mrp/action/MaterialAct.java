@@ -172,7 +172,8 @@ public class MaterialAct {
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
 		
-		Pagination pagination = rawFlowDao.getPage(type-1, 1,2, searchName, pageNum, numPerPage);
+		//type=1 out：选择leftNumber大于0，in：只需要status = 1 2就可以
+		Pagination pagination = rawFlowDao.getPage(type-1, 1,2, searchName, type==1?0.00:null, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("type", type);

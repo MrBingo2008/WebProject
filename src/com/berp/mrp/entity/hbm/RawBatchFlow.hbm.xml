@@ -18,7 +18,8 @@
 		<many-to-one name="cir" column="cir_id" class="com.berp.mrp.entity.Cir"/>
 		<!-- 这里应该是one-to-one，外送和回收的flow的plan不能有值，否则plan下的rawFLows会有两种元素--> 
 		<many-to-one name="plan" column="plan_id" class="com.berp.mrp.entity.Plan" unique="true"/>
-			 
+		<!-- 没有unique选项 -->
+		<many-to-one name="planStep" column="plan_step_id" class="com.berp.mrp.entity.PlanStep"/>	 
 		<set name="children" inverse="true" cascade="none">
 			<key column="parent_id"/>
 			<one-to-many class="com.berp.mrp.entity.RawBatchFlow"/>

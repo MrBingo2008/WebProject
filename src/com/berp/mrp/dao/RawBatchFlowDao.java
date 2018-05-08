@@ -42,7 +42,7 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		return entity;
 	}
 	
-	public Pagination getPage(Integer type, Integer status1, Integer status2, String name, Integer pageNo, Integer pageSize) {
+	public Pagination getPage(Integer type, Integer status1, Integer status2, String name, Double lessLeftNumber, Integer pageNo, Integer pageSize) {
 		Finder f = Finder.create("select bean from RawBatchFlow bean  where 1=1");
 	
 		if(type!=null)
@@ -51,7 +51,7 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 			f.setParam("type", type);
 		}
 		if(status1!=null && status2 ==null){
-			f.append(" and bean.status =: statuts1");
+			f.append(" and bean.status = :statuts1");
 			f.setParam("status1", status1);
 		}else if(status1!=null && status2!=null){
 			f.append(" and bean.status between :status1 and :status2");
@@ -63,6 +63,10 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		{
 			f.append(" and (bean.material.name like :name or bean.material.serial like :name) ");
 			f.setParam("name", "%" + name + "%");
+		}
+		if(lessLeftNumber!=null){
+			f.append(" and bean.leftNumber > :lessLeftNumber");
+			f.setParam("lessLeftNumber", lessLeftNumber);
 		}
 		
 		f.append(" order by bean.id desc");
@@ -170,25 +174,29 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 	//注意下跟cirDao的分工，cirDao可能主要处理他底下的flow的更新，而rawBatchFlowDao处理相关联flow的更新
 	//arriveNumber可以为负数，支持cancelApproval
 	public RawBatchFlow updateArriveNumber (Integer parentFlowId, Double arriveNumber) throws Exception{
+		
+		//更新发货单记录
 		RawBatchFlow flow = findById(parentFlowId);
 		Double notArriveNum = flow.getNotArriveNumber();
-		if(notArriveNum == null || notArriveNum ==0)
-			throw new Exception(String.format("%s到货数不能为空或0。", flow.getMaterial().getName()));
+		if(notArriveNum <0)
+			throw new Exception(String.format("系统异常，%s的未到货数为负数。", flow.getMaterial().getName()));
 		else if(arriveNumber > notArriveNum)
 			throw new Exception(String.format("%s未回收数为%.2f%s，已超出其范围。", flow.getSerial(), notArriveNum, flow.getMaterial().getUnit()));
 		else if(arriveNumber<notArriveNum){
-			//order.setStatus(Order.Status.partFinish.ordinal());
-			flow.setArriveNumber(flow.getArriveNumber() + arriveNumber);
-			flow.setStatus(2);
+			Double temp = flow.getArriveNumber() + arriveNumber;
+			flow.setArriveNumber(temp);
+			if(temp > 0)
+				flow.setStatus(2);
+			else 
+				flow.setStatus(1);
 		}
 		else{
 			flow.setArriveNumber(flow.getNumber());
 			flow.setStatus(3);
 		}
-		
-		//更新cir的状态
+		//更新发货单
 		cirDao.updateStatusByRawFlow(flow.getCir().getId());
-		
+				
 		//更新爷爷节点flow的状态
 	    RawBatchFlow flowParent = flow.getParent(); 
 		flowParent.setArriveNumber(flowParent.getArriveNumber() + arriveNumber);
@@ -199,6 +207,7 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 			flowParent.setStatus(2);
 		else
 			flowParent.setStatus(1);
+		
 		return flowParent;
 	}
 	

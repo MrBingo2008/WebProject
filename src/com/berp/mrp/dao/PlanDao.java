@@ -188,6 +188,10 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		
 		if(step.getType() == 1)
 			throw new Exception("请先删除相关的外加工单据");
+		PlanStep currentStep = plan.getCurrentStep();
+		if(currentStep!=null && currentStep.getId().equals(stepId)==false && currentStep.getStep().getType() ==1){
+			
+		}
 		
 		step.setStatus(0);	
 		

@@ -6,9 +6,10 @@ public class RawBatchFlow extends BaseBatchFlow {
 	
 	private Double arriveNumber;
 	private RawBatchFlow parent;
-
 	private Set<RawBatchFlow> children;
 
+	private PlanStep planStep;
+	
 	public static enum Type{produce, outsideOut, outsideIn}
 	
 	public RawBatchFlow(){}
@@ -69,4 +70,14 @@ public class RawBatchFlow extends BaseBatchFlow {
 		}
 		return sb.toString();
 	}
+	
+	//plan step
+	public PlanStep getPlanStep() {
+		return planStep;
+	}
+
+	public void setPlanStep(PlanStep planStep) {
+		this.planStep = planStep;
+	}
+	
 }
