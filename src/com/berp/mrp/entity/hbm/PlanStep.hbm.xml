@@ -13,7 +13,7 @@
 		<property name="number" column="number" type="double" length="11"/>
 		
 		<set name="rawFlows" inverse="true" cascade="none">
-			<key column="parent_id"/>
+			<key column="plan_step_id"/>
 			<one-to-many class="com.berp.mrp.entity.RawBatchFlow"/>
 		</set>
 		

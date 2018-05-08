@@ -186,13 +186,19 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		PlanStep step = stepDao.findById(stepId);
 		Plan plan = step.getPlan();
 		
-		if(step.getType() == 1)
+		if(step.getStep().getType() == 1 && step.getRawFlows()!=null)
 			throw new Exception("请先删除相关的外加工单据");
-		PlanStep currentStep = plan.getCurrentStep();
-		if(currentStep!=null && currentStep.getId().equals(stepId)==false && currentStep.getStep().getType() ==1){
-			
-		}
 		
+		PlanStep nextStep = plan.getNextStep(step);
+		if(nextStep!=null){
+			if(nextStep.getStatus() == 1)
+				throw new Exception(String.format("请先弃核工序'%s'", nextStep.getStep().getName()));
+			else{
+				if(nextStep.getStep().getType() == 1)
+					throw new Exception(String.format("请先弃核外加工'%s'相关的单据", nextStep.getStep().getName()));
+			}
+		}
+			
 		step.setStatus(0);	
 		
 		//先要删除package flows

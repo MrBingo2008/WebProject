@@ -171,7 +171,7 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 	}
 	
 	//更新到达数量
-	//注意下跟cirDao的分工，cirDao可能主要处理他底下的flow的更新，而rawBatchFlowDao处理相关联flow的更新
+	//注意下跟cirDao的分工，cirDao可能主要处理他底下的flow的更新，以及plan和step的更新，而rawBatchFlowDao处理相关联flow的更新
 	//arriveNumber可以为负数，支持cancelApproval
 	public RawBatchFlow updateArriveNumber (Integer parentFlowId, Double arriveNumber) throws Exception{
 		

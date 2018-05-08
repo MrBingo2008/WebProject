@@ -61,6 +61,15 @@ public class RawBatchFlow extends BaseBatchFlow {
 		this.children = children;
 	}
 	
+	public String getChildrenString(){
+		StringBuilder sb = new StringBuilder();
+		for(RawBatchFlow flow:children){
+			sb.append(flow.getSerial());
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
+	
 	//获取他的子flows所属的业务单号
 	public String getchildrenParentSerial(){
 		StringBuilder sb = new StringBuilder();

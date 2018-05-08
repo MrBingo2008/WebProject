@@ -20,6 +20,8 @@ public class PlanStep {
 	private java.util.Date finishTime;
 	private Double number;
 	
+	private Set<RawBatchFlow> rawFlows;
+
 	public static enum Status{notFinish, finish};
 	
 	public PlanStep(){
@@ -129,4 +131,14 @@ public class PlanStep {
 		else
 			return false;
 	}
+	
+	//raw flows
+	public Set<RawBatchFlow> getRawFlows() {
+		return rawFlows;
+	}
+
+	public void setRawFlows(Set<RawBatchFlow> rawFlows) {
+		this.rawFlows = rawFlows;
+	}
+
 }

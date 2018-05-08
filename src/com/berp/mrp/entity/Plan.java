@@ -80,6 +80,20 @@ public class Plan extends BaseBill {
 		}
 		return null;
 	}
+	
+	public PlanStep getNextStep(PlanStep step){
+		Integer i = 0;
+		boolean find = false;
+		for(;i<steps.size();i++){
+			if(steps.get(i).getId().equals(step.getId())){
+				find=true;
+				break;
+			}
+		}
+		if(find && i < steps.size() -1)
+			return steps.get(i+1);
+		return null;
+	}
 
 	//flows
 	public List<BatchFlow> getFlows(){

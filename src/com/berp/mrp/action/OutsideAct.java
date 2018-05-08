@@ -115,6 +115,17 @@ public class OutsideAct extends CirAct {
 		ResponseUtils.renderJson(response, object.toString());
 	}
 	
+	@RequestMapping("/o_outsideOut_cancelApproval.do")
+	public void outsideOutCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.outsideOutCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_outsideOut_edit.do?cirId="+cirId, "编辑外加工出货单").toString());
+	}
+	
 	@RequestMapping("/o_outsideOut_delete.do")
 	public void outsideOutDelete(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
