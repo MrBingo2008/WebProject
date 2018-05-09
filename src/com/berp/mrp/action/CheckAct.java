@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.berp.framework.web.DwzJsonUtils;
+import com.berp.framework.web.ResponseUtils;
 import com.berp.mrp.entity.Cir;
 
 @Controller
@@ -35,6 +37,19 @@ public class CheckAct extends CirAct {
 	@RequestMapping("/o_checkIn_update.do")
 	public void checkInUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.cirUpdate(cir, Cir.CirType.checkIn.ordinal(), "v_checkIn_list.do", "查询盘点报溢单", request, response, model);
+	}
+	
+	//区别于update， update调用cirDao的通用函数，然后再辨别调用业务函数
+	//而这个直接调用业务函数
+	@RequestMapping("/o_checkIn_cancelApproval.do")
+	public void checkInCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.checkInCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_checkIn_edit.do?cirId="+cirId, "编辑盘点报溢单").toString());
 	}
 	
 	@RequestMapping("/v_checkIn_list.do")
@@ -71,6 +86,17 @@ public class CheckAct extends CirAct {
 	@RequestMapping("/o_checkOut_update.do")
 	public void checkOutUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.cirUpdate(cir, Cir.CirType.checkOut.ordinal(), "v_checkOut_list.do", "查询盘点报损单", request, response, model);
+	}
+	
+	@RequestMapping("/o_checkOut_cancelApproval.do")
+	public void checkOutCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.checkOutCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_checkOut_edit.do?cirId="+cirId, "编辑盘点报损单").toString());
 	}
 	
 	@RequestMapping("/v_checkOut_list.do")

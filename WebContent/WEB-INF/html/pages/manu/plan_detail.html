@@ -27,7 +27,7 @@ $(function(){
 			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_step_update.do";
 			break;
 		case '3':
@@ -36,7 +36,7 @@ $(function(){
 			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_step_update.do";
 			break;
 		case '4':
@@ -45,7 +45,7 @@ $(function(){
 			
 			$("#planMaterial a").css("display", "none");
 			$("#planMaterial input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_finish_package.do";
 			break;
 		//入库完成
@@ -57,7 +57,7 @@ $(function(){
 			$("#planMaterial input").attr("readonly", "readonly");
 			$("#planIn a").css("display", "none");
 			$("#planIn input").attr("readonly", "readonly");
-			$("#saveButton, #approvalButton").attr("disabled","disabled");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_finish_package.do";
 			break;	
 		default:
@@ -205,7 +205,10 @@ function calFactor(numInput){
 				<!-- 因为是js生成button的，所以不大好在页面修改status，只能靠不同的url，在后台修改status -->
 				<table class="list nowrap itemDetail" addButton='<@s.m "plan.material.new"/>' buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if> 
 				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_material_update.do' 
-				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_material_approval.do' width="100%">
+				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_material_approval.do'
+				  cancelApplyButton='<@s.m "global.cancelApproval"/>' cancelApplyAction='o_plan_material_cancel_approval.do' 
+				  cancelButtonDisabled=<#if plan.status gt 1 && plan.status lt 4 && openMode != 'view'>"false"<#else>"true"</#if>
+				   width="100%">
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
@@ -415,15 +418,7 @@ function calFactor(numInput){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
-				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button">
-				<@s.m "global.cancelApproval"/>
-				(<#if plan.status lt 2><@s.m "plan.basic"/>
-				<!-- 2为物料完成，3为委外 -->
-					<#elseif plan.status == 2 || plan.status == 3><@s.m "plan.material"/>
-					<#elseif plan.status == 4><@s.m "process"/>
-					<#elseif plan.status == 5><@s.m "plan.in"/>
-					</#if>)
-				</button></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_plan_cancelApproval.do?planId=${plan.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></a></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

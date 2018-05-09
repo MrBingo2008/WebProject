@@ -105,6 +105,21 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		}
 	}
 
+	public void sellOutCancelApproval(Integer cirId) throws Exception{
+		Cir cir = findById(cirId);
+		
+		List<BatchFlow> flows = cir.getFlows();
+		cir.setStatus(0);
+		for(BatchFlow flow:flows){
+			flow.setStatus(0);
+			//要再测测这两个函数的异常情况
+			recordDao.cancelFinishNumber(flow);
+			flowDao.updateLeftNumber(flow.getParent().getId(), -flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, flow.getNumber());
+			
+		}
+	}
+	
 	private void sellBackUpdate(Cir bean) throws Exception{
 		List<BatchFlow> flows = bean.getFlows();
 		if(flows ==null)
@@ -112,6 +127,22 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		for(BatchFlow flow : flows){
 			//flow.setStatus(1);
 			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, null);
+		}
+	}
+	
+	public void sellBackCancelApproval(Integer cirId) throws Exception{
+		Cir cir = findById(cirId);
+		
+		List<BatchFlow> flows = cir.getFlows();
+		for(BatchFlow flow: flows){
+			if(flow.getFlows()!=null && flow.getFlows().size()>0){
+				throw new Exception("请先删除相关联的单据" + flow.getFlowsParentSerial());
+			}
+		}
+		cir.setStatus(0);
+		for(BatchFlow flow:flows){
+			flow.setStatus(0);
+			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
 		}
 	}
 	
@@ -316,6 +347,22 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		}
 	}
 	
+	public void checkInCancelApproval(Integer cirId) throws Exception{
+		Cir cir = findById(cirId);
+		
+		List<BatchFlow> flows = cir.getFlows();
+		for(BatchFlow flow: flows){
+			if(flow.getFlows()!=null && flow.getFlows().size()>0){
+				throw new Exception("请先删除相关联的单据" + flow.getFlowsParentSerial());
+			}
+		}
+		cir.setStatus(0);
+		for(BatchFlow flow:flows){
+			flow.setStatus(0);
+			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
+		}
+	}
+	
 	private void checkOutUpdate(Cir bean) throws Exception{
 		List<BatchFlow> flows = bean.getFlows();
 		if(flows == null)
@@ -324,6 +371,17 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			//flow.setStatus(1);
 			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
 			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getNumber());
+		}
+	}
+	
+	public void checkOutCancelApproval(Integer cirId) throws Exception{
+		Cir cir = findById(cirId);
+		
+		cir.setStatus(0);
+		for(BatchFlow flow:cir.getFlows()){
+			flow.setStatus(0);
+			flowDao.updateLeftNumber(flow.getParent().getId(), - flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, null);
 		}
 	}
 	

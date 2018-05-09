@@ -119,19 +119,14 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 	//弃核（生产下料）
 	public void cancelPlanMaterial(Integer planId) throws Exception{
 		Plan plan = this.findById(planId);
-
-		plan.setStatus(Plan.Status.approval.ordinal());
-		
-		//删除上一步plansteps，然后再考虑cancelStep那里是不是做得合理
-		RawBatchFlow rawFlow = plan.getRawBatchFlow();
-		if(rawFlow.getChildren()!=null && rawFlow.getChildren().size()>0){
-			throw new Exception("请先删除相关的外加工单据" + rawFlow.getchildrenParentSerial());
-		}	
 		List<PlanStep> steps = plan.getSteps();
-		for(PlanStep step: steps){
-			step.setStatus(PlanStep.Status.notFinish.ordinal());
+		if(steps!=null && steps.size()>0){
+			PlanStep firstStep= steps.get(0);
+			if(firstStep.getType() == 0 && firstStep.getStatus() == 1)
+				throw new Exception("请先弃核生产流程");
+			else if(firstStep.getType() == 1 && firstStep.getRawFlows()!=null && firstStep.getRawFlows().size()>0)
+				throw new Exception(String.format("请先弃核外加工'%s'单据", firstStep.getStep().getName()));
 		}
-		//end 删除
 		
 		List<BatchFlow> materialFlows = plan.getMaterialFlows();
 		for(BatchFlow flow: materialFlows){
@@ -140,7 +135,8 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getDirect() * flow.getNumber());
 			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
 		}
-		
+
+		plan.setStatus(Plan.Status.approval.ordinal());
 		rawFlowDao.deleteById(plan.getRawBatchFlow().getId());
 	}
 	
@@ -200,8 +196,18 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			}
 		}
 			
-		step.setStatus(0);	
+		step.setStatus(0);
 		
+		//重设生产数量 ，如果是外加工的，不需要重设，因为它改不了数量
+		PlanStep preStep = plan.getPreStep(step);
+		if(preStep!=null){
+			plan.getRawBatchFlow().setNumber(preStep.getNumber());
+			plan.getRawBatchFlow().setLeftNumber(preStep.getNumber());
+		}else
+		{
+			plan.getRawBatchFlow().setNumber(plan.getNumber());
+			plan.getRawBatchFlow().setLeftNumber(plan.getNumber());
+		}
 		//先要删除package flows
 		//这个地方如果先setFlows(null)，再add(flowDao.find(materialFlowType, planId))，这样是不行的，set null会反映到持久层，导致所有materialFlows和planInFlows都清空，使用flowDao查找出来都是空的
 		plan.setFlows(plan.getMaterialFlows());

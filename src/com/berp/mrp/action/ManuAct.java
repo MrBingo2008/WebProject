@@ -165,6 +165,19 @@ public class ManuAct {
 		reload(response, plan.getId());
 	}
 	
+	
+	@RequestMapping("/o_plan_cancelApproval.do")
+	public void planCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			if(plan.getStatus() == Plan.Status.approval.ordinal())
+				planDao.cancelBasic(plan.getId());
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
+	}
+	
 	@RequestMapping("/o_plan_delete.do")
 	public void planDelete(Integer planId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(planDao.findById(planId).getStatus() >= Plan.Status.approval.ordinal()){
@@ -228,6 +241,18 @@ public class ManuAct {
 			return;
 		}
 		reload(response, plan.getId());
+	}
+	
+	@RequestMapping("/o_plan_material_cancel_approval.do")
+	public void planMaterialCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			if(plan.getStatus() == Plan.Status.materialFinish.ordinal() || plan.getStatus() == Plan.Status.outside.ordinal())
+				planDao.cancelPlanMaterial(plan.getId());
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
 	}
 	
 	//step update
@@ -313,24 +338,6 @@ public class ManuAct {
 		try{
 			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
 				planDao.cancelPlanIn(plan.getId());
-		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
-			return;
-		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
-	}
-	
-	@RequestMapping("/o_plan_cancelApproval.do")
-	public void planCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		try{
-			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
-				planDao.cancelPlanIn(plan.getId());
-			else if(plan.getStatus() == Plan.Status.manuFinish.ordinal())
-				planDao.cancelPlanStep(plan.getId());
-			else if(plan.getStatus() == Plan.Status.materialFinish.ordinal() || plan.getStatus() == Plan.Status.outside.ordinal())
-				planDao.cancelPlanMaterial(plan.getId());
-			else if(plan.getStatus() == Plan.Status.approval.ordinal())
-				planDao.cancelBasic(plan.getId());
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;

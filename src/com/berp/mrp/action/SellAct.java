@@ -84,6 +84,17 @@ public class SellAct extends CirAct {
 		this.cirUpdate(cir, Cir.CirType.sellOut.ordinal(), "v_sellOut_list.do", "查询客户发货单", request, response, model);
 	}
 	
+	@RequestMapping("/o_sellOut_cancelApproval.do")
+	public void sellOutCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.sellOutCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_sellOut_edit.do?cirId="+cirId, "编辑客户发货单").toString());
+	}
+	
 	@RequestMapping("/v_sellOut_list.do")
 	public String sellOutList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sellOut", Cir.CirType.sellOut.ordinal(), request, model);	
@@ -118,6 +129,17 @@ public class SellAct extends CirAct {
 	@RequestMapping("/o_sellBack_update.do")
 	public void sellBackUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.cirUpdate(cir, Cir.CirType.sellBack.ordinal(), "v_sellBack_list.do", "查询客户退货单", request, response, model);
+	}
+	
+	@RequestMapping("/o_sellBack_cancelApproval.do")
+	public void sellBackCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			cirDao.sellBackCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_sellBack_edit.do?cirId="+cirId, "编辑客户退货单").toString());
 	}
 	
 	@RequestMapping("/v_sellBack_list.do")
