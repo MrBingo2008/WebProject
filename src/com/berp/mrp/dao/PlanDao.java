@@ -186,6 +186,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		PlanStep step = stepDao.findById(stepId);
 		Plan plan = step.getPlan();
 		
+		//这个其实可以不要，因为cancel plan step是本厂生产的
 		if(step.getStep().getType() == 1 && step.getRawFlows()!=null)
 			throw new Exception("请先删除相关的外加工单据");
 		
@@ -194,7 +195,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			if(nextStep.getStatus() == 1)
 				throw new Exception(String.format("请先弃核工序'%s'", nextStep.getStep().getName()));
 			else{
-				if(nextStep.getStep().getType() == 1)
+				if(nextStep.getStep().getType() == 1 && nextStep.getRawFlows()!=null&& nextStep.getRawFlows().size()>0)
 					throw new Exception(String.format("请先弃核外加工'%s'相关的单据", nextStep.getStep().getName()));
 			}
 		}
@@ -209,27 +210,6 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		
 		return plan;
 	}
-	
-	/*public void cancelPlanStep(Integer planId) throws Exception{
-		Plan plan = this.findById(planId);
-		//先要删除package flows
-		//这个地方如果先setFlows(null)，再add(flowDao.find(materialFlowType, planId))，这样是不行的，set null会反映到持久层，导致所有materialFlows和planInFlows都清空，使用flowDao查找出来都是空的
-		plan.setFlows(plan.getMaterialFlows());
-		
-		//弃核planstep比较特殊，要把全部step都清空
-		//再删除outside
-		RawBatchFlow rawFlow = plan.getRawBatchFlow();
-		if(rawFlow.getChildren()!=null && rawFlow.getChildren().size()>0){
-			throw new Exception("请先删除相关的外加工单据" + rawFlow.getchildrenParentSerial());
-		}
-		
-		List<PlanStep> steps = plan.getSteps();
-		for(PlanStep step: steps){
-			step.setStatus(PlanStep.Status.notFinish.ordinal());
-		}
-		
-		plan.setStatus(Plan.Status.materialFinish.ordinal());
-	}*/
 	
 	public Plan updatePlanIn(Plan bean) throws Exception{
 

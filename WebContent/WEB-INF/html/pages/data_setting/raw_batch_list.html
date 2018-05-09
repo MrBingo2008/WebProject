@@ -28,6 +28,7 @@
 				<th width="100"><@s.m "material.name"/></th>
 				<th width="160"><@s.m "plan.serial"/></th>
 				<th width="40"><@s.m "material.unit"/></th>
+				<th width="100"><@s.m "step.outside"/></th>
 				<th width="100"><@s.m "material.manuNumber"/></th>
 				<th width="100"><@s.m "rawFlow.leftNumber"/></th>
 				<th width="100"><@s.m "rawFlow.arriveNumber"/></th>
@@ -43,6 +44,10 @@
 				<td>${rawFlow.material.info!}</td>
 				<td>${rawFlow.serial!}</td>
 				<td>${rawFlow.material.unit!}</td>
+				<td><#if type == 1>
+				${(rawFlow.plan.currentStep.step.name)!}
+				<#elseif type==2>
+				${(rawFlow.parent.plan.currentStep.step.name)!}</#if></td>
 				<td>${rawFlow.number!}</td>
 				<td>${rawFlow.leftNumber!}</td>
 				<td>${rawFlow.arriveNumber!}</td>

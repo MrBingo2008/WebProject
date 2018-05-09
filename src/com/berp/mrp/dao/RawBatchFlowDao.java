@@ -49,6 +49,11 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		{
 			f.append(" and bean.type=:type");
 			f.setParam("type", type);
+			
+			if(type == 0)
+				f.append(" and bean.plan.status=3");
+			else
+				f.append(" and bean.parent.plan.status=3");
 		}
 		if(status1!=null && status2 ==null){
 			f.append(" and bean.status = :statuts1");

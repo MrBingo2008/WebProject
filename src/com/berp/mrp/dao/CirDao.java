@@ -261,6 +261,9 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		
 		for(RawBatchFlow rawFlow : rawFlows){
 			Plan plan = rawFlow.getParent().getParent().getPlan();
+			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
+				throw new Exception(String.format("生产任务'%s'已入库, 请先弃核入库.", plan.getSerial()));
+			
 			PlanStep currentStep = rawFlow.getPlanStep();
 			//两种情况：1，处于当前的step，2，处于最后一个apply的step：接下来要不就是没有step了，有step的话，分两种情况
 			boolean isCurrentStep = currentStep.equals(plan.getCurrentStep());
