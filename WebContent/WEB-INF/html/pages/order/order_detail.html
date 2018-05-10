@@ -32,7 +32,11 @@ $("#saveButton").click(function(){
 
 $("#approvalButton").click(function(){
 	$("#statusInput").val("1");
-	$("#orderForm").submit();
+	alertMsg.confirm("您是否确定审核?", {
+		okCall: function(){
+			$("#orderForm").submit();
+		}
+	});
 });
 /*
 $("#cancelApprovalButton").click(function(){
@@ -44,6 +48,11 @@ $("#cancelApprovalButton").click(function(){
 </script>
 <div class="pageContent">
 	<form id="orderForm" method="post" action="o_${orderType}_order_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<input type="hidden" name="pageNum" value="${pageNum!}" />
+		<input type="hidden" name="numPerPage" value="${numPerPage!}" />
+		<input type="hidden" name="searchName" value="${searchName!}"/>
+		<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
+		<input type="hidden" name="searchStatus" value="${searchStatus!}" />
 		<input id="statusInput" type="hidden" name="status" value="${order.status}"/>
 		<div id = "formContent" class="pageFormContent" layoutH="56">
 			<p>
@@ -168,11 +177,13 @@ $("#cancelApprovalButton").click(function(){
 		</div>
 		<div class="formBar">
 			<ul>
+				<#assign urlPara = "&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pageNum!}&numPerPage=${numPerPage!}" />
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
-				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${orderType}_order_cancelApproval.do?orderId=${order.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
-				<li><div class="button"><div class="buttonContent"><a href="v_${orderType}_order_list.do?type=${type!}" target="navTab" rel="main" title="<@s.m '${orderType}.order.list'/>"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${orderType}_order_cancelApproval.do?orderId=${order.id!}${urlPara}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a href="v_${orderType}_order_list.do?type=${type!}${urlPara}" target="navTab" rel="main" title="<@s.m '${orderType}.order.list'/>"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>
 	</form>
 </div>
+

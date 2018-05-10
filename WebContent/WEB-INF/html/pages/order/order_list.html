@@ -114,9 +114,10 @@ $(function(){
 					<td><a class="btnSelect" href="javascript:$.bringBack({'serial':'${order.serial!}', 'name':'${order.name!}', 'info':'${order.info}',  'id':'${order.id}'})"><@s.m "global.select"/></a></td>
 				<#else>
 				<td>
+					<#assign urlPara = "orderId=${order.id}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}" />
 					<a title="<@s.m '${orderType}.order.view'/>" target="navTab" href="v_${orderType}_order_view.do?orderId=${order.id}" rel="main"><@s.m "global.view"/></a>
-					<@berp_perm url="/o_${orderType}_order"><a title="<@s.m '${orderType}.order.edit'/>" target="navTab" href="v_${orderType}_order_edit.do?orderId=${order.id}" rel="main"><@s.m "global.edit"/></a>
-					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${orderType}_order_delete.do?orderId=${order.id}"><@s.m "global.delete"/></a></@berp_perm>
+					<@berp_perm url="/o_${orderType}_order"><a title="<@s.m '${orderType}.order.edit'/>" target="navTab" href="v_${orderType}_order_edit.do?${urlPara!}" rel="main"><@s.m "global.edit"/></a>
+					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${orderType}_order_delete.do?${urlPara!}" rel="main"><@s.m "global.delete"/></a></@berp_perm>
 				</td>
 				</#if>
 			</tr>

@@ -101,9 +101,16 @@ public class CirAct {
 		return "pages/order/order_detail";
 	}
 	
-	public String orderEdit(Integer orderId, String orderType, HttpServletRequest request, ModelMap model) {
+	public String orderEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer orderId, String orderType, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("orderType", orderType);
 		model.addAttribute("openMode", "edit");
+		
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("numPerPage", numPerPage);
+		model.addAttribute("searchName", searchName);
+		model.addAttribute("searchRecordName", searchRecordName);
+		model.addAttribute("searchStatus", searchStatus);
 		
 		model.addAttribute("order", orderDao.findById(orderId));
 		return "pages/order/order_detail";
@@ -126,12 +133,12 @@ public class CirAct {
 		
 		order.setType(type);
 		try{
-		orderDao.update(order);
+			orderDao.update(order);
 		}catch (Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("已审核的订单无法删除."+ex.getMessage()).toString());
 		}
 		
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson(order.getStatus()==0?"保存成功!":"审核成功!", returnUrl, returnTitle).toString());
 	}
 	
 	//sellAct 和 purchaseAct都用到这个函数，而且都差不多
@@ -314,6 +321,21 @@ public class CirAct {
 		return "pages/cir/cir_list";
 	}
 
+	protected String getUrlPara(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage){		
+		StringBuilder sb = new StringBuilder();
+		if(StringUtils.isEmpty(searchName) == false)
+			sb.append("&searchName="+searchName);
+		if(StringUtils.isEmpty(searchRecordName) == false)
+			sb.append("&searchRecordName="+searchRecordName);
+		if(searchStatus != null)
+			sb.append("&searchStatus="+searchStatus);
+		if(pageNum != null)
+			sb.append("&pageNum="+pageNum);
+		if(numPerPage != null)
+			sb.append("&numPerPage="+numPerPage);
+		return sb.toString();
+	}
+	
 	@Autowired
 	protected CirDao cirDao;
 	
