@@ -28,7 +28,11 @@ $("#saveButton").click(function(){
 
 $("#approvalButton").click(function(){
 	$("#statusInput").val("1");
-	$("#cirForm").submit();
+	alertMsg.confirm("您是否确定审核?", {
+		okCall: function(){
+			$("#cirForm").submit();
+		}
+	});
 });
 
 function calSum(numInput){
@@ -66,6 +70,13 @@ function calFactor(numInput){
 <div class="pageContent">
 	<form id="cirForm" method="post" action="o_${cirType}_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div id="formContent" class="pageFormContent" layoutH="56">
+		
+			<input type="hidden" name="pageNum" value="${pageNum!}" />
+			<input type="hidden" name="numPerPage" value="${numPerPage!}" />
+			<input type="hidden" name="searchName" value="${searchName!}"/>
+			<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
+			<input type="hidden" name="searchStatus" value="${searchStatus!}" />
+		
 			<input id="statusInput" type="hidden" name="status" value="${cir.status}"/>
 			<p>
 				<label><@s.m "global.createTime"/>:</label>
@@ -134,6 +145,7 @@ function calFactor(numInput){
 							<#if cirType == 'sellOut' || cirType == 'purchaseIn'>
 								<th type="text" name="flows[#index#].record.orderSerial" size="24" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.order.serial"/></th>
 								<th type="hidden" name="flows[#index#].record.id" style="display:none"></th>
+								<th type="hidden" name="flows[#index#].surface.id" style="display:none"></th>
 								<th type="hidden" name="flows[#index#].defaultSurfaceId" style="display:none"></th>
 							</#if>
 							<th type="text" name="flows[#index#].numPerBox" size="4" fieldClass="number" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
@@ -178,6 +190,7 @@ function calFactor(numInput){
 								<td>
 								<input type="text" name="flows[${count}].record.orderSerial" value="${(flow.record.ord.info)!}" size="24" class="textInput" readonly>
 								<input type="hidden" name="flows[${count}].record.id" value="${(flow.record.id)!}">
+								<input type="hidden" name="flows[${count}].surface.id" value="${(flow.surface.id)!}">
 								<input type="hidden" name="flows[${count}].defaultSurfaceId" value="${(flow.defaultSurface.id)!}">
 								</td>
 							</#if>
@@ -207,10 +220,11 @@ function calFactor(numInput){
 		</div>
 		<div class="formBar">
 			<ul>
+				<#assign listPara = "cirId=${cir.id!}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pageNum!}&numPerPage=${numPerPage!}" />
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
-				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${cirType}_cancelApproval.do?cirId=${cir.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
-				<li><div class="button"><div class="buttonContent"><a href="v_${cirType}_list.do" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${cirType}_cancelApproval.do?${listPara!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a href="v_${cirType}_list.do?${listPara!}" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>
 	</form>

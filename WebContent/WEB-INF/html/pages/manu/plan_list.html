@@ -8,7 +8,7 @@ $(function(){
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 	<input type="hidden" name="searchName" value="${searchName!}"/>
-	<input type="hidden" name="searchProductName" value="${searchProductName!}"/>
+	<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
 	<input type="hidden" name="searchStatus" value="${searchStatus!}" />
 </form>
 
@@ -22,7 +22,7 @@ $(function(){
 			</li>
 			<li>
 				<label><@s.m "product.serialOrName"/>：</label>
-				<input type="text" name="searchProductName" value="${searchProductName!}"/>
+				<input type="text" name="searchRecordName" value="${searchRecordName!}"/>
 			</li>
 			<li>
 			<label><@s.m "plan.status"/>：</label>
@@ -78,8 +78,9 @@ $(function(){
 				<td>${(plan.createTime?string('yyyy-MM-dd'))!}</td>
 				<td<#if plan.status==0> style="color:red"</#if>><@s.m "plan.status.${plan.status}"/></td>
 				<td>
-					<@berp_perm url="/v_plan"><a title="<@s.m 'plan.view'/>" target="navTab" rel="main" href="v_plan_view.do?planId=${plan.id}"><@s.m "global.view"/></a></@berp_perm>
-					<@berp_perm url="/o_plan"><a title="<@s.m 'plan.edit'/>" target="navTab" rel="main" href="v_plan_edit.do?planId=${plan.id}"><@s.m "global.edit"/></a>
+				<#assign listPara = "planId=${plan.id}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}" />
+					<@berp_perm url="/v_plan"><a title="<@s.m 'plan.view'/>" target="navTab" rel="main" href="v_plan_view.do?${listPara}"><@s.m "global.view"/></a></@berp_perm>
+					<@berp_perm url="/o_plan"><a title="<@s.m 'plan.edit'/>" target="navTab" rel="main" href="v_plan_edit.do?${listPara}"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_plan_delete.do?planId=${plan.id}"><@s.m "global.delete"/></a></@berp_perm>
 				</td>
 			</tr>

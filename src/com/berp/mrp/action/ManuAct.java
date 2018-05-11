@@ -34,6 +34,7 @@ import com.berp.mrp.entity.Process;
 import com.berp.mrp.entity.ProcessStep;
 import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.mrp.entity.Step;
+import com.berp.mrp.web.PageListPara;
 import com.berp.core.dao.UserDao;
 import com.berp.core.entity.Category;
 import com.berp.core.entity.User;
@@ -48,14 +49,14 @@ import com.berp.framework.web.ResponseUtils;
 public class ManuAct {
 
 	@RequestMapping("/v_plan_list.do")
-	public String planList(Integer pageNum, Integer numPerPage, String searchName, String searchProductName, Integer searchStatus, HttpServletRequest request, ModelMap model) {
+	public String planList(Integer pageNum, Integer numPerPage, String searchName, String searchRecordName, Integer searchStatus, HttpServletRequest request, ModelMap model) {
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
 		
-		Pagination pagination = planDao.getPage(searchName, searchProductName, searchStatus, pageNum, numPerPage);
+		Pagination pagination = planDao.getPage(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
-		model.addAttribute("searchProductName", searchProductName);
+		model.addAttribute("searchRecordName", searchRecordName);
 		model.addAttribute("searchStatus", searchStatus);
 		return "pages/manu/plan_list";
 	}
@@ -115,7 +116,11 @@ public class ManuAct {
 	}
 
 	@RequestMapping("/v_plan_view.do")
-	public String planView(Integer planId, HttpServletRequest request, ModelMap model) {
+	public String planView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer planId, HttpServletRequest request, ModelMap model) {
+		
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		listPara.addToModel(model);
 		
 		model.addAttribute("openMode", "view");
 		
@@ -125,7 +130,12 @@ public class ManuAct {
 	}
 	
 	@RequestMapping("/v_plan_edit.do")
-	public String planEdit(Integer planId, HttpServletRequest request, ModelMap model) {
+	public String planEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer planId, HttpServletRequest request, ModelMap model) {
+		
+		//一种是 return html，可以用model.add，一种是return redirect，参数只能放在url里
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		listPara.addToModel(model);
 		
 		model.addAttribute("openMode", "edit");
 		
@@ -136,7 +146,7 @@ public class ManuAct {
 	}
 	
 	@RequestMapping("/o_plan_save.do")
-	public void planSave(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void planSave(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(plan.getSteps()==null || plan.getSteps().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("工艺流程不能为空").toString());
 			return;
@@ -147,11 +157,11 @@ public class ManuAct {
 		}
 		plan = planDao.save(plan);
 
-		reload(response, plan.getId());
+		reload(response, plan.getStatus() == 0?"保存成功":"审核成功", plan.getId(), listPara);
 	}
 	
 	@RequestMapping("/o_plan_update.do")
-	public void planUpdate(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void planUpdate(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(plan.getSteps()==null || plan.getSteps().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("工艺流程不能为空").toString());
 			return;
@@ -162,12 +172,13 @@ public class ManuAct {
 		}
 		planDao.update(plan);
 
-		reload(response, plan.getId());
+		reload(response, plan.getStatus() == 0?"保存成功":"审核成功", plan.getId(), listPara);
 	}
 	
 	
 	@RequestMapping("/o_plan_cancelApproval.do")
-	public void planCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void planCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
 			if(plan.getStatus() == Plan.Status.approval.ordinal())
 				planDao.cancelBasic(plan.getId());
@@ -175,7 +186,9 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		reload(response, "弃核成功", plan.getId(), listPara);
+		//ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
 	}
 	
 	@RequestMapping("/o_plan_delete.do")
@@ -196,7 +209,7 @@ public class ManuAct {
 	
 	//material update
 	@RequestMapping("/o_plan_material_update.do")
-	public void materialUpdate(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
+	public void materialUpdate(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
 		if(plan.getMaterialFlows()==null || plan.getMaterialFlows().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("下料明细不能为空").toString());
 			return;
@@ -215,11 +228,11 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		reload(response, plan.getId());
+		reload(response, "保存成功", plan.getId(), listPara);
 	}
 	
 	@RequestMapping("/o_plan_material_approval.do")
-	public void materialApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
+	public void materialApproval(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
 		if(plan.getMaterialFlows()==null || plan.getMaterialFlows().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("下料明细不能为空").toString());
 			return;
@@ -240,11 +253,11 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		reload(response, plan.getId());
+		reload(response, "审核成功", plan.getId(), listPara);
 	}
 	
 	@RequestMapping("/o_plan_material_cancel_approval.do")
-	public void planMaterialCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void planMaterialCancelApproval(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
 			if(plan.getStatus() == Plan.Status.materialFinish.ordinal() || plan.getStatus() == Plan.Status.outside.ordinal())
 				planDao.cancelPlanMaterial(plan.getId());
@@ -252,20 +265,35 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
+		
+		reload(response, "弃核成功", plan.getId(), listPara);
 	}
 	
 	//step update
 	@RequestMapping("/o_plan_step_update.do")
-	public void stepUpdate(Plan plan, Integer stepNo, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
+	public void stepUpdate(PageListPara listPara, Plan plan, Integer stepNo, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
 		
 		planDao.updateStep(plan, stepNo);
-		reload(response, plan.getId());
+		reload(response, "保存成功", plan.getId(), listPara);
+	}
+
+	@RequestMapping("/o_plan_step_cancel_approval.do")
+	public void planStepCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer stepId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		try{
+			Plan plan = planDao.cancelPlanStep(stepId);
+			PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+			reload(response, "弃核成功", plan.getId(), listPara);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
 	}
 
 	//package
 	@RequestMapping("/o_plan_in_update.do")
-	public void planInUpdate(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
+	public void planInUpdate(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
 		if(plan.getPackageFlows()==null || plan.getPackageFlows().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("入库明细不能为空").toString());
 			return;
@@ -285,24 +313,11 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		
-		reload(response, plan.getId());
-	}
-	
-	@RequestMapping("/o_plan_step_cancel_approval.do")
-	public void planStepCancelApproval(Integer stepId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		
-		try{
-			Plan plan = planDao.cancelPlanStep(stepId);
-			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
-		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
-			return;
-		}
+		reload(response, "保存成功", plan.getId(), listPara);
 	}
 	
 	@RequestMapping("/o_plan_in_approval.do")
-	public void planInApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
+	public void planInApproval(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		
 		if(plan.getPackageFlows()==null || plan.getPackageFlows().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("入库明细不能为空").toString());
 			return;
@@ -330,11 +345,11 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		reload(response, plan.getId());
+		reload(response, "审核成功", plan.getId(), listPara);
 	}
 
 	@RequestMapping("/o_plan_in_cancel_approval.do")
-	public void planInCancelApproval(Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void planInCancelApproval(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
 			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
 				planDao.cancelPlanIn(plan.getId());
@@ -342,11 +357,11 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
+		reload(response, "弃核成功", plan.getId(), listPara);	
 	}
 	
-	private void reload(HttpServletResponse response, Integer id){
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_plan_edit.do?planId="+id, "修改生产任务").toString());
+	private void reload(HttpServletResponse response, String text, Integer id, PageListPara para){
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson(text, String.format("v_plan_edit.do?planId=%d&%s", id, para.getUrlPara()), "修改生产任务").toString());
 	}
 	
 	@Autowired

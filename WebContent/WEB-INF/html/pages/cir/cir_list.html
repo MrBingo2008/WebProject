@@ -85,8 +85,9 @@ $(function(){
 				<td <#if cir.status==0> style="color:red"</#if>><@s.m "cir.status.${cir.status}"/></td>
 				<td>${(cir.createUser.name)!}</td>
 				<td>
-					<@berp_perm url="/v_${cirType}"><a title="<@s.m '${cirType}.view'/>" target="navTab" rel="main" href="v_${cirType}_view.do?cirId=${cir.id}"><@s.m "global.view"/></a></@berp_perm>
-					<@berp_perm url="/o_${cirType}"><a title="<@s.m '${cirType}.edit'/>" target="navTab" rel="main" href="v_${cirType}_edit.do?cirId=${cir.id}"><@s.m "global.edit"/></a>
+					<#assign listPara = "cirId=${cir.id}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}" />
+					<@berp_perm url="/v_${cirType}"><a title="<@s.m '${cirType}.view'/>" target="navTab" rel="main" href="v_${cirType}_view.do?${listPara!}"><@s.m "global.view"/></a></@berp_perm>
+					<@berp_perm url="/o_${cirType}"><a title="<@s.m '${cirType}.edit'/>" target="navTab" rel="main" href="v_${cirType}_edit.do?${listPara!}"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${cirType}_delete.do?cirId=${cir.id}"><@s.m "global.delete"/></a></@berp_perm>
 				</td>
 			</tr>

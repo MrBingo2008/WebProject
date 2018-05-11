@@ -83,21 +83,26 @@ $(function(){
 	$("form").attr("action", actionUrl);
 	$("#saveButton").click(function(){
 		$("#statusInput").val("0");
-		$("#pagerForm").submit();
+		$("form").submit();
 	});
 	$("#approvalButton").click(function(){
 		$("#statusInput").val("1");
-		$("#pagerForm").submit();
+		$("form").submit();
 	});
 	$("#stepApproval").click(function(){
 		$("#stepStatus").val("1");
-		$("#pagerForm").submit();
+		$("form").submit();
 	});
 	//因为可能要传status和packageFlows、steps等信息，所以改成form submit，而不用a link
 	$("#cancelApprovalButton").click(function(){
 		//修改action后应该不需要再改回去，因为弃核后会重新加载
 		$("form").attr("action", "o_plan_cancelApproval.do");
-		$("#pagerForm").submit();
+		
+		alertMsg.confirm("您是否确定审核?", {
+			okCall: function(){
+				$("form").submit();
+			}
+		});
 	});
 	
 	$("#orderInput").change(function(){
@@ -139,8 +144,15 @@ function calFactor(numInput){
 }
 </script>
 <div class="pageContent">
-	<form id="pagerForm" method="post" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
-
+	<form method="post" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+				
+		<input type="hidden" name="pageNum" value="${pageNum!}" />
+		<input type="hidden" name="numPerPage" value="${numPerPage!}" />
+		<input type="hidden" name="searchName" value="${searchName!}"/>
+		<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
+		<input type="hidden" name="searchStatus" value="${searchStatus!}" />
+		
+		<#assign listPara = "searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pageNum!}&numPerPage=${numPerPage!}" />
 		<input id="statusInput" type="hidden" name="status" value='${(plan.status)!}'/>
 		<div class="pageFormContent" layoutH="56">
 			<div id="basicInfo">
@@ -318,7 +330,7 @@ function calFactor(numInput){
 								<td>
 									<!-- 如果是plan.status大于等于5（入库完成）就不需要了 -->
 									<#if plan.status lt 5 && step.isLastApply && step.step.type == 0>
-									<div class="button"><div class="buttonContent"><a href="o_plan_step_cancel_approval.do?stepId=${step.id}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>"><button type="button"><@s.m "global.cancelApproval"/></button></a></div></div>
+									<div class="button"><div class="buttonContent"><a href="o_plan_step_cancel_approval.do?stepId=${step.id}&${listPara!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>"><button type="button"><@s.m "global.cancelApproval"/></button></a></div></div>
 									</#if>
 								</td>
 							<#elseif plan.status gt 1 && step.status == 0 && hasButton == 0>
@@ -418,8 +430,8 @@ function calFactor(numInput){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
-				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_plan_cancelApproval.do?planId=${plan.id!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></a></div></div></li>
-				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_plan_cancelApproval.do?planId=${plan.id!}&${listPara}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></a></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do?${listPara}" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>
 	</form>

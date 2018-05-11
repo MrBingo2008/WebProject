@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.entity.Order;
+import com.berp.mrp.web.PageListPara;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
 import com.berp.mrp.entity.Cir;
@@ -36,25 +37,29 @@ public class PurchaseAct extends CirAct {
 	}
 
 	@RequestMapping("/v_purchase_order_view.do")
-	public String orderView(Integer orderId, HttpServletRequest request, ModelMap model) {
-		return this.orderView(orderId, "purchase", request, model);
+	public String orderView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer orderId, HttpServletRequest request, ModelMap model) {
+		return this.orderView(searchName, searchRecordName, searchStatus, pageNum, numPerPage,orderId, "purchase", request, model);
 	}
 	
 	@RequestMapping("/v_purchase_order_edit.do")
-	public String orderEdit(Integer orderId, HttpServletRequest request, ModelMap model) {
-		return this.orderEdit(orderId, "purchase", request, model);
+	public String orderEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer orderId, HttpServletRequest request, ModelMap model) {
+		return this.orderEdit(searchName, searchRecordName, searchStatus, pageNum, numPerPage,orderId, "purchase", request, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_update.do")
-	public void orderUpdate(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void orderUpdate(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(order.getSellOrder().getId() == null)
 			order.setSellOrder(null);
-		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
+		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0"+ this.getUrlPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage), "查询采购订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_cancelApproval.do")
-	public void orderCancelApproval(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderCancelApprovalBase(orderId, "v_purchase_order_edit.do?orderId="+orderId, "编辑采购订单", request, response, model);
+	public void orderCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		this.orderCancelApprovalBase(orderId, "v_purchase_order_edit.do?orderId="+orderId+ this.getUrlPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage), "编辑采购订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_delete.do")
@@ -74,40 +79,35 @@ public class PurchaseAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_purchaseIn_view.do")
-	public String purchaseInView(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirView(cirId, "purchaseIn", 1, request, model);
+	public String purchaseInView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer cirId, HttpServletRequest request, ModelMap model) {
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		return this.cirView(listPara, cirId, "purchaseIn", 1, request, model);
 	}
 	
 	@RequestMapping("/v_purchaseIn_edit.do")
-	public String purchaseInEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirEdit(cirId, "purchaseIn", 1, request, model);
+	public String purchaseInEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer cirId, HttpServletRequest request, ModelMap model) {
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		return this.cirEdit(listPara, cirId, "purchaseIn", 1, request, model);
 	}
 	
 	@RequestMapping("/o_purchaseIn_update.do")
-	public void purchaseInUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.cirUpdate(cir, Cir.CirType.purchaseIn.ordinal(), "v_purchaseIn_list.do", "查询采购到货单", request, response, model);
+	public void purchaseInUpdate(PageListPara listPara, Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		this.cirUpdate(cir, Cir.CirType.purchaseIn.ordinal(), "v_purchaseIn_list.do?"+listPara.getUrlPara(), "查询采购到货单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchaseIn_cancelApproval.do")
-	public void purchaseInCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void purchaseInCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
 		try{
 			cirDao.purchaseInCancelApproval(cirId);
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseIn_edit.do?cirId="+cirId, "编辑采购到货单").toString());
-	}
-	
-	@RequestMapping("/o_purchaseBack_cancelApproval.do")
-	public void purchaseBackCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		try{
-			cirDao.purchaseBackCancelApproval(cirId);
-		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
-			return;
-		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_purchaseBack_edit.do?cirId="+cirId, "编辑采购退货单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_purchaseIn_edit.do?cirId=%d&%s",cirId, listPara.getUrlPara()), "编辑采购到货单").toString());
 	}
 	
 	@RequestMapping("/v_purchaseIn_list.do")
@@ -121,6 +121,12 @@ public class PurchaseAct extends CirAct {
 	}
 	
 	//purchase back
+	
+	@RequestMapping("/v_purchaseBack_list.do")
+	public String purchaseBackList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchaseBack", Cir.CirType.purchaseBack.ordinal(), request, model);
+	}
+	
 	@RequestMapping("/v_purchaseBack_add.do")
 	public String purchaseBackAdd(HttpServletRequest request, ModelMap model) {
 		return this.cirAdd("purchaseBack", /*"purchase",*/ 2, "CGTH", request, model);
@@ -132,23 +138,35 @@ public class PurchaseAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_purchaseBack_view.do")
-	public String purchaseBackView(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirView(cirId, "purchaseBack", 2, request, model);
+	public String purchaseBackView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer cirId, HttpServletRequest request, ModelMap model) {
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		return this.cirView(listPara, cirId, "purchaseBack", 2, request, model);
 	}
 	
 	@RequestMapping("/v_purchaseBack_edit.do")
-	public String purchaseBackEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
-		return this.cirEdit(cirId, "purchaseBack", 2, request, model);
+	public String purchaseBackEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer cirId, HttpServletRequest request, ModelMap model) {
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		return this.cirEdit(listPara, cirId, "purchaseBack", 2, request, model);
 	}
 	
 	@RequestMapping("/o_purchaseBack_update.do")
-	public void purchaseBackUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.cirUpdate(cir, Cir.CirType.purchaseBack.ordinal(), "v_purchaseBack_list.do", "查询采购退货单", request, response, model);
+	public void purchaseBackUpdate(PageListPara listPara, Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		this.cirUpdate(cir, Cir.CirType.purchaseBack.ordinal(), "v_purchaseBack_list.do?"+listPara.getUrlPara(), "查询采购退货单", request, response, model);
 	}
 	
-	@RequestMapping("/v_purchaseBack_list.do")
-	public String purchaseBackList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchaseBack", Cir.CirType.purchaseBack.ordinal(), request, model);
+	@RequestMapping("/o_purchaseBack_cancelApproval.do")
+	public void purchaseBackCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		try{
+			cirDao.purchaseBackCancelApproval(cirId);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_purchaseBack_edit.do?cirId=%d&%s",cirId, listPara.getUrlPara()), "编辑采购退货单").toString());
 	}
 	
 	@RequestMapping("/o_purchaseBack_delete.do")

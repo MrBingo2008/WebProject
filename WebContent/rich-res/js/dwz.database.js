@@ -322,7 +322,7 @@
 						var saveAction = $table.attr('saveAction');
 						$saveBut.click(function(){
 							//这里写死了好像不大好
-							$("#pagerForm").attr("action", saveAction);
+							$("form").attr("action", saveAction);
 							//$("#planForm").submit();
 						});
 					}
@@ -332,7 +332,7 @@
 						var $applyBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +butDisabledTxt+ '>'+applyButTxt+'</button></div></div>').insertBefore($table).find("button");
 						var applyAction = $table.attr('applyAction');
 						$applyBut.click(function(){
-							$("#pagerForm").attr("action", applyAction);	
+							$("form").attr("action", applyAction);	
 						});
 					}
 				}
@@ -346,7 +346,7 @@
 						var $cancelApplyBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +cancelButtonDisabledTxt+ '>'+cancelApplyButTxt+'</button></div></div>').insertBefore($table).find("button");
 						var cancelApplyAction = $table.attr('cancelApplyAction');
 						$cancelApplyBut.click(function(){
-							$("#pagerForm").attr("action", cancelApplyAction);	
+							$("form").attr("action", cancelApplyAction);	
 						});
 					}
 				}

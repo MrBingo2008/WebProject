@@ -90,7 +90,7 @@ $(function(){
 				<#if '${orderType}'=='sell' && type == 0>
 				<td>
 					<#list order.purchaseOrders as purchaseOrder>
-					<#if purchaseOrder.status == 1>
+					<#if purchaseOrder.status gt 0>
 						<#list purchaseOrder.records as pRecord>
 						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${pRecord.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
 						</#list>
@@ -117,7 +117,7 @@ $(function(){
 					<#assign urlPara = "orderId=${order.id}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}" />
 					<a title="<@s.m '${orderType}.order.view'/>" target="navTab" href="v_${orderType}_order_view.do?orderId=${order.id}" rel="main"><@s.m "global.view"/></a>
 					<@berp_perm url="/o_${orderType}_order"><a title="<@s.m '${orderType}.order.edit'/>" target="navTab" href="v_${orderType}_order_edit.do?${urlPara!}" rel="main"><@s.m "global.edit"/></a>
-					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${orderType}_order_delete.do?${urlPara!}" rel="main"><@s.m "global.delete"/></a></@berp_perm>
+					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${orderType}_order_delete.do?orderId=${order.id}" rel="main"><@s.m "global.delete"/></a></@berp_perm>
 				</td>
 				</#if>
 			</tr>

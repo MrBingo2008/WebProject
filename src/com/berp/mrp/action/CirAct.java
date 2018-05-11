@@ -20,6 +20,7 @@ import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
+import com.berp.mrp.web.PageListPara;
 import com.berp.core.entity.User;
 import com.berp.framework.page.Pagination;
 import com.berp.framework.util.DateUtils;
@@ -35,6 +36,7 @@ public class CirAct {
 		model.addAttribute("orderType", orderType);
 		Pagination pagination = null;
 		
+		//type用于区分是否完成的订单
 		if(type == null)
 			type = 0;
 		//2018-4-22：假设type>0都是选择未完成的订单
@@ -88,14 +90,21 @@ public class CirAct {
 		try{
 			orderDao.save(order);
 		}catch(Exception ex){
-			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败"+ex.getMessage()).toString());
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(order.getStatus()==0?"保存失败!":"审核失败!"+ex.getMessage()).toString());
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson(order.getStatus()==0?"保存成功!":"审核成功!", returnUrl, returnTitle).toString());
 	}
 
-	public String orderView(Integer orderId, String orderType, HttpServletRequest request, ModelMap model) {
+	public String orderView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer orderId, String orderType, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("orderType", orderType);
 		model.addAttribute("openMode", "view");
+		
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("numPerPage", numPerPage);
+		model.addAttribute("searchName", searchName);
+		model.addAttribute("searchRecordName", searchRecordName);
+		model.addAttribute("searchStatus", searchStatus);
 		
 		model.addAttribute("order", orderDao.findById(orderId));
 		return "pages/order/order_detail";
@@ -209,23 +218,27 @@ public class CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson(cir.getStatus()==0?"保存成功!":"审核成功!", returnUrl, returnTitle).toString());
 	}
 	
-	public String cirView(Integer cirId, String cirType, Integer direction, HttpServletRequest request, ModelMap model) {
+	public String cirView(PageListPara listPara, Integer cirId, String cirType, Integer direction, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", cirType);
 		model.addAttribute("openMode", "view");
 		model.addAttribute("direction", direction);
+		
+		listPara.addToModel(model);
 		
 		Cir cir = cirDao.findById(cirId);	
 		model.addAttribute("cir", cir);
 		return "pages/cir/cir_flow_detail";
 	}
 	
-	public String cirEdit(Integer cirId, String cirType, Integer direction, HttpServletRequest request, ModelMap model) {
+	public String cirEdit(PageListPara listPara, Integer cirId, String cirType, Integer direction, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", cirType);
 		model.addAttribute("openMode", "edit");
 		model.addAttribute("direction", direction);
+		
+		listPara.addToModel(model);
 		
 		Cir cir = cirDao.findById(cirId);	
 		model.addAttribute("cir", cir);
@@ -250,7 +263,7 @@ public class CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", returnUrl, returnTitle).toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson(cir.getStatus()==0?"保存成功!":"审核成功!", returnUrl, returnTitle).toString());
 		
 	}
 	

@@ -1,10 +1,11 @@
+<!-- 这个用于类别的选择 -->
 <script type="text/javascript">
 
 function getTree(data){   
     var tree = "";  
     tree += "<li><a href='javascript:' onclick=\"$.bringBack({id:'"+ data.id +"', name:'"+ data.name +"'})\">"+data.name+"</a>";   
     if(data.hasOwnProperty("children")){
-    	tree += "<ul>";
+    	tree += "<ul class='collapse'>";
     	var childrenVal = eval(data.children);
     	for(var i=0; i<childrenVal.length; i++){
     		tree += getTree(childrenVal[i]);
@@ -17,12 +18,16 @@ function getTree(data){
 
 $(function(){
 	var data = ${tree};
-	$("#tree").html(getTree(data));  
+	$("#tree").html(getTree(data));
+	if(data.id==3){
+		$("#tree").addClass("collapse");
+		setTimeout(function() {$("#tree div:eq(1)").trigger("click");}, 100);
+	}
 });
 </script>
 <div class="pageContent">
 	<div class="pageFormContent" layoutH="58">
-		<ul id="tree" class="tree expand">
+		<ul id="tree" class="tree">
 		</ul>
 	</div>
 	

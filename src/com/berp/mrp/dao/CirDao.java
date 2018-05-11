@@ -19,6 +19,7 @@ import com.berp.mrp.entity.Plan;
 import com.berp.mrp.entity.PlanStep;
 import com.berp.mrp.entity.RawBatch;
 import com.berp.mrp.entity.RawBatchFlow;
+import com.berp.mrp.entity.Step;
 import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
@@ -96,7 +97,10 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			//这里不能重新查询flow，因为如果是update cir的时候，flows会重新建，如果重新查的话，在内存里就会有相同Id，但是不一样的flow
 			//所以专门在flow设一个defaultSurfaceId，从页面那里接收过来
 			//BatchFlow f = flowDao.findById(flow.getId());
-			if(record.getSurface()!=null && (flow.getDefaultSurfaceId() ==null || !record.getSurface().getId().equals(flow.getDefaultSurfaceId())) ){
+			Step recordSurface  =record.getSurface();
+			Integer recordSurfaceId = recordSurface.getId();
+			Integer flowSurfaceId = flow.getDefaultSurfaceId();
+			if(recordSurface!=null && (flowSurfaceId ==null || !recordSurfaceId.equals(flowSurfaceId)) ){
 				throw new Exception(String.format("'%s'订单的%s表面处理为%s，与该批次的产品不一致。", ord.getSerial(), record.getMaterial().getName(), record.getSurface().getName()));
 			}
 			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getNumber());
@@ -115,7 +119,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			//要再测测这两个函数的异常情况
 			recordDao.cancelFinishNumber(flow);
 			flowDao.updateLeftNumber(flow.getParent().getId(), -flow.getNumber());
-			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, -flow.getNumber());
 			
 		}
 	}
@@ -193,7 +197,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			flow.setStatus(0);
 			//要再测测这两个函数的异常情况
 			recordDao.cancelFinishNumber(flow);
-			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), - flow.getDirect() * flow.getNumber(), null);
+			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getNumber(), - flow.getNumber(), null);
 			
 		}
 	}
