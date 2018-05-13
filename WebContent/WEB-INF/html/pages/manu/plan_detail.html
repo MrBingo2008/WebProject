@@ -204,7 +204,7 @@ function calFactor(numInput){
 				<input type="text" name="record.number" value="${(plan.record.number)!}" size ="30" readonly/>			
 			</p>
 			<p>
-				<label><@s.m "material.manuNumber"/>:</label>
+				<label><@s.m "material.planNumber"/>:</label>
 				<input type="text" name="number" value="${plan.number!}" size ="30" class="positiveNumber required"/>
 			</p>
 			</div>
@@ -317,7 +317,7 @@ function calFactor(numInput){
 								<!-- td><input type="text" name="steps[${count}].workshop" value="" size="12" class="number textInput"></td-->
 								<td><a href="javascript:void(0)" class="btnDel ">删除</a></td>
 							<#else>
-								<td>${step.step.name!}</td>
+								<td>${(step.step.name)!}</td>
 								<td><@s.m "step.type.${step.step.type}"/></td>
 								<td><#if step.step.surface>是<#else>否</#if></td>
 							</#if>
@@ -430,7 +430,7 @@ function calFactor(numInput){
 			<ul>
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
-				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_plan_cancelApproval.do?planId=${plan.id!}&${listPara}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></a></div></div></li>
+				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do?${listPara}" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

@@ -75,6 +75,9 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		Plan plan = this.findById(planId);
 		plan.setFlows(new ArrayList<BatchFlow>());
 		plan.setStatus(Plan.Status.edit.ordinal());
+		
+		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
+		getSession().createQuery(hql).executeUpdate();
 	}
 	
 	public Plan updateMaterial(Plan bean) throws Exception{
@@ -203,16 +206,21 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		if(preStep!=null){
 			plan.getRawBatchFlow().setNumber(preStep.getNumber());
 			plan.getRawBatchFlow().setLeftNumber(preStep.getNumber());
+			plan.getRawBatchFlow().setArriveNumber(0.00);
 		}else
 		{
 			plan.getRawBatchFlow().setNumber(plan.getNumber());
 			plan.getRawBatchFlow().setLeftNumber(plan.getNumber());
+			plan.getRawBatchFlow().setArriveNumber(0.00);
 		}
 		//先要删除package flows
 		//这个地方如果先setFlows(null)，再add(flowDao.find(materialFlowType, planId))，这样是不行的，set null会反映到持久层，导致所有materialFlows和planInFlows都清空，使用flowDao查找出来都是空的
 		plan.setFlows(plan.getMaterialFlows());
 		
 		plan.setStatus(Plan.Status.materialFinish.ordinal());
+		
+		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
+		getSession().createQuery(hql).executeUpdate();
 		
 		return plan;
 	}
@@ -222,16 +230,32 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		bean.setFlows(new ArrayList<BatchFlow>());
 		bean.getFlows().addAll(flowDao.getList(null, null, null, null, bean.getId(), BatchFlow.Type.planMaterial.ordinal()));
 		List<BatchFlow> flows = bean.getPackageFlows();
-		for(BatchFlow flow:flows){
-			//status已经在Act里设置好
-			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, null);
+		
+		Double manuNum = 0.00;
+		
+		if(bean.getStatus() == Plan.Status.packageFinish.ordinal()){
+			for(BatchFlow flow:flows){
+				manuNum += flow.getNumber();
+				//status已经在Act里设置好
+				materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), null, null);
+			}
+			
+			//这个地方的plan无法获取rawBatchFlow，所以用这个
+			RawBatchFlow rawBatchFlow = rawFlowDao.findByPlan(bean);
+			rawBatchFlow.setNumber(manuNum);
+			rawBatchFlow.setLeftNumber(manuNum);
+			rawBatchFlow.setArriveNumber(0.00);
 		}
+		
+		
 		bean.getFlows().addAll(flows);
 		
 		Updater<Plan> updater = new Updater<Plan>(bean);
 		updater.setUpdateMode(Updater.UpdateMode.MIN);
 		updater.include("flows");
 		updater.include("status");
+		//updater.include("rawBatchFlow");
+		
 		bean = updateByUpdater(updater);
 		
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
@@ -253,6 +277,13 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
 			flow.setStatus(0);
 		}
+		
+		//重设raw batch flow
+		PlanStep lastStep =plan.getSteps().get(plan.getSteps().size()-1);
+		plan.getRawBatchFlow().setNumber(lastStep.getNumber());
+		plan.getRawBatchFlow().setLeftNumber(lastStep.getNumber());
+		plan.getRawBatchFlow().setArriveNumber(0.00);
+		
 		plan.setStatus(Plan.Status.manuFinish.ordinal());
 	}
 

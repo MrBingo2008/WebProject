@@ -116,7 +116,7 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		
 		if(StringUtils.isNotEmpty(name))
 		{
-			f.append(" and (bean.name like :name or bean.serial like :name or bean.customerSerial like :name) ");
+			f.append(" and (bean.name like :name or bean.serial like :name or bean.customerSerial like :name or bean.spec like :name) ");
 			f.setParam("name", "%" + name + "%");
 		}
 		

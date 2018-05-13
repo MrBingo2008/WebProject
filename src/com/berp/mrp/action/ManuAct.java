@@ -80,7 +80,12 @@ public class ManuAct {
 		if(surface!=null){
 			ProcessStep ps = new ProcessStep();
 			ps.setStep(surface);
-			if(process.getSteps()!=null && process.getSteps().size()>0){
+			
+			//2018-5-12，如果没有生产流程，但是订单有指定的表面处理工序，此时steps就是null的
+			if(process.getSteps()==null)
+				process.setSteps(new ArrayList<ProcessStep>());
+			
+			if(process.getSteps().size()>0){
 				int lastIndex = process.getSteps().size()-1;
 				ProcessStep lastStep = process.getSteps().get(lastIndex);
 				if(lastStep.getStep().getSurface() == true)
@@ -177,7 +182,7 @@ public class ManuAct {
 	
 	
 	@RequestMapping("/o_plan_cancelApproval.do")
-	public void planCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+	public void planCancelApproval(PageListPara listPara,
 			Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
 			if(plan.getStatus() == Plan.Status.approval.ordinal())
@@ -186,7 +191,6 @@ public class ManuAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
 		reload(response, "弃核成功", plan.getId(), listPara);
 		//ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", "v_plan_edit.do?planId="+plan.getId(), "修改生产任务").toString());
 	}

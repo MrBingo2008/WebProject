@@ -10,7 +10,7 @@ public class PageListPara {
 	public Integer pageNum;
 	public Integer numPerPage;
 	
-	public PageListPara(){
+	public PageListPara(){ 
 	}
 	
 	//必须要getter和setter才能作为参数

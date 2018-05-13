@@ -59,6 +59,7 @@ $(function(){
 				<th width="80"><@s.m "sell.order.company"/></th>
 				<th width="80"><@s.m "product.info"/></th>
 				<th width="80"><@s.m "sell.order.surface"/></th>
+				<th width="60"><@s.m "material.planNumber"/></th>
 				<th width="60"><@s.m "material.manuNumber"/></th>
 				<th width="80"><@s.m "global.createTime"/></th>
 				<th width="80"><@s.m "plan.status"/></th>
@@ -75,6 +76,7 @@ $(function(){
 				<td>${plan.material.info!}</td>
 				<td>${(plan.record.surface.name)!}</td>
 				<td>${plan.number!}</td>
+				<td>${(plan.rawBatchFlow.number)!}</td>
 				<td>${(plan.createTime?string('yyyy-MM-dd'))!}</td>
 				<td<#if plan.status==0> style="color:red"</#if>><@s.m "plan.status.${plan.status}"/></td>
 				<td>

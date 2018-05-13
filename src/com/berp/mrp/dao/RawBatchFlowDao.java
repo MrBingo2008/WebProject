@@ -34,6 +34,10 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		return entity;
 	}
 
+	public RawBatchFlow findByPlan(Plan plan) {
+		return findUniqueByProperty("plan", plan);
+	}
+	
 	public RawBatchFlow deleteById(Integer id) {
 		RawBatchFlow entity = get(id);
 		if (entity != null) {

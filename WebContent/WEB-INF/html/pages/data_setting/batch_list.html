@@ -15,14 +15,15 @@
 				</tr>
 			</thead>
 			<tbody>
-			<#list flows as flow>
+			<#list flows as flow> 
 				<tr target="sid_obj" rel="1">
 				    <td>${flow.id}</td>
 					<td>${flow.material.allSerial}</td>
 					<td>${flow.material.name!}</td>
 					<td>${flow.serial!}</td>
 					
-					<td>${(flow.defaultSurface.name)!}</td>
+					<!-- flow direction = -1是不记录surface的 -->
+					<td><#if flow.direct == 1>${(flow.defaultSurface.name)!}<#else>${(flow.parent.defaultSurface.name)!}</#if></td>
 					
 					<td><@s.m "batch.type.${flow.type}"/></td>
 					<#if type?? && type == "all"><td>${flow.number*flow.direct}</td><#else><td>${flow.leftNumber!}</td></#if>

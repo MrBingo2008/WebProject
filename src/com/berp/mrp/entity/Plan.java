@@ -22,6 +22,12 @@ public class Plan extends BaseBill {
 	
 	private List<Batch> batchs;
 	
+	//用来表示当前审核过的最近的实际生产数量
+	//material approval后，就生成，step approval后, step.number会更新到raw batch flow里
+	//plan in approval后，更新rawBatchFlow
+	//弃核：
+	//plan in cancel后 rawBatchFlow要设回step的值
+	//step cancel approval后，要设回到上一个step的number值，如果没有上一个step，则设回到plan number
 	private RawBatchFlow rawBatchFlow;
 
 	public static enum Status{edit, approval, materialFinish, outside, manuFinish, packageFinish};

@@ -57,13 +57,17 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		if(bean.getStatus() == 1)
 			this.updateQuatity(bean);
 		
+		this.clearUnusedFlows();
+		
+		return bean;
+	}
+	
+	private void clearUnusedFlows(){
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
 		
 		hql = "delete from RawBatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
-		
-		return bean;
 	}
 	
 	private void updateQuatity(Cir bean) throws Exception{
@@ -98,7 +102,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			//所以专门在flow设一个defaultSurfaceId，从页面那里接收过来
 			//BatchFlow f = flowDao.findById(flow.getId());
 			Step recordSurface  =record.getSurface();
-			Integer recordSurfaceId = recordSurface.getId();
+			Integer recordSurfaceId = recordSurface==null?null:recordSurface.getId();
 			Integer flowSurfaceId = flow.getDefaultSurfaceId();
 			if(recordSurface!=null && (flowSurfaceId ==null || !recordSurfaceId.equals(flowSurfaceId)) ){
 				throw new Exception(String.format("'%s'订单的%s表面处理为%s，与该批次的产品不一致。", ord.getSerial(), record.getMaterial().getName(), record.getSurface().getName()));
@@ -171,18 +175,6 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		}
 	}
 	
-	private void purchaseBackUpdate(Cir bean) throws Exception{
-		List<BatchFlow> flows = bean.getFlows();
-		for(BatchFlow flow: flows){
-			//setStatus在PurchaseAct里设置，但是弃核的话，是在cirDao里设置
-			//flow.setStatus(1);
-			Double number = flow.getNumber();
-			
-			flowDao.updateLeftNumber(flow.getParent().getId(), number);
-			materialDao.updateNumber(flow.getMaterial().getId(), -number, null, null);
-		}
-	}
-
 	public void purchaseInCancelApproval(Integer cirId) throws Exception{
 		Cir cir = findById(cirId);
 		
@@ -201,6 +193,19 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			
 		}
 	}
+	
+	private void purchaseBackUpdate(Cir bean) throws Exception{
+		List<BatchFlow> flows = bean.getFlows();
+		for(BatchFlow flow: flows){
+			//setStatus在PurchaseAct里设置，但是弃核的话，是在cirDao里设置
+			//flow.setStatus(1);
+			Double number = flow.getNumber();
+			
+			flowDao.updateLeftNumber(flow.getParent().getId(), number);
+			materialDao.updateNumber(flow.getMaterial().getId(), -number, null, null);
+		}
+	}
+
 	
 	//统一到一个函数
 	public void purchaseBackCancelApproval(Integer cirId) throws Exception{
@@ -256,6 +261,8 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			
 			Plan plan = parentFlow.getPlan();
 			PlanStep planStep = plan.getCurrentStep();
+			
+			//实时用step.number去更新raw batch flow
 			planStep.setNumber(parentFlow.getArriveNumber());
 			
 			if(parentFlow.getArriveNumber().equals(parentFlow.getNumber())){
@@ -305,12 +312,8 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			boolean isLastApply = currentStep.getIsLastApply();
 			PlanStep nextStep = plan.getNextStep(rawFlow.getPlanStep());
 			
-			//boolean next1 = plan.getCurrentStep() == null && plan.getStatus().equals(Plan.Status.manuFinish.ordinal());
-			//boolean next2 = plan.getCurrentStep() != null && plan.getCurrentStep().getStep().getType() == 0;
-			//boolean next3 = plan.getCurrentStep() != null && plan.getCurrentStep().getStep().getType() == 1 && plan.getRawBatchFlow().getArriveNumber() == 0;
-			
 			if(isCurrentStep || 
-					isLastApply && ( nextStep ==null || nextStep.getStep().getType() == 0 && nextStep.getStatus() == 0 || nextStep.getStep().getType() == 1 && nextStep.getStatus() ==0 && plan.getRawBatchFlow().getArriveNumber() == 0) ){
+					isLastApply && ( nextStep ==null || nextStep.getStep().getType() == 0 && nextStep.getStatus() == 0 || nextStep.getStep().getType() == 1 && nextStep.getStatus() ==0 && (nextStep.getRawFlows()==null || nextStep.getRawFlows().size() == 0) ) ){
 			
 				//删除plan in
 				plan.setFlows(plan.getMaterialFlows());
@@ -325,9 +328,10 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 				}
 				
 				//更新所关联的发货单和生产任务
-				RawBatchFlow parent = rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), -rawFlow.getNumber());
+				rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), -rawFlow.getNumber());
 				
 				//更新生产工序，不能在updateArriveNumber的函数里实现，因为他是个通用函数
+				//这个判断只是排除currentStep.getNumber =0的情况
 				if(plan.getRawBatchFlow().getNumber() > plan.getRawBatchFlow().getArriveNumber()){
 					rawFlow.getPlanStep().setStatus(0);
 					rawFlow.getPlanStep().setNumber(plan.getRawBatchFlow().getArriveNumber());
@@ -339,6 +343,10 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		}
 		
 		cir.setStatus(0);
+		
+		//不合理，需要改
+		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
+		getSession().createQuery(hql).executeUpdate();
 	}
 	
 	private void checkInUpdate(Cir bean) throws Exception{
