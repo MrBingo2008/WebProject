@@ -21,3 +21,9 @@ role:sellOut、purchaseIn、plan.manage等角色加了v_record
 
 2018-5-8：
 增加raw_batch_flow表的plan_step_id
+
+2015-5-11：
+获取光明数据库，修改数据
+
+2018-5-13：
+更新版本
