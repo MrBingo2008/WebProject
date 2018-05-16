@@ -69,7 +69,7 @@ $(function(){
 		<div class="formBar">
 			<ul>
 				<@berp_perm url="/v_material_add.do"><li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li></@berp_perm>
-				<li><div class="button"><div class="buttonContent"><a href="v_material.do?type=0" target="navTab" rel="main"><button type="button">取消</button></a></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a href="v_material.do?type=0&searchName=${searchName!}&parentId=${parentId!}&pageNum=${pageNum!}&numPerPage=${numPerPage!}" target="navTab" rel="main"><button type="button">取消</button></a></div></div></li>
 			</ul>
 		</div>
 	</form>

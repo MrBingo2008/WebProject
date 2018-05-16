@@ -115,7 +115,7 @@ public class MaterialAct {
 			material.setCompany(null);
 		
 		if(material.getSurface().getId() == null)
-			material.setSurface(null);
+			material.setSurface(null); 
 		
 		materialDao.update(material);
 		String url = String.format("v_material.do?type=0&searchName=%s&parentId=%d&pageNum=%d&numPerPage=%d", searchName, parentId, pageNum, numPerPage).toString();
