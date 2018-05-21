@@ -1824,7 +1824,7 @@ var ZYFILE = {
 					html += '<div id="uploadList_'+ file.index +'" class="upload_append_list">';
 					html += '	<div class="file_bar">';
 					html += '		<div style="padding:5px;">';
-					html += '			<p class="file_name" title="'+file.name+'">' + file.name + '</p>';
+					html += '			<span class="file_name" title="'+file.name+'">' + file.name + '</span>';
 					html += 			editHtml;  // 编辑按钮的html
 					html += 			delHtml;   // 删除按钮的html
 					html += '		</div>';
@@ -1834,17 +1834,17 @@ var ZYFILE = {
 					html += '			<img id="uploadImage_'+file.index+'" class="upload_image" src="' + e.target.result + '" style="width:expression(this.width > '+imgWidth+' ? '+imgWidth+'px : this.width);" />';                                                                 
 					html += '		</div>';
 					html += '	</a>';
-					html += '	<p id="uploadProgress_'+file.index+'" class="file_progress"></p>';
-					html += '	<p id="uploadFailure_'+file.index+'" class="file_failure">上传失败，请重试</p>';
-					html += '	<p id="uploadTailor_'+file.index+'" class="file_tailor" tailor="false">裁剪完成</p>';
-					html += '	<p id="uploadSuccess_'+file.index+'" class="file_success"></p>';
+					html += '	<span id="uploadProgress_'+file.index+'" class="file_progress"></span>';
+					html += '	<span id="uploadFailure_'+file.index+'" class="file_failure">上传失败，请重试</span>';
+					html += '	<span id="uploadTailor_'+file.index+'" class="file_tailor" tailor="false">裁剪完成</span>';
+					html += '	<span id="uploadSuccess_'+file.index+'" class="file_success"></span>';
 					html += '</div>';
                 	
 				}else{
 					html += '<div id="uploadList_'+ file.index +'" class="upload_append_list">';
 					html += '	<div class="file_bar">';
 					html += '		<div style="padding:5px;">';
-					html += '			<p class="file_name">' + file.name + '</p>';
+					html += '			<span class="file_name">' + file.name + '</span>';
 					html += 			delHtml;   // 删除按钮的html
 					html += '		</div>';
 					html += '	</div>';
@@ -1853,9 +1853,9 @@ var ZYFILE = {
 					html += '			<img id="uploadImage_'+file.index+'" class="upload_file" src="' + fileImgSrc + '" style="width:expression(this.width > '+imgWidth+' ? '+imgWidth+'px : this.width)" />';                                                                 
 					html += '		</div>';
 					html += '	</a>';
-					html += '	<p id="uploadProgress_'+file.index+'" class="file_progress"></p>';
-					html += '	<p id="uploadFailure_'+file.index+'" class="file_failure">上传失败，请重试</p>';
-					html += '	<p id="uploadSuccess_'+file.index+'" class="file_success"></p>';
+					html += '	<span id="uploadProgress_'+file.index+'" class="file_progress"></span>';
+					html += '	<span id="uploadFailure_'+file.index+'" class="file_failure">上传失败，请重试</span>';
+					html += '	<span id="uploadSuccess_'+file.index+'" class="file_success"></span>';
 					html += '</div>';
 				}
 				
@@ -2062,7 +2062,7 @@ var ZYFILE = {
 						if($("#uploadTailor_"+file.index).length>0){
 							$("#uploadTailor_" + file.index).hide();
 						}
-						$("#uploadInf").append("<p>文件" + file.name + "上传失败！</p>");	
+						$("#uploadInf").append("<span>文件" + file.name + "上传失败！</span>");	
 						//$("#uploadImage_" + file.index).css("opacity", 0.2);
 					},
 					onComplete: function(response){

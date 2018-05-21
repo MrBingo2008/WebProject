@@ -1,8 +1,34 @@
 package com.berp.framework.action;
 
-public class UploadAct {
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
-private static final long serialVersionUID = 1L;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+@Controller
+public class UploadAct {
 	
 	//上传文件的保存路径  
     protected String configPath = "upload/widget";  
@@ -10,29 +36,10 @@ private static final long serialVersionUID = 1L;
     protected String dirTemp = "upload/widget/temp";  
       
     protected String dirName = "file";  
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UploadAction() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doPost(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-        request.setCharacterEncoding("UTF-8");  
+    
+    @RequestMapping(value="/upload.do", method = RequestMethod.POST)
+	public void upload(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");  
         response.setContentType("text/html; charset=UTF-8");  
         PrintWriter out = response.getWriter();  
           
@@ -41,7 +48,7 @@ private static final long serialVersionUID = 1L;
         //String savePath = this.getServletContext().getRealPath("/") + configPath;  
           
         // 临时文件目录   
-        String tempPath = this.getServletContext().getRealPath("/") + dirTemp;  
+        String tempPath =  request.getServletContext().getRealPath("/") + dirTemp;  
           
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");  
         String ymd = sdf.format(new Date());  
@@ -119,7 +126,6 @@ private static final long serialVersionUID = 1L;
         }  
         out.flush();  
         out.close(); 
-		
 	}
 }
 
