@@ -151,7 +151,7 @@
             swf: '../image/Uploader.swf',
             chunked: false,
             chunkSize: 512 * 1024,
-            server: '../../server/fileupload.php',
+            server: 'upload.do',
             // runtimeOrder: 'flash',
 
             // accept: {
@@ -214,7 +214,7 @@
         function addFile( file ) {
             var $li = $( '<li id="' + file.id + '">' +
                     '<p class="title">' + file.name + '</p>' +
-                    '<p class="imgWrap"></p>'+
+                    '<p class="imgWrap" style="padding:0;"></p>'+
                     '<p class="progress"><span></span></p>' +
                     '</li>' ),
 

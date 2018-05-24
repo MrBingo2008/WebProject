@@ -54,11 +54,11 @@ table {
 
 /* ------------ */
 #imageWrapper {
-    width: 980px;
+    width: 640px;
     margin: 0 auto;
 
     margin: 1em;
-    width: auto;
+    /*width: auto;*/
 }
 
 
@@ -329,10 +329,10 @@ table {
 }
 
 #uploader .statusBar {
-    height: 63px;
+    height: 40px;
     border-top: 1px solid #dadada;
     padding: 0 20px;
-    line-height: 63px;
+    line-height: 40px;
     vertical-align: middle;
     position: relative;
 }
@@ -371,9 +371,9 @@ table {
 
 #uploader .statusBar .btns {
     position: absolute;
-    top: 10px;
+    top: 6px;
     right: 20px;
-    line-height: 40px;
+    line-height: 26px;
 }
 
 #filePicker2 {
