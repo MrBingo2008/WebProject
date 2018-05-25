@@ -1,5 +1,6 @@
 package com.berp.mrp.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +30,8 @@ public class Material {
 
 	private Set<OrderRecord> records;
 	
+	private List<MaterialImage> images;
+
 	public Material(){
 		
 	}
@@ -238,6 +241,15 @@ public class Material {
 		this.records = rs;
 	}
 	
+	//images
+	public List<MaterialImage> getImages() {
+		return images;
+	}
+
+	public void setImages(List<MaterialImage> images) {
+		this.images = images;
+	}
+	
 	//for stat
 	private Double purchaseOrder = 0.00;
 	private Double sellOrder = 0.00;
@@ -329,4 +341,5 @@ public class Material {
 	public void setSellBack(Double sellBack) {
 		this.sellBack = sellBack;
 	}
+
 }

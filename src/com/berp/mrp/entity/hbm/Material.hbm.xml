@@ -22,5 +22,11 @@
 			<key column="material_id"/>
 			<one-to-many class="com.berp.mrp.entity.OrderRecord"/>
 		</set>
+		
+		<list name="images" inverse="false" cascade="all">
+			<key column="material_id"/>
+			<index column="priority" type="integer"></index>
+			<one-to-many class="com.berp.mrp.entity.MaterialImage"/>
+		</list>
 	</class>
 </hibernate-mapping>

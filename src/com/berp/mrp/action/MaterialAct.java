@@ -1,10 +1,14 @@
 package com.berp.mrp.action;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,6 +112,20 @@ public class MaterialAct {
 	
 	@RequestMapping("/o_material_update.do")
 	public void materialUpdate(Material material, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        DiskFileItemFactory  factory = new DiskFileItemFactory();  
+        factory.setSizeThreshold(20 * 1024 * 1024); //设定使用内存超过5M时，将产生临时文件并存储于临时目录中。     
+        //factory.setRepository(new File(tempPath)); //设定存储临时文件的目录。     
+        ServletFileUpload upload = new ServletFileUpload(factory);  
+        upload.setHeaderEncoding("UTF-8");  
+        
+        List items;
+		try {
+			items = upload.parseRequest(request);
+	        System.out.println("items = " + items);  
+		} catch (FileUploadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
 		
 		//stone: how to deal with exception, need to re-organize
 		material.setStatus(0);

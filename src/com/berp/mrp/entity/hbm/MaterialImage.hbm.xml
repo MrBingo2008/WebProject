@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.berp.mrp.entity">
+	<class name="MaterialImage" table="material_image">
+		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
+		<property name="priority" column="priority" type="integer" length="10"/>
+		<property name="name" column="name" type="string" length="50"/>
+		<property name="url" column="url" type="string" length="200"/>
+		<many-to-one name="material" column="material_id" class="com.berp.mrp.entity.Material"/>
+	</class>
+</hibernate-mapping>
