@@ -47,7 +47,7 @@ public class LoginAct {
 	public String input(HttpServletRequest request,
 			HttpServletResponse response, ModelMap model) {
 		
-		//added by stone
+		//added by stone，这个函数就是往model里填入一些前台常用的变量(user、richRes)
 		ModelUtils.frontData(model, null);
 		
 		String processUrl = RequestUtils.getQueryParam(request, PROCESS_URL);
@@ -161,11 +161,13 @@ public class LoginAct {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private SessionProvider sessionProvider;
+	
 	/*
 	@Autowired
 	private AuthenticationMng authMng;*/
-	@Autowired
-	private SessionProvider sessionProvider;
 	/*@Autowired
 	private ImageCaptchaService imageCaptchaService;
 	@Autowired

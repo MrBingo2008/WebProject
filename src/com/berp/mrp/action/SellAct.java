@@ -1,8 +1,13 @@
 package com.berp.mrp.action;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 //stone: 这几个类是否属于springmvc?
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
+import com.berp.framework.web.session.SessionProvider;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.web.PageListPara;
@@ -18,11 +24,25 @@ import com.berp.mrp.web.PageListPara;
 @Controller
 public class SellAct extends CirAct {
 	
+	public static final String ORDER_TODO_LIST = "orderTodoList";
+	
 	//只需要type就可以，cirType根据它再定
 	@RequestMapping("/v_sell_order_list.do")
 	public String orderList(Integer type, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		//其实type可以不用作为参数
 		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sell", type, request, model);
+	}
+	
+	@RequestMapping("/v_sell_order_todo_list.do")
+	public String orderList(String orderSerial, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		//其实type可以不用作为参数
+		List<String> orders = (List<String>)sessionProvider.getAttribute(request, ORDER_TODO_LIST);
+		if(orders == null)
+			orders = new ArrayList<String>();
+		orders.add(orderSerial);
+		sessionProvider.setAttribute(request, response, ORDER_TODO_LIST, (Serializable) orders);
+		model.addAttribute("orders", orders);
+		return "pages/order/order_todo_list";
 	}
 	
 	@RequestMapping("/v_sell_order_add.do")
@@ -179,4 +199,7 @@ public class SellAct extends CirAct {
 	public void sellBackDelete(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.cirDeleteBase(cirId, "v_sellBack_list.do", "查询客户退货单", request, response, model);
 	}
+	
+	@Autowired
+	private SessionProvider sessionProvider;
 }

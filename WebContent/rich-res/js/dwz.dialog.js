@@ -3,9 +3,8 @@
  * reference:dwz.drag.js, dwz.dialogDrag.js, dwz.resize.js, dwz.taskBar.js
  */
 (function($){
-	//modified by stone: change height and width
 	$.pdialog = {
-		_op:{height:500, width:800, minH:40, minW:50, total:20, max:false, mask:false, resizable:true, drawable:true, maxable:true,minable:true,fresh:true},
+		_op:{height:300, width:580, minH:40, minW:50, total:20, max:false, mask:false, resizable:true, drawable:true, maxable:true,minable:true,fresh:true},
 		_current:null,
 		_zIndex:42,
 		getCurrent:function(){
@@ -43,16 +42,13 @@
 					dialog.find(".dialogHeader").find("h1").html(title);
 					this.switchDialog(dialog);
 					var jDContent = dialog.find(".dialogContent");
-
-					jDContent.ajaxUrl({
-						type:options.type||'GET', url:url, data:options.data || {}, callback:function(){
-							jDContent.find("[layoutH]").layoutH(jDContent);
-							$(".pageContent", dialog).width($(dialog).width()-14);
-							$("button.close", dialog).click(function(){
-								$.pdialog.close(dialog);
-								return false;
-							});
-						}
+					jDContent.loadUrl(url, {}, function(){
+						jDContent.find("[layoutH]").layoutH(jDContent);
+						$(".pageContent", dialog).width($(dialog).width()-14);
+						$("button.close").click(function(){
+							$.pdialog.close(dialog);
+							return false;
+						});
 					});
 				}
 			
@@ -124,15 +120,13 @@
 				$.pdialog.attachShadow(dialog);
 				//load data
 				var jDContent = $(".dialogContent",dialog);
-				jDContent.ajaxUrl({
-					type:options.type||'GET', url:url, data:options.data || {}, callback:function(){
-						jDContent.find("[layoutH]").layoutH(jDContent);
-						$(".pageContent", dialog).width($(dialog).width()-14);
-						$("button.close", dialog).click(function(){
-							$.pdialog.close(dialog);
-							return false;
-						});
-					}
+				jDContent.loadUrl(url, {}, function(){
+					jDContent.find("[layoutH]").layoutH(jDContent);
+					$(".pageContent", dialog).width($(dialog).width()-14);
+					$("button.close").click(function(){
+						$.pdialog.close(dialog);
+						return false;
+					});
 				});
 			}
 			if (op.mask) {
@@ -192,8 +186,14 @@
 			}
 			
 			var iTop = ($(window).height()-dialog.height())/2;
+			var iLeft = ($(window).width()-dialog.width())/2;
+			if(op.align == 'bottomLeft'){
+				iTop = $(window).height()-dialog.height();
+				iLeft = $(window).width()-dialog.width();
+			}
+			
 			dialog.css({
-				left: ($(window).width()-dialog.width())/2,
+				left: iLeft,
 				top: iTop > 0 ? iTop : 0
 			});
 		},

@@ -1,0 +1,25 @@
+<div class="pageContent">
+	<table class="table" width="100%" layoutH="50">
+		<thead>
+			<tr>
+				<th width="60"><@s.m "sell.order.serial"/></th>
+				<th width="30"><@s.m "sell.order.material"/></th>
+				<th width="30"><@s.m "global.operate"/></th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list orders as order>
+			<tr>
+				<td>${order!}</td>
+				<td></td>
+				<td></td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<div class="formBar">
+	<ul>
+		<li><div class="button"><div class="buttonContent"><button type="button"><@s.m "sell.order.newPurchase"/></button></div></div></li>
+	</ul>
+</div>

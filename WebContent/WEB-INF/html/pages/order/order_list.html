@@ -89,13 +89,17 @@ $(function(){
 				
 				<#if '${orderType}'=='sell' && type == 0>
 				<td>
-					<#list order.purchaseOrders as purchaseOrder>
-					<#if purchaseOrder.status gt 0>
-						<#list purchaseOrder.records as pRecord>
-						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${pRecord.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
+					<#if order.purchaseOrders?size gt 0>
+						<#list order.purchaseOrders as purchaseOrder>
+						<#if purchaseOrder.status gt 0>
+							<#list purchaseOrder.records as pRecord>
+							<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${pRecord.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
+							</#list>
+						</#if>
 						</#list>
+					<#else>
+						<a href="v_sell_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_sell_todo_list" align="bottomLeft" width="300" height="200" title="<@s.m 'sell.order.toPurchase'/>"><@s.m "sell.order.addPurchase"/></a>
 					</#if>
-					</#list>
 				</td>
 				<td>
 					<#list order.records as record>
