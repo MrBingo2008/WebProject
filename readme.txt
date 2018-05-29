@@ -32,5 +32,5 @@ role:sellOut、purchaseIn、plan.manage等角色加了v_record
 增加material_image表
 
 2018-5-29：
-material的dim改为comment，增加numPerBox
+material的dim改为comment，增加num_per_box
 增加表product_material

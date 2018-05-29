@@ -82,15 +82,15 @@ $(function(){
 							
 							<th type="lookup" name="assemblies[#index#].material.serial" size="20"
 								lookupGroup="assemblies[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=1" aTitle="<@s.m 'material'/>"
-								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "material.allSerial"/></th>
+								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "rawMaterial.serial"/></th>
 								
-							<th type="text" name="assemblies[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							<th type="text" name="assemblies[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "rawMaterial.name"/></th>
 							
-							<th type="text" name="assemblies[#index#].productNumber" size="12" fieldClass="positiveNumber required"><@s.m "material.number"/></th>
-							<th type="text" name="assemblies[#index#].product.unit" size="12" defaultVal="${material.unit!}" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
-							
-							<th type="text" name="assemblies[#index#].materialNumber" size="12" fieldClass="positiveNumber required"><@s.m "material.number"/></th>
+							<th type="text" name="assemblies[#index#].materialNumber" size="12" fieldClass="positiveNumber required"><@s.m "rawMaterial.number"/></th>
 							<th type="text" name="assemblies[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
+							
+							<th type="text" name="assemblies[#index#].productNumber" size="12" fieldClass="positiveNumber required"><@s.m "product.number"/></th>
+							<th type="text" name="assemblies[#index#].product.unit" size="12" defaultVal="${material.unit!}" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 								
 							<th type="del" width="60"><@s.m "global.operate"/></th>
 						</tr>
@@ -109,10 +109,10 @@ $(function(){
 							<td><input type="text" name="assemblies[${count}].material.name" value="${assembly.material.name!}" size="12" class="textInput" readonly>
 							<input type="hidden" name="assemblies[${count}].material.id" value="${assembly.material.id!}" class="textInput"></td>
 							
-							<td><input type="text" name="assemblies[${count}].productNumber" value="${assembly.productNumber!}" size="12" class="positiveNumber textInput required"></td>
+							<td><input type="text" name="assemblies[${count}].productNumber" value="${assembly.productNumber!}" size="12" class="positiveNumber textInput"></td>
 							<td><input type="text" name="assemblies[${count}].product.unit" value="${assembly.product.unit!}" size="12" class="textInput" readonly></td>
 							
-							<td><input type="text" name="assemblies[${count}].materialNumber" value="${assembly.materialNumber!}" size="12" class="positiveNumber textInput required"></td>
+							<td><input type="text" name="assemblies[${count}].materialNumber" value="${assembly.materialNumber!}" size="12" class="positiveNumber textInput"></td>
 							<td><input type="text" name="assemblies[${count}].material.unit" value="${assembly.material.unit!}" size="12" class="textInput" readonly></td>
 							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
 						</tr>
@@ -126,31 +126,33 @@ $(function(){
 			
 			<!-- 对于zyuploader来说，一定要加float:left，要不然会放在最前的位置 
 			而对于webuploader来说，居然不用-->
-			<div class="divider"></div>
-			<p><label>图片集:</label></p>
-			<br/>
-			<div id="imageWrapper">
-		        <div id="imageContainer">
-		            <!--头部，相册选择和格式选择-->
-		
-		            <div id="uploader">
-		                <div class="queueList">
-		                    <div id="dndArea" class="placeholder">
-		                        <div id="filePicker"></div>
-		                        <span>或将照片拖到这里，单次最多可选300张</span>
-		                    </div>
-		                </div>
-		                <div class="statusBar" style="display:none;">
-		                    <div class="progress">
-		                        <span class="text">0%</span>
-		                        <span class="percentage"></span>
-		                    </div><div class="info"></div>
-		                    <div class="btns">
-		                        <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
+			<div class="panel" style="overflow: auto">
+			<h1><@s.m "material.attachs"/></h1>
+			<div>
+				<div id="imageWrapper">
+			        <div id="imageContainer">
+			            <!--头部，相册选择和格式选择-->
+			
+			            <div id="uploader">
+			                <div class="queueList">
+			                    <div id="dndArea" class="placeholder">
+			                        <div id="filePicker"></div>
+			                        <span>或将照片拖到这里，单次最多可选300张</span>
+			                    </div>
+			                </div>
+			                <div class="statusBar" style="display:none;">
+			                    <div class="progress">
+			                        <span class="text">0%</span>
+			                        <span class="percentage"></span>
+			                    </div><div class="info"></div>
+			                    <div class="btns">
+			                        <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </div>
 		    </div>   
 		</div>
 		<div class="formBar">

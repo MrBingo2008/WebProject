@@ -14,11 +14,12 @@ public class Material {
 	private String serial;
 	private String customerSerial;
 	private Double leftNumber;
+	private Double numPerBox;
 	private Double notPurchaseInNumber;
 	private Double notSellOutNumber;
 	private String unit;
 	private String spec;
-	private String dim;
+	private String comment;
 	
 	private Integer type;
 	private Integer fetchType;
@@ -30,10 +31,10 @@ public class Material {
 
 	private Set<OrderRecord> records;
 	
+	private List<ProductMaterial> assemblies;
 	private List<MaterialImage> images;
 
 	public Material(){
-		
 	}
 	
 	public Material (java.lang.Integer id) {
@@ -123,6 +124,15 @@ public class Material {
 		this.leftNumber = number;
 	}
 	
+	//numPerBox
+	public Double getNumPerBox() {
+		return numPerBox;
+	}
+
+	public void setNumPerBox(Double numPerBox) {
+		this.numPerBox = numPerBox;
+	}
+	
 	//not purchaseIn number
 	public java.lang.Double getNotPurchaseInNumber () {
 		/*Double sum = 0.00;
@@ -170,12 +180,12 @@ public class Material {
 		this.spec = spec;
 	}
 	
-	public java.lang.String getDim() {
-		return dim;
+	public java.lang.String getComment() {
+		return comment;
 	}
 
-	public void setDim (java.lang.String dim) {
-		this.dim = dim;
+	public void setComment (java.lang.String comment) {
+		this.comment = comment;
 	}
 
 	//type
@@ -248,6 +258,15 @@ public class Material {
 
 	public void setImages(List<MaterialImage> images) {
 		this.images = images;
+	}
+	
+	//materials
+	public List<ProductMaterial> getAssemblies() {
+		return assemblies;
+	}
+
+	public void setAssemblies(List<ProductMaterial> assemblies) {
+		this.assemblies = assemblies;
 	}
 	
 	//for stat

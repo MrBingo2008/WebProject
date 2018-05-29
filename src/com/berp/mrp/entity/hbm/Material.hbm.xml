@@ -7,11 +7,12 @@
 		<property name="serial" column="serial" type="string" length="100"/>
 		<property name="customerSerial" column="customerSerial" type="string" length="100"/>
 		<property name="leftNumber" column="left_number" type="java.lang.Double" length="10"/>
+		<property name="numPerBox" column="num_per_box" type="java.lang.Double" length="10"/>
 		<property name="notPurchaseInNumber" column="not_purchaseIn_number" type="java.lang.Double" length="10"/>
 		<property name="notSellOutNumber" column="not_sellOut_number" type="java.lang.Double" length="10"/>
 		<property name="unit" column="unit" type="string" length="30"/>
 		<property name="spec" column="spec" type="string" length="200"/>
-		<property name="dim" column="dim" type="string" length="150"/>
+		<property name="comment" column="comment" type="string" length="150"/>
 		<property name="type" column="type" type="integer" length="10"/>
 		<property name="fetchType" column="fetchType" type="integer" length="10"/>
 		<property name="status" column="status" type="integer" length="10"/>
@@ -22,7 +23,11 @@
 			<key column="material_id"/>
 			<one-to-many class="com.berp.mrp.entity.OrderRecord"/>
 		</set>
-		
+		<list name="assemblies" inverse="false" cascade="all">
+			<key column="product_id"/>
+			<index column="priority" type="integer"></index>
+			<one-to-many class="com.berp.mrp.entity.ProductMaterial"/>
+		</list>		
 		<list name="images" inverse="false" cascade="all">
 			<key column="material_id"/>
 			<index column="priority" type="integer"></index>
