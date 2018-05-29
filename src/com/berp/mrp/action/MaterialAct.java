@@ -28,6 +28,7 @@ import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.OrderRecord;
+import com.berp.mrp.entity.ProductMaterial;
 import com.berp.mrp.entity.RawBatch;
 import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.core.dao.CategoryDao;
@@ -91,6 +92,10 @@ public class MaterialAct {
 		if(material.getSurface().getId() == null)
 			material.setSurface(null);
 		
+		if(material.getAssemblies() != null && material.getAssemblies().size() > 0)
+			for(ProductMaterial assembly : material.getAssemblies())
+				assembly.setProduct(material);
+		
 		materialDao.save(material);
 
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
@@ -112,21 +117,7 @@ public class MaterialAct {
 	
 	@RequestMapping("/o_material_update.do")
 	public void materialUpdate(Material material, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-        DiskFileItemFactory  factory = new DiskFileItemFactory();  
-        factory.setSizeThreshold(20 * 1024 * 1024); //设定使用内存超过5M时，将产生临时文件并存储于临时目录中。     
-        //factory.setRepository(new File(tempPath)); //设定存储临时文件的目录。     
-        ServletFileUpload upload = new ServletFileUpload(factory);  
-        upload.setHeaderEncoding("UTF-8");  
         
-        List items;
-		try {
-			items = upload.parseRequest(request);
-	        System.out.println("items = " + items);  
-		} catch (FileUploadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}  
-		
 		//stone: how to deal with exception, need to re-organize
 		material.setStatus(0);
 		if(material.getCompany().getId() == null)
@@ -134,6 +125,10 @@ public class MaterialAct {
 		
 		if(material.getSurface().getId() == null)
 			material.setSurface(null); 
+		
+		if(material.getAssemblies() != null && material.getAssemblies().size() > 0)
+			for(ProductMaterial assembly : material.getAssemblies())
+				assembly.setProduct(material);
 		
 		materialDao.update(material);
 		String url = String.format("v_material.do?type=0&searchName=%s&parentId=%d&pageNum=%d&numPerPage=%d", searchName, parentId, pageNum, numPerPage).toString();
