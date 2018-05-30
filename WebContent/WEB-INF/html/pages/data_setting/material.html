@@ -29,7 +29,7 @@ $(function(){
 	//left_bar那里有用到，但用的是:first
 	setTimeout(function () {
 		//$("#leftMaterialCategoryTree a").first().trigger("click");
-		$("#jbsxBox").loadUrl("v_material_list.do?type=${type!}&searchName=${searchName!}&parentId=${parentId!}&pageNum=${pageNum!}&numPerPage=${numPerPage!}", {}, function(){
+		$("#jbsxBox").loadUrl("v_material_list.do?type=${type!}&parentId=${parentId!}&useSession=${useSession!}", {}, function(){
 			//异步获取后，不会自动计算layoutH的高度
 			$("#jbsxBox").find("[layoutH]").layoutH();
 		});

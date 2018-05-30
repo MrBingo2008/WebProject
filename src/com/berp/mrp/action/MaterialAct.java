@@ -18,58 +18,68 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.berp.mrp.dao.BatchDao;
 import com.berp.mrp.dao.BatchFlowDao;
 import com.berp.mrp.dao.MaterialDao;
 import com.berp.mrp.dao.OrderRecordDao;
-import com.berp.mrp.dao.RawBatchDao;
 import com.berp.mrp.dao.RawBatchFlowDao;
-import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.ProductMaterial;
-import com.berp.mrp.entity.RawBatch;
-import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.core.dao.CategoryDao;
 import com.berp.core.entity.Category;
 import com.berp.framework.page.Pagination;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
+import com.berp.framework.web.session.SessionProvider;
 
 
 @Controller
 public class MaterialAct {
 	@RequestMapping("/v_material.do")
-	public String material(Integer type, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+	public String material(Integer type, Integer parentId,  Boolean useSession, /*String searchName, Integer pageNum, Integer numPerPage,*/ HttpServletRequest request, ModelMap model) {
 		Category category = categoryDao.findById(1);
 		JSONObject object = categoryDao.getCategoryTree(category);
-		model.addAttribute("tree", object.toString());
-		model.addAttribute("type", type);
-		
-		model.addAttribute("searchName", searchName);
-		
 		if(parentId == null)
 			parentId = category.getId();
 		model.addAttribute("parentId", parentId);
+		if(useSession == null)
+			useSession = false;
+		model.addAttribute("useSession", useSession);
+		
+		model.addAttribute("tree", object.toString());
+		model.addAttribute("type", type);
+		
+		/*
+		model.addAttribute("searchName", searchName);
 		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("numPerPage", numPerPage);
+		model.addAttribute("numPerPage", numPerPage);*/
 		
 		return "pages/data_setting/material";
 	}
 	
 	@RequestMapping("/v_material_list.do")
-	public String materialList(Integer type, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+	public String materialList(Integer type, Integer parentId, Boolean useSession, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		if(useSession!=null && useSession == true){
+			searchName = (String)sessionProvider.getAttribute(request, "searchName");
+			pageNum = (Integer)sessionProvider.getAttribute(request, "pageNum");
+			numPerPage = (Integer)sessionProvider.getAttribute(request, "numPerPage");
+		}
 		
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
 		
 		Pagination pagination = materialDao.getPage(parentId, searchName, pageNum, numPerPage);
+		model.addAttribute("type", type);
+		model.addAttribute("parentId", parentId);
 		
 		model.addAttribute("pagination", pagination);
-		model.addAttribute("type", type);
 		model.addAttribute("searchName", searchName);
-		model.addAttribute("parentId", parentId);
+		
+		sessionProvider.setAttribute(request, response, "searchName", searchName);
+		sessionProvider.setAttribute(request, response, "pageNum", pageNum);
+		sessionProvider.setAttribute(request, response, "numPerPage", numPerPage);
 		
 		return "pages/data_setting/material_list";
 	}
@@ -102,21 +112,21 @@ public class MaterialAct {
 	}
 
 	@RequestMapping("/v_material_edit.do")
-	public String materialEdit(Integer materialId, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+	public String materialEdit(Integer materialId, Integer parentId, /*String searchName, Integer pageNum, Integer numPerPage,*/ HttpServletRequest request, ModelMap model) {
 		Material m = materialDao.findById(materialId);
 		model.addAttribute("material", m);
 		model.addAttribute("openMode", "edit");
 		
-		model.addAttribute("searchName", searchName);
+		//model.addAttribute("searchName", searchName);
 		model.addAttribute("parentId", parentId);
-		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("numPerPage", numPerPage);
+		//model.addAttribute("pageNum", pageNum);
+		//model.addAttribute("numPerPage", numPerPage);
 		
 		return "pages/data_setting/material_detail";
 	}
 	
 	@RequestMapping("/o_material_update.do")
-	public void materialUpdate(Material material, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void materialUpdate(Material material,  Integer parentId, /*String searchName, Integer pageNum, Integer numPerPage, */HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         
 		//stone: how to deal with exception, need to re-organize
 		material.setStatus(0);
@@ -135,7 +145,7 @@ public class MaterialAct {
 		//parentId如果为null，则字符串是null，有问题
 		//String test = ""+parentId;
 		//test.toString();
-		String url = String.format("v_material.do?type=0&searchName=%s&parentId=%s&pageNum=%d&numPerPage=%d", searchName, parentId==null?"":parentId.toString(), pageNum, numPerPage).toString();
+		String url = String.format("v_material.do?type=0&parentId=%s&useSession=true", parentId==null?"":parentId.toString()).toString();
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", url, "物料").toString());
 	}
 	
@@ -233,4 +243,7 @@ public class MaterialAct {
 	
 	@Autowired
 	private OrderRecordDao recordDao;
+	
+	@Autowired
+	private SessionProvider sessionProvider;
 }
