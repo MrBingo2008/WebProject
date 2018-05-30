@@ -3,6 +3,7 @@
 <hibernate-mapping package="com.berp.mrp.entity">
 	<class name="ProductMaterial" table="product_material">
 		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
+		<!-- product_id应该设为允许空，因为inverse = false, save或update时会先把id set null -->
 		<many-to-one name="product" column="product_id" class="com.berp.mrp.entity.Material"/>
 		<many-to-one name="material" column="material_id" class="com.berp.mrp.entity.Material"/>
 		<property name="productNumber" column="product_number" type="java.lang.Double" length="10"/>

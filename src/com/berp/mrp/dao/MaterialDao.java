@@ -42,6 +42,10 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		updater.exclude("notPurchaseInNumber");
 		updater.exclude("notSellOutNumber");
 		bean = updateByUpdater(updater);
+		
+		String hql = "delete from ProductMaterial bean where bean.product.id is null";
+		getSession().createQuery(hql).executeUpdate();
+		
 		return bean;
 	}
 	

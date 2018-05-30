@@ -131,7 +131,11 @@ public class MaterialAct {
 				assembly.setProduct(material);
 		
 		materialDao.update(material);
-		String url = String.format("v_material.do?type=0&searchName=%s&parentId=%d&pageNum=%d&numPerPage=%d", searchName, parentId, pageNum, numPerPage).toString();
+		
+		//parentId如果为null，则字符串是null，有问题
+		//String test = ""+parentId;
+		//test.toString();
+		String url = String.format("v_material.do?type=0&searchName=%s&parentId=%s&pageNum=%d&numPerPage=%d", searchName, parentId==null?"":parentId.toString(), pageNum, numPerPage).toString();
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", url, "物料").toString());
 	}
 	

@@ -269,6 +269,14 @@ public class Material {
 		this.assemblies = assemblies;
 	}
 	
+	public String getAssembliesString(){
+		StringBuilder sb = new StringBuilder();
+		if(assemblies != null)
+			for(ProductMaterial assembly : assemblies)
+				sb.append(assembly.getMaterial().getShowName() + " ");
+		return sb.toString();
+	}
+	
 	//for stat
 	private Double purchaseOrder = 0.00;
 	private Double sellOrder = 0.00;

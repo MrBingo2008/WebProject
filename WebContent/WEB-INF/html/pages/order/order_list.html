@@ -1,8 +1,13 @@
-<script>
+<script type="text/javascript">
 $(function(){
 	var status = '${searchStatus!}';
 	$("#statusSelect").val(status);
 });
+
+function clearPurchaseTodo() {
+	
+	return true;
+}
 </script>
 <form id="pagerForm" method="post" action="v_${orderType}_order_list.do?type=${type}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
@@ -98,7 +103,7 @@ $(function(){
 						</#if>
 						</#list>
 					<#else>
-						<a href="v_sell_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_sell_todo_list" align="bottomLeft" width="300" height="200" title="<@s.m 'sell.order.toPurchase'/>"><@s.m "sell.order.addPurchase"/></a>
+						<a href="v_sell_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_sell_todo_list" align="bottomLeft" width="300" height="200" close="clearPurchaseTodo" title="<@s.m 'sell.order.toPurchase'/>"><@s.m "sell.order.addPurchase"/></a>
 					</#if>
 				</td>
 				<td>
