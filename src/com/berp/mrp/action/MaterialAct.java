@@ -37,14 +37,24 @@ import com.berp.framework.web.session.SessionProvider;
 @Controller
 public class MaterialAct {
 	@RequestMapping("/v_material.do")
-	public String material(Integer type, Integer parentId,  Boolean useSession, /*String searchName, Integer pageNum, Integer numPerPage,*/ HttpServletRequest request, ModelMap model) {
+	//不用parentId，但是v_material.do也要用到，有两种情况会调用到v_material.do，一个是初始化，一个是修改查看返回
+	//如果是初始化或选择的话，parentId在list那里登记到session
+	//session主要是用于修改查看返回，然后从session里取出来
+	public String material(Integer type, /*Integer parentId,*/ Integer useSession, /*String searchName, Integer pageNum, Integer numPerPage,*/ HttpServletRequest request, ModelMap model) {
 		Category category = categoryDao.findById(1);
 		JSONObject object = categoryDao.getCategoryTree(category);
+		
+		Integer parentId = null;
+		//如果是修改或返回，就用session的值，否则是初始化
+		if(useSession != null && useSession == 1)
+			parentId = (Integer)sessionProvider.getAttribute(request, "parentId");
 		if(parentId == null)
 			parentId = category.getId();
 		model.addAttribute("parentId", parentId);
+		
+		//useSession设成integer，主要是javascript里会用到，boolean获取有问题
 		if(useSession == null)
-			useSession = false;
+			useSession = 0;
 		model.addAttribute("useSession", useSession);
 		
 		model.addAttribute("tree", object.toString());
@@ -59,9 +69,9 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/v_material_list.do")
-	public String materialList(Integer type, Integer parentId, Boolean useSession, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public String materialList(Integer type, Integer parentId, Integer useSession, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		
-		if(useSession!=null && useSession == true){
+		if(useSession!=null && useSession == 1){
 			searchName = (String)sessionProvider.getAttribute(request, "searchName");
 			pageNum = (Integer)sessionProvider.getAttribute(request, "pageNum");
 			numPerPage = (Integer)sessionProvider.getAttribute(request, "numPerPage");
@@ -73,10 +83,11 @@ public class MaterialAct {
 		Pagination pagination = materialDao.getPage(parentId, searchName, pageNum, numPerPage);
 		model.addAttribute("type", type);
 		model.addAttribute("parentId", parentId);
-		
-		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
+		model.addAttribute("pagination", pagination);
 		
+		//放session
+		sessionProvider.setAttribute(request, response, "parentId", parentId);
 		sessionProvider.setAttribute(request, response, "searchName", searchName);
 		sessionProvider.setAttribute(request, response, "pageNum", pageNum);
 		sessionProvider.setAttribute(request, response, "numPerPage", numPerPage);
@@ -145,7 +156,7 @@ public class MaterialAct {
 		//parentId如果为null，则字符串是null，有问题
 		//String test = ""+parentId;
 		//test.toString();
-		String url = String.format("v_material.do?type=0&parentId=%s&useSession=true", parentId==null?"":parentId.toString()).toString();
+		String url = "v_material.do?type=0&useSession=1";
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", url, "物料").toString());
 	}
 	
