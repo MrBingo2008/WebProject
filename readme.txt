@@ -34,3 +34,6 @@ role:sellOut、purchaseIn、plan.manage等角色加了v_record
 2018-5-29：
 material的dim改为comment，增加num_per_box
 增加表product_material
+
+2018-5-31：
+更新版本，修复中文查询编辑问题，更新2018-5-29修改的表

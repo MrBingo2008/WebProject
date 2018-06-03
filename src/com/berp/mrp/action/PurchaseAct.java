@@ -1,8 +1,13 @@
 package com.berp.mrp.action;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 //stone: 这几个类是否属于springmvc?
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,10 +17,13 @@ import com.berp.mrp.entity.Order;
 import com.berp.mrp.web.PageListPara;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
+import com.berp.framework.web.session.SessionProvider;
 import com.berp.mrp.entity.Cir;
 
 @Controller
 public class PurchaseAct extends CirAct {
+	
+	public static final String PURCHASE_ORDER_TODO_LIST = "purchaseOrderTodoList";
 	
 	//purchase order
 	@RequestMapping("/v_purchase_order_list.do")
@@ -65,6 +73,25 @@ public class PurchaseAct extends CirAct {
 	@RequestMapping("/o_purchase_order_delete.do")
 	public void orderDelete(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.orderDeleteBase(orderId, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
+	}
+	
+	
+	@RequestMapping("/v_purchase_order_todo_list.do")
+	public String todoList(String orderSerial, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		//其实type可以不用作为参数
+		List<String> orders = (List<String>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_LIST);
+		if(orders == null)
+			orders = new ArrayList<String>();
+		orders.add(orderSerial);
+		sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, (Serializable) orders);
+		model.addAttribute("orders", orders);
+		return "pages/order/order_todo_list";
+	}
+	
+	@RequestMapping("/o_purchase_order_todo_clear.do")
+	public void todoClear(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, null);
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJson("成功!").toString());
 	}
 	
 	//purchase in, type(direction)表示方向，统一1为进，2为出
@@ -173,4 +200,7 @@ public class PurchaseAct extends CirAct {
 	public void purchaseBackDelete(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.cirDeleteBase(cirId,  "v_purchaseBack_list.do", "查询采购退货单", request, response, model);
 	}
+	
+	@Autowired
+	private SessionProvider sessionProvider;
 }

@@ -5,7 +5,7 @@ $(function(){
 });
 
 function clearPurchaseTodo() {
-	
+	ajaxTodo("o_purchase_order_todo_clear.do")
 	return true;
 }
 </script>
@@ -103,7 +103,7 @@ function clearPurchaseTodo() {
 						</#if>
 						</#list>
 					<#else>
-						<!-- a href="v_sell_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_sell_todo_list" align="bottomLeft" width="300" height="200" close="clearPurchaseTodo" title="<@s.m 'sell.order.toPurchase'/>"><@s.m "sell.order.addPurchase"/></a-->
+						<a href="v_purchase_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_purchase_todo" align="bottomLeft" width="300" height="200" close="clearPurchaseTodo" title="<@s.m 'sell.order.toPurchase'/>"><@s.m "sell.order.addPurchase"/></a>
 					</#if>
 				</td>
 				<td>
