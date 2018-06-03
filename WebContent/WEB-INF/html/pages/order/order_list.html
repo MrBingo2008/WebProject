@@ -103,7 +103,7 @@ function clearPurchaseTodo() {
 						</#if>
 						</#list>
 					<#else>
-						<a href="v_purchase_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_purchase_todo" align="bottomLeft" width="300" height="200" close="clearPurchaseTodo" title="<@s.m 'sell.order.toPurchase'/>"><@s.m "sell.order.addPurchase"/></a>
+						<a href="v_purchase_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_purchase_todo" align="bottomLeft" width="300" height="200" close="clearPurchaseTodo" title="<@s.m 'purchase.order.todo.list'/>"><@s.m "purchase.order.todo.add"/></a>
 					</#if>
 				</td>
 				<td>
