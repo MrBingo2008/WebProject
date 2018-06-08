@@ -1,3 +1,9 @@
+<script type="text/javascript">
+function clearPurchaseTodo() {
+	ajaxTodo("o_purchase_order_todo_clear.do")
+	return true;
+}
+</script>
 <div class="pageContent">
 	<table class="table" width="100%" layoutH="54">
 		<thead>
@@ -8,6 +14,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			<#if orders??>
 			<#list orders as order>
 			<tr>
 				<td>${order!}</td>
@@ -15,12 +22,13 @@
 				<td></td>
 			</tr>
 			</#list>
+			</#if>
 		</tbody>
 	</table>
 </div>
 <div class="formBar">
 	<ul>
-		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_clear.do"><@s.m "purchase.order.todo.clear"/></a></button></div></div></li>
+		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_list.do" target="dialog" rel="dialog_purchase_todo"><@s.m "purchase.order.todo.clear"/></a></button></div></div></li>
 		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_gen.do"><@s.m "purchase.order.todo.gen"/></a></button></div></div></li>
 	</ul>
 </div>

@@ -3,11 +3,6 @@ $(function(){
 	var status = '${searchStatus!}';
 	$("#statusSelect").val(status);
 });
-
-function clearPurchaseTodo() {
-	ajaxTodo("o_purchase_order_todo_clear.do")
-	return true;
-}
 </script>
 <form id="pagerForm" method="post" action="v_${orderType}_order_list.do?type=${type}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
@@ -103,7 +98,7 @@ function clearPurchaseTodo() {
 						</#if>
 						</#list>
 					<#else>
-						<a href="v_purchase_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_purchase_todo" align="bottomLeft" width="300" height="200" close="clearPurchaseTodo" title="<@s.m 'purchase.order.todo.list'/>"><@s.m "purchase.order.todo.add"/></a>
+						<a href="v_purchase_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_purchase_todo" align="bottomLeft" width="300" height="200" title="<@s.m 'purchase.order.todo.list'/>"><@s.m "purchase.order.todo.add"/></a>
 					</#if>
 				</td>
 				<td>

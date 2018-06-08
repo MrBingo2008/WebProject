@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 //stone: 这几个类是否属于springmvc?
 import org.springframework.stereotype.Controller;
@@ -78,13 +79,18 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/v_purchase_order_todo_list.do")
 	public String todoList(String orderSerial, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		//其实type可以不用作为参数
-		List<String> orders = (List<String>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_LIST);
-		if(orders == null)
-			orders = new ArrayList<String>();
-		orders.add(orderSerial);
-		sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, (Serializable) orders);
-		model.addAttribute("orders", orders);
+		if(StringUtils.isBlank(orderSerial)){
+			sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, null);
+		}else{
+			//其实type可以不用作为参数
+			List<String> orders = (List<String>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_LIST);
+			if(orders == null)
+				orders = new ArrayList<String>();
+			orders.add(orderSerial);
+			sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, (Serializable) orders);
+			model.addAttribute("orders", orders);
+		}
+		
 		return "pages/order/order_todo_list";
 	}
 	

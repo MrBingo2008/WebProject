@@ -38,13 +38,10 @@ $("#approvalButton").click(function(){
 		}
 	});
 });
-/*
-$("#cancelApprovalButton").click(function(){
-	var actionUrl = "o_${orderType}_order_cancelApproval.do";
-	$("form").attr("action", actionUrl);
-	$("#statusInput").val("0");
+
+function test(){
 	$("#orderForm").submit();
-});*/
+}
 </script>
 <div class="pageContent">
 	<form id="orderForm" method="post" action="o_${orderType}_order_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
@@ -55,6 +52,7 @@ $("#cancelApprovalButton").click(function(){
 		<input type="hidden" name="searchStatus" value="${searchStatus!}" />
 		<input id="statusInput" type="hidden" name="status" value="${order.status}"/>
 		<div id = "formContent" class="pageFormContent" layoutH="56">
+			
 			<p>
 				<label><@s.m "global.createTime"/>:</label>
 				<input name="createTime" readonly="readonly" type="text" value="${(order.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="30" />
@@ -67,6 +65,7 @@ $("#cancelApprovalButton").click(function(){
 			
 			<div class="divider"></div>
 			
+			<div style="float:left;width:780px">
 			<p>
 				<label>ID:</label>
 				<input name="id" type="text" size="30" value="${order.id!}" readonly="readonly"/>
@@ -79,14 +78,6 @@ $("#cancelApprovalButton").click(function(){
 				<label><@s.m "${orderType}.order.name"/>:</label>
 				<input name="name" type="text" size="30" value="${order.name!}"/>
 			</p>
-			<#if '${orderType}'=='purchase'>
-			<p>
-				<label><@s.m "purchase.order.forSell"/>:</label>
-				<input type="hidden" name="sellOrder.id" value="${(order.sellOrder.id)!}"/>
-				<input type="text" name="sellOrder.info" value="${(order.sellOrder.info)!}" lookupGroup="sellOrder" size="30" readonly/>
-				<a class="btnLook" href="v_sell_order_list.do?type=1" lookupGroup="sellOrder" title="<@s.m 'purchase.order.selectSellOrder'/>"><@s.m "sell.order"/></a>		
-			</p>
-			</#if>
 			<p>
 				<label><@s.m "${orderType}.order.company"/>:</label>
 				<input type="hidden" name="company.id" value="${(order.company.id)!}"/>
@@ -108,7 +99,45 @@ $("#cancelApprovalButton").click(function(){
 				<label><@s.m "global.comment"/>:</label>
 				<input name="comment" type="text" size="30" value="${order.comment!}"/>
 			</p>
-			
+			</div>
+			<#if '${orderType}'=='purchase'>
+			<div class="panel" style="clear:none; float:left; width:350px; margin:5px;">
+			<h1><span style="float:left"><@s.m "purchase.order.forSell"/></span></h1>
+	            <div>
+				<table class="list nowrap itemDetail" addButton="<@s.m 'global.add'/>" buttonTop="true" buttonDisabled=<#if order.status == 0 && orderType != 'view'>"false"<#else>"true"</#if>
+					width="100%">
+					<thead>
+						<tr>
+							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>
+							
+							<th type="lookup" name="sellOrders[#index#].serial" size="20"
+								lookupGroup="sellOrders[#index#]" lookuppk="id" lookupUrl="v_sell_order_list.do?type=1" onItemChange="test();" aTitle="<@s.m 'purchase.order.selectSellOrder'/>"
+								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "sell.order"/></th>
+								
+							<th type="del" width="60"><@s.m "global.operate"/></th>
+						</tr>
+					</thead>
+					<tbody>
+					<#if order.sellOrders??>
+						<#assign count=0 />
+						<#list order.sellOrders as sellOrder>
+						<tr class="unitBox">
+						    <td><span class="label" display="#index#">${count+1}</span>
+						    <input type="hidden" name="sellOrders[${count}].id" value="${sellOrder.id}"></input></td>
+							<td>
+								<input type="text" name="sellOrders[${count}].serial" value="${sellOrder.serial}" size="20" class="textInput required" readonly>
+								<a class="btnLook" href="v_sell_order_list.do?type=1" lookupgroup="sellOrders[${count}]" lookuppk="id" title="<@s.m 'purchase.order.selectSellOrder'/>" onchange="test();"><@s.m "sell.order"/></a>
+							</td>
+							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
+						</tr>
+						<#assign count=count+1 />
+						</#list>
+					</#if>
+					</tbody>
+				</table>
+				</div>
+			</div>
+			</#if>
 			<div class="divider"></div>
 			
 			<div class="panel" style="overflow: auto">

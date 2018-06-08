@@ -2,7 +2,7 @@
  * @author ZhangHuihua@msn.com
  */
 (function($){
-	var _lookup = {currentGroup:"", suffix:"", $target:null, pk:"id"};
+	var _lookup = {currentGroup:"", suffix:"", $target:null, pk:"id", onItemChange:null};
 	var _util = {
 		_lookupPrefix: function(key){
 			var strDot = _lookup.currentGroup ? "." : "";
@@ -42,6 +42,8 @@
 					}
 				}
 			});
+			if(_lookup['onItemChange'] != null)
+				eval(_lookup['onItemChange']);
 		},
 		bringBack: function(args){
 			$.bringBackSuggest(args);
@@ -62,7 +64,9 @@
 						currentGroup: $this.attr("lookupGroup") || "",
 						suffix: $this.attr("suffix") || "",
 						$target: $this,
-						pk: $this.attr("lookupPk") || "id"
+						pk: $this.attr("lookupPk") || "id",
+						//added by stone
+						onItemChange: $this.attr("onItemChange") || null
 					});
 					
 					var url = unescape($this.attr("href")).replaceTmById($(event.target).parents(".unitBox:first"));
@@ -255,7 +259,8 @@
 						fieldClass: $th.attr("fieldClass") || "",
 						fieldAttrs: $th.attr("fieldAttrs") || "",
 						aFieldAttrs: $th.attr("aFieldAttrs") || "",
-						aTitle: $th.attr("aTitle") || ""
+						aTitle: $th.attr("aTitle") || "",
+						onItemChange:$th.attr("onItemChange") || ""
 					};
 					fields.push(field);
 				});
@@ -295,8 +300,13 @@
 				if(butDisabled ==null || butDisabled == "false"){
 					if (addButTxt) {
 
-						var $addBut = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>').insertBefore($table).find("button");
 						//var $rowNum = $('<input type="text" name="dwz_rowNum" class="textInput" style="margin:2px;" value="1" size="2"/>').insertBefore($table);
+						var $addBut = null;
+						var buttonTop = $table.attr('buttonTop');
+						if(buttonTop!=null && buttonTop=="true")
+						    $addBut = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>').insertAfter($table.parent().parent().find("span:first")).find("button");
+						else
+							$addBut = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>').insertBefore($table).find("button");
 						
 						var trTm = "";
 						$addBut.click(function(){
@@ -423,7 +433,7 @@
 
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
 							+ '<input type="text" name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" size="'+field.size+'" class="'+field.fieldClass+'" '+attrFrag+'/>'
-							+ '<a class="btnLook" href="'+field.lookupUrl+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" title="'+field.aTitle+'" '+aAttrFrag+'>'+field.aTitle+'</a>';
+							+ '<a class="btnLook" href="'+field.lookupUrl+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag+'>'+field.aTitle+'</a>';
 						break;
 					case 'attach':
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
