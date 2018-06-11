@@ -88,7 +88,7 @@
 					$unitBox.find("[name='"+$this.attr("multLookup")+"']").filter(":checked").each(function(){
 						var _args = DWZ.jsonEval($(this).val());
 						for (var key in _args) {
-							var value = args[key] ? args[key]+"," : "";
+							var value = args[key] ? args[key]+"<br/>" : "";
 							args[key] = value + _args[key];
 						}
 					});

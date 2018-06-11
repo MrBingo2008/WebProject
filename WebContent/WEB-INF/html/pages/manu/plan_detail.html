@@ -156,57 +156,61 @@ function calFactor(numInput){
 		<input id="statusInput" type="hidden" name="status" value='${(plan.status)!}'/>
 		<div class="pageFormContent" layoutH="56">
 			<div id="basicInfo">
-			<p>
-				<label><@s.m "global.createTime"/>:</label>
-				<input name="createTime" readonly="readonly" type="text" value="${(plan.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="30" />
-			</p>
-			<p>
-				<label><@s.m "global.createUser"/>:</label>
-				<input readonly="readonly" type="text" value="${(plan.createUser.name)!}" size="30" />
-				<input name="createUser.id" type="hidden" value="${(plan.createUser.id)!}" />
-			</p>
-			
-			<div class="divider"></div>
-			
-			<p>
-				<label>ID:</label>
-				<input name="id" type="text" size="30" value="${plan.id!}" readonly/>
-			</p>
-			<p>
-				<label><@s.m "plan.serial" />:</label>
-				<input name="serial" type="text" size="30" value="${plan.serial!}" readonly/>
-			</p>
-			<p>
-				<label><@s.m "plan.name"/>:</label>
-				<input name="name" type="text" size="30" value="${plan.name!}"/>
-			</p>
-			<p>
-				<label><@s.m "plan.status"/>:</label>
-				<span class="viewLabel"><@s.m "plan.status.${plan.status!0}"/></span>
-			</p>
-			<p>
-				<label><@s.m "plan.order"/>:</label>
-				<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
-				<input id="orderInput" type="text" size="30" name="record.order.info" value="${(plan.record.ord.info)!}" class="required" readonly/>
-				<a class="btnLook" href="v_record_list.do?direction=0" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
-			</p>
-			<p>
-				<label><@s.m "product.info"/>:</label>
-				<input type="text" name="material.info" value="${(plan.material.info)!}" size ="30" readonly/>
-				<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
-			</p>
-			<p>
-				<label><@s.m "sell.order.surface"/>:</label>
-				<input type="text" name="record.surface.name" value="${(plan.record.surface.name)!}" size ="30" readonly/>
-			</p>
-			<p>
-				<label><@s.m "sell.order.number"/>:</label>
-				<input type="text" name="record.number" value="${(plan.record.number)!}" size ="30" readonly/>			
-			</p>
-			<p>
-				<label><@s.m "material.planNumber"/>:</label>
-				<input type="text" name="number" value="${plan.number!}" size ="30" class="positiveNumber required"/>
-			</p>
+				<p>
+					<label><@s.m "global.createTime"/>:</label>
+					<input name="createTime" readonly="readonly" type="text" value="${(plan.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="30" />
+				</p>
+				<p>
+					<label><@s.m "global.createUser"/>:</label>
+					<input readonly="readonly" type="text" value="${(plan.createUser.name)!}" size="30" />
+					<input name="createUser.id" type="hidden" value="${(plan.createUser.id)!}" />
+				</p>
+				
+				<div class="divider"></div>
+				<div style="float:left;width:780px">
+				<p>
+					<label>ID:</label>
+					<input name="id" type="text" size="20" value="${plan.id!}" readonly/>
+				</p>
+				<p>
+					<label><@s.m "plan.serial" />:</label>
+					<input name="serial" type="text" size="20" value="${plan.serial!}" readonly/>
+				</p>
+				<p>
+					<label><@s.m "plan.name"/>:</label>
+					<input name="name" type="text" size="20" value="${plan.name!}"/>
+				</p>
+				<p>
+					<label><@s.m "plan.status"/>:</label>
+					<span class="viewLabel"><@s.m "plan.status.${plan.status!0}"/></span>
+				</p>
+				<p>
+					<label><@s.m "product.info"/>:</label>
+					<input type="text" name="material.info" value="${(plan.material.info)!}" size ="20" readonly/>
+					<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
+				</p>
+				<p>
+					<label><@s.m "sell.order.surface"/>:</label>
+					<input type="text" name="record.surface.name" value="${(plan.record.surface.name)!}" size ="20" readonly/>
+				</p>
+				<p>
+					<label><@s.m "sell.order.number"/>:</label>
+					<input type="text" name="record.number" value="${(plan.record.number)!}" size ="20" readonly/>			
+				</p>
+				<p>
+					<label><@s.m "material.planNumber"/>:</label>
+					<input type="text" name="number" value="${plan.number!}" size ="20" class="positiveNumber required"/>
+				</p>
+				</div>
+				<div style="clear:none; float:left; width:240px;">
+				<p>
+					<label><@s.m "plan.order"/>:</label>
+					<div style="clear:both"/>
+					<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
+					<textarea id="orderInput" size="50" name="record.info" value="${(plan.record.ord.info)!}" class="required" style="white-space:nowrap; overflow:scroll;" wrap="soft" readonly/>
+					<a class="btnLook" href="v_record_multi_list.do?direction=0" lookupGroup="record" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
+				</p>
+				</div>
 			</div>
 
 			<div class="divider"></div>

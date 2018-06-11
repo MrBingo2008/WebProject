@@ -183,6 +183,18 @@ public class MaterialAct {
 		return "pages/data_setting/record_list";
 	}
 	
+	@RequestMapping("/v_record_multi_list.do")
+	//direction表示方向，1为进，2为出 0为生产选择
+	public String recordMultiList(Integer direction, String searchName, HttpServletRequest request, ModelMap model) {
+		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, searchName, direction==1?1:2, 1, 2, null, null);
+		model.addAttribute("records", records);
+		model.addAttribute("direction", direction);
+		model.addAttribute("searchName", searchName);
+		//这个是为了选择窗口的预定数量label
+		model.addAttribute("orderType", direction==1?"purchase":"sell");
+		return "pages/data_setting/record_multi_list";
+	}
+	
 	//recordId不合理
 	@RequestMapping("/v_batch_list.do")
 	public String batchAvailableList(Integer materialId, Integer recordId, HttpServletRequest request, ModelMap model) {
