@@ -142,6 +142,11 @@ function calFactor(numInput){
 		$(numInput).parent().parent().find("input[name*=boxNum]").val(s/npb);
 	}
 }
+
+function test(){
+	var test = $("#test").html("KHDD-20180526-006/PSS成谦/华司 ( 75*4 )/蓝锌\nKHDD-20180526-005/PSS成谦/华司 ( 61*4 )/彩锌");
+	test = test + "abc";
+}
 </script>
 <div class="pageContent">
 	<form method="post" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
@@ -167,7 +172,7 @@ function calFactor(numInput){
 				</p>
 				
 				<div class="divider"></div>
-				<div style="float:left;width:780px">
+				<div style="float:left;width:760px">
 				<p>
 					<label>ID:</label>
 					<input name="id" type="text" size="20" value="${plan.id!}" readonly/>
@@ -207,7 +212,7 @@ function calFactor(numInput){
 					<label><@s.m "plan.order"/>:</label>
 					<div style="clear:both"/>
 					<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
-					<textarea id="orderInput" size="50" name="record.info" value="${(plan.record.ord.info)!}" class="required" style="white-space:nowrap; overflow:scroll;" wrap="soft" readonly/>
+					<div id="orderInput" name="record.info" class="required" style="white-space:nowrap; overflow:scroll;width:200px;height:80px;float:left;border:solid 1px #d5dbdf;" />
 					<a class="btnLook" href="v_record_multi_list.do?direction=0" lookupGroup="record" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
 				</p>
 				</div>

@@ -20,7 +20,7 @@
 		bringBackSuggest: function(args){
 			//这个地方应该可以改进，不需要查找那么多
 			var $box = _lookup['$target'].parents(".unitBox:first");
-			$box.find(":input, select").each(function(){
+			$box.find(":input, select, div").each(function(){
 				var $input = $(this), inputName = $input.attr("name");
 				
 				for (var key in args) {
@@ -37,7 +37,10 @@
 						}
 						//2018-4-25: stone:增加change()是为了手动触发input的change事件，让plan自动生成items
 						//$input.val(args[key]);
-						$input.val(args[key]).change();
+						if(tagName == "DIV")
+							$input.html(args[key]);
+						else
+							$input.val(args[key]).change();
 						break;
 					}
 				}
