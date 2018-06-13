@@ -101,7 +101,7 @@ public class PurchaseAct extends CirAct {
 	}
 	
 	//purchase in, type(direction)表示方向，统一1为进，2为出
-	@RequestMapping("/v_purchaseIn_add.do")
+	@RequestMapping("/v_purchaseIn_add.do") 
 	public String purchaseInAdd(HttpServletRequest request, ModelMap model) {
 		return this.cirAdd("purchaseIn", /*"purchase",*/ 1, "CGDH", request, model);
 	}
