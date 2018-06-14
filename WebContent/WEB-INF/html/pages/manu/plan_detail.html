@@ -194,26 +194,26 @@ function test(){
 					<input type="text" name="material.info" value="${(plan.material.info)!}" size ="20" readonly/>
 					<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 				</p>
-				<p>
+				<!-- <p>
 					<label><@s.m "sell.order.surface"/>:</label>
 					<input type="text" name="record.surface.name" value="${(plan.record.surface.name)!}" size ="20" readonly/>
 				</p>
 				<p>
 					<label><@s.m "sell.order.number"/>:</label>
 					<input type="text" name="record.number" value="${(plan.record.number)!}" size ="20" readonly/>			
-				</p>
+				</p> -->
 				<p>
 					<label><@s.m "material.planNumber"/>:</label>
 					<input type="text" name="number" value="${plan.number!}" size ="20" class="positiveNumber required"/>
 				</p>
 				</div>
-				<div style="clear:none; float:left; width:240px;">
+				<div style="clear:none; float:left; width:340px;">
 				<p>
 					<label><@s.m "plan.order"/>:</label>
 					<div style="clear:both"/>
-					<input type="hidden" name="record.id" value="${(plan.record.id)!}"/>
-					<div id="orderInput" name="record.info" class="required" style="white-space:nowrap; overflow:scroll;width:200px;height:80px;float:left;border:solid 1px #d5dbdf;" />
-					<a class="btnLook" href="v_record_multi_list.do?direction=0" lookupGroup="record" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
+					<input type="hidden" name="ids" value="${(plan.record.id)!}"/>
+					<div id="orderInput" name="infos" class="required" style="white-space:nowrap; overflow:scroll;width:300px;height:80px;float:left;border:solid 1px #d5dbdf;" />
+					<a class="btnLook" href="v_record_multi_list.do?direction=0" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
 				</p>
 				</div>
 			</div>

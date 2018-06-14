@@ -91,8 +91,15 @@
 					$unitBox.find("[name='"+$this.attr("multLookup")+"']").filter(":checked").each(function(){
 						var _args = DWZ.jsonEval($(this).val());
 						for (var key in _args) {
-							var value = args[key] ? args[key]+"<br/>" : "";
-							args[key] = value + _args[key];
+							//modified by stone,写死了
+							if(key == "ids"){
+								var value = args[key] ? args[key]+"," : "";
+								args[key] = value + _args[key];
+							}else if(key =="infos"){
+								var value = args[key] ? args[key]+"<br/>" : "";
+								args[key] = value + _args[key];
+							}else
+								args[key] = _args[key];
 						}
 					});
 
