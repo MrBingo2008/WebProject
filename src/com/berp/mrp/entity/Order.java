@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.berp.core.entity.Company;
 import com.berp.framework.util.StrUtils;
 import com.berp.mrp.entity.Cir.CirType;
@@ -76,7 +78,10 @@ public class Order extends BaseBill {
 	}
 
 	public String getInfo(){
-		return String.format("%s/%s", this.getSerial(), this.company.getName());
+		String temp = this.getName();
+		if(StringUtils.isBlank(temp))
+			temp = this.getSerial();
+		return String.format("%s/%s", temp, this.company.getName());
 	}
 	//sell order
 	public Order getSellOrder() {

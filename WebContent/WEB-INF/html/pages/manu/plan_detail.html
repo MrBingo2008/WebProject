@@ -105,10 +105,10 @@ $(function(){
 		});
 	});
 	
-	$("#orderInput").change(function(){
+	$("#ids").change(function(){
 		//record.id应该加引号
-		var recordId = $("input[name='record.id']").val();
-		$("tbody#processItems").loadUrl("v_process_items.do?recordId=" + recordId, {}, function(){});
+		var ids = $("input[name='ids']").val();
+		$("tbody#processItems").loadUrl("v_process_items.do?ids=" + ids, {}, function(){});
 	});
 });
 
@@ -172,7 +172,15 @@ function test(){
 				</p>
 				
 				<div class="divider"></div>
-				<div style="float:left;width:760px">
+				
+				<input type="hidden" id="ids" name="ids" value="${(plan.record.id)!}"/>
+				
+					<label><@s.m "plan.order"/>:</label>
+					<div name="infos" class="required" style="white-space:nowrap; overflow:scroll;width:400px;height:80px;float:left;border:solid 1px #d5dbdf;" />
+					<a class="btnLook" href="v_record_multi_list.do?direction=0" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
+				
+				<div class="divider"></div>
+
 				<p>
 					<label>ID:</label>
 					<input name="id" type="text" size="20" value="${plan.id!}" readonly/>
@@ -206,16 +214,7 @@ function test(){
 					<label><@s.m "material.planNumber"/>:</label>
 					<input type="text" name="number" value="${plan.number!}" size ="20" class="positiveNumber required"/>
 				</p>
-				</div>
-				<div style="clear:none; float:left; width:340px;">
-				<p>
-					<label><@s.m "plan.order"/>:</label>
-					<div style="clear:both"/>
-					<input type="hidden" name="ids" value="${(plan.record.id)!}"/>
-					<div id="orderInput" name="infos" class="required" style="white-space:nowrap; overflow:scroll;width:300px;height:80px;float:left;border:solid 1px #d5dbdf;" />
-					<a class="btnLook" href="v_record_multi_list.do?direction=0" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
-				</p>
-				</div>
+
 			</div>
 
 			<div class="divider"></div>

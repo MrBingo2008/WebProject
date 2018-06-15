@@ -62,8 +62,10 @@ public class ManuAct {
 	}
 	
 	@RequestMapping("/v_process_items.do")
-	public String processItems(Integer recordId,  String test, HttpServletRequest request, ModelMap model) {
-		OrderRecord orderRecord = orderRecordDao.findById(recordId);
+	public String processItems(String ids,  String test, HttpServletRequest request, ModelMap model) {
+		ids.toString();
+		
+		OrderRecord orderRecord = orderRecordDao.findById(2);
 		Material material = orderRecord.getMaterial();
 		
 		Process process = new Process();
