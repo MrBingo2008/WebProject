@@ -1,12 +1,15 @@
 <div id="recordContain">
-<div id="jbsxBox" class="unitBox">
-	<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'jbsxBox');" action="v_record_list.do?direction=${direction!}">
+<div class="unitBox">
+	<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'recordContain');" action="v_record_multi_list.do?type=${type!}">
 		<input type="hidden" name="searchName" value="${searchName!}"/>
 	</form>
 	<div class="pageHeader" style="border:1px #B8D0D6 solid">
-		<form onsubmit="return divSearch(this, 'jbsxBox');" action="v_record_list.do?direction=${direction!}" method="post">
+		<form onsubmit="return divSearch(this, 'recordContain');" action="v_record_multi_list.do?type=${type!}" method="post">
 		<div class="searchBar">
 			<table class="searchContent">
+				<#if type == 0>
+					<tr><td><div class="button"><div class="buttonContent"><button type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td></tr>
+				<#else>
 				<tr>
 					<td>
 						<label><@s.m "orderOrMaterial"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
@@ -16,6 +19,7 @@
 					    <div class="button"><div class="buttonContent"><button type="button" multLookup="orgId" warn="请选择成品"><@s.m "global.select"/></button></div></div>
 					</td>
 				</tr>
+				</#if>
 			</table>
 		</div>
 		</form>
@@ -28,7 +32,7 @@
 					<th width="30"><input type="checkbox" class="checkboxCtrl" group="orgId" /></th>
 					<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 					<th width="100"><@s.m "material.name"/></th>
-					<#if direction != 1>
+					<#if type != 1>
 						<th width="60"><@s.m "sell.order.surface"/></th>
 					</#if>
 					<th width="80"><@s.m "${orderType}.order.company"/></th>
@@ -45,7 +49,7 @@
 				    number:'${record.notFinishNumber!}','material.id':'${record.material.id}', 'material.info':'${record.material.info!}'}"/></td>
 					<td>${record.material.allSerial!}</td>
 					<td>${record.material.info!}</td>
-					<#if direction != 1>
+					<#if type != 1>
 						<td>${(record.surface.name)!}</td>
 					</#if>
 					<td>${record.ord.company.name!}</td>
@@ -83,5 +87,12 @@ function test(){
 	setTimeout(function() {
 		$(".sidebarHeader").css("padding", "0px");
 		$("#sidebarContentH").css("padding", "0px");}, 20);
+}
+
+function closeAndSelect(){
+	//
+	$.pdialog.close("dialog_plan_todo_select");
+	$.pdialog.open("v_purchase_order_todo_list.do", "dialog_plan_todo_list", "<@s.m 'plan.todo.list'/>", {width:300, height:200, align:"bottomLeft"});
+	
 }
 </script>

@@ -142,11 +142,6 @@ function calFactor(numInput){
 		$(numInput).parent().parent().find("input[name*=boxNum]").val(s/npb);
 	}
 }
-
-function test(){
-	var test = $("#test").html("KHDD-20180526-006/PSS成谦/华司 ( 75*4 )/蓝锌\nKHDD-20180526-005/PSS成谦/华司 ( 61*4 )/彩锌");
-	test = test + "abc";
-}
 </script>
 <div class="pageContent">
 	<form method="post" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
@@ -177,7 +172,7 @@ function test(){
 				
 					<label><@s.m "plan.order"/>:</label>
 					<div name="infos" class="required" style="white-space:nowrap; overflow:scroll;width:400px;height:80px;float:left;border:solid 1px #d5dbdf;" />
-					<a class="btnLook" href="v_record_multi_list.do?direction=0" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
+					<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="" title="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>		
 				
 				<div class="divider"></div>
 

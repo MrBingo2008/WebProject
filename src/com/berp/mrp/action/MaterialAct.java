@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.dao.BatchFlowDao;
 import com.berp.mrp.dao.MaterialDao;
+import com.berp.mrp.dao.OrderDao;
 import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.dao.RawBatchFlowDao;
 import com.berp.mrp.entity.BatchFlow;
@@ -184,14 +185,19 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/v_record_multi_list.do")
-	//direction表示方向，1为进，2为出 0为生产选择
-	public String recordMultiList(Integer direction, String searchName, HttpServletRequest request, ModelMap model) {
-		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, searchName, direction==1?1:2, 1, 2, null, null);
+	//目前这个全都是sell
+	//type:0，表示加入购物车模式，1，选择模式
+	public String recordMultiList(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
+		List<OrderRecord> records = null;
+		if(type == 0)
+			records = orderDao.findById(orderId).getRecords();
+		else	
+			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
 		model.addAttribute("records", records);
-		model.addAttribute("direction", direction);
+		model.addAttribute("type", type);
 		model.addAttribute("searchName", searchName);
 		//这个是为了选择窗口的预定数量label
-		model.addAttribute("orderType", direction==1?"purchase":"sell");
+		model.addAttribute("orderType", "sell");
 		return "pages/data_setting/record_multi_list";
 	}
 	
@@ -263,6 +269,9 @@ public class MaterialAct {
 	
 	@Autowired
 	private MaterialDao materialDao;
+	
+	@Autowired
+	private OrderDao orderDao;
 	
 	@Autowired
 	private OrderRecordDao recordDao;

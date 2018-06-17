@@ -98,7 +98,13 @@
 							}else if(key =="infos"){
 								var value = args[key] ? args[key]+"<br/>" : "";
 								args[key] = value + _args[key];
-							}else
+							}else if(key == "number"){
+								if(_args[key] == "")
+									_args[key] = "0";
+								var value = args[key] ? args[key] : "0";
+								args[key] = Number(value) + Number(_args[key]);
+							}
+							else
 								args[key] = _args[key];
 						}
 					});

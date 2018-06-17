@@ -11,7 +11,11 @@
 					<td>
 						<label><@s.m "orderOrMaterial"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
 					</td>
-					<td><div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div></td>
+					<td>
+						<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
+					    <div class="button"><div class="buttonContent"><button type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button>
+					    </div></div>
+					</td>
 				</tr>
 			</table>
 		</div>
@@ -22,7 +26,7 @@
 		<table class="table" width="99%" layoutH="66">
 			<thead>
 				<tr>
-					<th width="40">ID</th>
+					<th width="30"><input type="checkbox" class="checkboxCtrl" group="orgId" /></th>
 					<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 					<th width="100"><@s.m "material.name"/></th>
 					<#if direction != 1>
@@ -32,14 +36,14 @@
 					<th width="140"><@s.m "${orderType}.order.serial"/></th>
 					<th width="100"><@s.m "${orderType}.order.number"/></th>
 					<th width="100"><@s.m "${orderType}.order.notFinishNumber"/></th>
-					<th width="40"><@s.m "material.unit"/></th>
-					<th width="60"><@s.m "global.operate"/></th>				
+					<th width="40"><@s.m "material.unit"/></th>			
 				</tr>
 			</thead>
 			<tbody>
 			<#list records as record>
 				<tr target="sid_obj" rel="1">
-				    <td>${record.id}</td>
+				    <td><input type="checkbox" name="orgId" value="{'ids':'${record.id}', 'infos':'${record.material.info!}/${(record.surface.name)!}/${record.ord.info!}',
+				    number:'${record.notFinishNumber!}','material.id':'${record.material.id}', 'material.info':'${record.material.info!}'}"/></td>
 					<td>${record.material.allSerial!}</td>
 					<td>${record.material.info!}</td>
 					<#if direction != 1>
@@ -49,17 +53,7 @@
 					<td>${record.ord.serial!}</td>
 					<td>${record.number!}</td>
 					<td>${record.notFinishNumber!}</td>
-					<td>${record.material.unit!}</td>		
-					<td>
-					<#if direction == 2>
-						<a href="v_batch_list.do?materialId=${record.material.id}&recordId=${record.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a>
-					<#else>
-						<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
-						<!-- 返回number，可以满足(plan)number和(cir).flows[].number -->
-						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}','material.info':'${record.material.info!}', 'material.unit':'${record.material.unit!}',
-						 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
-					</#if>
-					</td>
+					<td>${record.material.unit!}</td>
 				</tr>
 			</#list>
 			</tbody>
@@ -90,5 +84,12 @@ function test(){
 	setTimeout(function() {
 		$(".sidebarHeader").css("padding", "0px");
 		$("#sidebarContentH").css("padding", "0px");}, 20);
+}
+
+function closeAndSelect(){
+	//
+	$.pdialog.close("dialog_plan_todo");
+	$.pdialog.open("v_purchase_order_todo_list.do", "dialog_purchase_todo", "test", {width:300, height:200, align:"bottomLeft"});
+	
 }
 </script>

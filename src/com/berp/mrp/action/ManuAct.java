@@ -40,6 +40,7 @@ import com.berp.core.entity.Category;
 import com.berp.core.entity.User;
 import com.berp.framework.page.Pagination;
 import com.berp.framework.util.DateUtils;
+import com.berp.framework.util.StrUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.RequestInfoUtils;
 import com.berp.framework.web.ResponseUtils;
@@ -62,11 +63,40 @@ public class ManuAct {
 	}
 	
 	@RequestMapping("/v_process_items.do")
-	public String processItems(String ids,  String test, HttpServletRequest request, ModelMap model) {
+	public String processItems(String ids,  String test, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		ids.toString();
+		Integer [] recordIds = StrUtils.getIntegersFromString(ids);
 		
-		OrderRecord orderRecord = orderRecordDao.findById(2);
-		Material material = orderRecord.getMaterial();
+		Material material = null;
+		Step surface = null;
+		for(Integer id : recordIds){
+			OrderRecord orderRecord = orderRecordDao.findById(id);
+			Material m = orderRecord.getMaterial();
+			
+			if(material == null)
+				material = m;
+			
+			if(!material.getId().equals(m.getId())){
+				//不返回个html也可以
+				ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品不一致.").toString());
+				return null;
+			}
+			
+			Step newSurface = orderRecord.getSurface();
+			if(newSurface == null)
+				newSurface = material.getSurface();
+			
+			if(surface == null)
+				surface = newSurface;
+			
+			if(newSurface !=null){
+				if(!surface.getId().equals(newSurface.getId())){
+					ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品表面处理不一致.").toString());
+					return null;
+				}
+			}
+			
+		}
 		
 		Process process = new Process();
 		List<Category> parents = material.getParent().getNodeList();
@@ -78,7 +108,6 @@ public class ManuAct {
 			}
 		}
 		
-	    Step surface = orderRecord.getSurface()!=null?orderRecord.getSurface():material.getSurface();
 		if(surface!=null){
 			ProcessStep ps = new ProcessStep();
 			ps.setStep(surface);
