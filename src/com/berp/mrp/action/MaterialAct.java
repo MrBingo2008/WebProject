@@ -201,6 +201,22 @@ public class MaterialAct {
 		return "pages/data_setting/record_multi_list";
 	}
 	
+	@RequestMapping("/v_record_material_multi_list.do")
+	//目前这个全都是sell
+	//type:0，表示加入购物车模式，1，选择模式
+	public String recordMaterialMultiList(Integer orderId, HttpServletRequest request, ModelMap model) {
+		List<OrderRecord> records = null;
+		records = orderDao.findById(orderId).getRecords();
+		for(OrderRecord record: records){
+			List<ProductMaterial> assemblies = record.getMaterial().getAssemblies();
+			for(ProductMaterial assembly : assemblies){
+				
+			}
+		}
+		model.addAttribute("records", records);
+		return "pages/data_setting/record_material_multi_list";
+	}
+	
 	//recordId不合理
 	@RequestMapping("/v_batch_list.do")
 	public String batchAvailableList(Integer materialId, Integer recordId, HttpServletRequest request, ModelMap model) {

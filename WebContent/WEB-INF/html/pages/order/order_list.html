@@ -98,7 +98,7 @@ $(function(){
 						</#if>
 						</#list>
 					<#else>
-						<a href="v_purchase_order_todo_list.do?orderSerial=${order.serial!}" target="dialog" rel="dialog_purchase_todo" align="bottomLeft" width="300" height="200" title="<@s.m 'purchase.order.todo.list'/>"><@s.m "purchase.order.todo.add"/></a>
+						<a href="v_record_material_multi_list.do?orderId=${order.id}" target="dialog" rel="dialog_purchase_todo_select" title="<@s.m 'purchase.order.todo.select'/>" mask="true"><@s.m "purchase.order.todo.add"/></a>
 					</#if>
 				</td>
 				<td>
