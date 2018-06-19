@@ -3,6 +3,11 @@ $(function(){
 	var status = '${searchStatus!}';
 	$("#statusSelect").val(status);
 });
+
+function testOpen(){
+	//$.pdialog.close("dialog_purchase_order_todo_list");
+	navTab.openTab("main", "v_purchase_order_add.do",{title:"test", fresh:true, external:true});
+}
 </script>
 <form id="pagerForm" method="post" action="v_${orderType}_order_list.do?type=${type}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
@@ -99,6 +104,7 @@ $(function(){
 						</#list>
 					<#else>
 						<a href="v_record_material_multi_list.do?orderId=${order.id}" target="dialog" rel="dialog_purchase_order_todo_select" title="<@s.m 'purchase.order.todo.select'/>" mask="true"><@s.m "purchase.order.todo.add"/></a>
+						<a href="v_purchase_order_add.do" target="navTab" rel="main">test</a>
 					</#if>
 				</td>
 				<td>

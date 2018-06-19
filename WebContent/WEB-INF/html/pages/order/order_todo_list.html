@@ -4,10 +4,11 @@ function clearPurchaseTodo() {
 	return true;
 }
 
-function purchaseGen(){
+$("#purchaseOrderGen").click(function(event){
 	$.pdialog.close("dialog_purchase_order_todo_list");
-	navTab.openTab("main", "v_purchase_order_todo_gen.do",{title:"test"});
-}
+	navTab.openTab("main", "v_purchase_order_add.do",{title:"test", fresh:true, external:false});
+	event.preventDefault();
+});
 </script>
 <div class="pageContent">
 	<table class="table" width="100%" layoutH="54">
@@ -34,6 +35,6 @@ function purchaseGen(){
 <div class="formBar">
 	<ul>
 		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_list.do" target="dialog" rel="dialog_purchase_order_todo_list"><@s.m "purchase.order.todo.clear"/></a></button></div></div></li>
-		<li><div class="button"><div class="buttonContent"><button type="button"><a href="" onclick="purchaseGen();"><@s.m "purchase.order.todo.gen"/></a></button></div></div></li>
+		<li><div class="button"><div class="buttonContent"><button type="button"><a id="purchaseOrderGen" href=""><@s.m "purchase.order.todo.gen"/></a></button></div></div></li>
 	</ul>
 </div>
