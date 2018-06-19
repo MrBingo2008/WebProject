@@ -16,15 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.web.PageListPara;
+import com.berp.framework.util.StrUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
 import com.berp.framework.web.session.SessionProvider;
+import com.berp.mrp.dao.MaterialDao;
 import com.berp.mrp.entity.Cir;
+import com.berp.mrp.entity.Material;
+import com.berp.mrp.entity.MaterialRecordPara;
 
 @Controller
 public class PurchaseAct extends CirAct {
 	
-	public static final String PURCHASE_ORDER_TODO_LIST = "purchaseOrderTodoList";
+	public static final String PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST = "purchaseOrderTodoMaterialRecordList";
+	//public static final String PURCHASE_ORDER_TODO_RECORD_LIST = "purchaseOrderTodoRecordList";
 	
 	//purchase order
 	@RequestMapping("/v_purchase_order_list.do")
@@ -78,17 +83,25 @@ public class PurchaseAct extends CirAct {
 	
 	
 	@RequestMapping("/v_purchase_order_todo_list.do")
-	public String todoList(String orderSerial, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		if(StringUtils.isBlank(orderSerial)){
-			sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, null);
+	public String todoList(String materialIdString, String recordIdString, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		if(StringUtils.isBlank(materialIdString)){
+			sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST, null);
+			//sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_RECORD_LIST, null);
 		}else{
-			//其实type可以不用作为参数
-			List<String> orders = (List<String>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_LIST);
-			if(orders == null)
-				orders = new ArrayList<String>();
-			orders.add(orderSerial);
-			sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, (Serializable) orders);
-			model.addAttribute("orders", orders);
+			List<MaterialRecordPara> mrps = (List<MaterialRecordPara>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST);
+			if(mrps == null)
+				mrps = new ArrayList<MaterialRecordPara>();
+			Integer [] materialIds = StrUtils.getIntegersFromString(materialIdString);
+			for(Integer id : materialIds){
+				Material m = materialDao.findById(id);
+				MaterialRecordPara p = new MaterialRecordPara();
+				p.setMaterial(m.getInfo());
+				p.setMaterialId(m.getId());
+				mrps.add(p);
+			}
+			
+			sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST, (Serializable) mrps);
+			model.addAttribute("mrps", mrps);
 		}
 		
 		return "pages/order/order_todo_list";
@@ -96,8 +109,13 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchase_order_todo_clear.do")
 	public void todoClear(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_LIST, null);
+		sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST, null);
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJson("成功!").toString());
+	}
+	
+	@RequestMapping("/v_purchase_order_todo_gen.do")
+	public String orderGen(HttpServletRequest request, ModelMap model) {
+		return this.orderAdd("purchase", "CGDD", request, model);
 	}
 	
 	//purchase in, type(direction)表示方向，统一1为进，2为出
@@ -209,4 +227,7 @@ public class PurchaseAct extends CirAct {
 	
 	@Autowired
 	private SessionProvider sessionProvider;
+	
+	@Autowired
+	private MaterialDao materialDao;
 }

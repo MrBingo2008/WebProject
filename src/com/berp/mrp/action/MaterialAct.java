@@ -25,6 +25,7 @@ import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.dao.RawBatchFlowDao;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Material;
+import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.ProductMaterial;
 import com.berp.core.dao.CategoryDao;
@@ -205,15 +206,13 @@ public class MaterialAct {
 	//目前这个全都是sell
 	//type:0，表示加入购物车模式，1，选择模式
 	public String recordMaterialMultiList(Integer orderId, HttpServletRequest request, ModelMap model) {
-		List<OrderRecord> records = null;
-		records = orderDao.findById(orderId).getRecords();
-		for(OrderRecord record: records){
-			List<ProductMaterial> assemblies = record.getMaterial().getAssemblies();
-			for(ProductMaterial assembly : assemblies){
-				
+		Order order = orderDao.findById(orderId);
+		model.addAttribute("order", order);
+		for(OrderRecord record:order.getRecords()){
+			for(ProductMaterial a : record.getMaterial().getAssemblies()){
+				a.getMaterial().getInfo();
 			}
 		}
-		model.addAttribute("records", records);
 		return "pages/data_setting/record_material_multi_list";
 	}
 	

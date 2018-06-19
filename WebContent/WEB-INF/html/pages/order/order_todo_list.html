@@ -3,21 +3,26 @@ function clearPurchaseTodo() {
 	ajaxTodo("o_purchase_order_todo_clear.do")
 	return true;
 }
+
+function purchaseGen(){
+	$.pdialog.close("dialog_purchase_order_todo_list");
+	navTab.openTab("main", "v_purchase_order_todo_gen.do",{title:"test"});
+}
 </script>
 <div class="pageContent">
 	<table class="table" width="100%" layoutH="54">
 		<thead>
 			<tr>
-				<th width="60"><@s.m "sell.order.serial"/></th>
 				<th width="30"><@s.m "purchase.order.todo.material"/></th>
+				<th width="60"><@s.m "sell.order.serial"/></th>
 				<th width="30"><@s.m "global.operate"/></th>
 			</tr>
 		</thead>
 		<tbody>
-			<#if orders??>
-			<#list orders as order>
+			<#if mrps??>
+			<#list mrps as mrp>
 			<tr>
-				<td>${order!}</td>
+				<td>${mrp.material!}</td>
 				<td></td> 
 				<td></td>
 			</tr>
@@ -28,7 +33,7 @@ function clearPurchaseTodo() {
 </div>
 <div class="formBar">
 	<ul>
-		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_list.do" target="dialog" rel="dialog_purchase_todo"><@s.m "purchase.order.todo.clear"/></a></button></div></div></li>
-		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_gen.do"><@s.m "purchase.order.todo.gen"/></a></button></div></div></li>
+		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_list.do" target="dialog" rel="dialog_purchase_order_todo_list"><@s.m "purchase.order.todo.clear"/></a></button></div></div></li>
+		<li><div class="button"><div class="buttonContent"><button type="button"><a href="" onclick="purchaseGen();"><@s.m "purchase.order.todo.gen"/></a></button></div></div></li>
 	</ul>
 </div>
