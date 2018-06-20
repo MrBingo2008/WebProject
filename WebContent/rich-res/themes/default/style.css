@@ -126,6 +126,16 @@ input.disabled, textarea.disabled { border-color:#9eabb3 #d5dbdf #d5dbdf #9eabb3
 
 .inputButton, .inputDateButton { background:url(./images/form/input_bt.png) no-repeat;}
 
+/*added by stone*/
+.lookupDiv{
+	white-space:nowrap; 
+	overflow:scroll;
+	width:180px;
+	height:60px;
+	float:left;
+	border:solid 1px #d5dbdf;
+}
+
 /* Button */
 .button, .button span,
 .buttonDisabled, .buttonDisabled span,

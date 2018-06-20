@@ -1,12 +1,12 @@
 <script type="text/javascript">
 function clearPurchaseTodo() {
-	ajaxTodo("o_purchase_order_todo_clear.do")
+	ajaxTodo("o_purchase_order_todo_clear.do");
 	return true;
 }
 
 $("#purchaseOrderGen").click(function(event){
 	$.pdialog.close("dialog_purchase_order_todo_list");
-	navTab.openTab("main", "v_purchase_order_add.do",{title:"test", fresh:true, external:false});
+	navTab.openTab("main", "v_purchase_order_todo_gen.do",{title:"<@s.m 'purchase.order.add'/>", fresh:true, external:false});
 	event.preventDefault();
 });
 </script>

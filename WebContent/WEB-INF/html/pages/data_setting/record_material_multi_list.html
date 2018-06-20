@@ -9,8 +9,8 @@
 			<table class="searchContent">
 				<tr>
 					<td><@s.m "sell.order"/>: ${order.info!}</td>
+					<td><div class="button"><div class="buttonContent"><button id="testButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td>
 				</tr>
-				<tr><td><div class="button"><div class="buttonContent"><button id="testButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td></tr>
 			</table>
 		</div>
 		</form>
@@ -20,7 +20,7 @@
 		<table class="table" width="99%" layoutH="66">
 			<thead>
 				<tr>
-					<th width="30"><input type="checkbox" class="checkboxCtrl" group="orgId" /></th>
+					<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 					<th width="100" orderField="number" class="asc"><@s.m "rawMaterial"/></th>
 					<th width="100"><@s.m "material.number"/></th>
 					<th width="40"><@s.m "material.unit"/></th>
@@ -101,7 +101,7 @@ function closeAndSelect(){
 	}
 	
 	$.pdialog.close("dialog_purchase_order_todo_select");
-	$.pdialog.open("v_purchase_order_todo_list.do?materialIdString="+materialIdString, "dialog_purchase_order_todo_list", "<@s.m 'purchase.order.todo.list'/>", {width:300, height:200, align:"bottomLeft"});
+	$.pdialog.open("v_purchase_order_todo_list.do?materialIdString="+materialIdString, "dialog_purchase_order_todo_list", "<@s.m 'purchase.order.todo.list'/>", {width:300, height:200, align:"bottomLeft", close:"function(){ajaxTodo('o_purchase_order_todo_clear.do');}"});
 	
 }
 </script>

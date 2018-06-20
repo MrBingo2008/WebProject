@@ -33,7 +33,7 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/v_sell_order_add.do")
 	public String orderAdd(HttpServletRequest request, ModelMap model) {
-		return this.orderAdd("sell", "KHDD", request, model);
+		return this.orderAdd("sell", "KHDD", null, request, model);
 	}
 	
 	@RequestMapping("/o_sell_order_save.do")

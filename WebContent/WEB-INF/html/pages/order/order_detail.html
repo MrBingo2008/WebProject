@@ -55,11 +55,11 @@ function test(){
 			
 			<p>
 				<label><@s.m "global.createTime"/>:</label>
-				<input name="createTime" readonly="readonly" type="text" value="${(order.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="30" />
+				<input name="createTime" readonly="readonly" type="text" value="${(order.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="20" />
 			</p>
 			<p>
 				<label><@s.m "global.createUser"/>:</label>
-				<input readonly="readonly" type="text" value="${(order.createUser.name)!}" size="30" />
+				<input readonly="readonly" type="text" value="${(order.createUser.name)!}" size="20" />
 				<input name="createUser.id" type="hidden" value="${(order.createUser.id)!}" />
 			</p>
 			
@@ -68,76 +68,38 @@ function test(){
 			<div style="float:left;width:780px">
 			<p>
 				<label>ID:</label>
-				<input name="id" type="text" size="30" value="${order.id!}" readonly="readonly"/>
+				<input name="id" type="text" size="20" value="${order.id!}" readonly="readonly"/>
 			</p>
 			<p>
 				<label><@s.m "${orderType}.order.serial" />:</label>
-				<input name="serial" type="text" size="30" value="${order.serial!}" readonly/>
+				<input name="serial" type="text" size="20" value="${order.serial!}" readonly/>
 			</p>
 			<p>
 				<label><@s.m "${orderType}.order.name"/>:</label>
-				<input name="name" type="text" size="30" value="${order.name!}"/>
+				<input name="name" type="text" size="20" value="${order.name!}"/>
 			</p>
 			<p>
 				<label><@s.m "${orderType}.order.company"/>:</label>
 				<input type="hidden" name="company.id" value="${(order.company.id)!}"/>
-				<input type="text" name="company.name" value="${(order.company.name)!}" lookupGroup="company" class="required" size="30" readonly/>
+				<input type="text" name="company.name" value="${(order.company.name)!}" lookupGroup="company" class="required" size="20" readonly/>
 				<a class="btnLook" href="v_company.do?type=1" lookupGroup="company"><@s.m "company"/></a>		
 			</p>
 			
 			<p>
 				<label><@s.m "${orderType}.order.time"/>:</label>
-				<input type="text" name="billTime" class="date" value="${(order.billTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="30" /><a class="inputDateButton" href="javascript:;">选择</a>
+				<input type="text" name="billTime" class="date" value="${(order.billTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
 			</p>
 			
 			<p>
 				<label><@s.m "${orderType}.order.deadline"/>:</label>
-				<input type="text" name="deadlineTime" class="date" value="${(order.deadlineTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="30" /><a class="inputDateButton" href="javascript:;">选择</a>
+				<input type="text" name="deadlineTime" class="date" value="${(order.deadlineTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
 			</p>
 
 			<p>
 				<label><@s.m "global.comment"/>:</label>
-				<input name="comment" type="text" size="30" value="${order.comment!}"/>
+				<input name="comment" type="text" size="20" value="${order.comment!}"/>
 			</p>
 			</div>
-			<#if '${orderType}'=='purchase'>
-			<div class="panel" style="clear:none; float:left; width:350px; margin:5px;">
-			<h1><span style="float:left"><@s.m "purchase.order.forSell"/></span></h1>
-	            <div>
-				<table class="list nowrap itemDetail" addButton="<@s.m 'global.add'/>" buttonTop="true" buttonDisabled=<#if order.status == 0 && orderType != 'view'>"false"<#else>"true"</#if>
-					width="100%">
-					<thead>
-						<tr>
-							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>
-							
-							<th type="lookup" name="sellOrders[#index#].serial" size="20"
-								lookupGroup="sellOrders[#index#]" lookuppk="id" lookupUrl="v_sell_order_list.do?type=1" onItemChange="test();" aTitle="<@s.m 'purchase.order.selectSellOrder'/>"
-								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "sell.order"/></th>
-								
-							<th type="del" width="60"><@s.m "global.operate"/></th>
-						</tr>
-					</thead>
-					<tbody>
-					<#if order.sellOrders??>
-						<#assign count=0 />
-						<#list order.sellOrders as sellOrder>
-						<tr class="unitBox">
-						    <td><span class="label" display="#index#">${count+1}</span>
-						    <input type="hidden" name="sellOrders[${count}].id" value="${sellOrder.id}"></input></td>
-							<td>
-								<input type="text" name="sellOrders[${count}].serial" value="${sellOrder.serial}" size="20" class="textInput required" readonly>
-								<a class="btnLook" href="v_sell_order_list.do?type=1" lookupgroup="sellOrders[${count}]" lookuppk="id" title="<@s.m 'purchase.order.selectSellOrder'/>" onchange="test();"><@s.m "sell.order"/></a>
-							</td>
-							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
-						</tr>
-						<#assign count=count+1 />
-						</#list>
-					</#if>
-					</tbody>
-				</table>
-				</div>
-			</div>
-			</#if>
 			<div class="divider"></div>
 			
 			<div class="panel" style="overflow: auto">
@@ -165,6 +127,12 @@ function test(){
 							<th type="text" name="records[#index#].number" size="12" fieldClass="positiveNumber required"><@s.m "material.number"/></th>
 							<#if order.status gt 0><th type="text" name="records[#index#].finishNumber" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "${orderType}.order.finishNumber"/></th></#if>
 							<th type="text" name="records[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
+							
+							<#if '${orderType}' == 'purchase'>
+								<th type="lookup" name="records[#index#].infos" size="20" lookupType="div"
+								lookupGroup="records[#index#]" lookuppk="ids" lookupUrl="v_record_multi_list.do?type=1" aTitle="<@s.m 'plan.selectMaterial'/>"
+								fieldAttrs="{readonly:'readonly'}" fieldClass="required lookupDiv"><@s.m "sell.order"/></th>
+							</#if>
 								
 							<th type="del" width="60"><@s.m "global.operate"/></th>
 						</tr>
@@ -175,7 +143,7 @@ function test(){
 						<#list order.records as record>
 						<tr class="unitBox">
 						    <td><span class="label" display="#index#">${count+1}</span>
-						    <input type="hidden" name="records[${count}].id" value="${record.id}"></input></td>
+						    <input type="hidden" name="records[${count}].id" value="${record.id!}"></input></td>
 							<td>
 								<input type="text" name="records[${count}].material.serial" value="${record.material.allSerial!}" size="20" class="textInput required" readonly>
 								<a class="btnLook" href="v_material.do?type=1" lookupgroup="records[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>

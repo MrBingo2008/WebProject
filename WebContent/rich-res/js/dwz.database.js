@@ -91,14 +91,18 @@
 					$unitBox.find("[name='"+$this.attr("multLookup")+"']").filter(":checked").each(function(){
 						var _args = DWZ.jsonEval($(this).val());
 						for (var key in _args) {
+							var lastKey = key;
+							var keys = key.split(".");
+							if(keys!=null && keys.length >= 1)
+								lastKey = keys[keys.length-1];
 							//modified by stone,写死了
-							if(key == "ids"){
+							if(lastKey == "ids"){
 								var value = args[key] ? args[key]+"," : "";
 								args[key] = value + _args[key];
-							}else if(key =="infos"){
+							}else if(lastKey =="infos"){
 								var value = args[key] ? args[key]+"<br/>" : "";
 								args[key] = value + _args[key];
-							}else if(key == "number"){
+							}else if(lastKey == "number"){
 								if(_args[key] == "")
 									_args[key] = "0";
 								var value = args[key] ? args[key] : "0";
@@ -275,6 +279,7 @@
 						fieldClass: $th.attr("fieldClass") || "",
 						fieldAttrs: $th.attr("fieldAttrs") || "",
 						aFieldAttrs: $th.attr("aFieldAttrs") || "",
+						lookupType: $th.attr("lookupType") || "",
 						aTitle: $th.attr("aTitle") || "",
 						onItemChange:$th.attr("onItemChange") || ""
 					};
@@ -446,9 +451,11 @@
 						if (field.suggestFields) {
 							suggestFrag = 'autocomplete="off" lookupGroup="'+field.lookupGroup+'"'+suffixFrag+' suggestUrl="'+field.suggestUrl+'" suggestFields="'+field.suggestFields+'"' + ' postField="'+field.postField+'"';
 						}
-
+						var temp = '<input type="text" name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" size="'+field.size+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
+						if(field.lookupType == "div")
+							temp = '<div name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
-							+ '<input type="text" name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" size="'+field.size+'" class="'+field.fieldClass+'" '+attrFrag+'/>'
+							+ temp
 							+ '<a class="btnLook" href="'+field.lookupUrl+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag+'>'+field.aTitle+'</a>';
 						break;
 					case 'attach':

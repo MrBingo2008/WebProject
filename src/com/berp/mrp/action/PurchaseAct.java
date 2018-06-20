@@ -40,7 +40,7 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/v_purchase_order_add.do")
 	public String orderAdd(HttpServletRequest request, ModelMap model) {
-		return this.orderAdd("purchase", "CGDD", request, model);
+		return this.orderAdd("purchase", "CGDD", null, request, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_save.do")
@@ -115,7 +115,9 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/v_purchase_order_todo_gen.do")
 	public String orderGen(HttpServletRequest request, ModelMap model) {
-		return this.orderAdd("purchase", "CGDD", request, model);
+		List<MaterialRecordPara> mrps = (List<MaterialRecordPara>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST);
+		
+		return this.orderAdd("purchase", "CGDD", mrps, request, model);
 	}
 	
 	//purchase in, type(direction)表示方向，统一1为进，2为出

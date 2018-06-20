@@ -1,6 +1,8 @@
 package com.berp.mrp.action;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +17,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.dao.CirDao;
+import com.berp.mrp.dao.MaterialDao;
 import com.berp.mrp.dao.OrderDao;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
+import com.berp.mrp.entity.MaterialRecordPara;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.web.PageListPara;
@@ -54,7 +58,7 @@ public class CirAct {
 		return "pages/order/order_list";
 	}
 	
-	public String orderAdd(String orderType, String serialTitle, HttpServletRequest request, ModelMap model) {
+	public String orderAdd(String orderType, String serialTitle, List<MaterialRecordPara> mrps, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("orderType", orderType);
 		model.addAttribute("openMode", "add");
 		
@@ -70,6 +74,16 @@ public class CirAct {
 		
 		order.setSerial(defaultSerial);
 		
+		if(mrps!=null){
+			List<OrderRecord> orderRecords = new ArrayList<OrderRecord>();
+			
+			for(MaterialRecordPara mrp : mrps){
+				OrderRecord record = new OrderRecord();
+				record.setMaterial(materialDao.findById(mrp.getMaterialId()));
+				orderRecords.add(record);
+			}
+			order.setRecords(orderRecords);
+		}
 		model.addAttribute("order", order);
 		
 		return "pages/order/order_detail";
@@ -354,4 +368,7 @@ public class CirAct {
 	
 	@Autowired
 	protected OrderDao orderDao;
+	
+	@Autowired
+	private MaterialDao materialDao;
 }
