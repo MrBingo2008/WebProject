@@ -162,6 +162,15 @@ function test(){
 							<td><input type="text" name="records[${count}].number" value="${record.number!}" size="12" class="positiveNumber textInput required"></td>
 							<#if order.status gt 0><td><input type="text" name="records[${count}].finishNumber" value="${record.finishNumber!}" size="12" readonly></td></#if>
 							<td><input type="text" name="records[${count}].material.unit" value="${record.material.unit!}" size="12" class="textInput" readonly></td>
+							
+							<#if '${orderType}' == 'purchase'>
+							<td>
+								<input type="hidden" name="records[${count}].ids" value="" class="textInput">
+								<div name="records[${count}].infos" class="lookupDiv"></div>
+								<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="records[${count}]" lookuppk="ids" aTitle="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>
+							</td>
+							</#if>
+							
 							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
 						</tr>
 						<#assign count=count+1/>

@@ -14,18 +14,18 @@ $("#purchaseOrderGen").click(function(event){
 	<table class="table" width="100%" layoutH="54">
 		<thead>
 			<tr>
-				<th width="30"><@s.m "purchase.order.todo.material"/></th>
-				<th width="60"><@s.m "sell.order.serial"/></th>
-				<th width="30"><@s.m "global.operate"/></th>
+				<th width="30"><@s.m "rawMaterial"/></th>
+				<th width="10"><@s.m "material.number"/></th>
+				<th width="50"><@s.m "rawMaterial.product"/></th>
 			</tr>
 		</thead>
 		<tbody>
 			<#if mrps??>
 			<#list mrps as mrp>
 			<tr>
-				<td>${mrp.material!}</td>
-				<td></td> 
-				<td></td>
+				<td>${mrp.materialInfo!}</td>
+				<td>${mrp.materialNumber!}</td> 
+				<td>${mrp.recordInfo!}</td>
 			</tr>
 			</#list>
 			</#if>
@@ -34,7 +34,7 @@ $("#purchaseOrderGen").click(function(event){
 </div>
 <div class="formBar">
 	<ul>
-		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_list.do" target="dialog" rel="dialog_purchase_order_todo_list"><@s.m "purchase.order.todo.clear"/></a></button></div></div></li>
+		<li><div class="button"><div class="buttonContent"><button type="button"><a href="v_purchase_order_todo_list.do" target="dialog" rel="dialog_purchase_order_todo_list" title="<@s.m 'purchase.order.todo.list'/>"><@s.m "purchase.order.todo.clear"/></a></button></div></div></li>
 		<li><div class="button"><div class="buttonContent"><button type="button"><a id="purchaseOrderGen" href=""><@s.m "purchase.order.todo.gen"/></a></button></div></div></li>
 	</ul>
 </div>

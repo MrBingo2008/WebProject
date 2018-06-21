@@ -80,6 +80,7 @@ public class CirAct {
 			for(MaterialRecordPara mrp : mrps){
 				OrderRecord record = new OrderRecord();
 				record.setMaterial(materialDao.findById(mrp.getMaterialId()));
+				record.setNumber(mrp.getMaterialNumber());
 				orderRecords.add(record);
 			}
 			order.setRecords(orderRecords);
@@ -370,5 +371,5 @@ public class CirAct {
 	protected OrderDao orderDao;
 	
 	@Autowired
-	private MaterialDao materialDao;
+	protected MaterialDao materialDao;
 }

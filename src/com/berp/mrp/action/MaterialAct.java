@@ -208,11 +208,6 @@ public class MaterialAct {
 	public String recordMaterialMultiList(Integer orderId, HttpServletRequest request, ModelMap model) {
 		Order order = orderDao.findById(orderId);
 		model.addAttribute("order", order);
-		for(OrderRecord record:order.getRecords()){
-			for(ProductMaterial a : record.getMaterial().getAssemblies()){
-				a.getMaterial().getInfo();
-			}
-		}
 		return "pages/data_setting/record_material_multi_list";
 	}
 	

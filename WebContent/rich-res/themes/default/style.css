@@ -129,11 +129,11 @@ input.disabled, textarea.disabled { border-color:#9eabb3 #d5dbdf #d5dbdf #9eabb3
 /*added by stone*/
 .lookupDiv{
 	white-space:nowrap; 
-	overflow:scroll;
-	width:180px;
-	height:60px;
+	/*overflow:scroll;*/
+	width:120px;
+	height:20px;
 	float:left;
-	border:solid 1px #d5dbdf;
+	border:solid 1px #b8d0d6;
 }
 
 /* Button */

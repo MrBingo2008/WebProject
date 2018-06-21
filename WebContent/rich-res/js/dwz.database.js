@@ -37,8 +37,10 @@
 						}
 						//2018-4-25: stone:增加change()是为了手动触发input的change事件，让plan自动生成items
 						//$input.val(args[key]);
-						if(tagName == "DIV")
+						if(tagName == "DIV"){
 							$input.html(args[key]);
+							$input.css({width:"auto", height:"auto"});
+						}
 						else
 							$input.val(args[key]).change();
 						break;
@@ -388,7 +390,7 @@
 			 */
 			function initSuffix($tbody) {
 				$tbody.find('>tr').each(function(i){
-					$(':input, a.btnLook, a.btnAttach, span.label', this).each(function(){
+					$(':input, a.btnLook, a.btnAttach, span.label, div.lookupDiv', this).each(function(){
 						var $this = $(this), name = $this.attr('name'), val = $this.val();
 						var display = $this.attr('display');
 						

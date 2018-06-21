@@ -15,12 +15,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.entity.Order;
+import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.web.PageListPara;
 import com.berp.framework.util.StrUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
 import com.berp.framework.web.session.SessionProvider;
 import com.berp.mrp.dao.MaterialDao;
+import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.MaterialRecordPara;
@@ -83,7 +85,7 @@ public class PurchaseAct extends CirAct {
 	
 	
 	@RequestMapping("/v_purchase_order_todo_list.do")
-	public String todoList(String materialIdString, String recordIdString, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public String todoList(String materialIdString, String recordIdString, String numberString, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(StringUtils.isBlank(materialIdString)){
 			sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST, null);
 			//sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_RECORD_LIST, null);
@@ -92,11 +94,17 @@ public class PurchaseAct extends CirAct {
 			if(mrps == null)
 				mrps = new ArrayList<MaterialRecordPara>();
 			Integer [] materialIds = StrUtils.getIntegersFromString(materialIdString);
-			for(Integer id : materialIds){
-				Material m = materialDao.findById(id);
+			Integer [] recordIds = StrUtils.getIntegersFromString(recordIdString);
+			Double [] numbers = StrUtils.getDoublesFromString(numberString);
+			for(int i = 0;i< materialIds.length;i++){
+				Material m = materialDao.findById(materialIds[i]);
+				OrderRecord r = recordDao.findById(recordIds[i]);
 				MaterialRecordPara p = new MaterialRecordPara();
-				p.setMaterial(m.getInfo());
+				p.setMaterialInfo(m.getInfo());
 				p.setMaterialId(m.getId());
+				p.setMaterialNumber(numbers[i]);
+				p.setRecordId(r.getId());
+				p.setRecordInfo(r.getInfo());
 				mrps.add(p);
 			}
 			
@@ -116,7 +124,6 @@ public class PurchaseAct extends CirAct {
 	@RequestMapping("/v_purchase_order_todo_gen.do")
 	public String orderGen(HttpServletRequest request, ModelMap model) {
 		List<MaterialRecordPara> mrps = (List<MaterialRecordPara>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST);
-		
 		return this.orderAdd("purchase", "CGDD", mrps, request, model);
 	}
 	
@@ -231,5 +238,5 @@ public class PurchaseAct extends CirAct {
 	private SessionProvider sessionProvider;
 	
 	@Autowired
-	private MaterialDao materialDao;
+	private OrderRecordDao recordDao;
 }

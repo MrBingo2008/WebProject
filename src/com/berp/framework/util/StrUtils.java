@@ -33,6 +33,19 @@ public class StrUtils {
 		return ids;
 	}
 	
+	public static Double [] getDoublesFromString(String str){
+		Double [] ids = null;
+		if(str != null && !str.equals(""))
+		{
+			String [] objectNames = str.split(",");
+			ids = new Double[objectNames.length];
+			for(int i=0;i<objectNames.length;i++){
+				ids[i] = Double.parseDouble(objectNames[i]);
+			}
+		}
+		return ids;
+	}
+	
 	public static String getStringFromIntegers(Integer [] ins){
 		StringBuilder result = new StringBuilder();
 		for(Integer in:ins){

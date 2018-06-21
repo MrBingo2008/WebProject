@@ -128,4 +128,12 @@ public class OrderRecord {
 		}
 		return result.toString();
 	}
+	
+	public String getInfo(){
+		return String.format("%s/%s", this.getMaterial().getInfo(), this.getOrd().getInfo());
+	}
+	
+	public String getFullInfo(){
+		return String.format("%s/%s/%s/%s", this.getMaterial().getInfo(), this.getSurface().getName(), this.getNumber().toString(), this.getOrd().getInfo());
+	}
 }

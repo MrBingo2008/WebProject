@@ -24,7 +24,7 @@
 					<th width="100" orderField="number" class="asc"><@s.m "rawMaterial"/></th>
 					<th width="100"><@s.m "material.number"/></th>
 					<th width="40"><@s.m "material.unit"/></th>
-					<th width="100"><@s.m "product"/></th>	
+					<th width="100"><@s.m "rawMaterial.product"/></th>	
 					<th width="100"><@s.m "sell.order.notFinishNumber"/></th>
 					<th width="40"><@s.m "material.unit"/></th>			
 				</tr>
@@ -35,9 +35,13 @@
 				<#if record.material.assemblies??>
 				<#list record.material.assemblies as assembly>
 				<tr target="sid_obj" rel="1">
-				    <td><input type="checkbox" name="checkboxIds" value="{'materialId':'${assembly.material.id}','recordId':'${record.id}'}"/></td>
+					<#assign needNumber = 0 />
+					<#if assembly.materialNumber != 0>
+						<#assign needNumber = record.notFinishNumber * assembly.materialNumber / assembly.productNumber  />
+					</#if> 
+				    <td><input type="checkbox" name="checkboxIds" value="{'materialId':'${assembly.material.id}','recordId':'${record.id}', number:${needNumber}}"/></td>
 					<td>${assembly.material.info!}</td>
-					<td></td>
+					<td>${needNumber!}</td>
 					<td>${assembly.material.unit!}</td>
 					<td>${record.material.info!}</td>
 					<td>${record.notFinishNumber!}</td>
@@ -78,7 +82,7 @@ function test(){
 }
 
 function closeAndSelect(){
-	var materialIdString = "", recordIdString = "";
+	var materialIdString = "", recordIdString = "", numberString;
 	//var $unitBox = $this.parents(".unitBox:first");
 	var $unitBox = $("#testButton").parents(".unitBox:first");
 	$unitBox.find("[name='checkboxIds']").filter(":checked").each(function(){
@@ -91,17 +95,20 @@ function closeAndSelect(){
 			}else if(key =="recordId"){
 				var temp = recordIdString ? recordIdString+"," : "";
 				recordIdString = temp + _args[key];
+			}else if(key =="number"){
+				var temp = numberString ? numberString+"," : "";
+				numberString = temp + _args[key];
 			}
 		}
 	});
 
-	if ($.isEmptyObject(materialIdString)) {
+	if (materialIdString == null || materialIdString == "") {
 		alertMsg.error("请选择原材料");
 		return false;
 	}
 	
 	$.pdialog.close("dialog_purchase_order_todo_select");
-	$.pdialog.open("v_purchase_order_todo_list.do?materialIdString="+materialIdString, "dialog_purchase_order_todo_list", "<@s.m 'purchase.order.todo.list'/>", {width:300, height:200, align:"bottomLeft", close:"function(){ajaxTodo('o_purchase_order_todo_clear.do');}"});
+	$.pdialog.open("v_purchase_order_todo_list.do?materialIdString="+materialIdString+"&recordIdString="+recordIdString+"&numberString="+numberString, "dialog_purchase_order_todo_list", "<@s.m 'purchase.order.todo.list'/>", {width:300, height:200, align:"bottomLeft", close:"function(){ajaxTodo('o_purchase_order_todo_clear.do');}"});
 	
 }
 </script>
