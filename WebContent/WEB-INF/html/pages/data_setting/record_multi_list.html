@@ -45,7 +45,7 @@
 			<tbody>
 			<#list records as record>
 				<tr target="sid_obj" rel="1">
-				    <td><input type="checkbox" name="orgId" value="{'ids':'${record.id}', 'infos':'${record.material.info!}/${(record.surface.name)!}/${record.ord.info!}',
+				    <td><input type="checkbox" name="orgId" value="{'ids':'${record.id}', 'infos':'${record.info!}',
 				    number:'${record.notFinishNumber!}','material.id':'${record.material.id}', 'material.info':'${record.material.info!}'}"/></td>
 					<td>${record.material.allSerial!}</td>
 					<td>${record.material.info!}</td>

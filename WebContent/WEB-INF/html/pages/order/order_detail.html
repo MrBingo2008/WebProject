@@ -130,7 +130,7 @@ function test(){
 							
 							<#if '${orderType}' == 'purchase'>
 								<th type="lookup" name="records[#index#].infos" size="20" lookupType="div"
-								lookupGroup="records[#index#]" lookuppk="ids" lookupUrl="v_record_multi_list.do?type=1" aTitle="<@s.m 'plan.selectMaterial'/>"
+								lookupGroup="records[#index#]" lookuppk="ids" lookupUrl="v_record_multi_list.do?type=1" aTitle="<@s.m 'sell.order.selectProduct'/>"
 								fieldAttrs="{readonly:'readonly'}" fieldClass="required lookupDiv"><@s.m "sell.order"/></th>
 							</#if>
 								
@@ -165,9 +165,9 @@ function test(){
 							
 							<#if '${orderType}' == 'purchase'>
 							<td>
-								<input type="hidden" name="records[${count}].ids" value="" class="textInput">
-								<div name="records[${count}].infos" class="lookupDiv"></div>
-								<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="records[${count}]" lookuppk="ids" aTitle="<@s.m 'plan.selectMaterial'/>"><@s.m "sell.order"/></a>
+								<input type="hidden" name="records[${count}].ids" value="${record.ids!}" class="textInput">
+								<div name="records[${count}].infos" class="lookupDiv" <#if record.sellRecordInfos??>style="width:auto;height:auto"</#if>>${record.sellRecordInfos!}</div>
+								<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="records[${count}]" lookuppk="ids" aTitle="<@s.m 'sell.order.selectProduct'/>"></a>
 							</td>
 							</#if>
 							

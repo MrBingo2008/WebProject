@@ -2,23 +2,24 @@ package com.berp.mrp.action;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 //stone: 这几个类是否属于springmvc?
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.dao.CirDao;
 import com.berp.mrp.dao.MaterialDao;
 import com.berp.mrp.dao.OrderDao;
+import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.MaterialRecordPara;
@@ -28,6 +29,7 @@ import com.berp.mrp.web.PageListPara;
 import com.berp.core.entity.User;
 import com.berp.framework.page.Pagination;
 import com.berp.framework.util.DateUtils;
+import com.berp.framework.util.StrUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.RequestInfoUtils;
 import com.berp.framework.web.ResponseUtils;
@@ -81,6 +83,9 @@ public class CirAct {
 				OrderRecord record = new OrderRecord();
 				record.setMaterial(materialDao.findById(mrp.getMaterialId()));
 				record.setNumber(mrp.getMaterialNumber());
+				Set sellRecords = new HashSet<OrderRecord>();
+				sellRecords.add(recordDao.findById(mrp.getRecordId()));
+				record.setSellRecords(sellRecords);
 				orderRecords.add(record);
 			}
 			order.setRecords(orderRecords);
@@ -100,6 +105,17 @@ public class CirAct {
 				record.setSurface(null);
 			record.setOrd(order);
 			record.setStatus(order.getStatus());
+			
+			//add 2018-06-22
+			if(StringUtils.isBlank(record.getIds()) == false){
+				Integer [] sellRecordIds = StrUtils.getIntegersFromString(record.getIds());
+				Set<OrderRecord> sellRecords = new HashSet<OrderRecord>();
+				for(Integer sellRecordId : sellRecordIds){
+					sellRecords.add(recordDao.findById(sellRecordId));
+				}
+				record.setSellRecords(sellRecords);
+			}
+			
 		}
 		order.setType(orderType);
 		try{
@@ -153,6 +169,17 @@ public class CirAct {
 			
 			record.setOrd(order);
 			record.setStatus(order.getStatus());
+			
+			//add 2018-06-22
+			if(StringUtils.isBlank(record.getIds()) == false){
+				Integer [] sellRecordIds = StrUtils.getIntegersFromString(record.getIds());
+				Set<OrderRecord> sellRecords = new HashSet<OrderRecord>();
+				for(Integer sellRecordId : sellRecordIds){
+					sellRecords.add(recordDao.findById(sellRecordId));
+				}
+				//record.getSellRecords().clear();
+				record.setSellRecords(sellRecords);
+			}
 		}
 		
 		order.setType(type);
@@ -369,6 +396,9 @@ public class CirAct {
 	
 	@Autowired
 	protected OrderDao orderDao;
+	
+	@Autowired
+	protected OrderRecordDao recordDao;
 	
 	@Autowired
 	protected MaterialDao materialDao;

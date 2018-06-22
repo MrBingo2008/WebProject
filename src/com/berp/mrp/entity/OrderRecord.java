@@ -2,6 +2,8 @@ package com.berp.mrp.entity;
 
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.berp.mrp.entity.Process;
 
 public class OrderRecord {
@@ -15,6 +17,9 @@ public class OrderRecord {
 	private Order order;
 	private Set<Plan> plans;
 	private Set<BatchFlow> flows;
+	//用于表示sellRecords的id参数传递
+	private String ids;
+	private Set<OrderRecord> sellRecords;
 
 	public OrderRecord(){
 		
@@ -103,6 +108,42 @@ public class OrderRecord {
 
 	public void setFlows(Set<BatchFlow> flows) {
 		this.flows = flows;
+	}
+	
+	//sell records
+	public Set<OrderRecord> getSellRecords() {
+		return sellRecords;
+	}
+
+	public void setSellRecords(Set<OrderRecord> sellRecords) {
+		this.sellRecords = sellRecords;
+	}
+	
+	//sell records ids
+	public String getIds() {
+		//两个地方会调用到，一个是init detail时，需要获取，一个是save或update order时，需要获取
+		if(StringUtils.isBlank(this.ids) && sellRecords != null){
+			String result = new String();
+			for(OrderRecord record: sellRecords){
+				String id = record.getId().toString();
+				result = result.isEmpty()?id:"," + id;
+			}
+			return result;
+		}
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+	
+	//sell record infos: 用于原料对应的客户订单
+	public String getSellRecordInfos(){
+		StringBuilder result = new StringBuilder();
+		for(OrderRecord record: sellRecords){
+			result.append(record.getInfo()+"<br>");
+		}
+		return result.toString();
 	}
 	
 	public String getPlansDetail(){

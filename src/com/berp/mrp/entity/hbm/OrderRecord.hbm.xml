@@ -19,5 +19,9 @@
 			<key column="record_id"/>
 			<one-to-many class="com.berp.mrp.entity.BatchFlow"/>
 		</set>
+		<set name="sellRecords" table="ord_record_record" inverse="false">
+			<key column="purchase_record_id"/>
+			<many-to-many column="sell_record_id" class="OrderRecord"/>
+		</set>
 	</class>
 </hibernate-mapping>

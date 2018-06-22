@@ -61,8 +61,13 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 		if(bean.getStatus() == 1)
 			this.updateMaterialQuatity(bean);
 		
+		//删除record之前，要把相关的sell records也删除了
+		//String hql = "delete from OrderRecord bean where bean.ord.id is null";
+		//getSession().createQuery(hql).executeUpdate();
+		
 		String hql = "delete from OrderRecord bean where bean.ord.id is null";
 		getSession().createQuery(hql).executeUpdate();
+		
 		return bean;
 	}
 	

@@ -47,8 +47,8 @@ public class PurchaseAct extends CirAct {
 	
 	@RequestMapping("/o_purchase_order_save.do")
 	public void orderSave(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		if(order.getSellOrder().getId() == null)
-			order.setSellOrder(null);
+		//if(order.getSellOrder().getId() == null)
+		//	order.setSellOrder(null);
 		this.orderSave(order, 1, "v_purchase_order_list.do?type=0", "查询采购订单", request, response, model);
 	}
 
@@ -67,8 +67,8 @@ public class PurchaseAct extends CirAct {
 	@RequestMapping("/o_purchase_order_update.do")
 	public void orderUpdate(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
 			Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		if(order.getSellOrder().getId() == null)
-			order.setSellOrder(null);
+		//if(order.getSellOrder().getId() == null)
+		//	order.setSellOrder(null);
 		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0"+ this.getUrlPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage), "查询采购订单", request, response, model);
 	}
 	
@@ -236,7 +236,5 @@ public class PurchaseAct extends CirAct {
 	
 	@Autowired
 	private SessionProvider sessionProvider;
-	
-	@Autowired
-	private OrderRecordDao recordDao;
+
 }
