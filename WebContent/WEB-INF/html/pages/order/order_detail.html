@@ -45,11 +45,6 @@ function test(){
 </script>
 <div class="pageContent">
 	<form id="orderForm" method="post" action="o_${orderType}_order_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
-		<input type="hidden" name="pageNum" value="${pageNum!}" />
-		<input type="hidden" name="numPerPage" value="${numPerPage!}" />
-		<input type="hidden" name="searchName" value="${searchName!}"/>
-		<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
-		<input type="hidden" name="searchStatus" value="${searchStatus!}" />
 		<input id="statusInput" type="hidden" name="status" value="${order.status}"/>
 		<div id = "formContent" class="pageFormContent" layoutH="56">
 			
@@ -115,7 +110,7 @@ function test(){
 								lookupGroup="records[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=1" aTitle="<@s.m 'material'/>"
 								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "material.allSerial"/></th>
 								
-							<th type="text" name="records[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							<th type="text" name="records[#index#].material.nameSpec" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "material.nameSpec"/></th>
 							
 							<!-- lookupGroup跟material不一样，为records[].surface，因为step的input name有可能为steps[].name或record.surface.name，所以step list返回的key只能为name -->
 							<#if '${orderType}'=='sell'>
@@ -131,7 +126,7 @@ function test(){
 							<#if '${orderType}' == 'purchase'>
 								<th type="lookup" name="records[#index#].infos" size="20" lookupType="div"
 								lookupGroup="records[#index#]" lookuppk="ids" lookupUrl="v_record_multi_list.do?type=1" aTitle="<@s.m 'sell.order.selectProduct'/>"
-								fieldAttrs="{readonly:'readonly'}" fieldClass="required lookupDiv"><@s.m "sell.order"/></th>
+								fieldAttrs="{readonly:'readonly'}" fieldClass="required lookupDiv"><@s.m "sell.order.forProduct"/></th>
 							</#if>
 								
 							<th type="del" width="60"><@s.m "global.operate"/></th>
@@ -141,14 +136,14 @@ function test(){
 					<#if order.records??>
 						<#assign count=0 />
 						<#list order.records as record>
-						<tr class="unitBox">
+						<tr>
 						    <td><span class="label" display="#index#">${count+1}</span>
 						    <input type="hidden" name="records[${count}].id" value="${record.id!}"></input></td>
 							<td>
 								<input type="text" name="records[${count}].material.serial" value="${record.material.allSerial!}" size="20" class="textInput required" readonly>
 								<a class="btnLook" href="v_material.do?type=1" lookupgroup="records[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>
 							</td>
-							<td><input type="text" name="records[${count}].material.name" value="${record.material.name!}" size="12" class="textInput" readonly>
+							<td><input type="text" name="records[${count}].material.nameSpec" value="${record.material.nameSpec!}" size="20" class="textInput" readonly>
 							<input type="hidden" name="records[${count}].material.id" value="${record.material.id!}" class="textInput"></td>
 							
 							<#if '${orderType}'=='sell'>
@@ -167,7 +162,7 @@ function test(){
 							<td>
 								<input type="hidden" name="records[${count}].ids" value="${record.ids!}" class="textInput">
 								<div name="records[${count}].infos" class="lookupDiv" <#if record.sellRecordInfos??>style="width:auto;height:auto"</#if>>${record.sellRecordInfos!}</div>
-								<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="records[${count}]" lookuppk="ids" aTitle="<@s.m 'sell.order.selectProduct'/>"></a>
+								<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="records[${count}]" lookuppk="ids"><@s.m 'sell.order.selectProduct'/></a>
 							</td>
 							</#if>
 							
@@ -187,7 +182,7 @@ function test(){
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${orderType}_order_cancelApproval.do?orderId=${order.id!}${urlPara}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
-				<li><div class="button"><div class="buttonContent"><a href="v_${orderType}_order_list.do?type=${type!}${urlPara}" target="navTab" rel="main" title="<@s.m '${orderType}.order.list'/>"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
+				<li><div class="button"><div class="buttonContent"><a href="v_${orderType}_order_list.do?type=${type!}&useSession=1" target="navTab" rel="main" title="<@s.m '${orderType}.order.list'/>"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>
 	</form>

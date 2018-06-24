@@ -39,6 +39,21 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		return entity;
 	}
 	
+	public OrderRecord deleteById(Integer id) {
+		OrderRecord entity = get(id);
+		if (entity != null) {
+			getSession().delete(entity);
+		}
+		return entity;
+	}
+	
+	public void deleteOrderNull(){
+		Finder f = Finder.create("select bean from OrderRecord bean where bean.ord.id is null");
+		List<OrderRecord> toDelList = find(f);
+		for(OrderRecord record: toDelList)
+			getSession().delete(record);
+	}
+	
 	public List<OrderRecord> findByCompanyAndMaterial(Integer companyId, Integer materialId, String name, Integer orderType, Integer status1, Integer status2, Date start, Date end){
 		Finder f = Finder.create("select bean from OrderRecord bean where 1=1");
 		if(companyId!=null)
@@ -213,7 +228,4 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 	
 	@Autowired
 	private OrderDao orderDao;
-	
-	@Autowired
-	private CompanyDao companyDao;
 }

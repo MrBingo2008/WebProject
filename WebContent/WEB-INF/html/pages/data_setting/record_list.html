@@ -56,8 +56,10 @@
 					<#else>
 						<!-- 因为在plan里，既要返回material，也要返回record，所以lookupGroup直接为空，在返回的名称里直接命名，如record.id -->
 						<!-- 返回number，可以满足(plan)number和(cir).flows[].number -->
-						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.name':'${record.material.name!}','material.info':'${record.material.info!}', 'material.unit':'${record.material.unit!}',
-						 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
+						<#assign boxNum = "" />
+						<#if record.material.numPerBox?? && record.material.numPerBox != 0><#assign boxNum = record.notFinishNumber / record.material.numPerBox /></#if>
+						<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.nameSpec':'${record.material.nameSpec!}', numPerBox:'${record.material.numPerBox!}', 'material.unit':'${record.material.unit!}',
+						 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', boxNum: '${boxNum}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'})"><@s.m "global.select"/></a>
 					</#if>
 					</td>
 				</tr>

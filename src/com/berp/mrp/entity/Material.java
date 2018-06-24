@@ -90,11 +90,12 @@ public class Material {
 		if(!StringUtils.isBlank(this.customerSerial))
 			return String.format("%s ( %s )", this.getName(),this.customerSerial);
 		return this.getName();
-		
-		/*String result = this.getAllSerial();
-		if(this.name != null && !this.name.equals(""))
-			result = result + " (" +this.name + ")";
-		return result;*/
+	}
+	
+	public String getNameSpec(){
+		if(!StringUtils.isBlank(this.spec))
+			return String.format("%s ( %s )", this.getName(),this.spec);
+		return this.getName();
 	}
 	
 	public String getFullShowName(){

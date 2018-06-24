@@ -24,7 +24,11 @@
 				var $input = $(this), inputName = $input.attr("name");
 				
 				for (var key in args) {
-					var name = (_lookup.pk == key) ? _util.lookupPk(key) : _util.lookupField(key);
+					var name = null;
+					if(key.indexOf(":") == 0)
+						name = key.substring(1, key.length);
+					else
+						name = (_lookup.pk == key) ? _util.lookupPk(key) : _util.lookupField(key);
 
 					if (name == inputName) {
 						
@@ -486,7 +490,9 @@
 				$(fields).each(function(){
 					html += tdHtml(this);
 				});
-				return '<tr class="unitBox">'+html+'</tr>';
+				//stone: bring时，会通过这个unitBox来作为查找的范围，详见bringBack，那这样就无法自动填充客户
+				//return '<tr class="unitBox">'+html+'</tr>';
+				return '<tr>'+html+'</tr>';
 			}
 		},
 		

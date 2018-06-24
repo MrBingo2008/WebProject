@@ -126,7 +126,7 @@ public class OrderRecord {
 			String result = new String();
 			for(OrderRecord record: sellRecords){
 				String id = record.getId().toString();
-				result = result.isEmpty()?id:"," + id;
+				result = StringUtils.isBlank(result)?id:result + "," + id;
 			}
 			return result;
 		}
@@ -139,6 +139,8 @@ public class OrderRecord {
 	
 	//sell record infos: 用于原料对应的客户订单
 	public String getSellRecordInfos(){
+		if(sellRecords == null || sellRecords.size() == 0)
+			return null;
 		StringBuilder result = new StringBuilder();
 		for(OrderRecord record: sellRecords){
 			result.append(record.getInfo()+"<br>");

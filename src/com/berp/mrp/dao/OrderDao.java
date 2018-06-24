@@ -61,13 +61,12 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 		if(bean.getStatus() == 1)
 			this.updateMaterialQuatity(bean);
 		
-		//删除record之前，要把相关的sell records也删除了
-		//String hql = "delete from OrderRecord bean where bean.ord.id is null";
-		//getSession().createQuery(hql).executeUpdate();
+		//update order时，对于records来说，先update，然后再把外键清空，然后再为赋值外键，如果record不再属于order，则不会赋值外键
+		//所以还要手动删除， 但是之前删除直接用hql的delete，这样是无法删除record的sellRecords，所以改为delete(entity)
+		//对于delete order来说，就不一样了，会直接delete record
 		
-		String hql = "delete from OrderRecord bean where bean.ord.id is null";
-		getSession().createQuery(hql).executeUpdate();
-		
+		//而update order record时，会自动删除sell records，所以不需要手动去删除
+		recordDao.deleteOrderNull();
 		return bean;
 	}
 	
@@ -220,6 +219,9 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 	protected Class<Order> getEntityClass() {
 		return Order.class;
 	}
+	
+	@Autowired
+	OrderRecordDao recordDao;
 	
 	@Autowired
 	private MaterialDao materialDao;

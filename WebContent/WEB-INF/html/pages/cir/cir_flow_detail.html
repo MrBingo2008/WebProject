@@ -139,7 +139,7 @@ function calFactor(numInput){
 								><@s.m "material.allSerial"/></th>
 							<!-- direction=1表示进， 2出 -->	
 							<#if direction == 2><th type="hidden" name="flows[#index#].parent.id" style="display:none"></th></#if>	
-							<th type="text" name="flows[#index#].material.name" size="10" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							<th type="text" name="flows[#index#].material.nameSpec" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "material.nameSpec"/></th>
 							<th type="text" name="flows[#index#].serial" size="18" <#if direction == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
 
 							<#if cirType == 'sellOut' || cirType == 'purchaseIn'>
@@ -183,7 +183,7 @@ function calFactor(numInput){
 							</td>
 							
 							<#if direction == 2><input type="hidden" name="flows[${count}].parent.id" value="${(flow.parent.id)!}"></input></#if>
-							<td><input type="text" name="flows[${count}].material.name" value="${flow.material.name!}" size="12" class="textInput" readonly></td>
+							<td><input type="text" name="flows[${count}].material.nameSpec" value="${flow.material.nameSpec!}" size="20" class="textInput" readonly></td>
 							<td><input type="text" name="flows[${count}].serial" value="${flow.serial!}" size="24" class="textInput" readonly></td>
 							
 							<#if cirType == 'sellOut' || cirType == 'purchaseIn'>

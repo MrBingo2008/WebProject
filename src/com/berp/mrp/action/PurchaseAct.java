@@ -2,7 +2,9 @@ package com.berp.mrp.action;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,13 +33,12 @@ import com.berp.mrp.entity.MaterialRecordPara;
 public class PurchaseAct extends CirAct {
 	
 	public static final String PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST = "purchaseOrderTodoMaterialRecordList";
-	//public static final String PURCHASE_ORDER_TODO_RECORD_LIST = "purchaseOrderTodoRecordList";
 	
 	//purchase order
 	@RequestMapping("/v_purchase_order_list.do")
 	//type表示select和list模式
-	public String orderList(Integer type, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchase", type, request, model);
+	public String orderList(Integer type, Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.orderList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchase", type, request, response, model);
 	}
 	
 	@RequestMapping("/v_purchase_order_add.do")
@@ -53,9 +54,8 @@ public class PurchaseAct extends CirAct {
 	}
 
 	@RequestMapping("/v_purchase_order_view.do")
-	public String orderView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer orderId, HttpServletRequest request, ModelMap model) {
-		return this.orderView(searchName, searchRecordName, searchStatus, pageNum, numPerPage,orderId, "purchase", request, model);
+	public String orderView(Integer orderId, HttpServletRequest request, ModelMap model) {
+		return this.orderView(orderId, "purchase", request, model);
 	}
 	
 	@RequestMapping("/v_purchase_order_edit.do")
@@ -97,6 +97,10 @@ public class PurchaseAct extends CirAct {
 			Integer [] recordIds = StrUtils.getIntegersFromString(recordIdString);
 			Double [] numbers = StrUtils.getDoublesFromString(numberString);
 			for(int i = 0;i< materialIds.length;i++){
+				
+				if(containMaterialRecord(mrps, materialIds[i], recordIds[i]))
+					continue;
+				
 				Material m = materialDao.findById(materialIds[i]);
 				OrderRecord r = recordDao.findById(recordIds[i]);
 				MaterialRecordPara p = new MaterialRecordPara();
@@ -115,6 +119,16 @@ public class PurchaseAct extends CirAct {
 		return "pages/order/order_todo_list";
 	}
 	
+	private boolean containMaterialRecord(List<MaterialRecordPara> mrps, Integer materialId, Integer recordId){
+		if(mrps == null || mrps.size() ==0)
+			return false;
+		for(MaterialRecordPara mrp:mrps){
+			if(mrp.getMaterialId().equals(materialId) && mrp.getRecordId().equals(recordId))
+				return true;
+		}
+		return false;
+	}
+	
 	@RequestMapping("/o_purchase_order_todo_clear.do")
 	public void todoClear(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST, null);
@@ -122,9 +136,19 @@ public class PurchaseAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_purchase_order_todo_gen.do")
-	public String orderGen(HttpServletRequest request, ModelMap model) {
+	public String orderGen(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		List<MaterialRecordPara> mrps = (List<MaterialRecordPara>)sessionProvider.getAttribute(request, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST);
-		return this.orderAdd("purchase", "CGDD", mrps, request, model);
+		sessionProvider.setAttribute(request, response, PURCHASE_ORDER_TODO_MATERIAL_RECORD_LIST, null);
+		
+		Map<Integer, List<MaterialRecordPara>> materialMrps = new HashMap<Integer, List<MaterialRecordPara>>();
+		for(MaterialRecordPara mrp: mrps){
+			Integer materialId = mrp.getMaterialId();
+			if(!materialMrps.containsKey(materialId)){
+				materialMrps.put(materialId, new ArrayList<MaterialRecordPara>());
+			}
+			materialMrps.get(materialId).add(mrp);	
+		}
+		return this.orderAdd("purchase", "CGDD", materialMrps, request, model);
 	}
 	
 	//purchase in, type(direction)表示方向，统一1为进，2为出

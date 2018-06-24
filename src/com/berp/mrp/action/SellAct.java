@@ -26,9 +26,9 @@ public class SellAct extends CirAct {
 	
 	//只需要type就可以，cirType根据它再定
 	@RequestMapping("/v_sell_order_list.do")
-	public String orderList(Integer type, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+	public String orderList(Integer type, Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		//其实type可以不用作为参数
-		return this.orderList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sell", type, request, model);
+		return this.orderList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sell", type, request, response, model);
 	}
 	
 	@RequestMapping("/v_sell_order_add.do")
@@ -45,10 +45,8 @@ public class SellAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_sell_order_view.do")
-	public String orderView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer orderId, HttpServletRequest request, ModelMap model) {
-		return this.orderView(searchName, searchRecordName, searchStatus, pageNum, numPerPage,
-				orderId, "sell", request, model);
+	public String orderView(Integer orderId, HttpServletRequest request, ModelMap model) {
+		return this.orderView(orderId, "sell", request, model);
 	}
 	
 	@RequestMapping("/v_sell_order_edit.do")
