@@ -37,8 +37,8 @@ public class PurchaseAct extends CirAct {
 	//purchase order
 	@RequestMapping("/v_purchase_order_list.do")
 	//type表示select和list模式
-	public String orderList(Integer type, Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		return this.orderList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchase", type, request, response, model);
+	public String orderList(Integer type, Integer useSession, String searchName, String searchRecordName, String searchCompanyName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.orderList(useSession, searchName, searchRecordName,searchCompanyName, searchStatus, pageNum, numPerPage, "purchase", type, request, response, model);
 	}
 	
 	@RequestMapping("/v_purchase_order_add.do")
@@ -59,23 +59,20 @@ public class PurchaseAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_purchase_order_edit.do")
-	public String orderEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer orderId, HttpServletRequest request, ModelMap model) {
-		return this.orderEdit(searchName, searchRecordName, searchStatus, pageNum, numPerPage,orderId, "purchase", request, model);
+	public String orderEdit(Integer orderId, HttpServletRequest request, ModelMap model) {
+		return this.orderEdit(orderId, "purchase", request, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_update.do")
-	public void orderUpdate(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void orderUpdate(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		//if(order.getSellOrder().getId() == null)
 		//	order.setSellOrder(null);
-		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0"+ this.getUrlPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage), "查询采购订单", request, response, model);
+		this.orderUpdate(order, 1, "v_purchase_order_list.do?type=0&useSession=1", "查询采购订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_cancelApproval.do")
-	public void orderCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		this.orderCancelApprovalBase(orderId, "v_purchase_order_edit.do?orderId="+orderId+ this.getUrlPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage), "编辑采购订单", request, response, model);
+	public void orderCancelApproval(Integer orderId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		this.orderCancelApprovalBase(orderId, "v_purchase_order_edit.do?orderId="+orderId, "编辑采购订单", request, response, model);
 	}
 	
 	@RequestMapping("/o_purchase_order_delete.do")

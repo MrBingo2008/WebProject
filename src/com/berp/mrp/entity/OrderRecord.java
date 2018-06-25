@@ -1,5 +1,6 @@
 package com.berp.mrp.entity;
 
+import java.util.Date;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +14,8 @@ public class OrderRecord {
 	private Integer status=0;
 	
 	private Material material;
+	private Date deadlineTime;
+	
 	private Step surface;
 	private Order order;
 	private Set<Plan> plans;
@@ -20,6 +23,7 @@ public class OrderRecord {
 	//用于表示sellRecords的id参数传递
 	private String ids;
 	private Set<OrderRecord> sellRecords;
+	private Set<OrderRecord> purchaseRecords;
 
 	public OrderRecord(){
 		
@@ -76,6 +80,15 @@ public class OrderRecord {
 		this.material = m;
 	}
 	
+	//deadline
+	public Date getDeadlineTime() {
+		return deadlineTime;
+	}
+
+	public void setDeadlineTime(Date deadlineTime) {
+		this.deadlineTime = deadlineTime;
+	}
+	
 	//surface
 	public Step getSurface() {
 		return surface;
@@ -117,6 +130,15 @@ public class OrderRecord {
 
 	public void setSellRecords(Set<OrderRecord> sellRecords) {
 		this.sellRecords = sellRecords;
+	}
+	
+	//purchase records
+	public Set<OrderRecord> getPurchaseRecords() {
+		return purchaseRecords;
+	}
+
+	public void setPurchaseRecords(Set<OrderRecord> purchaseRecords) {
+		this.purchaseRecords = purchaseRecords;
 	}
 	
 	//sell records ids

@@ -25,6 +25,7 @@ import com.berp.mrp.dao.OrderDao;
 import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
+import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.MaterialRecordPara;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
@@ -42,17 +43,19 @@ public class CirAct {
 	
 	public static final String ORDER_SEARCH_NAME = "order_search_name";
 	public static final String ORDER_SEARCH_RECORD_NAME = "order_search_record_name";
+	public static final String ORDER_SEARCH_COMPANY_NAME = "order_search_company_name";
 	public static final String ORDER_SEARCH_STATUS = "order_search_status";
 	public static final String ORDER_PAGE_NUM = "order_page_num";
 	public static final String ORDER_NUM_PER_PAGE = "order_num_per_page";
 	
-	public String orderList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, 
+	public String orderList(Integer useSession, String searchName, String searchRecordName, String searchCompanyName, Integer searchStatus, Integer pageNum, Integer numPerPage, 
 			String orderType, Integer type,
 			HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		
 		if(useSession !=null && useSession == 1){
 			searchName = (String)sessionProvider.getAttribute(request, orderType + ORDER_SEARCH_NAME);
 			searchRecordName = (String)sessionProvider.getAttribute(request, orderType + ORDER_SEARCH_RECORD_NAME);
+			searchCompanyName = (String)sessionProvider.getAttribute(request, orderType + ORDER_SEARCH_COMPANY_NAME);
 			searchStatus = (Integer)sessionProvider.getAttribute(request, orderType + ORDER_SEARCH_STATUS);
 			pageNum = (Integer)sessionProvider.getAttribute(request, orderType + ORDER_PAGE_NUM);
 			numPerPage = (Integer)sessionProvider.getAttribute(request, orderType + ORDER_NUM_PER_PAGE);
@@ -65,13 +68,14 @@ public class CirAct {
 			type = 0;
 		//2018-4-22：假设type>0都是选择未完成的订单
 		if(type > 0){
-			pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, Order.Status.approval.ordinal(), Order.Status.partFinish.ordinal(), pageNum, numPerPage);
+			pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, searchCompanyName, Order.Status.approval.ordinal(), Order.Status.partFinish.ordinal(), pageNum, numPerPage);
 		}else
-			pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, searchStatus, null, pageNum, numPerPage);
+			pagination = orderDao.getPage(orderType.equals("purchase")?1:2, searchName, searchRecordName, searchCompanyName, searchStatus, null, pageNum, numPerPage);
 		
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("searchRecordName", searchRecordName);
+		model.addAttribute("searchCompanyName", searchCompanyName);
 		model.addAttribute("searchStatus", searchStatus);
 		
 		model.addAttribute("orderType", orderType);
@@ -79,6 +83,7 @@ public class CirAct {
 		
 		sessionProvider.setAttribute(request, response, orderType + ORDER_SEARCH_NAME, searchName);
 		sessionProvider.setAttribute(request, response, orderType + ORDER_SEARCH_RECORD_NAME, searchRecordName);
+		sessionProvider.setAttribute(request, response, orderType + ORDER_SEARCH_COMPANY_NAME, searchCompanyName);
 		sessionProvider.setAttribute(request, response, orderType + ORDER_SEARCH_STATUS, searchStatus);
 		sessionProvider.setAttribute(request, response, orderType + ORDER_PAGE_NUM, pageNum);
 		sessionProvider.setAttribute(request, response, orderType + ORDER_NUM_PER_PAGE, numPerPage);
@@ -108,7 +113,11 @@ public class CirAct {
 			while(iterator.hasNext()){
 				Map.Entry<Integer, List<MaterialRecordPara>> entry = iterator.next();
 				OrderRecord record = new OrderRecord();
-				record.setMaterial(materialDao.findById(entry.getKey()));
+				Material material = materialDao.findById(entry.getKey());
+				record.setMaterial(material);
+				
+				if(material.getCompany()!=null)
+					order.setCompany(material.getCompany());
 				
 				Double totalNum = 0.00;
 				Set sellRecords = new HashSet<OrderRecord>();
@@ -171,16 +180,9 @@ public class CirAct {
 		return "pages/order/order_detail";
 	}
 	
-	public String orderEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer orderId, String orderType, HttpServletRequest request, ModelMap model) {
+	public String orderEdit(Integer orderId, String orderType, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("orderType", orderType);
 		model.addAttribute("openMode", "edit");
-		
-		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("numPerPage", numPerPage);
-		model.addAttribute("searchName", searchName);
-		model.addAttribute("searchRecordName", searchRecordName);
-		model.addAttribute("searchStatus", searchStatus);
 		
 		model.addAttribute("order", orderDao.findById(orderId));
 		return "pages/order/order_detail";

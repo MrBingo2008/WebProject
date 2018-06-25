@@ -10,6 +10,7 @@
 		<many-to-one name="ord" column="ord_id" class="com.berp.mrp.entity.Order"/>
 		<many-to-one name="material" column="material_id" class="com.berp.mrp.entity.Material"/>
 		<many-to-one name="surface" column="surface_id" class="com.berp.mrp.entity.Step"/>
+		<property name="deadlineTime" column="deadline_time" type="timestamp" length="19"/>
 		<property name="status" column="status" type="integer" not-null="true" length="3"/>
 		<set name="plans" inverse="true" cascade="none">
 			<key column="rec_id"/>
@@ -22,6 +23,10 @@
 		<set name="sellRecords" table="ord_record_record" inverse="false">
 			<key column="purchase_record_id"/>
 			<many-to-many column="sell_record_id" class="OrderRecord"/>
+		</set>
+		<set name="purchaseRecords" table="ord_record_record" inverse="true">
+			<key column="sell_record_id"/>
+			<many-to-many column="purchase_record_id" class="OrderRecord"/>
 		</set>
 	</class>
 </hibernate-mapping>

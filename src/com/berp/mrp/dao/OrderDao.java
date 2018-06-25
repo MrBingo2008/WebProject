@@ -171,7 +171,7 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 		return find(f);
 	}
 	
-	public Pagination getPage(Integer type, String name, String recordName, Integer status, Integer status1, Integer pageNo, Integer pageSize) {
+	public Pagination getPage(Integer type, String name, String recordName, String companyName, Integer status, Integer status1, Integer pageNo, Integer pageSize) {
 		
 		pageNo = pageNo == null?1:pageNo;
 		pageSize = pageSize == null?20:pageSize;
@@ -182,16 +182,22 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 			f.setParam("type", type);
 		}
 		//notEmpty 包括null和""，notBlank还包括" "
-		if(StringUtils.isNotEmpty(name))
+		if(StringUtils.isNotBlank(name))
 		{
 			f.append(" and (bean.name like :name or bean.serial like :name) ");
 			f.setParam("name", "%" + name + "%");
 		}
 		
-		if(StringUtils.isNotEmpty(recordName)){
+		if(StringUtils.isNotBlank(recordName)){
 			f.append(" and (record.material.name like :recordName or record.material.serial like :recordName or record.material.customerSerial like :recordName) ");
 			f.setParam("recordName", "%"+ recordName +"%");
 		}
+		
+		if(StringUtils.isNotBlank(companyName)){
+			f.append(" and bean.company.name like :companyName");
+			f.setParam("companyName", "%"+ companyName +"%");
+		}
+		
 		if (status != null && status1 == null) {
 			f.append(" and bean.status=:status");
 			f.setParam("status", status);

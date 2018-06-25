@@ -83,13 +83,15 @@ public class Material {
 	}
 	
 	public String getInfo(){
+		if(!StringUtils.isBlank(this.name))
+			return this.getName();
 		if(!StringUtils.isBlank(this.spec))
-			return String.format("%s ( %s )", this.getName(),this.spec);
+			return this.getSpec();
 		if(!StringUtils.isBlank(this.serial))
-			return String.format("%s ( %s )", this.getName(),this.serial);
+			return this.serial;
 		if(!StringUtils.isBlank(this.customerSerial))
-			return String.format("%s ( %s )", this.getName(),this.customerSerial);
-		return this.getName();
+			return customerSerial;
+		return "未命名";
 	}
 	
 	public String getNameSpec(){
@@ -98,6 +100,7 @@ public class Material {
 		return this.getName();
 	}
 	
+	/*
 	public String getFullShowName(){
 		String result = "";
 		if(!StringUtils.isBlank(this.name))
@@ -114,7 +117,7 @@ public class Material {
 		if(!StringUtils.isBlank(result) && result.length()>12)
 			result = String.format("%s..", result.substring(0, 12));
 		return result;
-	}
+	}*/
 	
 	//leftNumber
 	public java.lang.Double getLeftNumber () {
@@ -274,7 +277,7 @@ public class Material {
 		StringBuilder sb = new StringBuilder();
 		if(assemblies != null)
 			for(ProductMaterial assembly : assemblies)
-				sb.append(assembly.getMaterial().getShowName() + " ");
+				sb.append(assembly.getMaterial().getInfo() + " ");
 		return sb.toString();
 	}
 	

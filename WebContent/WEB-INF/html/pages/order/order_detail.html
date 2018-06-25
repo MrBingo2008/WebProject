@@ -123,6 +123,9 @@ function test(){
 							<#if order.status gt 0><th type="text" name="records[#index#].finishNumber" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "${orderType}.order.finishNumber"/></th></#if>
 							<th type="text" name="records[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
+							<th type="date" format="yyyy-MM-dd"
+								name="records[#index#].deadlineTime" size="12"><@s.m "${orderType}.order.deadline"/></th>
+							
 							<#if '${orderType}' == 'purchase'>
 								<th type="lookup" name="records[#index#].infos" size="20" lookupType="div"
 								lookupGroup="records[#index#]" lookuppk="ids" lookupUrl="v_record_multi_list.do?type=1" aTitle="<@s.m 'sell.order.selectProduct'/>"
@@ -157,7 +160,7 @@ function test(){
 							<td><input type="text" name="records[${count}].number" value="${record.number!}" size="12" class="positiveNumber textInput required"></td>
 							<#if order.status gt 0><td><input type="text" name="records[${count}].finishNumber" value="${record.finishNumber!}" size="12" readonly></td></#if>
 							<td><input type="text" name="records[${count}].material.unit" value="${record.material.unit!}" size="12" class="textInput" readonly></td>
-							
+							<td><input type="text" name="records[${count}].deadlineTime" value="${(record.deadlineTime?string('yyyy-MM-dd'))!}" class="textInput" size="12"></td>
 							<#if '${orderType}' == 'purchase'>
 							<td>
 								<input type="hidden" name="records[${count}].ids" value="${record.ids!}" class="textInput">

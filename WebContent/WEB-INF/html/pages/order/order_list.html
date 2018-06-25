@@ -10,11 +10,12 @@ function testOpen(){
 }
 </script>
 <form id="pagerForm" method="post" action="v_${orderType}_order_list.do?type=${type}">
-	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
-	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 	<input type="hidden" name="searchName" value="${searchName!}"/>
 	<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
+	<input type="hidden" name="searchCompanyName" value="${searchCompanyName!}"/>
 	<input type="hidden" name="searchStatus" value="${searchStatus!}" />
+	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
+	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 </form>
 
 <div class="pageHeader">
@@ -29,6 +30,10 @@ function testOpen(){
 			<li>
 				<label><@s.m "record.serialOrName"/>：</label>
 				<input type="text" name="searchRecordName" value="${searchRecordName!}"/>
+			</li>
+			<li>
+				<label><@s.m "company"/>：</label>
+				<input type="text" name="searchCompanyName" value="${searchCompanyName!}"/>
 			</li>
 			<#if type == 0>
 			<li>
@@ -94,16 +99,18 @@ function testOpen(){
 				
 				<#if '${orderType}'=='sell' && type == 0>
 				<td>
-					<#if order.purchaseOrders?size gt 0>
-						<#list order.purchaseOrders as purchaseOrder>
-						<#if purchaseOrder.status gt 0>
-							<#list purchaseOrder.records as pRecord>
-							<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${pRecord.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
+				<!-- 审核后的才能采购，那么如果弃核要考虑下是否有采购的todo -->
+					<#list order.records as record>
+						<#if record.purchaseRecords??>
+							<#list record.purchaseRecords as pRecord>
+							<#if pRecord.status gt 0>
+							<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${pRecord.material.nameSpec!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${pRecord.number} / ${pRecord.finishNumber!} ${pRecord.material.unit}</span><br>
+							</#if>
 							</#list>
 						</#if>
-						</#list>
-					<#else>
-						<a href="v_record_material_multi_list.do?orderId=${order.id}" target="dialog" rel="dialog_purchase_order_todo_select" title="<@s.m 'purchase.order.todo.select'/>" mask="true"><@s.m "purchase.order.todo.add"/></a>
+					</#list>
+					<#if order.status gt 0 && order.status lt 3>
+					<a href="v_record_material_multi_list.do?orderId=${order.id}" target="dialog" rel="dialog_purchase_order_todo_select" title="<@s.m 'purchase.order.todo.select'/>" mask="true"><@s.m "purchase.order.todo.add"/></a>
 					</#if>
 				</td>
 				<td>
@@ -124,9 +131,8 @@ function testOpen(){
 					<td><a class="btnSelect" href="javascript:$.bringBack({'serial':'${order.serial!}', 'name':'${order.name!}', 'info':'${order.info}',  'id':'${order.id}'})"><@s.m "global.select"/></a></td>
 				<#else>
 				<td>
-					<#assign urlPara = "orderId=${order.id}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}" />
 					<a title="<@s.m '${orderType}.order.view'/>" target="navTab" href="v_${orderType}_order_view.do?orderId=${order.id}" rel="main"><@s.m "global.view"/></a>
-					<@berp_perm url="/o_${orderType}_order"><a title="<@s.m '${orderType}.order.edit'/>" target="navTab" href="v_${orderType}_order_edit.do?${urlPara!}" rel="main"><@s.m "global.edit"/></a>
+					<@berp_perm url="/o_${orderType}_order"><a title="<@s.m '${orderType}.order.edit'/>" target="navTab" href="v_${orderType}_order_edit.do?orderId=${order.id}" rel="main"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${orderType}_order_delete.do?orderId=${order.id}" rel="main"><@s.m "global.delete"/></a></@berp_perm>
 				</td>
 				</#if>
