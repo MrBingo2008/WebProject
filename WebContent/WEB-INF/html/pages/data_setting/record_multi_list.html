@@ -9,7 +9,8 @@
 			<table class="searchContent">
 				<tr>
 				<#if type == 0>
-					<td><div class="button"><div class="buttonContent"><button type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td>
+					<td><@s.m "sell.order"/>: ${order.info!}</td>
+					<td><div class="button"><div class="buttonContent"><button id="selectButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td>
 				<#else>
 					<td>
 						<label><@s.m "orderOrMaterial"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
@@ -29,9 +30,9 @@
 		<table class="table" width="99%" layoutH="66">
 			<thead>
 				<tr>
-					<th width="30"><input type="checkbox" class="checkboxCtrl" group="orgId" /></th>
-					<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
-					<th width="100"><@s.m "material.name"/></th>
+					<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
+					<th width="100" orderField="number" class="asc"><@s.m "product.serial"/></th>
+					<th width="100"><@s.m "product.name"/></th>
 					<#if type != 1>
 						<th width="60"><@s.m "sell.order.surface"/></th>
 					</#if>
@@ -45,8 +46,7 @@
 			<tbody>
 			<#list records as record>
 				<tr target="sid_obj" rel="1">
-				    <td><input type="checkbox" name="orgId" value="{'ids':'${record.id}', 'infos':'${record.info!}',
-				    number:'${record.notFinishNumber!}','material.id':'${record.material.id}', 'material.info':'${record.material.info!}'}"/></td>
+				    <td><input type="checkbox" name="checkboxIds" value="{'recordId':'${record.id}', number:${record.notFinishNumber!}}"/></td>
 					<td>${record.material.allSerial!}</td>
 					<td>${record.material.info!}</td>
 					<#if type != 1>
@@ -82,17 +82,30 @@ $(function(){
 	}
 });
 
-function test(){
-	openBatchDetail();
-	setTimeout(function() {
-		$(".sidebarHeader").css("padding", "0px");
-		$("#sidebarContentH").css("padding", "0px");}, 20);
-}
-
 function closeAndSelect(){
-	//
+	var recordIdString = "", numberString = "";
+	var $unitBox = $("#selectButton").parents(".unitBox:first");
+	$unitBox.find("[name='checkboxIds']").filter(":checked").each(function(){
+		var _args = DWZ.jsonEval($(this).val());
+		for (var key in _args) {
+			//modified by stone,写死了
+			if(key =="recordId"){
+				var temp = recordIdString ? recordIdString+"," : "";
+				recordIdString = temp + _args[key];
+			}else if(key =="number"){
+				var temp = numberString ? numberString+"," : "";
+				numberString = temp + _args[key];
+			}
+		}
+	});
+
+	if (recordIdString == null || recordIdString == "") {
+		alertMsg.error("请选择订单产品");
+		return false;
+	}
+	
 	$.pdialog.close("dialog_plan_todo_select");
-	$.pdialog.open("v_plan_todo_list.do", "dialog_plan_todo_list", "<@s.m 'plan.todo.list'/>", {width:300, height:200, align:"bottomLeft"});
+	$.pdialog.open("v_plan_todo_list.do?recordIdString="+recordIdString+"&numberString="+numberString, "dialog_plan_todo_list", "<@s.m 'plan.todo.list'/>", {width:300, height:200, align:"bottomLeft", close:"function(){ajaxTodo('o_plan_todo_clear.do');}"});
 	
 }
 </script>

@@ -84,11 +84,6 @@ function test(){
 				<label><@s.m "${orderType}.order.time"/>:</label>
 				<input type="text" name="billTime" class="date" value="${(order.billTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
 			</p>
-			
-			<p>
-				<label><@s.m "${orderType}.order.deadline"/>:</label>
-				<input type="text" name="deadlineTime" class="date" value="${(order.deadlineTime?string('yyyy-MM-dd'))!(order.createTime?string('yyyy-MM-dd'))!}" size="20" /><a class="inputDateButton" href="javascript:;">选择</a>
-			</p>
 
 			<p>
 				<label><@s.m "global.comment"/>:</label>
@@ -160,7 +155,7 @@ function test(){
 							<td><input type="text" name="records[${count}].number" value="${record.number!}" size="12" class="positiveNumber textInput required"></td>
 							<#if order.status gt 0><td><input type="text" name="records[${count}].finishNumber" value="${record.finishNumber!}" size="12" readonly></td></#if>
 							<td><input type="text" name="records[${count}].material.unit" value="${record.material.unit!}" size="12" class="textInput" readonly></td>
-							<td><input type="text" name="records[${count}].deadlineTime" value="${(record.deadlineTime?string('yyyy-MM-dd'))!}" class="textInput" size="12"></td>
+							<td><input type="text" name="records[${count}].deadlineTime" value="${(record.deadlineTime?string('yyyy-MM-dd'))!}" class="date" size="12"><a class="inputDateButton">选择</a></td>
 							<#if '${orderType}' == 'purchase'>
 							<td>
 								<input type="hidden" name="records[${count}].ids" value="${record.ids!}" class="textInput">

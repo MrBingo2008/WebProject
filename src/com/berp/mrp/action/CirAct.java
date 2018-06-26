@@ -125,7 +125,6 @@ public class CirAct {
 				for(MaterialRecordPara mrp : entry.getValue()){
 					totalNum += mrp.getMaterialNumber();
 					sellRecords.add(recordDao.findById(mrp.getRecordId()));
-					
 				}
 
 				record.setNumber(totalNum);

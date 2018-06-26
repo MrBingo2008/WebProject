@@ -93,6 +93,7 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 		
 		Integer type = order.getType();
 		List<OrderRecord> orders = order.getRecords();
+		//1=采购
 		if(type == 1){
 			for(OrderRecord record : orders){
 				if(record.getFlows() != null && record.getFlows().size()>0)
@@ -105,11 +106,14 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 				
 				if(record.getPlans() != null && record.getPlans().size()>0)
 					throw new Exception("请先删除相关联的生产任务" + record.getPlanSerials());
+				
+				if(record.getPurchaseRecords()!=null && record.getPurchaseRecords().size()>0)
+					throw new Exception("请先删除相关联的采购订单" + record.getPurchaseOrderSerials());
 			}
 		}
-		
+		/*
 		if(order.getPurchaseOrders()!=null && order.getPurchaseOrders().size()>0)
-			throw new Exception("请先删除相关联的采购订单" + order.getPurchaseOrderSerials());
+			throw new Exception("请先删除相关联的采购订单" + order.getPurchaseOrderSerials());*/
 		
 		order.setStatus(0);
 		if(type == 1){

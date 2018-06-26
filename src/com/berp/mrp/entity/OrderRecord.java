@@ -141,6 +141,17 @@ public class OrderRecord {
 		this.purchaseRecords = purchaseRecords;
 	}
 	
+	//用于订单弃核时，判断是否还有关联的采购订单
+	public String getPurchaseOrderSerials(){
+		if(purchaseRecords == null || purchaseRecords.size() == 0)
+			return null;
+		StringBuilder result = new StringBuilder();
+		for(OrderRecord record: purchaseRecords){
+			result.append(record.getOrd().getSerial()+" ");
+		}
+		return result.toString();
+	}
+	
 	//sell records ids
 	public String getIds() {
 		//两个地方会调用到，一个是init detail时，需要获取，一个是save或update order时，需要获取

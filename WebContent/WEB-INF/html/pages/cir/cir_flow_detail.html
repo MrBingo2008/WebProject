@@ -139,13 +139,12 @@ function calFactor(numInput){
 								><@s.m "material.allSerial"/></th>
 							<!-- direction=1表示进， 2出 -->	
 							<#if direction == 2><th type="hidden" name="flows[#index#].parent.id" style="display:none"></th></#if>	
-							<th type="text" name="flows[#index#].material.nameSpec" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "material.nameSpec"/></th>
-							<th type="text" name="flows[#index#].serial" size="18" <#if direction == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
+							<th type="text" name="flows[#index#].material.nameSpec" size="18" fieldAttrs="{readonly:'readonly'}"><@s.m "material.nameSpec"/></th>
+							<th type="text" name="flows[#index#].serial" size="16" <#if direction == 1>defaultVal="${cir.serial!}"</#if> fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
 
 							<#if cirType == 'sellOut' || cirType == 'purchaseIn'>
-								<th type="text" name="flows[#index#].record.orderSerial" size="24" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.order.serial"/></th>
+								<th type="text" name="flows[#index#].record.orderSerial" size="18" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.order.serial"/></th>
 								<th type="hidden" name="flows[#index#].record.id" style="display:none"></th>
-								<!-- th type="hidden" name="flows[#index#].surface.id" style="display:none"></th-->
 								<th type="hidden" name="flows[#index#].defaultSurfaceId" style="display:none"></th>
 							</#if>
 							<th type="text" name="flows[#index#].numPerBox" size="4" fieldClass="number" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
@@ -154,7 +153,7 @@ function calFactor(numInput){
 							<th type="text" name="flows[#index#].material.unit" size="4" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
 							<#if direction == 1>
-							<th type="lookup" name="flows[#index#].room.name" size="8"
+							<th type="lookup" name="flows[#index#].room.name" size="4"
 								lookupGroup="flows[#index#].room" lookuppk="id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
 								aTitle="<@s.m 'room'/>" lookupUrl="v_category_tree.do?parentId=3"><@s.m "room"/></th>
 							</#if>
@@ -166,7 +165,7 @@ function calFactor(numInput){
 					<#if cir.flows??>
 						<#assign count=0 />
 						<#list cir.flows as flow>
-						<tr class="unitBox">
+						<tr>
 						    <td><span class="label" size="4" display="#index#">${count+1}</span>
 						    <input type="hidden" name="flows[${count}].id" value="${flow.id!}"></input></td>
 						    
@@ -183,27 +182,27 @@ function calFactor(numInput){
 							</td>
 							
 							<#if direction == 2><input type="hidden" name="flows[${count}].parent.id" value="${(flow.parent.id)!}"></input></#if>
-							<td><input type="text" name="flows[${count}].material.nameSpec" value="${flow.material.nameSpec!}" size="20" class="textInput" readonly></td>
-							<td><input type="text" name="flows[${count}].serial" value="${flow.serial!}" size="24" class="textInput" readonly></td>
+							<td><input type="text" name="flows[${count}].material.nameSpec" value="${flow.material.nameSpec!}" size="16" class="textInput" readonly></td>
+							<td><input type="text" name="flows[${count}].serial" value="${flow.serial!}" size="16" class="textInput" readonly></td>
 							
 							<#if cirType == 'sellOut' || cirType == 'purchaseIn'>
 								<td>
-								<input type="text" name="flows[${count}].record.orderSerial" value="${(flow.record.ord.info)!}" size="24" class="textInput" readonly>
+								<input type="text" name="flows[${count}].record.orderSerial" value="${(flow.record.ord.info)!}" size="18" class="textInput" readonly>
 								<input type="hidden" name="flows[${count}].record.id" value="${(flow.record.id)!}">
 								<!-- input type="hidden" name="flows[${count}].surface.id" value="${(flow.surface.id)!}" -->
 								<input type="hidden" name="flows[${count}].defaultSurfaceId" value="${(flow.parent.defaultSurface.id)!}">
 								</td>
 							</#if>
 							
-							<td><input type="text" name="flows[${count}].numPerBox" value="${flow.numPerBox!}" size="12" class="number textInput" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);"></td>
-							<td><input type="text" name="flows[${count}].boxNum" value="${flow.boxNum!}" size="6" class="digits textInput" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);"></td>
-							<td><input type="text" name="flows[${count}].number" value="${flow.number!}" size="12" class="positiveNumber textInput required"  onkeyup="calFactor(this);" onpaste="calFactor(this);" oncut="calFactor(this);" ondrop="calFactor(this);"></td>
-							<td><input type="text" name="flows[${count}].material.unit" value="${flow.material.unit!}" size="6" class="textInput" readonly></td>
+							<td><input type="text" name="flows[${count}].numPerBox" value="${flow.numPerBox!}" size="4" class="number textInput" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);"></td>
+							<td><input type="text" name="flows[${count}].boxNum" value="${flow.boxNum!}" size="4" class="digits textInput" onkeyup="calSum(this);" onpaste="calSum(this);" oncut="calSum(this);" ondrop="calSum(this);"></td>
+							<td><input type="text" name="flows[${count}].number" value="${flow.number!}" size="6" class="positiveNumber textInput required"  onkeyup="calFactor(this);" onpaste="calFactor(this);" oncut="calFactor(this);" ondrop="calFactor(this);"></td>
+							<td><input type="text" name="flows[${count}].material.unit" value="${flow.material.unit!}" size="4" class="textInput" readonly></td>
 							
 							<#if direction == 1>
 							<td>
 								<input type="hidden" name="flows[${count}].room.id" value="${(flow.room.id)!}">
-								<input type="text" name="flows[${count}].room.name" value="${(flow.room.name)!}" size="8" class="textInput required" readonly>
+								<input type="text" name="flows[${count}].room.name" value="${(flow.room.name)!}" size="4" class="textInput required" readonly>
 								<a class="btnLook" href="v_category_tree.do?parentId=3" lookupgroup="flows[${count}].room" lookuppk="id" title="<@s.m 'room'/>"><@s.m "room"/></a>
 							</td>
 							</#if>

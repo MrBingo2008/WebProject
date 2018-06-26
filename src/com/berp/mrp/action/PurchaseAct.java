@@ -113,7 +113,7 @@ public class PurchaseAct extends CirAct {
 			model.addAttribute("mrps", mrps);
 		}
 		
-		return "pages/order/order_todo_list";
+		return "pages/order/purchase_todo_list";
 	}
 	
 	private boolean containMaterialRecord(List<MaterialRecordPara> mrps, Integer materialId, Integer recordId){

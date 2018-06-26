@@ -1,0 +1,42 @@
+
+<div class="pageContent">
+	<table class="table" width="100%" layoutH="54">
+		<thead>
+			<tr>
+				<th width="50"><@s.m "sell.order.forProduct"/></th>
+				<th width="10"><@s.m "material.number"/></th>
+			</tr>
+		</thead>
+		<tbody>
+			<#if rps??>
+			<#list rps as rp>
+			<tr>
+				<td>${rp.recordInfo!}</td>
+				<td>${rp.number!}</td> 
+
+			</tr>
+			</#list>
+			</#if>
+		</tbody>
+	</table>
+</div>
+<div class="formBar">
+	<ul>
+	<!-- 如果<a>放在<button>里面，ie8居然点击不了 -->
+		<li><div class="button"><div class="buttonContent"><a href="v_plan_todo_list.do" target="dialog" rel="dialog_plan_todo_list" title="<@s.m 'plan.todo.list'/>"><button type="button"><@s.m "plan.todo.clear"/></button></a></div></div></li>
+		<li><div class="button"><div class="buttonContent"><a id="planGen" href=""><button type="button"><@s.m "plan.todo.gen"/></button></a></div></div></li>
+	</ul>
+</div>
+<script type="text/javascript">
+function clearPlanTodo() {
+	ajaxTodo("o_plan_todo_clear.do");
+	return true;
+}
+$(function(){
+	$("#planGen").click(function(event){
+		$.pdialog.close("dialog_plan_todo_list");
+		navTab.openTab("main", "v_plan_todo_gen.do",{title:"<@s.m 'plan.add'/>", fresh:true, external:false});
+		event.preventDefault();
+	});
+});
+</script>

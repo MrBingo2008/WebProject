@@ -72,7 +72,7 @@ $(function(){
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_material_delete.do?materialId=${m.id}"><@s.m "global.delete"/></a></@berp_perm>
 					</td>
 				<#elseif type == 1>
-					<td><a class="btnSelect" href="javascript:$.bringBack({'material.serial':'${m.allSerial!}', 'material.name':'${m.name!}', 'material.nameSpec':'${m.nameSpec!}', numPerBox:'${m.numPerBox!}', 'material.unit':'${m.unit!}', 'material.id':'${m.id}', 'surface.id':'${(m.surface.id)!}', 'surface.name':'${(m.surface.name)!}', ':company.id':'${(m.company.id)!}' , ':company.name':'${(m.company.name)!}'})"><@s.m "global.select"/></a></td>
+					<td><a class="btnSelect" href="javascript:$.bringBack({'material.serial':'${m.allSerial!}', 'material.name':'${m.name!}', 'material.nameSpec':'${m.nameSpec!}', numPerBox:'${m.numPerBox!}', 'material.unit':'${m.unit!}', 'material.id':'${m.id}', 'material.category':'${m.parent.name!}', 'surface.id':'${(m.surface.id)!}', 'surface.name':'${(m.surface.name)!}', ':company.id':'${(m.company.id)!}' , ':company.name':'${(m.company.name)!}'})"><@s.m "global.select"/></a></td>
 				<#elseif type == 2>
 					<td><a href="v_batch_list.do?materialId=${m.id}" onclick="openBatchDetail()" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
 				<#elseif type == 3>

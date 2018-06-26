@@ -187,8 +187,11 @@ public class MaterialAct {
 	//type:0，表示加入购物车模式，1，选择模式
 	public String recordMultiList(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
 		List<OrderRecord> records = null;
-		if(type == 0)
-			records = orderDao.findById(orderId).getRecords();
+		if(type == 0){
+			Order order = orderDao.findById(orderId);
+			model.addAttribute("order", order);
+			records = order.getRecords();
+		}
 		else	
 			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
 		model.addAttribute("records", records);

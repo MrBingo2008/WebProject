@@ -1,12 +1,16 @@
 package com.berp.mrp.action;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,7 @@ import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Material;
+import com.berp.mrp.entity.MaterialRecordPara;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.Plan;
@@ -33,6 +38,7 @@ import com.berp.mrp.entity.PlanStep;
 import com.berp.mrp.entity.Process;
 import com.berp.mrp.entity.ProcessStep;
 import com.berp.mrp.entity.RawBatchFlow;
+import com.berp.mrp.entity.RecordPara;
 import com.berp.mrp.entity.Step;
 import com.berp.mrp.web.PageListPara;
 import com.berp.core.dao.UserDao;
@@ -44,11 +50,13 @@ import com.berp.framework.util.StrUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.RequestInfoUtils;
 import com.berp.framework.web.ResponseUtils;
+import com.berp.framework.web.session.SessionProvider;
 
 
 @Controller
 public class ManuAct {
-
+	public static final String PLAN_TODO_RECORD_LIST = "planTodoRecordList";
+	
 	@RequestMapping("/v_plan_list.do")
 	public String planList(Integer pageNum, Integer numPerPage, String searchName, String searchRecordName, Integer searchStatus, HttpServletRequest request, ModelMap model) {
 		pageNum = pageNum == null?1:pageNum;
@@ -130,8 +138,79 @@ public class ManuAct {
 		return "pages/manu/process_items";
 	}
 	
+	@RequestMapping("/v_plan_todo_list.do")
+	public String todoList(String recordIdString, String numberString, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		if(StringUtils.isBlank(recordIdString)){
+			sessionProvider.setAttribute(request, response, PLAN_TODO_RECORD_LIST, null);
+		}else{
+			List<RecordPara> rps = (List<RecordPara>)sessionProvider.getAttribute(request, PLAN_TODO_RECORD_LIST);
+			if(rps == null)
+				rps = new ArrayList<RecordPara>();
+			Integer [] recordIds = StrUtils.getIntegersFromString(recordIdString);
+			Double [] numbers = StrUtils.getDoublesFromString(numberString);
+			
+			Integer existId = null;
+			if(rps!=null && rps.size()>0)
+				existId = rps.get(0).getRecordId();
+			
+			for(int i = 0;i< recordIds.length;i++){
+				
+				if(existId == null)
+					existId = recordIds[i];
+				else if(!existId.equals(recordIds[i]))
+				{
+					ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品不一致.").toString());
+					return null;
+				}
+				
+				if(containRecord(rps, recordIds[i]))
+					continue;
+				
+				OrderRecord r = orderRecordDao.findById(recordIds[i]);
+				RecordPara p = new RecordPara();
+				p.setRecordId(r.getId());
+				p.setRecordInfo(r.getInfo());
+				p.setNumber(numbers[i]);
+				rps.add(p);
+			}
+			
+			sessionProvider.setAttribute(request, response, PLAN_TODO_RECORD_LIST, (Serializable) rps);
+			model.addAttribute("rps", rps);
+		}
+		
+		return "pages/order/plan_todo_list";
+	}
+	
+	@RequestMapping("/v_plan_todo_gen.do")
+	public String orderGen(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		List<RecordPara> rps = (List<RecordPara>)sessionProvider.getAttribute(request, PLAN_TODO_RECORD_LIST);
+		sessionProvider.setAttribute(request, response, PLAN_TODO_RECORD_LIST, null);
+		Integer recordId = null;
+		for(RecordPara rp: rps){
+			if(recordId == null)
+				recordId = rp.getRecordId();
+			else if(!recordId.equals(rp.getRecordId()))
+			{
+				//不返回个html也可以
+				ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品不一致.").toString());
+				return null;
+			}
+		}
+		return this.planAdd(request, model);
+	}
+	
+	private boolean containRecord(List<RecordPara> rps, Integer recordId){
+		if(rps == null || rps.size() ==0)
+			return false;
+		for(RecordPara rp:rps){
+			if(rp.getRecordId().equals(recordId))
+				return true;
+		}
+		return false;
+	}
+	
 	@RequestMapping("/v_plan_add.do")
-	public String planAdd(Integer orderRecordId, Integer materialId, HttpServletRequest request, ModelMap model) {
+	public String planAdd(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("openMode", "add");
 		
 		String serial = String.format("SCRW-%s", DateUtils.getCurrentDayString());
@@ -410,4 +489,7 @@ public class ManuAct {
 	
 	@Autowired
 	private PlanStepDao stepDao;
+	
+	@Autowired
+	private SessionProvider sessionProvider;
 }

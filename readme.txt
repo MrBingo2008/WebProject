@@ -39,5 +39,5 @@ material的dim改为comment，增加num_per_box
 更新版本，修复中文查询编辑问题，更新2018-5-29修改的表
 
 2018-6-25：
-增加表ord_record_record，(update相应的数据，删除ord的sell_record_id )
+增加表ord_record_record，从ord的sell_record_id里找出记录，增加到ord_record_record里，删除ord的sell_record_id )
 增加record的deadline：update ord_record, ord set ord_record.deadline_time = ord.deadline_time where ord_record.ord_id = ord.id

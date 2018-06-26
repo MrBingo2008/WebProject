@@ -72,11 +72,11 @@ $(function(){
 				<td>
 					<#if cirType != 'outsideOut' && cirType != 'outsideIn'>
 						<#list cir.flows as flow>
-						<span style="width:130px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${flow.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${flow.number}${flow.material.unit}</span><br>
+						<span style="width:130px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${flow.material.nameSpec!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${flow.number}${flow.material.unit}</span><br>
 						</#list>
 					<#else>
 						<#list cir.rawFlows as rawFlow>
-						<span style=width:130px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${rawFlow.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${rawFlow.number}${rawFlow.material.unit}</span><br>
+						<span style=width:130px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${rawFlow.material.nameSpec!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${rawFlow.number}${rawFlow.material.unit}</span><br>
 						</#list>
 					</#if>
 				</td>

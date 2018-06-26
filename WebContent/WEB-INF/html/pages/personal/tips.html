@@ -1,5 +1,19 @@
 
 <div class="pageFormContent">
+	<@berp_perm url="/o_sell_order">
+	<h2 class="contentTitle"><@s.m "sell.manage"/></h2>
+	<div class="todo">客户订单<span style="color:red">未审核</span>数量：${sellNotApprovalNumber!0}个。  
+	<#if sellNotApprovalNumber gt 0><a title="<@s.m 'sell.order.list'/>" href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	<div class="todo">客户订单<span style="color:red">未完成发货</span>数量：${sellNotFinishNumber!0}个。  
+	<#if sellNotFinishNumber gt 0><a title="<@s.m 'sell.order.list'/>" href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "sellOut"/><span style="color:red">未审核</span>数量：${sellOutNotApprovalNumber!0}个。
+	<#if sellOutNotApprovalNumber gt 0><a title="<@s.m 'sellOut.list'/>" href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	<div class="todo"><@s.m "sellBack"/><span style="color:red">未审核</span>数量：${sellBackNotApprovalNumber!0}个。
+	<#if sellBackNotApprovalNumber gt 0><a title="<@s.m 'sellBack.list'/>" href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
+	
+	</@berp_perm>
 	
 	<@berp_perm url="/o_purchase_order">
 	<h2 class="contentTitle" style="margin-top:5px;"><@s.m "purchase.manage"/></h2>
@@ -15,21 +29,6 @@
 	
 	<div class="todo"><@s.m "purchaseBack"/><span style="color:red">未审核</span>数量：${purchaseBackNotApprovalNumber!0}个。
 	<#if purchaseBackNotApprovalNumber gt 0><a title="<@s.m 'purchaseBack.list'/>" href="v_purchaseBack_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
-	</@berp_perm>
-		
-	<@berp_perm url="/o_sell_order">
-	<h2 class="contentTitle"><@s.m "sell.manage"/></h2>
-	<div class="todo">客户订单<span style="color:red">未审核</span>数量：${sellNotApprovalNumber!0}个。  
-	<#if sellNotApprovalNumber gt 0><a title="<@s.m 'sell.order.list'/>" href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
-	<div class="todo">客户订单<span style="color:red">未完成发货</span>数量：${sellNotFinishNumber!0}个。  
-	<#if sellNotFinishNumber gt 0><a title="<@s.m 'sell.order.list'/>" href="v_sell_order_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
-	
-	<div class="todo"><@s.m "sellOut"/><span style="color:red">未审核</span>数量：${sellOutNotApprovalNumber!0}个。
-	<#if sellOutNotApprovalNumber gt 0><a title="<@s.m 'sellOut.list'/>" href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
-	
-	<div class="todo"><@s.m "sellBack"/><span style="color:red">未审核</span>数量：${sellBackNotApprovalNumber!0}个。
-	<#if sellBackNotApprovalNumber gt 0><a title="<@s.m 'sellBack.list'/>" href="v_sellOut_list.do" target="navTab" rel="main"><@s.m "personal.solute"/></a></#if></div>
-	
 	</@berp_perm>
 	
 	<@berp_perm url="/o_plan">

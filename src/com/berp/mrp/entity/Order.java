@@ -18,8 +18,7 @@ public class Order extends BaseBill {
 	private Date deadlineTime;
 	private Company company;
 	private List<OrderRecord> records;
-	private Order sellOrder;
-	private Set<Order> purchaseOrders;
+	//private Set<Order> purchaseOrders;
 	
 	public static enum Status{notApproval, approval, partFinish, finish};
 	
@@ -83,15 +82,8 @@ public class Order extends BaseBill {
 			temp = this.getSerial();
 		return String.format("%s/%s", temp, this.company.getName());
 	}
-	//sell order
-	public Order getSellOrder() {
-		return sellOrder;
-	}
-
-	public void setSellOrder(Order sellOrder) {
-		this.sellOrder = sellOrder;
-	}
 	
+	/*
 	//purchase orders
 	public Set<Order> getPurchaseOrders() {
 		return purchaseOrders;
@@ -110,6 +102,6 @@ public class Order extends BaseBill {
 			}
 		}
 		return serials.toString();
-	}
+	}*/
 
 }

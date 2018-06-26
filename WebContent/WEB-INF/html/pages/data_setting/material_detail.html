@@ -80,8 +80,8 @@ $(function(){
 								lookupGroup="assemblies[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=1" aTitle="<@s.m 'material'/>"
 								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "rawMaterial.serial"/></th>
 								
-							<th type="text" name="assemblies[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "rawMaterial.name"/></th>
-							
+							<th type="text" name="assemblies[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "rawMaterial.nameSpec"/></th>
+							<th type="text" name="assemblies[#index#].material.category" size="6" fieldAttrs="{readonly:'readonly'}"><@s.m "category.1"/></th>
 							<th type="text" name="assemblies[#index#].materialNumber" size="12" fieldClass="positiveNumber"><@s.m "rawMaterial.number"/></th>
 							<th type="text" name="assemblies[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
@@ -102,8 +102,9 @@ $(function(){
 								<input type="text" name="assemblies[${count}].material.serial" value="${assembly.material.allSerial!}" size="20" class="textInput required" readonly>
 								<a class="btnLook" href="v_material.do?type=1" lookupgroup="assemblies[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>
 							</td>
-							<td><input type="text" name="assemblies[${count}].material.name" value="${assembly.material.name!}" size="12" class="textInput" readonly>
+							<td><input type="text" name="assemblies[${count}].material.name" value="${assembly.material.nameSpec!}" size="12" class="textInput" readonly>
 							<input type="hidden" name="assemblies[${count}].material.id" value="${assembly.material.id!}" class="textInput"></td>
+							<td><input type="text" name="assemblies[${count}].material.category" value="${(assembly.material.parent.name)!}" size="6" class="textInput" readonly></td>
 							
 							<td><input type="text" name="assemblies[${count}].materialNumber" value="${assembly.materialNumber!}" size="12" class="positiveNumber textInput"></td>
 							<td><input type="text" name="assemblies[${count}].material.unit" value="${assembly.material.unit!}" size="12" class="textInput" readonly></td>

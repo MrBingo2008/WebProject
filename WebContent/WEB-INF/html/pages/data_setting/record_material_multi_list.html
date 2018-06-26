@@ -1,4 +1,4 @@
-<div id="recordContain">
+<div id="recordMaterialContain">
 <div class="unitBox">
 	<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'recordContain');" action="v_record_material_multi_list.do">
 		<input type="hidden" name="searchName" value="${searchName!}"/>
@@ -40,10 +40,10 @@
 						<#assign needNumber = record.notFinishNumber * assembly.materialNumber / assembly.productNumber  />
 					</#if> 
 				    <td><input type="checkbox" name="checkboxIds" value="{'materialId':'${assembly.material.id}','recordId':'${record.id}', number:${needNumber}}"/></td>
-					<td>${assembly.material.info!}</td>
+					<td>${assembly.material.nameSpec!}</td>
 					<td>${needNumber!}</td>
 					<td>${assembly.material.unit!}</td>
-					<td>${record.material.info!}</td>
+					<td>${record.material.nameSpec!}</td>
 					<td>${record.notFinishNumber!}</td>
 					<td>${record.material.unit!}</td>
 				</tr>
@@ -70,7 +70,7 @@
 <script type="text/javascript">
 $(function(){
 	if ($.fn.jBarH) {
-		$("#recordContain").jBarH({minW:150, maxW:700});
+		$("#recordMaterialContain").jBarH({minW:150, maxW:700});
 	}
 });
 
