@@ -188,11 +188,12 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 			record.setFinishNumber(newFinishNumber);
 			record.setStatus(2);
 		}
-		else if(newFinishNumber.equals(record.getNumber())){
-			record.setFinishNumber(record.getNumber());
+		else if(newFinishNumber >= record.getNumber()){
+			record.setFinishNumber(newFinishNumber);
 			record.setStatus(3);
 		}else{
-			throw new Exception(String.format("'%s'的%s未完成数为%.0f%s，已超出其范围。", record.getOrd().getSerial(), record.getMaterial().getName(), record.getNotFinishNumber(), record.getMaterial().getUnit()));	
+			//2018-6-27
+			//throw new Exception(String.format("'%s'的%s未完成数为%.0f%s，已超出其范围。", record.getOrd().getSerial(), record.getMaterial().getName(), record.getNotFinishNumber(), record.getMaterial().getUnit()));	
 		}
 		//刚修改record的数据，就马上去修改order的status(status需要靠record来判断)，应该是没问题
 		orderDao.updateStatusForCir(record.getOrd().getId());
@@ -215,7 +216,10 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 			record.setFinishNumber(newFinishNumber);
 			record.setStatus(Order.Status.partFinish.ordinal());
 		}else{
-			throw new Exception(String.format("'%s'的%s完成数为%.0f%s，已超出其范围。", record.getOrd().getSerial(), record.getMaterial().getName(), record.getFinishNumber(), record.getMaterial().getUnit()));	
+			//throw new Exception(String.format("'%s'的%s完成数为%.0f%s，已超出其范围。", record.getOrd().getSerial(), record.getMaterial().getName(), record.getFinishNumber(), record.getMaterial().getUnit()));
+			//2018-6-27
+			record.setFinishNumber(newFinishNumber);
+			record.setStatus(Order.Status.finish.ordinal());
 		}
 		//刚修改record的数据，就马上去修改order的status(status需要靠record来判断)，应该是没问题
 		orderDao.updateStatusForCir(record.getOrd().getId());

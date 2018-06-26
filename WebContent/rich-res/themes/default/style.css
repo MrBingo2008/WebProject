@@ -132,6 +132,7 @@ input.disabled, textarea.disabled { border-color:#9eabb3 #d5dbdf #d5dbdf #9eabb3
 	/*overflow:scroll;*/
 	width:120px;
 	height:20px;
+	line-height: 21px;
 	float:left;
 	border:solid 1px #b8d0d6;
 }

@@ -17,7 +17,7 @@
 					</td>
 					<td>
 						<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
-					    <div class="button"><div class="buttonContent"><button type="button" multLookup="orgId" warn="请选择成品"><@s.m "global.select"/></button></div></div>
+					    <div class="button"><div class="buttonContent"><button type="button" multLookup="checkboxIds" warn="请选择成品"><@s.m "global.select"/></button></div></div>
 					</td>
 				</#if>
 				</tr>
@@ -46,7 +46,7 @@
 			<tbody>
 			<#list records as record>
 				<tr target="sid_obj" rel="1">
-				    <td><input type="checkbox" name="checkboxIds" value="{'recordId':'${record.id}', number:${record.notFinishNumber!}}"/></td>
+				    <td><input type="checkbox" name="checkboxIds" value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"/></td>
 					<td>${record.material.allSerial!}</td>
 					<td>${record.material.info!}</td>
 					<#if type != 1>
@@ -89,7 +89,7 @@ function closeAndSelect(){
 		var _args = DWZ.jsonEval($(this).val());
 		for (var key in _args) {
 			//modified by stone,写死了
-			if(key =="recordId"){
+			if(key =="ids"){
 				var temp = recordIdString ? recordIdString+"," : "";
 				recordIdString = temp + _args[key];
 			}else if(key =="number"){

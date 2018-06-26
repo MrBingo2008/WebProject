@@ -12,10 +12,7 @@
 		<many-to-one name="surface" column="surface_id" class="com.berp.mrp.entity.Step"/>
 		<property name="deadlineTime" column="deadline_time" type="timestamp" length="19"/>
 		<property name="status" column="status" type="integer" not-null="true" length="3"/>
-		<set name="plans" inverse="true" cascade="none">
-			<key column="rec_id"/>
-			<one-to-many class="com.berp.mrp.entity.Plan"/>
-		</set>
+
 		<set name="flows" inverse="true" cascade="none">
 			<key column="record_id"/>
 			<one-to-many class="com.berp.mrp.entity.BatchFlow"/>
@@ -27,6 +24,10 @@
 		<set name="purchaseRecords" table="ord_record_record" inverse="true">
 			<key column="sell_record_id"/>
 			<many-to-many column="purchase_record_id" class="OrderRecord"/>
+		</set>
+		<set name="plans" table="plan_record" inverse="true">
+			<key column="sell_record_id"/>
+			<many-to-many column="plan_id" class="com.berp.mrp.entity.Plan"/>
 		</set>
 	</class>
 </hibernate-mapping>

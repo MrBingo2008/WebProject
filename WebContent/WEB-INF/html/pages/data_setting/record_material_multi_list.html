@@ -39,6 +39,7 @@
 					<#if assembly.materialNumber != 0>
 						<#assign needNumber = record.notFinishNumber * assembly.materialNumber / assembly.productNumber  />
 					</#if> 
+					<!-- 这个是不需要bringback的，直接在本页面的js处理 -->
 				    <td><input type="checkbox" name="checkboxIds" value="{'materialId':'${assembly.material.id}','recordId':'${record.id}', number:${needNumber}}"/></td>
 					<td>${assembly.material.nameSpec!}</td>
 					<td>${needNumber!}</td>

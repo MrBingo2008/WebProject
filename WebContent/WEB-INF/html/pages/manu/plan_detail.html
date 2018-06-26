@@ -1,10 +1,18 @@
 <script type="text/javascript">
 $(function(){
+	$("#ids").change(function(){
+		//record.id应该加引号
+		var ids = $("input[name='ids']").val();
+		$("tbody#processItems").loadUrl("v_process_items.do?ids=" + ids, {}, function(){});
+	});
+	
 	var actionUrl;
 	if('${openMode}'=='add'){
 		$("#planMaterial, #package, #planIn").css("display","none");
 		$("#cancelApprovalButton").attr("disabled", "disabled");
 		actionUrl = "o_plan_save.do";
+		$("#ids").change();
+		
 	}else if('${openMode}' == 'edit'){
 		var status = '${(plan.status)!}';
 		if(status == null || status=='')
@@ -105,11 +113,7 @@ $(function(){
 		});
 	});
 	
-	$("#ids").change(function(){
-		//record.id应该加引号
-		var ids = $("input[name='ids']").val();
-		$("tbody#processItems").loadUrl("v_process_items.do?ids=" + ids, {}, function(){});
-	});
+
 });
 
 function calSum(numInput){
@@ -156,23 +160,24 @@ function calFactor(numInput){
 		<input id="statusInput" type="hidden" name="status" value='${(plan.status)!}'/>
 		<div class="pageFormContent" layoutH="56">
 			<div id="basicInfo">
+							
+					<label><@s.m "sell.order.forProduct"/>:</label>
+					
+					<div name="infos" class="required lookupDiv" <#if plan.sellRecordInfos??>style="width:auto;height:auto"</#if>>${plan.sellRecordInfos!}</div><span style="margin-left:4px;color:red;font-size:16px;float:left">*</span>
+					
+					<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="" title="<@s.m 'sell.order.selectProduct'/>"><@s.m "sell.order"/></a>		
+					<input type="hidden" id="ids" name="ids" value="${(plan.ids!)!}" class="required"/>
+				<!-- ie第一次不会出现必填提示 -->
+				<div class="divider"></div>
 				<p>
 					<label><@s.m "global.createTime"/>:</label>
-					<input name="createTime" readonly="readonly" type="text" value="${(plan.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="30" />
+					<input name="createTime" readonly="readonly" type="text" value="${(plan.createTime?string('yyyy-MM-dd hh:mm:ss'))!}" size="20" />
 				</p>
 				<p>
 					<label><@s.m "global.createUser"/>:</label>
-					<input readonly="readonly" type="text" value="${(plan.createUser.name)!}" size="30" />
+					<input readonly="readonly" type="text" value="${(plan.createUser.name)!}" size="20" />
 					<input name="createUser.id" type="hidden" value="${(plan.createUser.id)!}" />
 				</p>
-				
-				<div class="divider"></div>
-				
-				<input type="hidden" id="ids" name="ids" value="${(plan.record.id)!}"/>
-				
-					<label><@s.m "sell.order.forProduct"/>:</label>
-					<div name="infos" class="required lookupDiv" <#if plan.sellRecordInfos??>style="width:auto;height:auto"</#if>></div>
-					<a class="btnLook" href="v_record_multi_list.do?type=1" lookupGroup="" title="<@s.m 'sell.order.selectProduct'/>"><@s.m "sell.order"/></a>		
 				
 				<div class="divider"></div>
 
@@ -194,7 +199,7 @@ function calFactor(numInput){
 				</p>
 				<p>
 					<label><@s.m "product.info"/>:</label>
-					<input type="text" name="material.info" value="${(plan.material.info)!}" size ="20" readonly/>
+					<input type="text" name="material.nameSpec" value="${(plan.material.nameSpec)!}" size ="20" readonly/>
 					<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 				</p>
 				<!-- <p>
@@ -232,7 +237,7 @@ function calFactor(numInput){
 							lookupGroup="materialFlows[#index#]" lookupUrl="v_material.do?type=2" lookuppk="material.id"><@s.m "material.allSerial"/></th>
 								
 							<th type="hidden" name="materialFlows[#index#].parent.id" style="display:none"></th>
-							<th type="text" name="materialFlows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.name"/></th>
+							<th type="text" name="materialFlows[#index#].material.nameSpec" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.nameSpec"/></th>
 							
 							<th type="text" name="materialFlows[#index#].serial" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
 							<th type="text" name="materialFlows[#index#].number" size="12" fieldClass="positiveNumber required"><@s.m "material.costNumber"/></th>
@@ -254,7 +259,7 @@ function calFactor(numInput){
 								<a class="btnLook" href="v_material.do?type=2" lookupgroup="materialFlows[${count}]" lookuppk="material.id" width="900" height="700" resizable="false" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
 							</td>
 							<input type="hidden" name="materialFlows[${count}].parent.id" value="${(flow.parent.id)!}">
-							<td><input type="text" name="materialFlows[${count}].material.name" value="${flow.material.name!}" size="12" class="textInput" readonly=readonly></td>
+							<td><input type="text" name="materialFlows[${count}].material.nameSpec" value="${flow.material.nameSpec!}" size="12" class="textInput" readonly=readonly></td>
 							<td><input type="text" name="materialFlows[${count}].serial" value="${(flow.parent.serial)!}" size="20" class="textInput" readonly=readonly></td>
 							<td><input type="text" name="materialFlows[${count}].number" value="${flow.number!}" size="12" class="positiveNumber textInput required"></td>
 							<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a>
@@ -389,8 +394,8 @@ function calFactor(numInput){
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
 							<th type="text" name="packageFlows[#index#].serial" size="20" defaultVal="${plan.serial!}-#index#" fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
-							<th type="text" name="packageFlows[#index#].numPerBox" size="12" defaultVal="${(plan.rawBatchFlow.number)!}" fieldClass="positiveNumber" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
-							<th type="text" name="packageFlows[#index#].boxNum" size="12"  defaultVal="1" fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
+							<th type="text" name="packageFlows[#index#].numPerBox" size="12" defaultVal="${(plan.material.numPerBox)!}" fieldClass="positiveNumber" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
+							<th type="text" name="packageFlows[#index#].boxNum" size="12"  fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
 							<th type="text" name="packageFlows[#index#].number" size="12" defaultVal="${(plan.rawBatchFlow.number)!}" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
 							<th type="text" name="packageFlows[#index#].material.unit" size="12" defaultVal="${(plan.material.unit)!}" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							<th type="lookup" name="packageFlows[#index#].room.name" size="12"

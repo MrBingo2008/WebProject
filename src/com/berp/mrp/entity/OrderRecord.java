@@ -18,13 +18,14 @@ public class OrderRecord {
 	
 	private Step surface;
 	private Order order;
-	private Set<Plan> plans;
+
 	private Set<BatchFlow> flows;
 	//用于表示sellRecords的id参数传递
 	private String ids;
 	private Set<OrderRecord> sellRecords;
 	private Set<OrderRecord> purchaseRecords;
-
+	private Set<Plan> plans;
+	
 	public OrderRecord(){
 		
 	}
@@ -98,20 +99,23 @@ public class OrderRecord {
 		this.surface = surface;
 	}
 	
+	//get default surface主要用于判断
+	public Integer getDefaultSurfaceId(){
+		if(this.surface!=null)
+			return surface.getId();
+		else if(this.getMaterial().getSurface()!=null)
+			return this.getMaterial().getSurface().getId();
+		else 
+			return null;
+		
+	}
+	
 	public Order getOrd () {
 		return order;
 	}
 
 	public void setOrd (Order order) {
 		this.order = order;
-	}
-	
-	public Set<Plan> getPlans(){
-		return this.plans;
-	}
-	
-	public void setPlans(Set<Plan> plans){
-		this.plans = plans;
 	}
 	
 	//flows
@@ -140,7 +144,7 @@ public class OrderRecord {
 	public void setPurchaseRecords(Set<OrderRecord> purchaseRecords) {
 		this.purchaseRecords = purchaseRecords;
 	}
-	
+
 	//用于订单弃核时，判断是否还有关联的采购订单
 	public String getPurchaseOrderSerials(){
 		if(purchaseRecords == null || purchaseRecords.size() == 0)
@@ -148,6 +152,31 @@ public class OrderRecord {
 		StringBuilder result = new StringBuilder();
 		for(OrderRecord record: purchaseRecords){
 			result.append(record.getOrd().getSerial()+" ");
+		}
+		return result.toString();
+	}
+	
+	//plans
+	public Set<Plan> getPlans(){
+		return this.plans;
+	}
+	
+	public void setPlans(Set<Plan> plans){
+		this.plans = plans;
+	}
+	
+	/*public String getPlansDetail(){
+		StringBuilder result = new StringBuilder();
+		for(Plan plan : plans){
+			result.append(plan.getDetail()+"<br>");
+		}
+		return result.toString();
+	}*/
+	
+	public String getPlanSerials(){
+		StringBuilder result = new StringBuilder();
+		for(Plan plan : plans){
+			result.append(plan.getSerial() + " ");
 		}
 		return result.toString();
 	}
@@ -176,23 +205,7 @@ public class OrderRecord {
 			return null;
 		StringBuilder result = new StringBuilder();
 		for(OrderRecord record: sellRecords){
-			result.append(record.getInfo()+"<br>");
-		}
-		return result.toString();
-	}
-	
-	public String getPlansDetail(){
-		StringBuilder result = new StringBuilder();
-		for(Plan plan : plans){
-			result.append(plan.getDetail()+"<br>");
-		}
-		return result.toString();
-	}
-	
-	public String getPlanSerials(){
-		StringBuilder result = new StringBuilder();
-		for(Plan plan : plans){
-			result.append(plan.getSerial() + " ");
+			result.append(record.getFullInfo()+"<br>");
 		}
 		return result.toString();
 	}
@@ -210,6 +223,6 @@ public class OrderRecord {
 	}
 	
 	public String getFullInfo(){
-		return String.format("%s/%s/%s/%s", this.getMaterial().getInfo(), this.getSurface().getName(), this.getNumber().toString(), this.getOrd().getInfo());
+		return this.getMaterial().getInfo() +"/"+ this.getNumber() + "/" + this.getOrd().getInfo();
 	}
 }

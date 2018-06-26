@@ -171,7 +171,13 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 				throw new Exception(String.format("'%s'订单的客户为%s，与本到货单客户%s不一致。", ord.getSerial(), ord.getCompany().getName(), bean.getCompany().getName()));	
 			}
 			recordDao.updateFinishNumber(flow);
-			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), flow.getNumber(), null);
+			
+			//2018-6-27
+			Double notPurchaseNumber = flow.getNumber();
+			if(flow.getMaterial().getNotPurchaseInNumber() < flow.getNumber())
+				notPurchaseNumber = flow.getMaterial().getNotPurchaseInNumber();
+			
+			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), notPurchaseNumber, null);
 		}
 	}
 	

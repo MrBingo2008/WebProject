@@ -6,11 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.berp.core.entity.Company;
 
 public class Plan extends BaseBill {
 	
-	private OrderRecord orderRecord;
+	private Set<OrderRecord> sellRecords;
+	private String ids;
+	
 	private Material material;
 	private Double number;
 	
@@ -60,13 +64,42 @@ public class Plan extends BaseBill {
 			return number;
 	}
 	
-	//orderRecord
-	public OrderRecord getRecord(){
-		return this.orderRecord;
+	//sell records
+	public Set<OrderRecord> getSellRecords() {
+		return sellRecords;
+	}
+
+	public void setSellRecords(Set<OrderRecord> sellRecords) {
+		this.sellRecords = sellRecords;
 	}
 	
-	public void setRecord(OrderRecord orderRecord){
-		this.orderRecord = orderRecord;
+	//sell records ids
+	public String getIds() {
+		//两个地方会调用到，一个是init detail时，需要获取，一个是save或update order时，需要获取
+		if(StringUtils.isBlank(this.ids) && sellRecords != null){
+			String result = new String();
+			for(OrderRecord record: sellRecords){
+				String id = record.getId().toString();
+				result = StringUtils.isBlank(result)?id:result + "," + id;
+			}
+			return result;
+		}
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+	
+	//sell record infos: 用于对应的客户订单
+	public String getSellRecordInfos(){
+		if(sellRecords == null || sellRecords.size() == 0)
+			return null;
+		StringBuilder result = new StringBuilder();
+		for(OrderRecord record: sellRecords){
+			result.append(record.getFullInfo()+"<br>");
+		}
+		return result.toString();
 	}
 	
 	//steps

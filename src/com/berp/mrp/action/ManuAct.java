@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,9 +72,12 @@ public class ManuAct {
 		return "pages/manu/plan_list";
 	}
 	
-	@RequestMapping("/v_process_items.do")
-	public String processItems(String ids,  String test, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		ids.toString();
+	//这个可以再优化和合并
+	private Process getProcess(String ids){
+		
+		if(StringUtils.isBlank(ids))
+			return null;
+		
 		Integer [] recordIds = StrUtils.getIntegersFromString(ids);
 		
 		Material material = null;
@@ -86,7 +91,7 @@ public class ManuAct {
 			
 			if(!material.getId().equals(m.getId())){
 				//不返回个html也可以
-				ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品不一致.").toString());
+				//ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品不一致.").toString());
 				return null;
 			}
 			
@@ -99,7 +104,7 @@ public class ManuAct {
 			
 			if(newSurface !=null){
 				if(!surface.getId().equals(newSurface.getId())){
-					ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品表面处理不一致.").toString());
+					//ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品表面处理不一致.").toString());
 					return null;
 				}
 			}
@@ -133,8 +138,14 @@ public class ManuAct {
 			process.getSteps().add(ps);
 			
 		}
-		
-		model.addAttribute("steps", process.getSteps());
+		return process;
+	}
+	
+	@RequestMapping("/v_process_items.do")
+	public String processItems(String ids, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		Process process = this.getProcess(ids);
+		if(process!=null && process.getSteps()!=null)
+			model.addAttribute("steps", process.getSteps());
 		return "pages/manu/process_items";
 	}
 	
@@ -150,23 +161,32 @@ public class ManuAct {
 			Double [] numbers = StrUtils.getDoublesFromString(numberString);
 			
 			Integer existId = null;
-			if(rps!=null && rps.size()>0)
-				existId = rps.get(0).getRecordId();
+			Integer surfaceId = null;
 			
 			for(int i = 0;i< recordIds.length;i++){
 				
+				OrderRecord r = orderRecordDao.findById(recordIds[i]);
+				Integer materialId = r.getMaterial().getId(); 
 				if(existId == null)
-					existId = recordIds[i];
-				else if(!existId.equals(recordIds[i]))
+					existId = materialId;
+				else if(!existId.equals(materialId))
 				{
 					ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品不一致.").toString());
+					return null;
+				}
+				
+				if(surfaceId == null)
+					surfaceId = r.getDefaultSurfaceId();
+				else if(r.getDefaultSurfaceId() != null && !surfaceId.equals(r.getDefaultSurfaceId()))
+				{
+					ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品表面处理不一致.").toString());
 					return null;
 				}
 				
 				if(containRecord(rps, recordIds[i]))
 					continue;
 				
-				OrderRecord r = orderRecordDao.findById(recordIds[i]);
+				
 				RecordPara p = new RecordPara();
 				p.setRecordId(r.getId());
 				p.setRecordInfo(r.getInfo());
@@ -185,18 +205,7 @@ public class ManuAct {
 	public String orderGen(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		List<RecordPara> rps = (List<RecordPara>)sessionProvider.getAttribute(request, PLAN_TODO_RECORD_LIST);
 		sessionProvider.setAttribute(request, response, PLAN_TODO_RECORD_LIST, null);
-		Integer recordId = null;
-		for(RecordPara rp: rps){
-			if(recordId == null)
-				recordId = rp.getRecordId();
-			else if(!recordId.equals(rp.getRecordId()))
-			{
-				//不返回个html也可以
-				ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品不一致.").toString());
-				return null;
-			}
-		}
-		return this.planAdd(request, model);
+		return this.add(rps, request, response, model);
 	}
 	
 	private boolean containRecord(List<RecordPara> rps, Integer recordId){
@@ -210,7 +219,11 @@ public class ManuAct {
 	}
 	
 	@RequestMapping("/v_plan_add.do")
-	public String planAdd(HttpServletRequest request, ModelMap model) {
+	public String planAdd(HttpServletRequest request, HttpServletResponse response, ModelMap model){
+		return this.add(null, request, response, model);
+	}
+	
+	private String add(List<RecordPara> rps, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("openMode", "add");
 		
 		String serial = String.format("SCRW-%s", DateUtils.getCurrentDayString());
@@ -225,6 +238,18 @@ public class ManuAct {
 		User user = RequestInfoUtils.getUser(request);
 		plan.setCreateUser(user);
 
+		if(rps!=null && rps.size()>0){
+			Set sellRecords = new HashSet<OrderRecord>();
+			Double num = 0.00;
+			for(RecordPara rp: rps){
+				OrderRecord record = orderRecordDao.findById(rp.getRecordId());
+				sellRecords.add(record);
+				num += rp.getNumber();
+				plan.setMaterial(record.getMaterial());
+			}
+			plan.setNumber(num);
+			plan.setSellRecords(sellRecords);
+		}
 		model.addAttribute("plan", plan);
 		
 		return "pages/manu/plan_detail";
@@ -260,8 +285,41 @@ public class ManuAct {
 		return "pages/manu/plan_detail";
 	}
 	
+	private Set<OrderRecord> getSellRecords(String ids){
+		Integer [] sellRecordIds = StrUtils.getIntegersFromString(ids);
+		Set<OrderRecord> sellRecords = new HashSet<OrderRecord>();
+		Integer materialId = null;
+		Integer surfaceId = null;
+		
+		for(Integer sellRecordId : sellRecordIds){
+			OrderRecord record = orderRecordDao.findById(sellRecordId);
+			Material material = record.getMaterial();
+			if(materialId == null)
+				materialId = material.getId();
+			else if(!materialId.equals(material.getId()))
+				return null;	
+			
+			if(surfaceId == null)
+				surfaceId = record.getDefaultSurfaceId();
+			else if(record.getDefaultSurfaceId()!=null && !surfaceId.equals(record.getDefaultSurfaceId()))
+				return null;
+			
+			sellRecords.add(record);
+		}
+		return sellRecords;
+	}
+	
 	@RequestMapping("/o_plan_save.do")
 	public void planSave(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		//这里确保plan.getIds不为空
+		Set<OrderRecord> sellRecords = this.getSellRecords(plan.getIds());
+		if(sellRecords == null){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品或表面处理不一致").toString());
+			return;
+		}
+		
+		plan.setSellRecords(sellRecords);
+		
 		if(plan.getSteps()==null || plan.getSteps().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("工艺流程不能为空").toString());
 			return;
@@ -277,6 +335,14 @@ public class ManuAct {
 	
 	@RequestMapping("/o_plan_update.do")
 	public void planUpdate(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		Set<OrderRecord> sellRecords = this.getSellRecords(plan.getIds());
+		if(sellRecords == null){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("订单产品或表面处理不一致").toString());
+			return;
+		}
+		
+		plan.setSellRecords(sellRecords);
+		
 		if(plan.getSteps()==null || plan.getSteps().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("工艺流程不能为空").toString());
 			return;

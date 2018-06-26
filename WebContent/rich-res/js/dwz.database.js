@@ -108,7 +108,9 @@
 							}else if(lastKey =="infos"){
 								var value = args[key] ? args[key]+"<br/>" : "";
 								args[key] = value + _args[key];
-							}else if(lastKey == "number"){
+							}
+							//主要用于新增生产任务选择订单产品的时候
+							else if(lastKey == "number"){
 								if(_args[key] == "")
 									_args[key] = "0";
 								var value = args[key] ? args[key] : "0";

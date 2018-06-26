@@ -3,7 +3,7 @@
 				<tr>
 					<th width="20">序号</th>
 					<th width="60" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
-					<th width="40"><@s.m "material.name"/></th>
+					<th width="40"><@s.m "material.nameSpec"/></th>
 					<th width="60"><@s.m "batch.serial"/></th>
 					<th width="40"><@s.m "step.surface"/></th>
 					<th width="40"><@s.m "batch.type"/></th>
@@ -19,7 +19,7 @@
 				<tr target="sid_obj" rel="1">
 				    <td>${flow.id}</td>
 					<td>${flow.material.allSerial}</td>
-					<td>${flow.material.name!}</td>
+					<td>${flow.material.nameSpec!}</td>
 					<td>${flow.serial!}</td>
 					
 					<!-- flow direction = -1是不记录surface的 -->
@@ -31,7 +31,7 @@
 					<td>${(flow.room.name)!}</td>
 					<td>
 					<!-- 返回record是为了传递参数而已 -->
-						<#if type?? && type == "lib"><a class="btnSelect" href="javascript:$.bringBack({'parent.id':'${flow.id}', 'material.serial':'${flow.material.allSerial!}', 'material.name':'${flow.material.name!}', 'material.id':'${flow.material.id!}', ':company.id':'${(flow.material.company.id)!}' , ':company.name':'${(flow.material.company.name)!}',
+						<#if type?? && type == "lib"><a class="btnSelect" href="javascript:$.bringBack({'parent.id':'${flow.id}', 'material.serial':'${flow.material.allSerial!}', 'material.name':'${flow.material.name!}', 'material.nameSpec':'${flow.material.nameSpec!}', 'material.id':'${flow.material.id!}', ':company.id':'${(flow.material.company.id)!}' , ':company.name':'${(flow.material.company.name)!}',
 						'record.id':'${recordId!}', 'record.orderSerial':'${orderSerial!}', 'defaultSurfaceId':'${(flow.defaultSurface.id)!}', 'surface.id':'${(flow.surface.id)!}', 'serial':'${flow.serial!}', 'material.unit':'${flow.material.unit!}', number:'${flow.leftNumber!}' , numPerBox:'${flow.numPerBox!}', boxNum:'${flow.boxNum!}'})"><@s.m "global.select"/></a></#if>
 					</td>
 				</tr>
