@@ -98,7 +98,7 @@ $("#saveButton").click(function(){
 								lookupGroup="rawFlows[#index#]" lookuppk="material.id"  fieldAttrs="{readonly:'readonly'}"
 								lookupUrl="v_raw_batch_list.do?type=${type}" aTitle="<@s.m '${cirType}.selectRaw'/>"><@s.m "product.allSerial"/></th>
 							
-							<th type="text" name="rawFlows[#index#].material.name" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "product.name"/></th>
+							<th type="text" name="rawFlows[#index#].material.nameSpec" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "product.name"/></th>
 							<!-- 一般出去的，只需要库存的批次号，但是对于外加工的，还是重新编号，因为回收时还要用到 -->
 							<th type="text" name="rawFlows[#index#].serial" defaultVal="${cir.serial!}" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "rawFlow.serial"/></th>
 							
@@ -119,7 +119,7 @@ $("#saveButton").click(function(){
 					<#if cir.rawFlows??>
 						<#assign count=0 />
 						<#list cir.rawFlows as rawFlow>
-						<tr class="unitBox">
+						<tr>
 						    <td><span class="label" display="#index#">${count+1}</span>
 						    <input type="hidden" name="rawFlows[${count}].id" value="${rawFlow.id!}"></input></td>
 							<td>
@@ -127,7 +127,7 @@ $("#saveButton").click(function(){
 								<a class="btnLook" href="v_raw_batch_list.do?type=${type}" lookupgroup="rawFlows[${count}]" lookuppk="material.id" title="<@s.m '${cirType}.selectRaw'/>"></a>
 								<input type="hidden" name="rawFlows[${count}].material.id" value="${rawFlow.material.id!}">
 							</td>
-							<td><input type="text" name="rawFlows[${count}].material.name" value="${rawFlow.material.name!}" size="12" class="textInput" readonly=readonly>
+							<td><input type="text" name="rawFlows[${count}].material.nameSpec" value="${rawFlow.material.nameSpec!}" size="12" class="textInput" readonly=readonly>
 							<td><input type="text" name="rawFlows[${count}].serial" value="${rawFlow.serial!}" size="20" class="textInput" readonly=readonly></td>
 							
 							<input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}"></td>

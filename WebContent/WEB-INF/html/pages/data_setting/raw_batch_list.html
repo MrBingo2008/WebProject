@@ -25,7 +25,7 @@
 			<tr>
 				<th width="40">ID</th>
 				<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
-				<th width="100"><@s.m "material.name"/></th>
+				<th width="100"><@s.m "material.nameSpec"/></th>
 				<th width="160"><@s.m "plan.serial"/></th>
 				<th width="40"><@s.m "material.unit"/></th>
 				<th width="100"><@s.m "step.outside"/></th>
@@ -41,7 +41,7 @@
 			<tr target="sid_obj" rel="1">
 			    <td>${rawFlow.id}</td>
 				<td>${rawFlow.material.allSerial!}</td>
-				<td>${rawFlow.material.info!}</td>
+				<td>${rawFlow.material.nameSpec!}</td>
 				<td>${rawFlow.serial!}</td>
 				<td>${rawFlow.material.unit!}</td>
 				<td><#if type == 1>
@@ -53,7 +53,8 @@
 				<td>${rawFlow.arriveNumber!}</td>
 				<td>${rawFlow.notArriveNumber!}</td>			
 				<td>
-					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'material.unit':'${rawFlow.material.unit!}',
+					<a class="btnSelect" href="javascript:$.bringBack({'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'material.nameSpec':'${rawFlow.material.nameSpec!}', 'material.unit':'${rawFlow.material.unit!}',
+					':company.id':'${(rawFlow.cir.company.id)!}' , ':company.name':'${(rawFlow.cir.company.name)!}',
 					 <#if type == 1>number:'${rawFlow.leftNumber!}', 'planStep.id':'${(rawFlow.plan.currentStep.id)!}', 'planStep.name':'${(rawFlow.plan.currentStep.step.name)!}',
 					 <#elseif type==2>number:'${rawFlow.notArriveNumber!}', 'planStep.id':'${(rawFlow.parent.plan.currentStep.id)!}', 'planStep.name':'${(rawFlow.parent.plan.currentStep.step.name)!}',</#if>
 					 'parent.info':'${rawFlow.info!}', 'parent.id':'${rawFlow.id}'})"><@s.m "global.select"/></a>

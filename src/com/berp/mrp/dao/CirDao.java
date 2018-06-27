@@ -170,14 +170,13 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			if(ord.getCompany().getId().equals(bean.getCompany().getId()) == false){
 				throw new Exception(String.format("'%s'订单的客户为%s，与本到货单客户%s不一致。", ord.getSerial(), ord.getCompany().getName(), bean.getCompany().getName()));	
 			}
-			recordDao.updateFinishNumber(flow);
 			
-			//2018-6-27
-			Double notPurchaseNumber = flow.getNumber();
-			if(flow.getMaterial().getNotPurchaseInNumber() < flow.getNumber())
-				notPurchaseNumber = flow.getMaterial().getNotPurchaseInNumber();
+			OrderRecord record_new = recordDao.updateFinishNumber(flow);
+			Double delta = flow.getNumber();
+			if(record_new.getFinishNumber() > record_new.getNumber())
+				delta = delta - (record_new.getFinishNumber() - record_new.getNumber());
 			
-			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), notPurchaseNumber, null);
+			materialDao.updateNumber(flow.getMaterial().getId(), flow.getNumber(), delta, null);
 		}
 	}
 	
@@ -194,8 +193,13 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		for(BatchFlow flow:flows){
 			flow.setStatus(0);
 			//要再测测这两个函数的异常情况
-			recordDao.cancelFinishNumber(flow);
-			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getNumber(), - flow.getNumber(), null);
+			OrderRecord record = recordDao.cancelFinishNumber(flow);
+			//考虑0的问题
+			Double notFinishNumber = record.getNotFinishNumber();
+			Double delta = flow.getNumber();
+			if(delta > notFinishNumber)
+				delta = notFinishNumber;
+			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getNumber(), - delta, null);
 			
 		}
 	}

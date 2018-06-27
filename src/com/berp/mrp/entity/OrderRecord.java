@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.berp.framework.util.StrUtils;
 import com.berp.mrp.entity.Process;
 
 public class OrderRecord {
@@ -219,10 +220,10 @@ public class OrderRecord {
 	}
 	
 	public String getInfo(){
-		return String.format("%s/%s", this.getMaterial().getInfo(), this.getOrd().getInfo());
+		return String.format("%s / %s", this.getMaterial().getInfo(), this.getOrd().getInfo());
 	}
 	
 	public String getFullInfo(){
-		return this.getMaterial().getInfo() +"/"+ this.getNumber() + "/" + this.getOrd().getInfo();
+		return String.format("%s / %s%s / %s", this.getMaterial().getInfo(), StrUtils.doubleTrans(this.getNumber()), this.getMaterial().getUnit(), this.getOrd().getInfo());
 	}
 }

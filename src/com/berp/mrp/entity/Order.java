@@ -80,7 +80,13 @@ public class Order extends BaseBill {
 		String temp = this.getName();
 		if(StringUtils.isBlank(temp))
 			temp = this.getSerial();
-		return String.format("%s/%s", temp, this.company.getName());
+		return String.format("%s / %s", temp, this.company.getName());
+	}
+	
+	public String getDisplay(){
+		if(StringUtils.isBlank(this.getName()))
+			return this.getSerial();
+		return this.getName();
 	}
 	
 	/*

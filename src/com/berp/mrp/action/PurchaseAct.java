@@ -101,7 +101,7 @@ public class PurchaseAct extends CirAct {
 				Material m = materialDao.findById(materialIds[i]);
 				OrderRecord r = recordDao.findById(recordIds[i]);
 				MaterialRecordPara p = new MaterialRecordPara();
-				p.setMaterialInfo(m.getInfo());
+				p.setMaterialInfo(m.getNameSpec());
 				p.setMaterialId(m.getId());
 				p.setMaterialNumber(numbers[i]);
 				p.setRecordId(r.getId());

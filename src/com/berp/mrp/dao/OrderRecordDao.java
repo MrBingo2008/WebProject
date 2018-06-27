@@ -177,7 +177,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 	}
 	
 	//收到货是以record为主的
-	public void updateFinishNumber (BatchFlow flow) throws Exception{
+	public OrderRecord updateFinishNumber (BatchFlow flow) throws Exception{
 		
 		OrderRecord record = findById(flow.getRecord().getId());
 		Double finishNumber = record.getFinishNumber();
@@ -197,10 +197,11 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		}
 		//刚修改record的数据，就马上去修改order的status(status需要靠record来判断)，应该是没问题
 		orderDao.updateStatusForCir(record.getOrd().getId());
+		return record;
 	}
 	
 	//用于cir的弃核
-	public void cancelFinishNumber (BatchFlow flow) throws Exception{
+	public OrderRecord cancelFinishNumber (BatchFlow flow) throws Exception{
 		
 		OrderRecord record = findById(flow.getRecord().getId());
 		Double finishNumber = record.getFinishNumber();
@@ -223,6 +224,8 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		}
 		//刚修改record的数据，就马上去修改order的status(status需要靠record来判断)，应该是没问题
 		orderDao.updateStatusForCir(record.getOrd().getId());
+		
+		return record;
 	}
 	
 	@Override

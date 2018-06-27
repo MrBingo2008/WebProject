@@ -65,8 +65,10 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 			Double notPurchaseInNumber = material.getNotPurchaseInNumber();
 			//如果是弃核的话，purchaseInNumber为负，所以应该不会throw exception，所以这个exception message不会用到
 			if(notPurchaseInNumber - purchaseInNumber < 0)
-				throw new Exception(material.getInfo() + "超出采购订单数量");
-			material.setNotPurchaseInNumber(notPurchaseInNumber - purchaseInNumber);
+				//throw new Exception(material.getInfo() + "超出采购订单数量");
+				material.setNotPurchaseInNumber(0.00);
+			else
+				material.setNotPurchaseInNumber(notPurchaseInNumber - purchaseInNumber);
 		}
 		
 		if(sellOutNumber!=null){

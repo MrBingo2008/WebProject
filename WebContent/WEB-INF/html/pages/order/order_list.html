@@ -68,10 +68,10 @@ function testOpen(){
 		<thead>
 			<tr>
 				<th width="20"><@s.m "global.id"/></th>
-				<th width="60"><@s.m "${orderType}.order.serialAndName"/></th>
+				<th width="60"><@s.m "${orderType}.order"/></th>
 				<th width="100"><@s.m "${orderType}.order.details"/></th>
 				<th width="20"><@s.m "${orderType}.order.company"/></th>
-				<th width="80"><@s.m "${orderType}.order.allTime"/></th>
+				<th width="80"><@s.m "${orderType}.order.time"/></th>
 				
 				<#if '${orderType}' == 'sell' && type == 0>
 				<th width="80"><@s.m "purchase.order.details"/></th>
@@ -88,14 +88,14 @@ function testOpen(){
 			<tr target="sid_user" rel="1">
 				<td>${order.id}</td>
 				
-				<td>${order.serial} / ${order.name!}</td>
+				<td>${order.display!}</td>
 				<td>
 					<#list order.records as record>
 					<span style="width:130px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${record.material.nameSpec!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${record.number} / ${record.finishNumber!} ${record.material.unit}</span><br>
 					</#list>
 				</td>
 				<td>${order.company.name!}</td>
-				<td>${(order.billTime?string('yyyy-MM-dd'))!}/${(order.deadlineTime?string('yyyy-MM-dd'))!}</td>
+				<td>${(order.billTime?string('yyyy-MM-dd'))!}</td>
 				
 				<#if '${orderType}'=='sell' && type == 0>
 				<td>
@@ -121,7 +121,9 @@ function testOpen(){
 						</#if>
 						</#list>
 					</#list>
+					<#if order.status gt 0 && order.status lt 3>
 					<a href="v_record_multi_list.do?type=0&orderId=${order.id!}" target="dialog" rel="dialog_plan_todo_select" mask="true" title="<@s.m 'sell.order.selectProduct'/>"><@s.m "plan.todo.add"/></a>
+					</#if>
 				</td>
 				</#if>
 				
