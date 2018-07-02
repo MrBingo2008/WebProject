@@ -32,7 +32,7 @@ public class Material {
 	private Set<OrderRecord> records;
 	
 	private List<ProductMaterial> assemblies;
-	private List<MaterialImage> images;
+	private List<MaterialAttach> attachs;
 
 	public Material(){
 	}
@@ -255,13 +255,13 @@ public class Material {
 		this.records = rs;
 	}
 	
-	//images
-	public List<MaterialImage> getImages() {
-		return images;
+	//attachs
+	public List<MaterialAttach> getAttachs() {
+		return attachs;
 	}
 
-	public void setImages(List<MaterialImage> images) {
-		this.images = images;
+	public void setAttachs(List<MaterialAttach> attachs) {
+		this.attachs = attachs;
 	}
 	
 	//materials

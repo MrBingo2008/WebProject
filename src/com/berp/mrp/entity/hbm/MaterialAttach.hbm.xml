@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.berp.mrp.entity">
-	<class name="MaterialImage" table="material_image">
+	<class name="MaterialAttach" table="material_attach">
 		<id name="id" type="java.lang.Integer" column="id"><generator class="identity"/></id>
 		<property name="priority" column="priority" type="integer" length="10"/>
 		<property name="name" column="name" type="string" length="50"/>

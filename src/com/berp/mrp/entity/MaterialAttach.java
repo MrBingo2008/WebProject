@@ -1,6 +1,6 @@
 package com.berp.mrp.entity;
 
-public class MaterialImage {
+public class MaterialAttach {
 	private Integer id;
 	private String name;
 	private String url;

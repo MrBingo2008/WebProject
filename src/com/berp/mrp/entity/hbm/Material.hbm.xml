@@ -28,10 +28,10 @@
 			<index column="priority" type="integer"></index>
 			<one-to-many class="com.berp.mrp.entity.ProductMaterial"/>
 		</list>		
-		<list name="images" inverse="false" cascade="all">
+		<list name="attachs" inverse="false" cascade="all">
 			<key column="material_id"/>
 			<index column="priority" type="integer"></index>
-			<one-to-many class="com.berp.mrp.entity.MaterialImage"/>
+			<one-to-many class="com.berp.mrp.entity.MaterialAttach"/>
 		</list>
 	</class>
 </hibernate-mapping>

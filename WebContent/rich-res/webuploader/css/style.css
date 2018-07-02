@@ -54,7 +54,7 @@ table {
 
 /* ------------ */
 #imageWrapper {
-    width: 640px;
+    /*width: 640px;*/
     margin: 0 auto;
 
     margin: 1em;
@@ -82,8 +82,8 @@ table {
 
 #uploader .placeholder {
     border: 3px dashed #e6e6e6;
-    min-height: 238px;
-    padding-top: 158px;
+    min-height: 138px;
+    padding-top: 58px;
     text-align: center;
     background: url(./image.png) center 93px no-repeat;
     color: #cccccc;

@@ -141,12 +141,12 @@
         uploader = WebUploader.create({
             pick: {
                 id: '#filePicker',
-                label: '点击选择图片'
+                label: '点击选择附件'
             },
             formData: {
                 uid: 123
             },
-            dnd: '#dndArea',
+            //dnd: '#dndArea',
             paste: '#uploader',
             swf: '../image/Uploader.swf',
             chunked: false,
@@ -216,6 +216,7 @@
                     '<p class="title">' + file.name + '</p>' +
                     '<p class="imgWrap" style="padding:0;"></p>'+
                     '<p class="progress"><span></span></p>' +
+                    '<input name="attach" value="'+ file.name +'"></input>' +
                     '</li>' ),
 
                 $btns = $('<div class="file-panel">' +
