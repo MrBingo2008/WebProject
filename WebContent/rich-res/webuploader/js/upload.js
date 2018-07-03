@@ -1,3 +1,4 @@
+//@ sourceURL=upload.js
 (function( $ ){
     // 当domReady的时候开始初始化
     $(function() {
