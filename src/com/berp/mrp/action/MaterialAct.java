@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +26,7 @@ import com.berp.mrp.dao.OrderRecordDao;
 import com.berp.mrp.dao.RawBatchFlowDao;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Material;
+import com.berp.mrp.entity.MaterialAttach;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.ProductMaterial;
@@ -106,7 +108,6 @@ public class MaterialAct {
 	
 	@RequestMapping("/o_material_save.do")
 	public void materialSave(Material material, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		
 		//stone: how to deal with exception, need to re-organize
 		material.setStatus(0);
 		if(material.getCompany().getId() == null)
@@ -118,6 +119,12 @@ public class MaterialAct {
 		if(material.getAssemblies() != null && material.getAssemblies().size() > 0)
 			for(ProductMaterial assembly : material.getAssemblies())
 				assembly.setProduct(material);
+		List<MaterialAttach> attachs = material.getAttachs();
+		if(attachs != null && attachs.size() >0 ){
+			for(MaterialAttach attach : attachs){
+				attach.setMaterial(material);
+			}
+		}
 		
 		materialDao.save(material);
 

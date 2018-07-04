@@ -26,6 +26,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.berp.framework.web.DwzJsonUtils;
+import com.berp.framework.web.ResponseUtils;
+
 
 @Controller
 public class UploadAct {
@@ -126,6 +129,7 @@ public class UploadAct {
         }  
         out.flush();  
         out.close(); 
+        ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJson("test").toString());
 	}
 }
 

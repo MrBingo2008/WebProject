@@ -147,7 +147,7 @@
             formData: {
                 uid: 123
             },
-            //dnd: '#dndArea',
+            dnd: '#dndArea',
             paste: '#uploader',
             swf: '../image/Uploader.swf',
             chunked: false,
@@ -191,6 +191,13 @@
             console.log('here');
         });
 
+        //stone
+        uploader.on('uploadSuccess', function (file, response) {
+            //console.log(response._raw); //这里可以得到后台返回的数据
+            //$('#' + file.id).addClass('upload-state-done');
+            //imgArr.push(response._raw);
+        });
+        
         // uploader.on('filesQueued', function() {
         //     uploader.sort(function( a, b ) {
         //         if ( a.name < b.name )
@@ -211,13 +218,42 @@
             window.uploader = uploader;
         });
 
+        //stone
+        function initAttachSuffix($tbody) {
+			$tbody.find('>li').each(function(i){
+				$(':input, a.btnLook, a.btnAttach, span.label, div.lookupDiv', this).each(function(){
+					var $this = $(this), name = $this.attr('name'), val = $this.val();
+					var display = $this.attr('display');
+					
+					//这个地方可以获取到defaultVal吗，是如何做到的
+					var defaultVal = $this.attr('defaultVal');
+					
+					if(display) 
+						$this.html(display.replace('#index#', i+1));
+
+					if (name) 
+						$this.attr('name', name.replaceSuffix(i));
+					
+					var lookupGroup = $this.attr('lookupGroup');
+					if (lookupGroup) {$this.attr('lookupGroup', lookupGroup.replaceSuffix(i));}
+					
+					var suffix = $this.attr("suffix");
+					if (suffix) {$this.attr('suffix', suffix.replaceSuffix(i));}
+					
+					//modified by stone
+					if (val && defaultVal && defaultVal.indexOf("#index#") >= 0) 
+						$this.val(defaultVal.replace('#index#',i+1));					
+					});
+			});
+		}
+        
         // 当有文件添加进来时执行，负责view的创建
         function addFile( file ) {
             var $li = $( '<li id="' + file.id + '">' +
                     '<p class="title">' + file.name + '</p>' +
                     '<p class="imgWrap" style="padding:0;"></p>'+
                     '<p class="progress"><span></span></p>' +
-                    '<input name="attach" value="'+ file.name +'"></input>' +
+                    '<input name="attachs['+ file.number +'].name" value="'+ file.name +'"></input>' +
                     '</li>' ),
 
                 $btns = $('<div class="file-panel">' +

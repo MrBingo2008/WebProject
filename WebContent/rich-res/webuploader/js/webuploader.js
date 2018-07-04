@@ -2437,6 +2437,9 @@
              * @type {string}
              */
             this.id = gid();
+            
+            //added by stone
+            this.number = idSuffix;
     
             /**
              * 文件扩展名，通过文件名获取，例如test.png的扩展名为png
@@ -4005,7 +4008,6 @@
              * @for  Uploader
              */
     
-    
             /**
              * @event uploadError
              * @param {File} file File对象
@@ -4151,6 +4153,8 @@
                 return owner
                         .request( 'after-send-file', arguments, function() {
                             file.setStatus( Status.COMPLETE );
+                            //stone：触发uploadSuccess event,在upload.js可以增加事件
+                            //ret为response
                             owner.trigger( 'uploadSuccess', file, ret, hds );
                         })
                         .fail(function( reason ) {

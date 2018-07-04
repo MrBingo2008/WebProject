@@ -395,6 +395,7 @@
 			 * 删除时重新初始化下标
 			 */
 			function initSuffix($tbody) {
+				//>选择器是匹配指定元素的一级子元素
 				$tbody.find('>tr').each(function(i){
 					$(':input, a.btnLook, a.btnAttach, span.label, div.lookupDiv', this).each(function(){
 						var $this = $(this), name = $this.attr('name'), val = $this.val();
