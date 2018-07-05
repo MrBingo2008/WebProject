@@ -126,8 +126,9 @@ public class CirAct {
 					totalNum += mrp.getMaterialNumber();
 					sellRecords.add(recordDao.findById(mrp.getRecordId()));
 				}
-
-				record.setNumber(totalNum);
+				//如果数量为0，则不需要填写
+				if(totalNum > 0)
+					record.setNumber(totalNum);
 				record.setSellRecords(sellRecords);
 				
 				orderRecords.add(record);

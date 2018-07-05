@@ -5,9 +5,10 @@
         var $wrap = $('#uploader'),
 
             // 图片容器
-            $queue = $( '<ul class="filelist"></ul>' )
-                .appendTo( $wrap.find( '.queueList' ) ),
-
+            /*$queue = $( '<ul class="filelist"></ul>' )
+                .appendTo( $wrap.find( '.queueList' ) ),*/
+        	$queue = $("ul.filelist");
+        
             // 状态栏，包括进度和控制按钮
             $statusBar = $wrap.find( '.statusBar' ),
 
@@ -194,7 +195,7 @@
         //stone
         uploader.on('uploadSuccess', function (file, response) {
             //console.log(response._raw); //这里可以得到后台返回的数据
-            //$('#' + file.id).addClass('upload-state-done');
+            $('#' + file.id).find("input[name$='location']").val(response._raw);
             //imgArr.push(response._raw);
         });
         
@@ -219,31 +220,31 @@
         });
 
         //stone
-        function initAttachSuffix($tbody) {
-			$tbody.find('>li').each(function(i){
-				$(':input, a.btnLook, a.btnAttach, span.label, div.lookupDiv', this).each(function(){
+        function initAttachSuffix() {
+        	$queue.find('li').each(function(i){
+				$(':input', this).each(function(){
 					var $this = $(this), name = $this.attr('name'), val = $this.val();
-					var display = $this.attr('display');
+					//var display = $this.attr('display');
 					
 					//这个地方可以获取到defaultVal吗，是如何做到的
-					var defaultVal = $this.attr('defaultVal');
+					//var defaultVal = $this.attr('defaultVal');
 					
-					if(display) 
-						$this.html(display.replace('#index#', i+1));
+					//if(display) 
+					//	$this.html(display.replace('#index#', i+1));
 
 					if (name) 
 						$this.attr('name', name.replaceSuffix(i));
 					
-					var lookupGroup = $this.attr('lookupGroup');
-					if (lookupGroup) {$this.attr('lookupGroup', lookupGroup.replaceSuffix(i));}
+					//var lookupGroup = $this.attr('lookupGroup');
+					//if (lookupGroup) {$this.attr('lookupGroup', lookupGroup.replaceSuffix(i));}
 					
-					var suffix = $this.attr("suffix");
-					if (suffix) {$this.attr('suffix', suffix.replaceSuffix(i));}
+					//var suffix = $this.attr("suffix");
+					//if (suffix) {$this.attr('suffix', suffix.replaceSuffix(i));}
 					
 					//modified by stone
-					if (val && defaultVal && defaultVal.indexOf("#index#") >= 0) 
-						$this.val(defaultVal.replace('#index#',i+1));					
-					});
+					//if (val && defaultVal && defaultVal.indexOf("#index#") >= 0) 
+					//	$this.val(defaultVal.replace('#index#',i+1));					
+				});
 			});
 		}
         
@@ -254,6 +255,8 @@
                     '<p class="imgWrap" style="padding:0;"></p>'+
                     '<p class="progress"><span></span></p>' +
                     '<input name="attachs['+ file.number +'].name" value="'+ file.name +'"></input>' +
+                    '<input name="attachs['+ file.number +'].src"></input>' +
+                    '<input name="attachs['+ file.number +'].location"></input>' +
                     '</li>' ),
 
                 $btns = $('<div class="file-panel">' +
@@ -261,6 +264,7 @@
                     '<span class="rotateRight">向右旋转</span>' +
                     '<span class="rotateLeft">向左旋转</span></div>').appendTo( $li ),
                 $prgress = $li.find('p.progress span'),
+                //重新定义wrap
                 $wrap = $li.find( 'p.imgWrap' ),
                 $info = $('<p class="error"></p>'),
 
@@ -298,6 +302,8 @@
                     if( isSupportBase64 ) {
                         img = $('<img src="'+src+'">');
                         $wrap.empty().append( img );
+                        //stone
+                        $li.find("input[name$='src']").val(src);
                     } else {
                         $.ajax('../../server/preview.php', {
                             method: 'POST',
@@ -548,6 +554,9 @@
             addFile( file );
             setState( 'ready' );
             updateTotalProgress();
+            
+            //stone
+            initAttachSuffix();
         };
 
         uploader.onFileDequeued = function( file ) {
@@ -561,6 +570,7 @@
             removeFile( file );
             updateTotalProgress();
 
+            initAttachSuffix();
         };
 
         uploader.on( 'all', function( type ) {

@@ -132,10 +132,30 @@ $(function(){
 			
 			            <div id="uploader">
 			                <div class="queueList">
-			                    <div id="dndArea" class="placeholder">
+			                    <div id="dndArea" class="placeholder<#if material.attachs?? && material.attachs?size gt 0>element-invisible</#if>">
 			                        <div id="filePicker"></div>
 			                        <span>或将文件拖到这里，单次最多可选300张</span>
 			                    </div>
+			                    <ul class="filelist">
+			                    <#if material.attachs?? && material.attachs?size gt 0>
+			                    
+			                    	<#assign count = 0 />
+			                    	<#list material.attachs as attach>
+			                    	<li id="WU_FILE_${count}" class="state-complete">
+			                    		<p class="title">${attach.name!}</p>
+			                    		<p class="imgWrap" style="padding:0;">
+			                    		<img src="${attach.src!}"></p>
+			                    		<p class="progress"><span style="display: none; width: 0px;"></span></p>
+			                    		<input name="attachs[${count}].name" value="${attach.name!}">
+			                    		<input name="attachs[${count}].src"  value="${attach.src!}">
+			                    		<input name="attachs[${count}].location"  value="${attach.location!}">
+			                    		<span class="success"></span>
+			                    	</li>
+			                    	<#assign count = count + 1 />
+			                    	</#list>
+			                    
+			                    </#if>
+			                    </ul>
 			                </div>
 			                <div class="statusBar" style="display:none;">
 			                    <div class="progress">

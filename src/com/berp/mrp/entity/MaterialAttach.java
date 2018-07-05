@@ -4,6 +4,9 @@ public class MaterialAttach {
 	private Integer id;
 	private String name;
 	private String url;
+	private String location;
+	private String src;
+
 	private Integer priority;
 	private Material material;
 	
@@ -24,6 +27,18 @@ public class MaterialAttach {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public String getSrc() {
+		return src;
+	}
+	public void setSrc(String src) {
+		this.src = src;
 	}
 	public Integer getPriority() {
 		return priority;

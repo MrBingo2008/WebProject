@@ -48,7 +48,8 @@ $(function(){
 				<th width="60"><@s.m "sell.order.notFinishNumber"/></th>
 				<th width="50"><@s.m "step.surface"/></th>
 				<th width="50"><@s.m "material.assemblies"/></th>
-				<th width="35"><@s.m "material.unit"/></th>
+				<th width="30"><@s.m "material.attachs"/></th>
+				<th width="30"><@s.m "material.unit"/></th>
 				<th width="60"><@s.m "global.operate"/></th>				
 			</tr>
 		</thead>
@@ -64,6 +65,7 @@ $(function(){
 				<td>${m.notSellOutNumber!}</td>
 				<td>${(m.surface.name)!}</td>
 				<td>${m.assembliesString!}</td>
+				<td><#if m.attachs?? && m.attachs?size gt 0><@s.m 'global.true'/></#if></td>
 				<td>${m.unit!}</td>
 				<!-- type换成0为管理的list， 大于0为选择模式 -->
 				<#if type == 0>			

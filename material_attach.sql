@@ -16,13 +16,15 @@
 
 CREATE TABLE `material_attach` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `material_id` int(11) NOT NULL DEFAULT '0',
-  `url` varchar(255) NOT NULL DEFAULT '',
+  `material_id` int(11) DEFAULT '0' COMMENT '必须设为允许空，因为hibernate的inverse为false，会先update set material_id=null，cascade=all再delete',
+  `url` varchar(255) DEFAULT '',
+  `location` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `priority` int(11) DEFAULT '0',
+  `src` text,
   PRIMARY KEY (`Id`),
   KEY `material_id` (`material_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 #
 #  Foreign keys for table material_attach
