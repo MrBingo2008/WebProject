@@ -21,14 +21,17 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.berp.framework.load.FileDownload;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
-
+import com.berp.mrp.dao.MaterialAttachDao;
+import com.berp.mrp.entity.MaterialAttach;
 
 @Controller
 public class UploadAct {
@@ -131,5 +134,17 @@ public class UploadAct {
         out.close(); 
         ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJson("test").toString());
 	}
+    
+	@RequestMapping("/view_attach.do")
+	public void viewAttach(Integer attachId, HttpServletRequest request,  HttpServletResponse response, ModelMap model){
+		MaterialAttach attach = attachDao.findById(attachId);
+		fileDownload.downloadByFullpath(attach.getLocation(), attach.getName(), request, response, model);
+	}
+	
+	@Autowired
+	private FileDownload fileDownload;
+	
+	@Autowired
+	private MaterialAttachDao attachDao;
 }
 

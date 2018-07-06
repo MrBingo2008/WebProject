@@ -7,6 +7,7 @@
 	<bean id="sessionProvider" class="com.berp.framework.web.session.HttpSessionProvider"/>
 		
 	<bean id="pwdEncoder" class="com.berp.framework.security.Md5PwdEncoder"/>
+	<bean id="fileDownload" class="com.berp.framework.load.FileDownload"/>
 	
 	<!-- 在servlet.xml里的freemarker引用 -->
 	<bean id="berp_perm" class="com.berp.framework.web.directive.PermistionDirective"/>
@@ -18,6 +19,7 @@
 	<bean id="categoryDao" class="com.berp.core.dao.CategoryDao"/>
 	
 	<bean id="materialDao" class="com.berp.mrp.dao.MaterialDao"/>
+	<bean id="materialAttachDao" class="com.berp.mrp.dao.MaterialAttachDao"/>
 	<bean id="batchDao" class="com.berp.mrp.dao.BatchDao"/>
 	<bean id="batchFlowDao" class="com.berp.mrp.dao.BatchFlowDao"/>
 	<bean id="rawBatchDao" class="com.berp.mrp.dao.RawBatchDao"/>

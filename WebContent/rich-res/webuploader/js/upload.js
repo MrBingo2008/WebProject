@@ -7,8 +7,8 @@
             // 图片容器
             /*$queue = $( '<ul class="filelist"></ul>' )
                 .appendTo( $wrap.find( '.queueList' ) ),*/
-        	$queue = $("ul.filelist");
-        
+        	$queue = $("ul.filelist"),
+        	
             // 状态栏，包括进度和控制按钮
             $statusBar = $wrap.find( '.statusBar' ),
 
@@ -219,6 +219,15 @@
             window.uploader = uploader;
         });
 
+        //stone，判断是否是edit，参考onFileQueued
+    	if($queue != null && $queue.length > 0){
+    		setState('ready');
+    		$statusBar.show();
+    	}else
+    	{
+    		$queue = $( '<ul class="filelist"></ul>' ).appendTo( $wrap.find( '.queueList' ) );
+    	}
+        
         //stone
         function initAttachSuffix() {
         	$queue.find('li').each(function(i){
@@ -328,8 +337,9 @@
                 if ( prev === 'progress' ) {
                     $prgress.hide().width(0);
                 } else if ( prev === 'queued' ) {
-                    $li.off( 'mouseenter mouseleave' );
-                    $btns.remove();
+                	//stone，上传后也保留着
+                	//$li.off( 'mouseenter mouseleave' );
+                    //$btns.remove();
                 }
 
                 // 成功
@@ -451,18 +461,18 @@
             } else if ( state === 'confirm' ) {
                 stats = uploader.getStats();
                 if ( stats.uploadFailNum ) {
-                    text = '已成功上传' + stats.successNum+ '张照片至XX相册，'+
-                        stats.uploadFailNum + '张照片上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>'
+                    text = '已成功上传' + stats.successNum+ '个附件，'+
+                        stats.uploadFailNum + '个附件上传失败，<a class="retry" href="#">重新上传</a>失败附件或<a class="ignore" href="#">忽略</a>'
                 }
 
             } else {
                 stats = uploader.getStats();
-                text = '共' + fileCount + '张（' +
+                text = '共' + fileCount + '个（' +
                         WebUploader.formatSize( fileSize )  +
-                        '），已上传' + stats.successNum + '张';
+                        '），已上传' + stats.successNum + '个';
 
                 if ( stats.uploadFailNum ) {
-                    text += '，失败' + stats.uploadFailNum + '张';
+                    text += '，失败' + stats.uploadFailNum + '个';
                 }
             }
 
