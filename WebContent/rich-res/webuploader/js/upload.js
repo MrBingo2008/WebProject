@@ -221,6 +221,7 @@
 
         //stone，判断是否是edit，参考onFileQueued
     	if($queue != null && $queue.length > 0){
+    		$placeHolder.addClass( 'element-invisible' );
     		setState('ready');
     		$statusBar.show();
     	}else
@@ -568,7 +569,9 @@
             //stone
             initAttachSuffix();
         };
-
+        
+        //uploader.trigger( 'fileQueued', null );
+ 		
         uploader.onFileDequeued = function( file ) {
             fileCount--;
             fileSize -= file.size;
@@ -602,7 +605,7 @@
         });
 
         uploader.onError = function( code ) {
-            alert( 'Eroor: ' + code );
+            alert( 'Error: ' + code );
         };
 
         $upload.on('click', function() {

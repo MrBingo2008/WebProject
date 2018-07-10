@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/berp/rich-res/webuploader/js/upload.js"></script>
 <script type="text/javascript">
 $(function(){
 	
@@ -5,10 +6,8 @@ $(function(){
 		var actionUrl = "o_material_update.do";
 		$("form").attr("action", actionUrl);
 	}
-	
 });
 </script>
-<script type="text/javascript" src="/berp/rich-res/webuploader/js/upload.js"></script>
 <div class="pageContent">
 	<form method="post" action="o_material_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		
@@ -137,9 +136,9 @@ $(function(){
 			                        <span>或将文件拖到这里，单次最多可选300张</span>
 			                    </div>
 			                    <#if material.attachs?? && material.attachs?size gt 0>
-			                    	<ul class="filelist">
-			                    	<#assign count = 0 />
-			                    	<#list material.attachs as attach>
+		                    	<ul class="filelist">
+		                    	<#assign count = 0 />
+		                    	<#list material.attachs as attach>
 			                    	<li id="WU_FILE_${count}" class="state-complete">
 			                    		<p class="title">${attach.name!}</p>
 			                    		<p class="imgWrap" style="padding:0;">
@@ -151,10 +150,9 @@ $(function(){
 			                    		<span class="success"></span>
 			                    	</li>
 			                    	<#assign count = count + 1 />
-			                    	</#list>
-			                    	</ul>
-			                    </#if>
-			                    
+		                    	</#list>
+		                    	</ul>
+			                   </#if> 
 			                </div>
 			                <div class="statusBar" style="display:none;">
 			                    <div class="progress">
