@@ -135,24 +135,6 @@ $(function(){
 			                        <div id="filePicker"></div>
 			                        <span>或将文件拖到这里，单次最多可选300张</span>
 			                    </div>
-			                    <#if material.attachs?? && material.attachs?size gt 0>
-		                    	<ul class="filelist">
-		                    	<#assign count = 0 />
-		                    	<#list material.attachs as attach>
-			                    	<li id="WU_FILE_${count}" class="state-complete">
-			                    		<p class="title">${attach.name!}</p>
-			                    		<p class="imgWrap" style="padding:0;">
-			                    		<a href="view_attach.do?attachId=${attach.id!}"><img src="${attach.src!}"></a></p>
-			                    		<p class="progress"><span style="display: none; width: 0px;"></span></p>
-			                    		<input name="attachs[${count}].name" value="${attach.name!}">
-			                    		<input name="attachs[${count}].src"  value="${attach.src!}">
-			                    		<input name="attachs[${count}].location"  value="${attach.location!}">
-			                    		<span class="success"></span>
-			                    	</li>
-			                    	<#assign count = count + 1 />
-		                    	</#list>
-		                    	</ul>
-			                   </#if> 
 			                </div>
 			                <div class="statusBar" style="display:none;">
 			                    <div class="progress">

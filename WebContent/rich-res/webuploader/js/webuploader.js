@@ -2390,7 +2390,7 @@
         function gid() {
             return idPrefix + idSuffix++;
         }
-    
+            
         /**
          * 文件类
          * @class File
@@ -2492,7 +2492,12 @@
                 }
     
             },
-    
+            
+            //added by stone
+            setSuffix: function(suffix){
+            	idSuffix = suffix;
+            },
+            
             /**
              * 获取文件状态
              * @return {File.Status}
@@ -2531,6 +2536,18 @@
             }
         });
     
+        //stone
+        Base.createFile = WUFile.create = function( source ) {
+            return new WUFile( source );
+        };
+    
+        // 暴露WUFile，可以通过它来扩展业务逻辑。
+        Base.WUFile = WUFile;
+        
+        Base.setSuffix = function( suffixNumber ) {
+        	idSuffix = suffixNumber;
+        };
+        
         Mediator.installTo( WUFile.prototype );
     
         /**

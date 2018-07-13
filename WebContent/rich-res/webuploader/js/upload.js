@@ -5,9 +5,10 @@
         var $wrap = $('#uploader'),
 
             // 图片容器
-            /*$queue = $( '<ul class="filelist"></ul>' )
-                .appendTo( $wrap.find( '.queueList' ) ),*/
-        	$queue = $("ul.filelist"),
+            $queue = $( '<ul class="filelist"></ul>' )
+                .appendTo( $wrap.find( '.queueList' ) ),
+        	//stone
+        	//$queue = $("ul.filelist"),
         	
             // 状态栏，包括进度和控制按钮
             $statusBar = $wrap.find( '.statusBar' ),
@@ -220,14 +221,65 @@
         });
 
         //stone，判断是否是edit，参考onFileQueued
-    	if($queue != null && $queue.length > 0){
+    	/*if($queue != null && $queue.length > 0){
     		$placeHolder.addClass( 'element-invisible' );
     		setState('ready');
     		$statusBar.show();
+    		
+    		fileCount = $("li", $queue).length;
+    		//var file = WebUploader.create1({size:0,name:"test"});
+    		//file.setSuffix(fileCount);
+    		WebUploader.setSuffix(fileCount);
+    		
+    		$queue.find('li').each(function(i){
+    			var $li = $(this);
+	            var $btns = $(".file-panel", $li);
+	            
+    			$li.on( 'mouseenter', function() {
+	                $btns.stop().animate({height: 30});
+	            });
+	
+	            $li.on( 'mouseleave', function() {
+	                $btns.stop().animate({height: 0});
+	            });
+	
+	            $btns.on( 'click', 'span', function() {
+	                var index = $(this).index(),
+	                    deg;
+	
+	                switch ( index ) {
+	                    case 0:
+	                        uploader.removeFile( file );
+	                        return;
+	
+	                    case 1:
+	                        file.rotation += 90;
+	                        break;
+	
+	                    case 2:
+	                        file.rotation -= 90;
+	                        break;
+	                }
+	
+	                if ( supportTransition ) {
+	                    deg = 'rotate(' + file.rotation + 'deg)';
+	                    $wrap.css({
+	                        '-webkit-transform': deg,
+	                        '-mos-transform': deg,
+	                        '-o-transform': deg,
+	                        'transform': deg
+	                    });
+	                } else {
+	                    $wrap.css( 'filter', 'progid:DXImageTransform.Microsoft.BasicImage(rotation='+ (~~((file.rotation/90)%4 + 4)%4) +')');
+	
+	                }
+	            });
+    		});
+    		
     	}else
     	{
     		$queue = $( '<ul class="filelist"></ul>' ).appendTo( $wrap.find( '.queueList' ) );
-    	}
+    	}*/
         
         //stone
         function initAttachSuffix() {
@@ -431,6 +483,7 @@
 
             delete percentages[ file.id ];
             updateTotalProgress();
+            //stone
             $li.off().find('.file-panel').off().end().remove();
         }
 
@@ -570,7 +623,10 @@
             initAttachSuffix();
         };
         
-        //uploader.trigger( 'fileQueued', null );
+        //stone add file
+    	<#if material.attachs?? && material.attachs?size gt 0>
+			uploader.trigger( 'fileQueued', WebUploader.createFile({name:"test1", size:10, type:"jpge"}) );
+		</#if>
  		
         uploader.onFileDequeued = function( file ) {
             fileCount--;
