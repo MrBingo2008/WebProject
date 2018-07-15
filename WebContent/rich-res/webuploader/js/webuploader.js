@@ -853,7 +853,13 @@
                     interruptNum: stats.numofInterrupt
                 } : {};
             },
-    
+            
+            //stone
+            setSuccessNum:function(num){
+            	var stats = this.request('get-stats');
+            	stats.numOfSuccess = num;
+            },
+            
             // 需要重写此方法来来支持opts.onEvent和instance.onEvent的处理器
             trigger: function( type/*, args...*/ ) {
                 var args = [].slice.call( arguments, 1 ),
@@ -2415,6 +2421,7 @@
              */
             this.size = source.size || 0;
     
+            this.src = source.src || "";
             /**
              * 文件MIMETYPE类型，与文件类型的对应关系请参考[http://t.cn/z8ZnFny](http://t.cn/z8ZnFny)
              * @property type
@@ -2440,6 +2447,7 @@
             
             //added by stone
             this.number = idSuffix;
+            this.attachId = source.attachId || "";
     
             /**
              * 文件扩展名，通过文件名获取，例如test.png的扩展名为png
@@ -2491,11 +2499,6 @@
                     this.trigger( 'statuschange', status, prevStatus );
                 }
     
-            },
-            
-            //added by stone
-            setSuffix: function(suffix){
-            	idSuffix = suffix;
             },
             
             /**

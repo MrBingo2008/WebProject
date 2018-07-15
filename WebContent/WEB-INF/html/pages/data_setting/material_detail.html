@@ -1,13 +1,5 @@
-<script type="text/javascript" src="/berp/rich-res/webuploader/js/upload.js"></script>
-<script type="text/javascript">
-$(function(){
-	
-	if('${openMode!}' == 'edit'){
-		var actionUrl = "o_material_update.do";
-		$("form").attr("action", actionUrl);
-	}
-});
-</script>
+<link rel="stylesheet" type="text/css" href="/berp/rich-res/webuploader/css/webuploader.css" />
+<link rel="stylesheet" type="text/css" href="/berp/rich-res/webuploader/css/style.css" />
 <div class="pageContent">
 	<form method="post" action="o_material_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		
@@ -160,3 +152,30 @@ $(function(){
 	</form>
 
 </div>
+
+<!-- 百度上传控件 -->
+<script type="text/javascript" src="/berp/rich-res/webuploader/js/webuploader.js"></script>
+<script type="text/javascript" src="/berp/rich-res/webuploader/js/upload.js"></script>
+<script type="text/javascript">
+$(function(){
+	
+	if('${openMode!}' == 'edit'){
+		var actionUrl = "o_material_update.do";
+		$("form").attr("action", actionUrl);
+	}
+	
+	var wuFile;
+    //stone add file
+	<#if material.attachs?? && material.attachs?size gt 0>
+    	<#list material.attachs as attach>
+    	
+    	wuFile = WebUploader.createFile({name:"${attach.name!}", size:10, type:"jpge", src:"${attach.src!}", attachId:"${attach.id!}"});
+		uploader.trigger( 'fileQueued',  wuFile);
+    	
+		//右下角打钩，必须在fileQueued之后，因为fileQueued会绑定complete(status change)事件
+		wuFile.setStatus('complete');
+		</#list>
+		uploader.trigger( 'setFinish',  ${material.attachs?size});
+	</#if>
+});
+</script>
