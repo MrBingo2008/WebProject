@@ -1,6 +1,7 @@
 package com.berp.mrp.action;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -119,10 +120,16 @@ public class MaterialAct {
 		if(material.getAssemblies() != null && material.getAssemblies().size() > 0)
 			for(ProductMaterial assembly : material.getAssemblies())
 				assembly.setProduct(material);
+		
 		List<MaterialAttach> attachs = material.getAttachs();
 		if(attachs != null && attachs.size() >0 ){
-			for(MaterialAttach attach : attachs){
-				attach.setMaterial(material);
+			int i=0;
+			for(; i<attachs.size()&& !StringUtils.isBlank(attachs.get(i).getLocation());i++){
+				attachs.get(i).setMaterial(material);
+			}
+			if(i < attachs.size()){
+				for(int j=attachs.size() -1 ;j>= i;j--)
+					attachs.remove(j);
 			}
 		}
 		
@@ -156,12 +163,27 @@ public class MaterialAct {
 		if(material.getAssemblies() != null && material.getAssemblies().size() > 0)
 			for(ProductMaterial assembly : material.getAssemblies())
 				assembly.setProduct(material);
+		else
+			material.setAssemblies(new ArrayList<ProductMaterial>());
+		
+		List<MaterialAttach> attachs = material.getAttachs();
+		if(attachs != null && attachs.size() >0 ){
+			//这里不需要setMaterial也可以，很奇怪!
+			//这里的步骤是1 update property, update material_id null, update material_id value
+			int i=0;
+			for(; i<attachs.size()&& !StringUtils.isBlank(attachs.get(i).getLocation());i++){
+				attachs.get(i).setMaterial(material);
+			}
+			if(i < attachs.size()){
+				for(int j=attachs.size() -1 ;j>= i;j--)
+					attachs.remove(j);
+			}
+			
+		}else
+			material.setAttachs(new ArrayList<MaterialAttach>());
 		
 		materialDao.update(material);
 		
-		//parentId如果为null，则字符串是null，有问题
-		//String test = ""+parentId;
-		//test.toString();
 		String url = "v_material.do?type=0&useSession=1";
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", url, "物料").toString());
 	}

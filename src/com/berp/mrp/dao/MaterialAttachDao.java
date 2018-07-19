@@ -20,6 +20,10 @@ public class MaterialAttachDao extends HibernateBaseDao<MaterialAttach, Integer>
 		MaterialAttach entity = get(id);
 		return entity;
 	}
+	
+	public MaterialAttach findByLocation(String location){
+		return findUniqueByProperty("location", location);
+	}
 	/*
 	public OrderRecord deleteById(Integer id) {
 		OrderRecord entity = get(id);

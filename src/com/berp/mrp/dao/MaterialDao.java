@@ -46,6 +46,9 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		String hql = "delete from ProductMaterial bean where bean.product.id is null";
 		getSession().createQuery(hql).executeUpdate();
 		
+		hql = "delete from MaterialAttach bean where bean.material.id is null";
+		getSession().createQuery(hql).executeUpdate();
+		
 		return bean;
 	}
 	

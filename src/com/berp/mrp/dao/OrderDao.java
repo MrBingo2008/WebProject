@@ -62,11 +62,12 @@ public class OrderDao extends HibernateBaseDao<Order, Integer> {
 			this.updateMaterialQuatity(bean);
 		
 		//update order时，对于records来说，先update，然后再把外键清空，然后再为赋值外键，如果record不再属于order，则不会赋值外键
-		//所以还要手动删除， 但是之前删除直接用hql的delete，这样是无法删除record的sellRecords，所以改为delete(entity)
+		//所以还要手动删除， 但是之前删除直接用hql的delete，这样是无法删除record的sellRecords
+		//因此改为delete(entity)，这样会自动删除sell records，不需要手动去删除
+		recordDao.deleteOrderNull();
+		
 		//对于delete order来说，就不一样了，会直接delete record
 		
-		//而update order record时，会自动删除sell records，所以不需要手动去删除
-		recordDao.deleteOrderNull();
 		return bean;
 	}
 	

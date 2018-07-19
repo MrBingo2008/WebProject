@@ -10,6 +10,9 @@ public class MaterialAttach {
 	private Integer priority;
 	private Material material;
 	
+	private Double size;
+	private String type;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -40,6 +43,20 @@ public class MaterialAttach {
 	public void setSrc(String src) {
 		this.src = src;
 	}
+	
+	public Double getSize() {
+		return size;
+	}
+	public void setSize(Double size) {
+		this.size = size;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	public Integer getPriority() {
 		return priority;
 	}

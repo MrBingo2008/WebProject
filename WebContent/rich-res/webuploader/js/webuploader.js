@@ -2448,6 +2448,7 @@
             //added by stone
             this.number = idSuffix;
             this.attachId = source.attachId || "";
+            this.location = source.location || "";
     
             /**
              * 文件扩展名，通过文件名获取，例如test.png的扩展名为png

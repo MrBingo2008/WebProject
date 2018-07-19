@@ -169,7 +169,7 @@ $(function(){
 	<#if material.attachs?? && material.attachs?size gt 0>
     	<#list material.attachs as attach>
     	
-    	wuFile = WebUploader.createFile({name:"${attach.name!}", size:10, type:"jpge", src:"${attach.src!}", attachId:"${attach.id!}"});
+    	wuFile = WebUploader.createFile({name:"${attach.name!}", size:${attach.size!0}, type:"${attach.type!}", src:"${attach.src!}", location:"${attach.location!}", attachId:${attach.id}});
 		uploader.trigger( 'fileQueued',  wuFile);
     	
 		//右下角打钩，必须在fileQueued之后，因为fileQueued会绑定complete(status change)事件

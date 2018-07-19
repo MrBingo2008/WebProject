@@ -36,6 +36,8 @@ import com.berp.mrp.entity.MaterialAttach;
 @Controller
 public class UploadAct {
 	
+	protected String savePathSuffix = "d:/berpAttach";
+	
 	//上传文件的保存路径  
     protected String configPath = "upload/widget";  
   
@@ -50,7 +52,7 @@ public class UploadAct {
         PrintWriter out = response.getWriter();  
           
         //文件保存目录路径  
-        String savePath = "E:/";  
+        String savePath = savePathSuffix;  
         //String savePath = this.getServletContext().getRealPath("/") + configPath;  
           
         // 临时文件目录   
@@ -106,7 +108,7 @@ public class UploadAct {
                         os.close();    
                         is.close();    
                         System.out.println("上传成功！路径："+savePath+"/"+newFileName);  
-                        out.print(savePath+"/"+newFileName);  
+                        out.print(String.format("/%s/%s", ymd, newFileName));  
                     }catch(Exception e){  
                         e.printStackTrace();  
                     }  
@@ -132,13 +134,18 @@ public class UploadAct {
         }  
         out.flush();  
         out.close(); 
-        ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJson("test").toString());
+        //ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJson("test").toString());
 	}
     
 	@RequestMapping("/view_attach.do")
-	public void viewAttach(Integer attachId, HttpServletRequest request,  HttpServletResponse response, ModelMap model){
-		MaterialAttach attach = attachDao.findById(attachId);
-		fileDownload.downloadByFullpath(attach.getLocation(), attach.getName(), request, response, model);
+	public void viewAttach(String location, HttpServletRequest request,  HttpServletResponse response, ModelMap model){
+		MaterialAttach attach = attachDao.findByLocation(location);
+		if(attach != null && attach.getLocation()!=null)
+			fileDownload.downloadByFullpath(this.savePathSuffix + attach.getLocation(), attach.getName(), request, response, model);
+		else{
+			String fileExt = location.substring(location.lastIndexOf(".") + 1).toLowerCase();  
+			fileDownload.downloadByFullpath(this.savePathSuffix + location, "临时文件"+"."+fileExt, request, response, model);
+		}
 	}
 	
 	@Autowired

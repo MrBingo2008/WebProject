@@ -196,13 +196,6 @@ var uploader;
         uploader.on('dialogOpen', function() {
             console.log('here');
         });
-
-        //stone
-        uploader.on('uploadSuccess', function (file, response) {
-            //console.log(response._raw); //这里可以得到后台返回的数据
-            $('#' + file.id).find("input[name$='location']").val(response._raw);
-            //imgArr.push(response._raw);
-        });
         
         // uploader.on('filesQueued', function() {
         //     uploader.sort(function( a, b ) {
@@ -259,15 +252,20 @@ var uploader;
                     '<p class="title">' + file.name + '</p>' +
                     '<p class="imgWrap" style="padding:0;"></p>'+
                     '<p class="progress"><span></span></p>' +
+                    '<input name="attachs['+ file.number +'].id" value="'+ file.attachId +'"></input>' +
                     '<input name="attachs['+ file.number +'].name" value="'+ file.name +'"></input>' +
-                    '<input name="attachs['+ file.number +'].src"></input>' +
-                    '<input name="attachs['+ file.number +'].location"></input>' +
+                    '<input name="attachs['+ file.number +'].src" value="'+ file.src +'"></input>' +
+                    '<input name="attachs['+ file.number +'].location" value="'+ file.location +'"></input>' +
+                    '<input name="attachs['+ file.number +'].size" value="'+ file.size +'"></input>' +
+                    '<input name="attachs['+ file.number +'].type" value="'+ file.type +'"></input>' +
                     '</li>' ),
 
-                $btns = $('<div class="file-panel">' +
-                    '<span class="cancel">删除</span>' +
+                /*    +
                     '<span class="rotateRight">向右旋转</span>' +
-                    '<span class="rotateLeft">向左旋转</span></div>').appendTo( $li ),
+                    '<span class="rotateLeft">向左旋转</span></div>'*/
+                    
+                $btns = $('<div class="file-panel">' +
+                    '<span class="cancel">删除</span>').appendTo( $li ),
                 $prgress = $li.find('p.progress span'),
                 //重新定义wrap
                 $wrap = $li.find( 'p.imgWrap' ),
@@ -291,17 +289,22 @@ var uploader;
                     $info.text( text ).appendTo( $li );
                 };
 
-            if ( file.getStatus() === 'invalid' ) {
+            //stone: 用于edit attachs
+            if(file.attachId!=null && file.attachId!=""){
+            	var url = "window.open('view_attach.do?location="+file.location+"')";
+            	if(file.src!=null && file.src!="")
+            		img = $('<a href="#" onclick="'+ url +'"><img src="'+file.src+'"></a>');
+            	else{
+            		var ext = getFileExt(file.name);
+            		img = $('<a href="#" onclick="'+ url +'">'+ ext +'文件</a>');
+            	}
+            	$wrap.empty().append( img );
+                //stone
+                //$li.find("input[name$='src']").val(file.src);
+            }
+            else if ( file.getStatus() === 'invalid' ) {
                 showError( file.statusText );
             } 
-            //stone: 用于edit attachs
-            else if(file.src!=null && file.src!=""){
-            	var url = "window.open('view_attach.do?attachId="+file.attachId+"')";
-                img = $('<a href="#" onclick="'+ url +'"><img src="'+file.src+'"></a>');
-                $wrap.empty().append( img );
-                //stone
-                $li.find("input[name$='src']").val(file.src);
-            }
             else {
                 // @todo lazyload
                 $wrap.text( '预览中' );
@@ -309,12 +312,15 @@ var uploader;
                     var img;
 
                     if ( error ) {
-                        $wrap.text( '不能预览' );
+                    	var ext = getFileExt(file.name);
+                    	img = $('<a href="#" style="cursor:default">'+ ext +'文件</a>');
+                        $wrap.empty().append( img );
+                        //$wrap.text( '' );
                         return;
                     }
 
                     if( isSupportBase64 ) {
-                        img = $('<img src="'+src+'">');
+                        img = $('<a><img src="'+src+'"></a>');
                         $wrap.empty().append( img );
                         //stone
                         $li.find("input[name$='src']").val(src);
@@ -385,14 +391,14 @@ var uploader;
                     case 0:
                         uploader.removeFile( file );
                         return;
-
+/*
                     case 1:
                         file.rotation += 90;
                         break;
 
                     case 2:
                         file.rotation -= 90;
-                        break;
+                        break;*/
                 }
 
                 if ( supportTransition ) {
@@ -428,7 +434,19 @@ var uploader;
 
             $li.appendTo( $queue );
         }
-
+        
+        function getFileExt(fileName){
+        	var ext = "";
+        	if(fileName != null && fileName!=""){
+        		var lastDot = fileName.lastIndexOf(".");
+        		if(lastDot == -1)
+        			ext = "未知类型";
+        		else
+        			ext = fileName.substring(lastDot+1, fileName.length);
+        	}
+        	return ext;
+        }
+        
         // 负责view的销毁
         function removeFile( file ) {
             var $li = $('#'+file.id);
@@ -588,6 +606,17 @@ var uploader;
             uploader.setSuccessNum(num);
         	updateStatus();
         }
+        
+        //stone
+        uploader.on('uploadSuccess', function (file, response) {
+            //console.log(response._raw); //这里可以得到后台返回的数据
+            $('#' + file.id).find("input[name$='location']").val(response._raw);
+            var url = "window.open('view_attach.do?location="+response._raw+"')";
+            var alink = $("a", '#' + file.id);
+            alink.attr("onclick", url);
+            alink.css("cursor", "pointer");
+            alink.href="#";
+        });
         
         uploader.onFileDequeued = function( file ) {
             fileCount--;
