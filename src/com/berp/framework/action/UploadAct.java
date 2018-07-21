@@ -36,7 +36,7 @@ import com.berp.mrp.entity.MaterialAttach;
 @Controller
 public class UploadAct {
 	
-	protected String savePathSuffix = "d:/berpAttach";
+	protected String savePathSuffix = "e:/berp/attach";
 	
 	//上传文件的保存路径  
     protected String configPath = "upload/widget";  
@@ -45,7 +45,7 @@ public class UploadAct {
       
     protected String dirName = "file";  
     
-    @RequestMapping(value="/upload.do", method = RequestMethod.POST)
+    @RequestMapping(value="/attach_upload.do", method = RequestMethod.POST)
 	public void upload(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws ServletException, IOException {
     	request.setCharacterEncoding("UTF-8");  
         response.setContentType("text/html; charset=UTF-8");  
@@ -137,7 +137,7 @@ public class UploadAct {
         //ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJson("test").toString());
 	}
     
-	@RequestMapping("/view_attach.do")
+	@RequestMapping("/attach_view.do")
 	public void viewAttach(String location, HttpServletRequest request,  HttpServletResponse response, ModelMap model){
 		MaterialAttach attach = attachDao.findByLocation(location);
 		if(attach != null && attach.getLocation()!=null)

@@ -158,7 +158,7 @@ var uploader;
             swf: '../image/Uploader.swf',
             chunked: false,
             chunkSize: 512 * 1024,
-            server: 'upload.do',
+            server: 'attach_upload.do',
             // runtimeOrder: 'flash',
 
             // accept: {
@@ -291,7 +291,7 @@ var uploader;
 
             //stone: 用于edit attachs
             if(file.attachId!=null && file.attachId!=""){
-            	var url = "window.open('view_attach.do?location="+file.location+"')";
+            	var url = "window.open('attach_view.do?location="+file.location+"')";
             	if(file.src!=null && file.src!="")
             		img = $('<a href="#" onclick="'+ url +'"><img src="'+file.src+'"></a>');
             	else{
@@ -611,7 +611,7 @@ var uploader;
         uploader.on('uploadSuccess', function (file, response) {
             //console.log(response._raw); //这里可以得到后台返回的数据
             $('#' + file.id).find("input[name$='location']").val(response._raw);
-            var url = "window.open('view_attach.do?location="+response._raw+"')";
+            var url = "window.open('attach_view.do?location="+response._raw+"')";
             var alink = $("a", '#' + file.id);
             alink.attr("onclick", url);
             alink.css("cursor", "pointer");
