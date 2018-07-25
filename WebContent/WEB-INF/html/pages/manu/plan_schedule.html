@@ -1,0 +1,126 @@
+<script src="/berp/rich-res/dhtmlx/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
+<script src="/berp/rich-res/dhtmlx/ext/dhtmlxscheduler_recurring.js" type="text/javascript" charset="utf-8"></script>
+<script src="/berp/rich-res/dhtmlx/ext/dhtmlxscheduler_active_links.js" type="text/javascript" charset="utf-8"></script>
+<script src='/berp/rich-res/dhtmlx/ext/dhtmlxscheduler_tooltip.js' type="text/javascript" charset="utf-8"></script>
+
+<link rel="stylesheet" href="/berp/rich-res/dhtmlx/dhtmlxscheduler_glossy.css" type="text/css" title="no title" charset="utf-8">
+
+<script src="/berp/rich-res/dhtmlx/ext/dhtmlxscheduler_editors.js" type="text/javascript" charset="utf-8"></script>
+<script src="/berp/rich-res/dhtmlx/locale/locale_cn.js" type="text/javascript" charset="utf-8"></script>
+<script src="/berp/rich-res/dhtmlx/locale/recurring/locale_recurring_cn.js" type="text/javascript" charset="utf-8"></script>
+	
+<style type="text/css" media="screen">    
+    .dhx_cal_event.event_private div, .dhx_cal_event_line.event_private, .dhx_cal_event_clear.event_private{
+        /*background-color: #E0FFFF !important;*/
+        /*color: #14588B !important;*/
+        background-color: #B8F8B8 !important;
+        color: #000000 !important;
+    }
+    
+    .dhx_cal_event.event_public div, .dhx_cal_event_line.event_public, .dhx_cal_event_clear.event_public{
+        /*background-color: #FFF2AA !important;*/
+        /*color: #845900 !important;*/
+        background-color: #FFEB75 !important;
+        color: #000000 !important;
+    }
+		
+</style>
+
+<script type="text/javascript" charset="utf-8">
+
+	function init() {
+		
+		scheduler.config.multi_day = true;
+		scheduler.config.xml_date="%Y-%m-%d %H:%i";
+		scheduler.config.prevent_cache = true;
+		scheduler.config.first_hour=7;
+		scheduler.config.last_hour=23;
+		
+		//scheduler.config.hour_size_px = 63;
+		
+		scheduler.config.details_on_create=true;
+		scheduler.config.details_on_dblclick=true;
+		scheduler.config.full_day = true;
+		
+		scheduler.locale.labels.section_location="详细信息";
+		scheduler.locale.labels.section_property="类型";
+		var properties = [{ key: 0, label: '私有(其他用户不可见)' },{ key: 1, label: '公开(其他用户可见)' }];
+		scheduler.config.lightbox.sections=[
+			{name:"description", height:40, map_to:"text", type:"textarea" , focus:true},
+			{name:"location", height:60, type:"textarea", map_to:"details" },
+			{name:"property", height: 25, options: properties, map_to:"property", type:"radio",default_value: "1"},
+			{name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring" },
+			{name:"time", height:72, type:"time", map_to:"auto"}
+		]
+		
+        scheduler.templates.event_class=function(start, end, event){
+            if(event.property){
+                if(event.property == 0)
+            		return "event_private";
+                else
+                	return "";
+            }
+            return "";
+        };
+		
+	    scheduler.templates.tooltip_text = function(start,end,event) {
+	    	return "<b>事件名称:</b> "+event.text+
+	    	"<br/><b>开始时间:</b> "+scheduler.templates.tooltip_date_format(start)+
+	    	"<br/><b>结束时间:</b> "+scheduler.templates.tooltip_date_format(end);
+	    }
+        
+		scheduler.init('scheduler_here',new Date(),"week");
+		//stone
+		scheduler.load("v_init.do");
+		var dp = new dataProcessor("v_init.do");
+		dp.init(scheduler);
+	}
+	scheduler.showLightbox = function(id) {
+		var locale = this.locale;
+		var c = scheduler.config.lightbox_recurring;
+		var pid = this.getEvent(id).event_pid;
+		var isVirtual = (id.toString().indexOf("#") != -1);
+		if (isVirtual)
+			pid = id.split("#")[0];
+		if ( !pid || pid == 0 || ( (!locale.labels.confirm_recurring || c == 'instance') || (c == 'series' && !isVirtual)) ) {
+			return this.showLightbox_rec(id); // editing instance or non recurring event
+		}
+		// show series
+		var callback = function() {
+			pid = this.getEvent(pid);
+			pid._end_date = pid.end_date;
+			pid.end_date = new Date(pid.start_date.valueOf() + pid.event_length * 1000);
+			return this.showLightbox_rec(pid.id); // editing series
+		};
+		return callback.call(this);
+	}; 
+	scheduler._dhtmlx_confirm = function(message, title, callback) {
+		if(!confirm(message)) 
+			return false;
+		return callback();
+	};
+	
+	$(function(){
+		init();
+	});	
+</script>
+
+<div class="pageContent">
+<div class="pageFormContent" layoutH="56">
+	<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
+		<div class="dhx_cal_navline">
+			<div class="dhx_cal_prev_button">&nbsp;</div>
+			<div class="dhx_cal_next_button">&nbsp;</div>
+			<div class="dhx_cal_today_button"></div>
+			<div class="dhx_cal_date"></div>
+			<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+			<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+			<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+		</div>
+		<div class="dhx_cal_header">
+		</div>
+		<div class="dhx_cal_data">
+		</div>		
+	</div>
+</div>
+</div>

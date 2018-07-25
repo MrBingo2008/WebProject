@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+ <head> 
+   <title>树表结构</title> 
+   <meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+   <meta name="title" content="Samples"/> 
+   <meta name="keywords" content=""/> 
+   <meta name="description" content=""/> 
+   <link rel="icon" href="../common/favicon.ico" type="image/x-icon"/> 
+   <link rel="shortcut icon" href="../common/favicon.ico" type="image/x-icon"/> 
+   <link rel="stylesheet" href="../common/css/style.css" type="text/css" media="screen"/> 
+ </head> 
+ <body>
+   
+   
+<!--- ================ LIVE DEMO ================== --->
+ <link rel="STYLESHEET" type="text/css" href="../dhtmlxGrid/codebase/dhtmlxgrid.css"> 
+ <link rel="STYLESHEET" type="text/css" href="../dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css"> 
+ <link rel="STYLESHEET" type="text/css" href="../dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_blue.css"> 
+ <script src="../dhtmlxGrid/codebase/dhtmlxcommon.js" type="text/javascript"></script> 
+ <script src="../dhtmlxGrid/codebase/dhtmlxgrid.js" type="text/javascript"></script> 
+ <script src="../dhtmlxGrid/codebase/dhtmlxgridcell.js" type="text/javascript"></script> 
+ <script src="../dhtmlxGrid/codebase/excells/dhtmlxgrid_excell_link.js" type="text/javascript"></script> 
+ <script src="../dhtmlxGrid/codebase/ext/dhtmlxgrid_selection.js" type="text/javascript"></script> 
+ <script src="../dhtmlxGrid/codebase/ext/dhtmlxgrid_nxml.js" type="text/javascript"></script> 
+ <script src="codebase/dhtmlxtreegrid.js" type="text/javascript"></script> 
+ <script>
+ var mygrid;
+ var activeTheme="dhx_skyblue";
+ function jr()
+     {mygrid=new dhtmlXGridObject('gridbox');
+      mygrid.resetColColors=resetColumnColors;buildGrid();};
+      function buildGrid()
+          {mygrid.gN=true;
+          mygrid.eg="../dhtmlxGrid/codebase/imgs/";
+          mygrid.setHeader("书名,状态,#cspan,#cspan");
+          mygrid.attachHeader("#rspan,价格,包装,运达");
+          mygrid.setInitWidths("290,100,100,*");
+          mygrid.setColAlign("left,right,left,left");
+          mygrid.setColTypes("tree,price,ed,co");
+          mygrid.setColSorting("str,int,str,str");
+          mygrid.setSkin(activeTheme);
+          var combobox=mygrid.cf(3);
+          combobox.eT("1","1 Hour");
+          combobox.eT("12","12 Hours");
+          combobox.eT("24","24 Hours");
+          combobox.eT("48","2 days");
+          combobox.eT("168","1 week");
+          combobox.eT("pick","pick up");
+          combobox.eT("na","na");
+          mygrid.init();
+          mygrid.loadXML("treegrid.xml?v=1.3");
+          mygrid.attachEvent("onKeyPress",onKeyPressed);
+          mygrid.enableBlockSelection();};
+          function setSkin(skinName)
+              {if(skinName==activeTheme)
+                  return;
+              var cTh=document.getElementById(activeTheme);
+              var nTh=document.getElementById(skinName);
+              cTh.className="skinbutton sb_inactive";
+              nTh.className="skinbutton sb_active";
+              activeTheme=skinName;
+              mygrid.setSkin(skinName);
+              mygrid.resetColColors("");
+              mygrid.setSizes();
+              mygrid.ahx();
+              return true;
+              };
+              function resetColumnColors(colorsList)
+              {this.setColumnColor(colorsList);
+              var colsNum=this.So();
+              for(var i=0;i<this.am.length;i++)
+                {for(var j=0;j<colsNum;j++)
+                  {this.am[i].cells[j].bgColor=this.columnColor[j]||"";
+                  }
+                }
+              };
+              function onKeyPressed(code,ctrl,shift)
+              {if(code==67&&ctrl)
+                  {mygrid.setCSVDelimiter("\t");
+                  mygrid.copyBlockToClipboard()}
+                  if(code==86&&ctrl)
+                      {mygrid.pasteBlockFromClipboard()
+                      }
+                   return true;
+               };
+               dhtmlxEvent(window,"load",jr);
+ </script> <h2>Live demo</h2> <div style="position:relative;margin-bottom:10px;"> <div width="600px" height="280px" id="gridbox" style="width:600px;height:280px;position:absolute;top:30px;left:0px"></div>  <img src="images/demo_treegrid_bg_lightgrey.gif" width="615" height="370" alt="" border="0"> <div style="position:absolute;top:317px;left:0px;"> 
+<!--- ============================================= --->
+
+
+            <footer>
+                <a href="/index.shtml" class="logo"></a>
+                <span>Copyright  &copy; 1998-2013  DHTMLX LTD.<br>All rights reserved.</span>
+                <ul class="footer-menu">
+                    <li><a href="/docs/terms.shtml" class="terms">Terms of use</a></li>
+                    <li><a href="/index.shtml" class="home">Home</a></li>
+                    <li><a href="/docs/contact.shtml" class="contact">Contact Us</a></li>
+                </ul>
+            </footer>
+
+    </div>
+    
+    <!--script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script-->
+    <!--script type="text/javascript">
+    try {
+    var pageTracker = _gat._getTracker("UA-30407974-1");
+    pageTracker._setDomainName(".dhtmlx.com");
+    pageTracker._trackPageview();
+    } catch(err) {}
+    </script-->
+    </body>
+</html>

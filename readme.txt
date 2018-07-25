@@ -46,3 +46,6 @@ material的dim改为comment，增加num_per_box
 
 2018-7-2：
 增加material_attach表格
+
+2018-7-23：
+更新版本，不过material_attach的size double好像没有设定长度

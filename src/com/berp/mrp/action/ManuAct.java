@@ -1,6 +1,8 @@
 package com.berp.mrp.action;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,6 +45,9 @@ import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.mrp.entity.RecordPara;
 import com.berp.mrp.entity.Step;
 import com.berp.mrp.web.PageListPara;
+import com.dhtmlx.connector.BaseConnector;
+import com.dhtmlx.connector.SchedulerConnector;
+import com.dhtmlx.connector.scheduler_rec_behavior;
 import com.berp.core.dao.UserDao;
 import com.berp.core.entity.Category;
 import com.berp.core.entity.User;
@@ -542,6 +547,38 @@ public class ManuAct {
 	
 	private void reload(HttpServletResponse response, String text, Integer id, PageListPara para){
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson(text, String.format("v_plan_edit.do?planId=%d&%s", id, para.getUrlPara()), "修改生产任务").toString());
+	}
+	
+	//plan schedule
+	@RequestMapping("/v_plan_schedule.do")
+	public String planSchedule(HttpServletRequest request, ModelMap model) {
+		return "pages/manu/plan_schedule";
+	}
+	
+	@RequestMapping("/v_plan_schedule_init.do") 
+	public void init(HttpServletRequest request, HttpServletResponse response, ModelMap model)
+			throws JSONException  {
+		
+		BaseConnector.global_http_request=request;
+		BaseConnector.global_http_response = response; 
+		
+		Connection conn=null; 
+		try {
+			Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/berp", "root", "root"); 
+		} catch (Throwable e) {
+			e.printStackTrace(); 
+		}
+		
+		SchedulerConnector c = new SchedulerConnector(conn);
+		c.event.attach(new scheduler_rec_behavior(c));
+		c.render_table("schedule_event","event_id","start_date,end_date,event_name,details");
+		//c.render_sql("select * from schedule_event where user_id="+user_ID +" and property>="+propertyLevel,"event_id","user_id,start_date,end_date,event_name,details,property,rec_type,event_pid,event_length");
+		try{
+			conn.close();
+		}catch(Exception ex){
+			ex.printStackTrace(); 
+		}
 	}
 	
 	@Autowired
