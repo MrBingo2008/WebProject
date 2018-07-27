@@ -71,8 +71,8 @@
         
 		scheduler.init('scheduler_here',new Date(),"week");
 		//stone
-		scheduler.load("v_init.do");
-		var dp = new dataProcessor("v_init.do");
+		scheduler.load("v_plan_schedule_init.do");
+		var dp = new dataProcessor("v_plan_schedule_init.do");
 		dp.init(scheduler);
 	}
 	scheduler.showLightbox = function(id) {

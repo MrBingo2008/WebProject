@@ -565,15 +565,15 @@ public class ManuAct {
 		Connection conn=null; 
 		try {
 			Class.forName ("com.mysql.jdbc.Driver").newInstance ();
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/berp", "root", "root"); 
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/berp_db", "root", "root"); 
 		} catch (Throwable e) {
 			e.printStackTrace(); 
 		}
 		
 		SchedulerConnector c = new SchedulerConnector(conn);
 		c.event.attach(new scheduler_rec_behavior(c));
-		c.render_table("schedule_event","event_id","start_date,end_date,event_name,details");
-		//c.render_sql("select * from schedule_event where user_id="+user_ID +" and property>="+propertyLevel,"event_id","user_id,start_date,end_date,event_name,details,property,rec_type,event_pid,event_length");
+		//c.render_table("schedule_event","event_id","start_date,end_date,event_name,details");
+		c.render_sql("select * from schedule_event ","event_id","user_id,start_date,end_date,event_name,details,property,rec_type,event_pid,event_length");
 		try{
 			conn.close();
 		}catch(Exception ex){
