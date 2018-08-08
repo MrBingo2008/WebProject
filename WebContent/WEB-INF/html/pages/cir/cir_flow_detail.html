@@ -1,12 +1,15 @@
+
 <script type="text/javascript">
 $(function(){
+	var status = '${cir.status}';
+	
 	if('${openMode!}' == 'add'){
 		$("#cancelApprovalButton").attr("disabled", "disabled");
 	}
 	else if('${openMode!}' == 'edit'){
 		var actionUrl = "o_${cirType}_update.do";
 		$("form").attr("action", actionUrl);
-		var status = '${cir.status}';
+		
 		if(status >= 1){
 			$("#formContent input").attr("readonly", "readonly");
 			$("#formContent a").css("display", "none");
@@ -19,6 +22,10 @@ $(function(){
 		$("#formContent a").css("display", "none");
 		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
 	}	
+	
+	if(status < 1){
+		$("#printButton").attr("disabled", "disabled");
+	}
 });
 
 $("#saveButton").click(function(){
@@ -64,6 +71,19 @@ function calFactor(numInput){
 		var npb = parseFloat(numPerBox);
 		$(numInput).parent().parent().find("input[name*=boxNum]").val(s/npb);
 	}
+}
+
+//应用URL协议启动WEB报表客户端程序，根据参数 option 调用对应的功能
+function gridReport_start(report, data, type) {
+    var args = {
+        baseurl:window.rootURL,
+        report: "grf/" + report + ".grf",
+        data: data ? "data/DataCenter.jsp?data=" + data : "data/SQLParam.jsp", //data,
+        selfsql: data ? false : true,
+        type: type
+    };      
+    
+    webapp_urlprotocol_run(args);
 }
 </script>
 
@@ -223,6 +243,7 @@ function calFactor(numInput){
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${cirType}_cancelApproval.do?${listPara!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
+				<li id="printButtonLi"><div class="button"><div class="buttonContent"><a href="javascript:gridReport_start('1a', 'Customer', 'preview');"><button id="printButton" type="button"><@s.m "global.print"/></button></a></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_${cirType}_list.do?${listPara!}" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>
