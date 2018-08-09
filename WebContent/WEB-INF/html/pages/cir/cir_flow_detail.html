@@ -1,4 +1,4 @@
-
+<script src="/berp/rich-res/grid_report/grwebapp.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function(){
 	var status = '${cir.status}';
@@ -26,6 +26,8 @@ $(function(){
 	if(status < 1){
 		$("#printButton").attr("disabled", "disabled");
 	}
+	//在grwebapp.js里定义
+	setRootUrl();
 });
 
 $("#saveButton").click(function(){
@@ -76,9 +78,11 @@ function calFactor(numInput){
 //应用URL协议启动WEB报表客户端程序，根据参数 option 调用对应的功能
 function gridReport_start(report, data, type) {
     var args = {
-        baseurl:window.rootURL,
-        report: "grf/" + report + ".grf",
-        data: data ? "data/DataCenter.jsp?data=" + data : "data/SQLParam.jsp", //data,
+        //rootURL在前面要事先设好，获取当前的路径
+    	baseurl:window.rootURL,
+    	//web.xml里对这种请求没有直接通过，没有经过action处理
+        report: "rich-res/grid_report/grf/" + report + ".grf",
+        data: data ? "rich-res/grid_report/data/DataCenter.jsp?data=" + data : "data/SQLParam.jsp", //data,
         selfsql: data ? false : true,
         type: type
     };      

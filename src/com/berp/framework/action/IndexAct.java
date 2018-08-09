@@ -76,6 +76,12 @@ public class IndexAct {
 		return "pages/left_bar_system_setting";
 	}
 	
+	@RequestMapping("/grf/1a.do")
+	public String test(HttpServletRequest request, ModelMap model) {
+		return "pages/left_bar_system_setting";
+	}
+	
+	
 	@Autowired
 	private CategoryDao categoryDao;
 }

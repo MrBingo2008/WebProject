@@ -254,3 +254,17 @@ function webapp_ws_fun_PrinterPapers(printer) {
         printer: printer
     });
 }
+
+//added by stone
+function setRootUrl() {
+  var path = window.location.pathname,
+      index = path.lastIndexOf("/");
+
+  //根据当前网页URL获取到当前WEB服务器的根URL，并记录在 window.rootURL 中
+  window.rootURL = window.location.protocol + "//" + window.location.host;
+  if (index >= 0) {
+      path = path.substr(0, index);
+      window.rootURL += path;
+  }
+  window.rootURL += "/";
+}
