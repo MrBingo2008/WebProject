@@ -117,6 +117,12 @@ public class SellAct extends CirAct {
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_sellOut_edit.do?cirId=%d&%s",cirId, listPara.getUrlPara()), "编辑客户发货单").toString());
 	}
 	
+	@RequestMapping("/o_sellOut_print.do")
+	public void sellOutPrint(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		String test = "<xml>\n<row><CustomerID>BLONP</CustomerID><CompanyName>name1</CompanyName><ContactName>contactName</ContactName><ContactTitle>title</ContactTitle><Address>address</Address><City>dalian</City><Region>dongbei</Region><PostalCode>565479</PostalCode><Country>china</Country><Phone>88601531</Phone><Fax>88601532</Fax></row>\n</xml>";
+		ResponseUtils.renderForGridReport(response, test);
+	}
+	
 	@RequestMapping("/o_sellOut_delete.do")
 	public void sellOutDelete(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		this.cirDeleteBase(cirId,  "v_sellOut_list.do", "查询客户发货单", request, response, model);

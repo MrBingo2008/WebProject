@@ -1,6 +1,7 @@
 package com.berp.framework.web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -68,6 +69,16 @@ public final class ResponseUtils {
 		response.setDateHeader("Expires", 0);
 		try {
 			response.getWriter().write(text);
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	public static void renderForGridReport(HttpServletResponse response,String text) {
+		try {
+			PrintWriter pw = response.getWriter();
+			pw.print(text);
+			pw.close();
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		}

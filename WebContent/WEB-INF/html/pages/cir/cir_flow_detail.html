@@ -1,4 +1,4 @@
-<script src="/berp/rich-res/grid_report/grwebapp.js" type="text/javascript"></script>
+<!-- script src="/berp/rich-res/grid_report/grwebapp.js" type="text/javascript"></script -->
 <script type="text/javascript">
 $(function(){
 	var status = '${cir.status}';
@@ -82,7 +82,7 @@ function gridReport_start(report, data, type) {
     	baseurl:window.rootURL,
     	//web.xml里对这种请求没有直接通过，没有经过action处理
         report: "rich-res/grid_report/grf/" + report + ".grf",
-        data: data ? "rich-res/grid_report/data/DataCenter.jsp?data=" + data : "data/SQLParam.jsp", //data,
+        data: "o_sellOut_print.do", //data,
         selfsql: data ? false : true,
         type: type
     };      
@@ -247,7 +247,8 @@ function gridReport_start(report, data, type) {
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.save"/></button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${cirType}_cancelApproval.do?${listPara!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
-				<li id="printButtonLi"><div class="button"><div class="buttonContent"><a href="javascript:gridReport_start('1a', 'Customer', 'preview');"><button id="printButton" type="button"><@s.m "global.print"/></button></a></div></div></li>
+				<!-- print原来用a href javascript: 在ie8里无法弹出，应该是跟dwz的一些预处理冲突-->
+				<li id="printButtonLi"><div class="button"><div class="buttonContent"><button id="printButton" type="button" onclick="gridReport_start('1a', 'Customer', 'preview');"><@s.m "global.print"/></button></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_${cirType}_list.do?${listPara!}" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

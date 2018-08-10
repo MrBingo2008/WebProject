@@ -24,7 +24,8 @@ function webapp_ajax(method, url, callback, cbthis, data) {
 
 //创建启动WEB报表客户端的URL协议参数
 function webapp_urlprotocol_href(args) {
-    return "grwebapp://" + (args ? JSON.stringify(args) : "");
+	var test = "grwebapp://" + (args ? JSON.stringify(args) : "");
+    return test;
 }
 
 //通过URL协议启动WEB报表客户端程序
