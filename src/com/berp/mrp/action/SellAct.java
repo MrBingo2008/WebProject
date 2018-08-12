@@ -117,9 +117,9 @@ public class SellAct extends CirAct {
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_sellOut_edit.do?cirId=%d&%s",cirId, listPara.getUrlPara()), "编辑客户发货单").toString());
 	}
 	
-	@RequestMapping("/o_sellOut_print.do")
+	@RequestMapping("/o_sellOut_print.do")//,  results = { @Result(name = SUCCESS, params = { "root", "msg", "contentType", "text/html;charset=UTF-8" }, type = "json") })
 	public void sellOutPrint(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		String test = "<xml>\n<row><CustomerID>BLONP</CustomerID><CompanyName>name1</CompanyName><ContactName>contactName</ContactName><ContactTitle>title</ContactTitle><Address>address</Address><City>dalian</City><Region>dongbei</Region><PostalCode>565479</PostalCode><Country>china</Country><Phone>88601531</Phone><Fax>88601532</Fax></row>\n</xml>";
+		String test = "<xml>\n<row><CustomerID>BLONP</CustomerID><CompanyName>name1</CompanyName><ContactName>contactName</ContactName><ContactTitle>title</ContactTitle><Address>address</Address><City>dalian</City><Region>dongbei</Region><PostalCode>565479</PostalCode><Country>china</Country><Phone>88601531</Phone><Fax>88601532</Fax></row>\n</xml>\n";
 		ResponseUtils.renderForGridReport(response, test);
 	}
 	

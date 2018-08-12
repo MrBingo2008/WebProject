@@ -75,9 +75,14 @@ public final class ResponseUtils {
 	}
 	
 	public static void renderForGridReport(HttpServletResponse response,String text) {
+		response.resetBuffer();
+		response.setContentType("text/html");
+		//response.setHeader("Pragma", "No-cache");
+		//response.setHeader("Cache-Control", "no-cache");
+		//response.setDateHeader("Expires", 0);
 		try {
 			PrintWriter pw = response.getWriter();
-			pw.print(text);
+			pw.write(text);
 			pw.close();
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);

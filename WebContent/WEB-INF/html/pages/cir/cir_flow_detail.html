@@ -82,7 +82,7 @@ function gridReport_start(report, data, type) {
     	baseurl:window.rootURL,
     	//web.xml里对这种请求没有直接通过，没有经过action处理
         report: "rich-res/grid_report/grf/" + report + ".grf",
-        data: "o_sellOut_print.do", //data,
+        data: "o_sellOut_print.do", //"rich-res/grid_report/data/DataCenter.jsp?data=Customer",// //data,
         selfsql: data ? false : true,
         type: type
     };      
