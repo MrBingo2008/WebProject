@@ -50,6 +50,7 @@
 			<list>
 				<value>/login.do</value>
 				<value>/logout.do</value>
+				<value>/o_sellOut_print.do</value>
 			</list>
 		</property>
 	</bean>

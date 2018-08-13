@@ -60,39 +60,31 @@
 		"Column":[
 			{
 				"Name":"serial",
-				"Width":2.77813
+				"Width":4.18042
 			},
 			{
 				"Name":"product",
-				"Width":4.39208
+				"Width":3.99521
 			},
 			{
 				"Name":"cnt_one_piece",
-				"Width":1.5875
+				"Width":2.40771
 			},
 			{
 				"Name":"pieces",
-				"Width":1.61396
+				"Width":1.79917
 			},
 			{
 				"Name":"unit",
-				"Width":1.00542
+				"Width":2.01083
 			},
 			{
 				"Name":"cnt",
-				"Width":1.98438
-			},
-			{
-				"Name":"price",
-				"Width":1.82563
-			},
-			{
-				"Name":"sum_price",
-				"Width":2.98979
+				"Width":3.57188
 			},
 			{
 				"Name":"comment",
-				"Width":2.98979
+				"Width":3.20146
 			}
 		],
 		"ColumnContent":{
@@ -125,16 +117,6 @@
 					"Column":"cnt",
 					"TextAlign":"MiddleCenter",
 					"DataField":"cnt"
-				},
-				{
-					"Column":"price",
-					"TextAlign":"MiddleCenter",
-					"DataField":"price"
-				},
-				{
-					"Column":"sum_price",
-					"TextAlign":"MiddleCenter",
-					"DataField":"sum_price"
 				},
 				{
 					"Column":"comment",
@@ -185,18 +167,6 @@
 				},
 				{
 					"GroupTitle":false,
-					"Column":"price",
-					"TextAlign":"MiddleCenter",
-					"Text":"单价"
-				},
-				{
-					"GroupTitle":false,
-					"Column":"sum_price",
-					"TextAlign":"MiddleCenter",
-					"Text":"小计/元"
-				},
-				{
-					"GroupTitle":false,
 					"Column":"comment",
 					"TextAlign":"MiddleCenter",
 					"Text":"备注"
@@ -214,15 +184,6 @@
 					"Height":0.608542,
 					"Control":[
 						{
-							"Type":"SummaryBox",
-							"Name":"SummaryBox2",
-							"Left":15.0548,
-							"Width":3.20146,
-							"Height":0.608542,
-							"TextAlign":"MiddleCenter",
-							"DataField":"sum_price"
-						},
-						{
 							"Type":"StaticBox",
 							"Name":"StaticBox3",
 							"Left":3.59833,
@@ -231,22 +192,10 @@
 							"Text":"本页合计"
 						},
 						{
-							"Type":"Line",
-							"Name":"Line3",
-							"Left":15.1342,
-							"Height":0.608542
-						},
-						{
-							"Type":"Line",
-							"Name":"Line4",
-							"Left":18.1504,
-							"Height":0.608542
-						},
-						{
 							"Type":"SummaryBox",
 							"Name":"SummaryBox3",
-							"Left":8.33438,
-							"Width":2.61938,
+							"Left":10.3981,
+							"Width":2.59292,
 							"Height":0.608542,
 							"TextAlign":"MiddleCenter",
 							"DataField":"pieces",
@@ -254,26 +203,14 @@
 						},
 						{
 							"Type":"Line",
-							"Name":"Line5",
-							"Left":8.70479,
-							"Height":0.608542
-						},
-						{
-							"Type":"Line",
 							"Name":"Line6",
-							"Left":10.3188,
+							"Left":10.3981,
 							"Height":0.608542
 						},
 						{
 							"Type":"Line",
 							"Name":"Line7",
-							"Left":13.3085,
-							"Height":0.608542
-						},
-						{
-							"Type":"Line",
-							"Name":"Line8",
-							"Left":11.3242,
+							"Left":12.409,
 							"Height":0.608542
 						}
 					]
@@ -440,7 +377,7 @@
 						"Charset":134
 					},
 					"TextAlign":"MiddleCenter",
-					"Text":"丰顺恒大光明电子科技公司出货单"
+					"Text":"丰顺恒大光明电子科技发展有限公司《出货单》"
 				},
 				{
 					"Type":"MemoBox",

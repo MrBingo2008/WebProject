@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
 import com.berp.framework.web.session.SessionProvider;
+import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Order;
 import com.berp.mrp.web.PageListPara;
@@ -119,8 +120,28 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/o_sellOut_print.do")//,  results = { @Result(name = SUCCESS, params = { "root", "msg", "contentType", "text/html;charset=UTF-8" }, type = "json") })
 	public void sellOutPrint(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		String test = "<xml>\n<row><CustomerID>BLONP</CustomerID><CompanyName>name1</CompanyName><ContactName>contactName</ContactName><ContactTitle>title</ContactTitle><Address>address</Address><City>dalian</City><Region>dongbei</Region><PostalCode>565479</PostalCode><Country>china</Country><Phone>88601531</Phone><Fax>88601532</Fax></row>\n</xml>\n";
-		ResponseUtils.renderForGridReport(response, test);
+		Cir cir = cirDao.findById(cirId);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<xml>");
+		for(BatchFlow flow: cir.getFlows()){
+			sb.append("<row>");
+			appendXmlRecord(sb, "serial", flow.getMaterial().getAllSerial());
+			appendXmlRecord(sb, "product", flow.getMaterial().getNameSpec());
+			appendXmlRecord(sb, "unit", flow.getMaterial().getUnit());
+			appendXmlRecord(sb, "cnt", flow.getNumber().toString());
+			//appendXmlRecord(sb, "cnt_one_piece", flow.getNumPerBox().toString());
+			//appendXmlRecord(sb, "pieces", flow.getBoxNum().toString());
+			sb.append("</row>");
+		}
+		sb.append("</xml>");
+		ResponseUtils.renderForGridReport(response, sb.toString());
+	}
+	
+	private void appendXmlRecord(StringBuilder sb, String name, String value){
+		sb.append("<"+name+">");
+		sb.append(value);
+		sb.append("</"+name+">");
 	}
 	
 	@RequestMapping("/o_sellOut_delete.do")
