@@ -75,15 +75,15 @@
 				"Width":1.79917
 			},
 			{
-				"Name":"unit",
-				"Width":2.01083
-			},
-			{
 				"Name":"cnt",
 				"Width":3.57188
 			},
 			{
-				"Name":"comment",
+				"Name":"Column1",
+				"Width":2.01083
+			},
+			{
+				"Name":"Column2",
 				"Width":3.20146
 			}
 		],
@@ -109,17 +109,17 @@
 					"DataField":"pieces"
 				},
 				{
-					"Column":"unit",
-					"TextAlign":"MiddleCenter",
-					"DataField":"unit"
-				},
-				{
 					"Column":"cnt",
 					"TextAlign":"MiddleCenter",
 					"DataField":"cnt"
 				},
 				{
-					"Column":"comment",
+					"Column":"Column1",
+					"TextAlign":"MiddleCenter",
+					"DataField":"unit"
+				},
+				{
+					"Column":"Column2",
 					"TextAlign":"MiddleCenter",
 					"DataField":"comment"
 				}
@@ -155,19 +155,19 @@
 				},
 				{
 					"GroupTitle":false,
-					"Column":"unit",
-					"TextAlign":"MiddleCenter",
-					"Text":"单位"
-				},
-				{
-					"GroupTitle":false,
 					"Column":"cnt",
 					"TextAlign":"MiddleCenter",
 					"Text":"数量"
 				},
 				{
 					"GroupTitle":false,
-					"Column":"comment",
+					"Column":"Column1",
+					"TextAlign":"MiddleCenter",
+					"Text":"单位"
+				},
+				{
+					"GroupTitle":false,
+					"Column":"Column2",
 					"TextAlign":"MiddleCenter",
 					"Text":"备注"
 				}
@@ -194,8 +194,8 @@
 						{
 							"Type":"SummaryBox",
 							"Name":"SummaryBox3",
-							"Left":10.3981,
-							"Width":2.59292,
+							"Left":10.5833,
+							"Width":1.79917,
 							"Height":0.608542,
 							"TextAlign":"MiddleCenter",
 							"DataField":"pieces",
@@ -204,14 +204,30 @@
 						{
 							"Type":"Line",
 							"Name":"Line6",
-							"Left":10.3981,
+							"Left":10.5569,
 							"Height":0.608542
 						},
 						{
 							"Type":"Line",
 							"Name":"Line7",
-							"Left":12.409,
+							"Left":12.356,
 							"Height":0.608542
+						},
+						{
+							"Type":"Line",
+							"Name":"Line8",
+							"Left":15.9279,
+							"Height":0.608542
+						},
+						{
+							"Type":"SummaryBox",
+							"Name":"SummaryBox4",
+							"Left":12.5942,
+							"Top":0.105833,
+							"Width":3.20146,
+							"Height":0.396875,
+							"TextAlign":"MiddleCenter",
+							"DataField":"cnt"
 						}
 					]
 				}
@@ -366,7 +382,7 @@
 				{
 					"Type":"StaticBox",
 					"Name":"title",
-					"Left":0.396875,
+					"Left":2.19604,
 					"Width":15.0019,
 					"Height":1.00542,
 					"Font":{
@@ -377,7 +393,7 @@
 						"Charset":134
 					},
 					"TextAlign":"MiddleCenter",
-					"Text":"丰顺恒大光明电子科技发展有限公司《出货单》"
+					"Text":"丰顺恒大光明电子科技发展有限公司《发货单》"
 				},
 				{
 					"Type":"MemoBox",
