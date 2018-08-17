@@ -3,6 +3,8 @@ package com.berp.core.entity;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.berp.framework.hibernate3.NestedTree;
 
 
@@ -149,5 +151,15 @@ public class Category implements NestedTree<Integer> {
 			node = node.getParent();
 		}
 		return list;
+	}
+	
+	public String getFullname(){
+		String fullname = "";
+		Category node = this;
+		while (node != null && node.getParent() != null) {
+			fullname = StringUtils.isBlank(fullname)?node.getName() : node.getName() + "-" + fullname;
+			node = node.getParent();
+		}
+		return fullname;
 	}
 }

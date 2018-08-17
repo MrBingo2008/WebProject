@@ -40,17 +40,17 @@ $(function(){
 		<thead>
 			<tr>
 				<th width="30"><@s.m "global.id"/></th>
-				<th width="60"><@s.m "material.allSerial"/></th>
-				<th width="60"><@s.m "material.nameSpec"/></th>
+				<th width="40"><@s.m "material.allSerial"/></th>
+				<th width="40"><@s.m "material.nameSpec"/></th>
 				<th width="40"><@s.m "material.category"/></th>
-				<th width="50"><@s.m "material.leftNumber"/></th>
-				<th width="60"><@s.m "purchase.order.notFinishNumber"/></th>
-				<th width="60"><@s.m "sell.order.notFinishNumber"/></th>
-				<th width="50"><@s.m "step.surface"/></th>
-				<th width="50"><@s.m "material.assemblies"/></th>
-				<th width="30"><@s.m "material.attachs"/></th>
-				<th width="30"><@s.m "material.unit"/></th>
-				<th width="60"><@s.m "global.operate"/></th>				
+				<th width="40"><@s.m "material.leftNumber"/></th>
+				<th width="40"><@s.m "purchase.order.notFinishNumber"/></th>
+				<th width="40"><@s.m "sell.order.notFinishNumber"/></th>
+				<th width="30"><@s.m "step.surface"/></th>
+				<th width="40"><@s.m "material.assemblies"/></th>
+				<th width="20"><@s.m "material.attachs"/></th>
+				<th width="20"><@s.m "material.unit"/></th>
+				<th width="40"><@s.m "global.operate"/></th>				
 			</tr>
 		</thead>
 		<tbody>
@@ -59,7 +59,7 @@ $(function(){
 			    <td>${m.id}</td>
 			    <td>${m.allSerial!}</td>
 				<td>${m.nameSpec!}</td>
-				<td>${m.parent.name}</td>
+				<td>${m.parent.fullname}</td>
 				<td>${m.leftNumber!}</td>
 				<td>${m.notPurchaseInNumber!}</td>
 				<td>${m.notSellOutNumber!}</td>
