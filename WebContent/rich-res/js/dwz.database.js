@@ -16,6 +16,9 @@
 		}
 	};
 	
+	//作为multiAddButton click事件的参数保存起来，bringback时可以用
+	var $curTable = null;
+	
 	$.extend({
 		bringBackSuggest: function(args){
 			//这个地方应该可以改进，不需要查找那么多
@@ -323,10 +326,10 @@
 					return false;
 				});
 
-				var addButTxt = $table.attr('addButton') || "Add New";
 				var butDisabled = $table.attr('buttonDisabled');
 				var butDisabledTxt = "";
 				if(butDisabled ==null || butDisabled == "false"){
+					var addButTxt = $table.attr('addButton');
 					if (addButTxt) {
 
 						//var $rowNum = $('<input type="text" name="dwz_rowNum" class="textInput" style="margin:2px;" value="1" size="2"/>').insertBefore($table);
@@ -354,7 +357,18 @@
 							initSuffix($tbody);
 						});
 					}
-				
+					
+					var multiAddButTxt = $table.attr('multiAddButton');
+					if(multiAddButTxt) {
+						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="#" lookupGroup="org"><button type="button">' + multiAddButTxt + '</button></a></div></div>').insertBefore($table).find("button");
+						$multiAddBut.click(function(){
+							$curTable = $table;
+							var $tableParent = $curTable.parent();
+							var $tableAddButton = $tableParent.find("button:first");
+							$tableAddButton.click();
+						});
+					}
+					
 					var saveButTxt = $table.attr('saveButton');
 					if (saveButTxt) {
 						var $saveBut = $('<div class="button"><div class="buttonContent"><button type="submit" ' +butDisabledTxt+ '>'+saveButTxt+'</button></div></div>').insertBefore($table).find("button");
@@ -374,7 +388,9 @@
 							$("form").attr("action", applyAction);	
 						});
 					}
+					
 				}
+
 
 				
 				var cancelButtonDisabled = $table.attr('cancelButtonDisabled');
