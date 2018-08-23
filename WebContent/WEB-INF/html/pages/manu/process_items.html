@@ -20,12 +20,13 @@
 </#list>
 </#if>
 <script type="text/javascript">
+//stone: 这个导致了一些bug
 $(function(){
 	//重新绑定del时间
 	setTimeout(function() {
 		if ($.fn.itemDetail){ 
-			$("#process .button").remove();
-			$("table.itemDetail").itemDetail();
+			//$("#process .button").remove();
+			//$("table.itemDetail").itemDetail();
 		}
 	}, 40);
 });

@@ -360,13 +360,14 @@
 					
 					var multiAddButTxt = $table.attr('multiAddButton');
 					if(multiAddButTxt) {
-						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="'+$table.attr('multiAddUrl')+'" lookupGroup="forStep">' + multiAddButTxt + '</a></div></div>').insertBefore($table).find("button");
-						$multiAddBut.click(function(){
-							$curTable = $table;
+						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="'+$table.attr('multiAddUrl')+'" lookupGroup="">' + multiAddButTxt + '</a></div></div>').insertBefore($table).find("a");
+						//var $multiAddBut = $('<a href="'+$table.attr('multiAddUrl')+'" lookupGroup="">' + multiAddButTxt + '</a>').insertBefore($table).find("a");
+						//$multiAddBut.click(function(){
+						//	$curTable = $table;
 							//var $tableParent = $curTable.parent();
 							//var $tableAddButton = $tableParent.find("button:first");
 							//$tableAddButton.click();
-						});
+						//});
 					}
 					
 					var saveButTxt = $table.attr('saveButton');
