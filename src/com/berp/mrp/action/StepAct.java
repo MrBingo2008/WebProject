@@ -43,6 +43,15 @@ public class StepAct {
 		return "pages/manu/step_list";
 	}
 	
+	@RequestMapping("/v_step_multi_list.do")
+	public String stepMultiList(String searchName, HttpServletRequest request, ModelMap model) {
+		
+		List<Step> steps = stepDao.getList();
+		model.addAttribute("steps", steps);
+		model.addAttribute("searchName", searchName);
+		return "pages/manu/step_multi_list";
+	}
+	
 	@RequestMapping("/v_step_add.do")
 	public String stepAdd(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("openMode", "add");

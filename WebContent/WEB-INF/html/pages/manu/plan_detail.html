@@ -279,7 +279,7 @@ function calFactor(numInput){
 	            <h1><@s.m "process"/><span style="margin:2px; color:red;"><#if plan.status gt 3>（已审核）<#elseif plan.status gt 1>（<@s.m "plan.status.${plan.status!}"/>）</#if></span></h1>
 	            <div>
 	            <!-- 因为table里的button无法在该文件头的js进行判断，所以在这里判断 -->
-				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" multiAddButton="<@s.m 'plan.step.new'/>(多选)" 
+				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" addButtonDisplay="false" multiAddButton="<@s.m 'plan.step.new'/>(多选)" multiAddUrl="v_step_multi_list.do"
 				buttonDisabled=<#if plan.status gt 0 || openMode == 'view'>"true"<#else>"false"</#if>
 				 width="100%">
 					<thead>

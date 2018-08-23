@@ -360,12 +360,12 @@
 					
 					var multiAddButTxt = $table.attr('multiAddButton');
 					if(multiAddButTxt) {
-						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="#" lookupGroup="org"><button type="button">' + multiAddButTxt + '</button></a></div></div>').insertBefore($table).find("button");
+						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="'+$table.attr('multiAddUrl')+'" lookupGroup="forStep">' + multiAddButTxt + '</a></div></div>').insertBefore($table).find("button");
 						$multiAddBut.click(function(){
 							$curTable = $table;
-							var $tableParent = $curTable.parent();
-							var $tableAddButton = $tableParent.find("button:first");
-							$tableAddButton.click();
+							//var $tableParent = $curTable.parent();
+							//var $tableAddButton = $tableParent.find("button:first");
+							//$tableAddButton.click();
 						});
 					}
 					
@@ -391,8 +391,6 @@
 					
 				}
 
-
-				
 				var cancelButtonDisabled = $table.attr('cancelButtonDisabled');
 				var cancelButtonDisabledTxt = "";
 				if(cancelButtonDisabled ==null || cancelButtonDisabled == "false"){

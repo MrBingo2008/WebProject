@@ -1,0 +1,39 @@
+<div class="pageHeader">
+	<form rel="pagerForm" onsubmit="return dwzSearch(this, 'dialog');" action="v_step_multi_list.do" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td><label><@s.m "step.serialOrName"/>：</label><input type="text" name="searchName" value="${searchName!}"/></td>
+				<td>
+					<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
+					<div class="button"><div class="buttonContent"><button id="selectButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" width="99%" layoutH="138">
+		<thead>
+			<tr>
+				<th width="20"><@s.m "global.id"/></th>
+				<th width="40" orderField="accountNo" class="asc"><@s.m "step.serial"/></th>
+				<th width="40"><@s.m "step.name"/></th>
+				<th width="40"><@s.m "step.type"/></th>
+				<th width="40"><@s.m "step.isSurface"/></th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list steps as step>
+			<tr target="sid_user" rel="1">
+				<td>${step.id}</td>
+				<td>${step.serial}</td>
+				<td>${step.name}</td>
+				<td><@s.m "step.type.${step.type}"/></td>
+				<td><#if step.surface>是<#else>否</#if></td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
