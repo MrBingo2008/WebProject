@@ -60,10 +60,12 @@
 		bringBack: function(args){
 			$.bringBackSuggest(args);
 			$.pdialog.closeCurrent();
-		}
+		},
+		
 	});
 	
 	$.fn.extend({
+		//stone: 处理打开窗口
 		lookup: function(){
 			return this.each(function(){
 				var $this = $(this), options = {mask:true, 
@@ -77,7 +79,7 @@
 						suffix: $this.attr("suffix") || "",
 						$target: $this,
 						pk: $this.attr("lookupPk") || "id",
-						//added by stone
+						//added by stone, 为什么要加这个?
 						onItemChange: $this.attr("onItemChange") || null
 					});
 					
@@ -92,6 +94,7 @@
 				});
 			});
 		},
+		//处理回调
 		multLookup: function(){
 			return this.each(function(){
 				var $this = $(this), args={};
@@ -129,6 +132,41 @@
 						return false;
 					}
 					$.bringBack(args);
+				});
+			});
+		},
+		multAddLookup: function(){
+			return this.each(function(){
+				var $this = $(this), args={};
+				$this.click(function(event){
+					var $tableParent = $curTable.parent();
+					var $tableAddButton = $tableParent.find("button:first");
+					
+					var $unitBox = $this.parents(".unitBox:first");
+					var checkAttr = "[name='"+$this.attr("multAddLookup")+"']";
+					$unitBox.find(checkAttr).filter(":checked").each(function(){
+						$tableAddButton.click();
+						var $curLookup = $tableParent.find("tr:last").find("a:first");
+						
+						_lookup = $.extend(_lookup, {
+							currentGroup: $curLookup.attr("lookupGroup") || "",
+							suffix: $curLookup.attr("suffix") || "",
+							$target: $curLookup,
+							pk: $curLookup.attr("lookupPk") || "id",
+							//added by stone, 为什么要加这个?
+							onItemChange: $curLookup.attr("onItemChange") || null
+						});	
+						
+						var tempArg = $(this).val();
+						$.bringBackSuggest(tempArg);
+						
+					});
+
+					if ($.isEmptyObject(args)) {
+						alertMsg.error($this.attr("warn") || DWZ.msg("alertSelectMsg"));
+						return false;
+					}
+					$.pdialog.closeCurrent();
 				});
 			});
 		},
@@ -360,14 +398,11 @@
 					
 					var multiAddButTxt = $table.attr('multiAddButton');
 					if(multiAddButTxt) {
-						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="'+$table.attr('multiAddUrl')+'" lookupGroup="">' + multiAddButTxt + '</a></div></div>').insertBefore($table).find("a");
+						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="'+$table.attr('multiAddUrl')+'" lookupGroup=""><button type="button">' + multiAddButTxt + '</button></a></div></div>').initUI().insertBefore($table).find("button");
 						//var $multiAddBut = $('<a href="'+$table.attr('multiAddUrl')+'" lookupGroup="">' + multiAddButTxt + '</a>').insertBefore($table).find("a");
-						//$multiAddBut.click(function(){
-						//	$curTable = $table;
-							//var $tableParent = $curTable.parent();
-							//var $tableAddButton = $tableParent.find("button:first");
-							//$tableAddButton.click();
-						//});
+						$multiAddBut.click(function(){
+							$curTable = $table;
+						});
 					}
 					
 					var saveButTxt = $table.attr('saveButton');

@@ -22,11 +22,18 @@
 <script type="text/javascript">
 //stone: 这个导致了一些bug
 $(function(){
-	//重新绑定del时间
+
+	//stone: initUI和itemDetail的关系：
+	//initUI是加载DWZ控件，比如tab dialog lookup等，一般网页面重新加载时会调用，ajax load url后也会回调，详见dwz.core.js
+	//itemDetial是针对dwz talbe的，主要是生成add button，绑定del事件等
+	//add multi是在itemDetial里临时加的，而且在initENV里是initUI后才调用itemDetial，所以add multi要自己initUI一下
+	//这里的情况也刚好符合，ajax url重新initUI，而itemDetial的add multi自己initUI，不过还是要改进一下
 	setTimeout(function() {
 		if ($.fn.itemDetail){ 
-			//$("#process .button").remove();
-			//$("table.itemDetail").itemDetail();
+			$("#process .button").remove();
+			
+			//重新绑定del事件，以及生成add button等
+			$("table.itemDetail").itemDetail();//.initUI();
 		}
 	}, 40);
 });

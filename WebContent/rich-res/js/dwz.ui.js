@@ -272,13 +272,14 @@ function initUI($p){
 	// dwz.ajax.js
 	if ($.fn.ajaxTodo) $("a[target=ajaxTodo]", $p).ajaxTodo();
 	if ($.fn.dwzExport) $("a[target=dwzExport]", $p).dwzExport();
-
-	//stone: itemDetail里面可能有lookup
-	if ($.fn.itemDetail) $("table.itemDetail", $p).itemDetail();
 	
 	if ($.fn.lookup) $("a[lookupGroup]", $p).lookup();
 	if ($.fn.multLookup) $("[multLookup]:button", $p).multLookup();
+	//added by stone
+	if ($.fn.multAddLookup) $("[multAddLookup]:button", $p).multAddLookup();
 	if ($.fn.suggest) $("input[suggestFields]", $p).suggest();
+	
+	if ($.fn.itemDetail) $("table.itemDetail", $p).itemDetail();
 	
 	if ($.fn.selectedTodo) $("a[target=selectedTodo]", $p).selectedTodo();
 	if ($.fn.pagerForm) $("form[rel=pagerForm]", $p).pagerForm({parentBox:$p});
