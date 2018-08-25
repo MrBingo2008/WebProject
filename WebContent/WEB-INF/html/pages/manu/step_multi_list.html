@@ -28,7 +28,8 @@
 		<tbody>
 			<#list steps as step>
 			<tr target="sid_user" rel="1">
-				<td><input type="checkbox" name="checkboxIds" value="{'id':'${step.id}', serial:'${step.serial!}', name:'${step.name!}'}"/></td>
+				<td><input type="checkbox" name="checkboxIds" 
+				value="{'id':'${step.id}', serial:'${step.serial!}', name:'${step.name!}',  dType:'<@s.m 'step.type.${step.type}'/>', dSurface:'<#if step.surface>是<#else>否</#if>'}"/></td>
 				<td>${step.id}</td>
 				<td>${step.serial}</td>
 				<td>${step.name}</td>

@@ -137,7 +137,7 @@
 		},
 		multAddLookup: function(){
 			return this.each(function(){
-				var $this = $(this), args={};
+				var $this = $(this), selectNum = 0;
 				$this.click(function(event){
 					var $tableParent = $curTable.parent();
 					var $tableAddButton = $tableParent.find("button:first");
@@ -157,12 +157,12 @@
 							onItemChange: $curLookup.attr("onItemChange") || null
 						});	
 						
-						var tempArg = $(this).val();
+						var tempArg = DWZ.jsonEval($(this).val());
 						$.bringBackSuggest(tempArg);
-						
+						selectNum ++;
 					});
 
-					if ($.isEmptyObject(args)) {
+					if (selectNum == 0) {
 						alertMsg.error($this.attr("warn") || DWZ.msg("alertSelectMsg"));
 						return false;
 					}

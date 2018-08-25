@@ -10,6 +10,7 @@
 				<tr>
 					<td><@s.m "sell.order"/>: ${order.info!}</td>
 					<td><div class="button"><div class="buttonContent"><button id="testButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td>
+					<td><span style="margin-left:20px;"><@s.m "rawMaterial"/>：</span><span style="color:#E36C0A">橙色(产品)</span><span style="margin-left:8px;">黑色(原材料)</span></td>
 				</tr>
 			</table>
 		</div>
@@ -32,6 +33,16 @@
 			<tbody>
 			<#if order.records??>
 			<#list order.records as record>
+				<tr>
+					<td><input type="checkbox" name="checkboxIds" value="{'materialId':'${record.material.id}','recordId':'${record.id}', number:${record.notFinishNumber}}"/></td>
+					<td><span style="color:#E36C0A">${record.material.nameSpec!}</span></td>
+					<td>${record.notFinishNumber!}</td>
+					<td>${record.material.unit!}</td>
+					<td>${record.material.nameSpec!}</td>
+					<td>${record.notFinishNumber!}</td>
+					<td>${record.material.unit!}</td>
+				</tr>
+				
 				<#if record.material.assemblies??>
 				<#list record.material.assemblies as assembly>
 				<tr target="sid_obj" rel="1">
@@ -50,6 +61,7 @@
 				</tr>
 				</#list>
 				</#if>
+
 			</#list>
 			</#if>
 			</tbody>

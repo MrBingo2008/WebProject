@@ -18,17 +18,20 @@ $(function(){
 		if(status == null || status=='')
 			status = '0';
 		switch(status){
+		//未审核
 		case '0':
 			$("#planMaterial, #planIn").css("display","none");
 			$("#cancelApprovalButton").attr("disabled", "disabled");
 			actionUrl = "o_plan_update.do";
 			break;
+		//审核，未下料完成
 		case '1':
 			$("#basicInfo input").attr("readonly", "readonly");
 			$("#basicInfo a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
 			actionUrl="o_plan_material_update.do";
 			break;
+		//下料完成，未生产完成
 		case '2':
 			$("#basicInfo input").attr("readonly", "readonly");
 			$("#basicInfo a").css("display", "none");
@@ -38,6 +41,7 @@ $(function(){
 			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_step_update.do";
 			break;
+		//委外？
 		case '3':
 			$("#basicInfo input").attr("readonly", "readonly");
 			$("#basicInfo a").css("display", "none");
@@ -47,6 +51,7 @@ $(function(){
 			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
 			actionUrl="o_plan_step_update.do";
 			break;
+		//生产完成，未入库完成
 		case '4':
 			$("#basicInfo input").attr("readonly", "readonly");
 			$("#basicInfo a").css("display", "none");
@@ -71,21 +76,37 @@ $(function(){
 		default:
 			break;
 		}
-	}else if('${openMode!}' == 'view'){
+	}
+	//view采用的方式更加简单，edit是否也可以参考
+	else if('${openMode!}' == 'view'){
+		var status = ${(plan.status)!};
+		if(status == null)
+			status = 0;
+		
 		//button、a直接隐藏，input就设为readonly或disable
 		$("#basicInfo input").attr("readonly", "readonly");
 		$("#basicInfo a").css("display", "none");
-		$("#planMaterial a").css("display", "none");
-		$("#planMaterial input").attr("readonly", "readonly");
+		
+		if(status == 0)
+			$("#planMaterial").css("display", "none");
+		else{
+			$("#planMaterial a").css("display", "none");
+			$("#planMaterial input").attr("readonly", "readonly");
+		}
 		
 		$("#process a").css("display", "none");
 		//设为readonly的话点击还是可以出现日期窗口
 		$("#process input").attr("disabled", "disabled");
 		$("#process .button").css("display", "none");
 		
-		$("#planIn a").css("display", "none");
-		$("#planIn input").attr("readonly", "readonly");
-		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
+		//如果审核过的，下料和入库都显示
+		if(status == 0)
+			$("#planIn a").css("display", "none");
+		else{
+			$("#planIn a").css("display", "none");
+			$("#planIn input").attr("readonly", "readonly");
+			$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
+		}
 	}
 	
 	$("form").attr("action", actionUrl);
@@ -202,14 +223,6 @@ function calFactor(numInput){
 					<input type="text" name="material.nameSpec" value="${(plan.material.nameSpec)!}" size ="20" readonly/>
 					<input type="hidden" name="material.id" value="${(plan.material.id)!}" />
 				</p>
-				<!-- <p>
-					<label><@s.m "sell.order.surface"/>:</label>
-					<input type="text" name="record.surface.name" value="${(plan.record.surface.name)!}" size ="20" readonly/>
-				</p>
-				<p>
-					<label><@s.m "sell.order.number"/>:</label>
-					<input type="text" name="record.number" value="${(plan.record.number)!}" size ="20" readonly/>			
-				</p> -->
 				<p>
 					<label><@s.m "material.planNumber"/>:</label>
 					<input type="text" name="number" value="${plan.number!}" size ="20" class="positiveNumber required"/>
