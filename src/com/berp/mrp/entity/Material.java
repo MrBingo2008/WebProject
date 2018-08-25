@@ -28,6 +28,7 @@ public class Material {
 	private Category parent;
 	private Company company;
 	private Step surface;
+	private Process process;
 
 	private Set<OrderRecord> records;
 	
@@ -244,6 +245,15 @@ public class Material {
 
 	public void setSurface(Step surface) {
 		this.surface = surface;
+	}
+	
+	//process
+	public Process getProcess() {
+		return process;
+	}
+
+	public void setProcess(Process process) {
+		this.process = process;
 	}
 	
 	//order record

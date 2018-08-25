@@ -5,7 +5,7 @@
 </form>
 
 <div class="pageHeader">
-	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="v_process_list.do" method="post">
+	<form rel="pagerForm" onsubmit="<#if type?? && type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_process_list.do?type=${type}" method="post">
 		<div class="searchBar">
 		<ul class="searchContent">
 			<li>
@@ -24,7 +24,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<@berp_perm url="/o_process"><li><a class="add" href="v_process_add.do" target="navTab" rel="main" title="<@s.m 'process.add'/>"><span><@s.m "process.add"/></span></a></li></@berp_perm>
+			<#if type == 0><@berp_perm url="/o_process"><li><a class="add" href="v_process_add.do" target="navTab" rel="main" title="<@s.m 'process.add'/>"><span><@s.m "process.add"/></span></a></li></@berp_perm></#if>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="138">
@@ -33,7 +33,7 @@
 				<th width="80"><@s.m "global.id"/></th>
 				<th width="80"><@s.m "process.serial"/></th>
 				<th width="80"><@s.m "process.name"/></th>
-				<th width="80"><@s.m "process.applyCategory"/></th>
+				<th width="80"><@s.m "process.applyMaterial"/></th>
 				<th width="80"><@s.m "process.comment"/></th>
 				<th width="80"><@s.m "global.operate"/></th>
 			</tr>
@@ -44,11 +44,15 @@
 				<td>${process.id}</td>
 				<td>${process.serial}</td>
 				<td>${process.name}</td>
-				<td>${process.category.name!}</td>
+				<td>${process.applyMaterialsInfo!}</td>
 				<td>${process.comment!}</td>
 				<td>
+				<#if type == 0>
 					<@berp_perm url="/o_process"><a title="<@s.m 'process.edit'/>" target="navTab" rel="main" href="v_process_edit.do?processId=${process.id}"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_process_delete.do?processId=${process.id}"><@s.m "global.delete"/></a></@berp_perm>
+				<#else>
+					<a class="btnSelect" href="javascript:$.bringBack({serial:'${process.serial}', name:'${process.name!}', id:'${process.id}'})">选择</a>
+				</#if>
 				</td>
 			</tr>
 			</#list>
@@ -56,6 +60,6 @@
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}张，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" targetType="navTab" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" targetType="<#if type gt 0>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>

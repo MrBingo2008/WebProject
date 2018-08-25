@@ -21,11 +21,15 @@ $(function(){
 				<label><@s.m "process.name"/>:</label>
 				<input name="name" type="text" size="20" value="${process.name!}"/>
 			</p>
-			<p>
+			<!-- <p>
 				<label><@s.m "process.applyCategory"/>:</label>
 				<input type="hidden" name="category.id" value="${(process.category.id)!}"/>
 				<input type="text" class="required" name="category.name" value="${(process.category.name)!}" readonly/>
 				<a class="btnLook" href="v_category_tree.do?parentId=1" lookupGroup="category"><@s.m "process.applyCategory"/></a>		
+			</p> -->
+			<p>
+				<label><@s.m "process.applyMaterial"/>:</label>
+				<span>${process.applyMaterialsInfo!}(若需修改，请在《产品属性》里修改)</span>
 			</p>
 			<p>
 				<label><@s.m "process.comment"/>:</label>

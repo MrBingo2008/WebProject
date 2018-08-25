@@ -19,12 +19,13 @@ import com.berp.framework.web.ResponseUtils;
 
 @Controller
 public class ProcessAct {
-	
+	//type=0 navTab list, >0 dialog
 	@RequestMapping("/v_process_list.do")
-	public String processList(String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+	public String processList(Integer type, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		Pagination pagination = processDao.getPage(searchName, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
+		model.addAttribute("type", type == null?0:type);
 		return "pages/manu/process_list";
 	}
 	/*

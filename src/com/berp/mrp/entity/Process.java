@@ -1,6 +1,7 @@
 package com.berp.mrp.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import com.berp.core.entity.Category;
 
@@ -11,6 +12,8 @@ public class Process {
 	private String serial;
 	private Category category;
 	
+	private Set<Material> materials;
+
 	private List<ProcessStep> steps;
 	
 	public Process(){
@@ -61,6 +64,26 @@ public class Process {
 	public void setCategory (Category p) {
 		this.category = p;
 	}
+	
+	//materials，适用产品
+	public Set<Material> getMaterials() {
+		return materials;
+	}
+
+	public void setMaterials(Set<Material> materials) {
+		this.materials = materials;
+	}
+	
+	public String getApplyMaterialsInfo(){
+		if(materials == null || materials.size() == 0)
+			return null;
+		StringBuilder result = new StringBuilder();
+		for(Material material: materials){
+			result.append(material.getNameSpec()+" ");
+		}
+		return result.toString();
+	}
+	
 	
 	public List<ProcessStep> getSteps(){
 		return this.steps;

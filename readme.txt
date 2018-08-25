@@ -49,3 +49,7 @@ material的dim改为comment，增加num_per_box
 
 2018-7-23：
 更新版本，不过material_attach的size double好像没有设定长度
+
+2018-8-25：
+material表，新建process_id，指向process id
+process表的category_id改为允许空

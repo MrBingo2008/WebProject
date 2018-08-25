@@ -19,6 +19,7 @@
 		<many-to-one name="parent" column="parent_id" class="com.berp.core.entity.Category"/>
 		<many-to-one name="company" column="company_id" class="com.berp.core.entity.Company"/>
 		<many-to-one name="surface" column="surface_id" class="com.berp.mrp.entity.Step"/>
+		<many-to-one name="process" column="process_id" class="com.berp.mrp.entity.Process"/>
 		<set name="records" inverse="true" cascade="none">
 			<key column="material_id"/>
 			<one-to-many class="com.berp.mrp.entity.OrderRecord"/>
