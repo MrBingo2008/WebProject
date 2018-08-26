@@ -9,6 +9,7 @@ import com.berp.framework.hibernate3.Finder;
 import com.berp.framework.hibernate3.HibernateBaseDao;
 import com.berp.framework.hibernate3.Updater;
 import com.berp.framework.page.Pagination;
+import com.berp.framework.util.DateUtils;
 import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.Process;
@@ -31,6 +32,7 @@ public class ProcessDao extends HibernateBaseDao<Process, Integer> {
 
 	//@Transactional
 	public Process save(Process bean) {
+
 		getSession().save(bean);
 		return bean;
 	}
@@ -42,6 +44,24 @@ public class ProcessDao extends HibernateBaseDao<Process, Integer> {
 		String hql = "delete from ProcessStep bean where bean.process.id is null";
 		getSession().createQuery(hql).executeUpdate();
 		return bean;
+	}
+	
+	public String getNextSerial(){
+		String serial = "SCLC";
+		
+		String hql = "select max(bean.serial) from Process bean where bean.serial like ?";
+		
+		//如果是findUnique(),则hql里必须使用 ?, 而不是:serial，findUnique()应该是没有定义参数名，直接顺序代入
+		String max = (String)this.findUnique(hql, "%"+serial+"%");
+		Integer num = 0;
+		try{
+			num = Integer.valueOf(max.split("-")[2]);
+		}catch(Exception ex){
+		}
+		
+		String defaultSerial = String.format("%s-%03d", serial, num+1);
+		return defaultSerial;
+		
 	}
 	
 	public Process deleteById(Integer id) {

@@ -17,7 +17,8 @@
 	<table class="table" width="99%" layoutH="66">
 		<thead>
 			<tr>
-				<th width="30"><input type="checkbox" class="checkboxCtrl"/></th>
+				<!--  必须有group才都实现全选(全取消) -->
+				<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 				<th width="20"><@s.m "global.id"/></th>
 				<th width="40" orderField="accountNo" class="asc"><@s.m "step.serial"/></th>
 				<th width="40"><@s.m "step.name"/></th>

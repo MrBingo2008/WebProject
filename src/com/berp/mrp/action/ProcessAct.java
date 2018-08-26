@@ -39,6 +39,7 @@ public class ProcessAct {
 	@RequestMapping("/v_process_add.do")
 	public String processAdd(HttpServletRequest request, ModelMap model) {
 		Process process = new Process();
+		process.setSerial(processDao.getNextSerial());
 		model.addAttribute("process", process);
 		model.addAttribute("openMode", "add");
 		return "pages/manu/process_detail";

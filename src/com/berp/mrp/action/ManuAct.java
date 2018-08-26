@@ -116,31 +116,24 @@ public class ManuAct {
 			
 		}
 		
-		Process process = new Process();
-		List<Category> parents = material.getParent().getNodeList();
-		for(Category category : parents){
-			List<Process> processes = processDao.getListByCategory(category.getId());
-			if(processes != null && processes.size()>0){
-				process = processes.get(0);
-				break;
-			}
-		}
+		Process process = material.getProcess();
 		
 		if(surface!=null){
 			ProcessStep ps = new ProcessStep();
 			ps.setStep(surface);
 			
-			//2018-5-12，如果没有生产流程，但是订单有指定的表面处理工序，此时steps就是null的
-			if(process.getSteps()==null)
-				process.setSteps(new ArrayList<ProcessStep>());
+			//2018-5-12，如果没有生产流程，但是订单有指定的表面处理工序，此时steps就是null的，这种情况不生成流程
+			//if(process.getSteps()==null)
+			//	process.setSteps(new ArrayList<ProcessStep>());
 			
-			if(process.getSteps().size()>0){
+			if(process!=null && process.getSteps()!=null && process.getSteps().size()>0){
 				int lastIndex = process.getSteps().size()-1;
 				ProcessStep lastStep = process.getSteps().get(lastIndex);
 				if(lastStep.getStep().getSurface() == true)
 					process.getSteps().remove(lastIndex);
+				
+				process.getSteps().add(ps);
 			}
-			process.getSteps().add(ps);
 			
 		}
 		return process;
@@ -356,9 +349,28 @@ public class ManuAct {
 		for(PlanStep step : plan.getSteps()){
 			step.setPlan(plan);
 		}
-		planDao.update(plan);
-
-		reload(response, plan.getStatus() == 0?"保存成功":"审核成功", plan.getId(), listPara);
+		//这样获取的newPlan，里面的material.process一样是空的，所以还是要重新获取
+		Plan newPlan = planDao.update(plan);
+		Material material = materialDao.findById(newPlan.getMaterial().getId());
+		String processSaveMessage = "";
+		if(plan.getStatus() == 1 && material.getProcess() == null){
+			Process process = new Process();
+			process.setName(String.format("生产流程-%s(自动生成)", material.getNameSpec()));
+			process.setSteps(new ArrayList<ProcessStep>());
+			for(PlanStep step:newPlan.getSteps()){
+				ProcessStep pStep = new ProcessStep();
+				pStep.setStep(step.getStep());
+				process.getSteps().add(pStep);
+			}
+			process.setSerial(processDao.getNextSerial());
+			Process nProcess = processDao.save(process);
+			material.setProcess(nProcess);
+			materialDao.update(material);
+			
+			processSaveMessage = String.format("自动保存流程:%s。", nProcess.getName());
+		}
+		
+		reload(response, plan.getStatus() == 0?"保存成功":"审核成功。"+processSaveMessage, plan.getId(), listPara);
 	}
 	
 	
@@ -586,6 +598,9 @@ public class ManuAct {
 	
 	@Autowired
 	private ProcessDao processDao;
+	
+	@Autowired
+	private MaterialDao materialDao;
 	
 	@Autowired
 	private OrderRecordDao orderRecordDao;

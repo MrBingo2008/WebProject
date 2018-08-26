@@ -372,11 +372,16 @@
 
 						//var $rowNum = $('<input type="text" name="dwz_rowNum" class="textInput" style="margin:2px;" value="1" size="2"/>').insertBefore($table);
 						var $addBut = null;
+						var $addButDiv = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>');
+						var addButDisplay = $table.attr('addButtonDisplay');
+						if(addButDisplay != null && addButDisplay == "false")
+							$addButDiv.css("display", "none");
+						
 						var buttonTop = $table.attr('buttonTop');
 						if(buttonTop!=null && buttonTop=="true")
-						    $addBut = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>').insertAfter($table.parent().parent().find("span:first")).find("button");
+						    $addBut = $addButDiv.insertAfter($table.parent().parent().find("span:first")).find("button");
 						else
-							$addBut = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>').insertBefore($table).find("button");
+							$addBut = $addButDiv.insertBefore($table).find("button");
 						
 						var trTm = "";
 						$addBut.click(function(){
