@@ -46,7 +46,7 @@ public class StepAct {
 	@RequestMapping("/v_step_multi_list.do")
 	public String stepMultiList(String searchName, HttpServletRequest request, ModelMap model) {
 		
-		List<Step> steps = stepDao.getList();
+		List<Step> steps = stepDao.getList(searchName);
 		model.addAttribute("steps", steps);
 		model.addAttribute("searchName", searchName);
 		return "pages/manu/step_multi_list";

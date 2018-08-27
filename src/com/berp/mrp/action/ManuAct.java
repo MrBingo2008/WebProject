@@ -307,6 +307,28 @@ public class ManuAct {
 		return sellRecords;
 	}
 	
+	private String saveProcess(Plan newPlan){
+		Material material = materialDao.findById(newPlan.getMaterial().getId());
+		String processSaveMessage = "";
+		if(newPlan.getStatus() == 1 && material.getProcess() == null){
+			Process process = new Process();
+			process.setName(String.format("生产流程-%s(自动生成)", material.getNameSpec()));
+			process.setSteps(new ArrayList<ProcessStep>());
+			for(PlanStep step:newPlan.getSteps()){
+				ProcessStep pStep = new ProcessStep();
+				pStep.setStep(step.getStep());
+				process.getSteps().add(pStep);
+			}
+			process.setSerial(processDao.getNextSerial());
+			Process nProcess = processDao.save(process);
+			material.setProcess(nProcess);
+			materialDao.update(material);
+			
+			processSaveMessage = String.format("自动保存流程:%s。", nProcess.getName());
+		}
+		return processSaveMessage;
+	}
+	
 	@RequestMapping("/o_plan_save.do")
 	public void planSave(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		//这里确保plan.getIds不为空
@@ -327,8 +349,8 @@ public class ManuAct {
 			step.setPlan(plan);
 		}
 		plan = planDao.save(plan);
-
-		reload(response, plan.getStatus() == 0?"保存成功":"审核成功", plan.getId(), listPara);
+		String message = this.saveProcess(plan);
+		reload(response, plan.getStatus() == 0?"保存成功":"审核成功。"+message, plan.getId(), listPara);
 	}
 	
 	@RequestMapping("/o_plan_update.do")
@@ -351,26 +373,8 @@ public class ManuAct {
 		}
 		//这样获取的newPlan，里面的material.process一样是空的，所以还是要重新获取
 		Plan newPlan = planDao.update(plan);
-		Material material = materialDao.findById(newPlan.getMaterial().getId());
-		String processSaveMessage = "";
-		if(plan.getStatus() == 1 && material.getProcess() == null){
-			Process process = new Process();
-			process.setName(String.format("生产流程-%s(自动生成)", material.getNameSpec()));
-			process.setSteps(new ArrayList<ProcessStep>());
-			for(PlanStep step:newPlan.getSteps()){
-				ProcessStep pStep = new ProcessStep();
-				pStep.setStep(step.getStep());
-				process.getSteps().add(pStep);
-			}
-			process.setSerial(processDao.getNextSerial());
-			Process nProcess = processDao.save(process);
-			material.setProcess(nProcess);
-			materialDao.update(material);
-			
-			processSaveMessage = String.format("自动保存流程:%s。", nProcess.getName());
-		}
-		
-		reload(response, plan.getStatus() == 0?"保存成功":"审核成功。"+processSaveMessage, plan.getId(), listPara);
+		String message = this.saveProcess(newPlan);
+		reload(response, plan.getStatus() == 0?"保存成功":"审核成功。"+ message, plan.getId(), listPara);
 	}
 	
 	

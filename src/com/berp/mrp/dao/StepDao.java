@@ -64,9 +64,14 @@ public class StepDao extends HibernateBaseDao<Step, Integer> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List getList() {
-		String hql = "from Step";
-		return find(hql);
+	public List getList(String name) {
+		Finder f = Finder.create("select bean from Step bean where 1=1");
+		if(name != null && name != "")
+		{
+			f.append(" and (bean.name like :name or bean.serial like :name) ");
+			f.setParam("name", "%" + name + "%");
+		}
+		return find(f);
 	}
 	
 	@Override

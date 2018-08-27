@@ -125,15 +125,18 @@ public class SellAct extends CirAct {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<xml>");
 		for(BatchFlow flow: cir.getFlows()){
-			sb.append("<row>");
+			sb.append("<Master>");
 			appendXmlRecord(sb, "serial", flow.getMaterial().getAllSerial());
 			appendXmlRecord(sb, "product", flow.getMaterial().getNameSpec());
 			appendXmlRecord(sb, "unit", flow.getMaterial().getUnit());
 			appendXmlRecord(sb, "cnt", flow.getNumber().toString());
 			//appendXmlRecord(sb, "cnt_one_piece", flow.getNumPerBox().toString());
 			//appendXmlRecord(sb, "pieces", flow.getBoxNum().toString());
-			sb.append("</row>");
+			sb.append("</Master>");
 		}
+		sb.append("<Detail>");
+		appendXmlRecord(sb, "customer", cir.getCompany().getName());
+		sb.append("</Detail>");
 		sb.append("</xml>");
 		ResponseUtils.renderForGridReport(response, sb.toString());
 	}
