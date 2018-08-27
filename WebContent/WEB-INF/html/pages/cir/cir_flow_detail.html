@@ -248,7 +248,7 @@ function gridReport_start(report, data, type) {
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/></button></div></div></li>
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><a href="o_${cirType}_cancelApproval.do?${listPara!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>" ><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/></button></a></div></div></li>
 				<!-- print原来用a href javascript: 在ie8里无法弹出，应该是跟dwz的一些预处理冲突-->
-				<li id="printButtonLi"><div class="button"><div class="buttonContent"><button id="printButton" type="button" onclick="gridReport_start('cir_sell_out', 'Customer', 'preview');"><@s.m "global.print"/></button></div></div></li>
+				<#if cirType == 'sellOut'><li id="printButtonLi"><div class="button"><div class="buttonContent"><button id="printButton" type="button" onclick="gridReport_start('cir_sell_out', 'Customer', 'preview');"><@s.m "global.print"/></button></div></div></li></#if>
 				<li><div class="button"><div class="buttonContent"><a href="v_${cirType}_list.do?${listPara!}" target="navTab" rel="main"><button type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

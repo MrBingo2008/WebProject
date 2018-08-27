@@ -1,6 +1,7 @@
 package com.berp.mrp.action;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,12 +131,14 @@ public class SellAct extends CirAct {
 			appendXmlRecord(sb, "product", flow.getMaterial().getNameSpec());
 			appendXmlRecord(sb, "unit", flow.getMaterial().getUnit());
 			appendXmlRecord(sb, "cnt", flow.getNumber().toString());
-			//appendXmlRecord(sb, "cnt_one_piece", flow.getNumPerBox().toString());
-			//appendXmlRecord(sb, "pieces", flow.getBoxNum().toString());
+			appendXmlRecord(sb, "cnt_one_piece", flow.getNumPerBox()==null?"":flow.getNumPerBox().toString());
+			appendXmlRecord(sb, "pieces", flow.getBoxNum()==null?"":flow.getBoxNum().toString());
 			sb.append("</Master>");
 		}
 		sb.append("<Detail>");
-		appendXmlRecord(sb, "customer", cir.getCompany().getName());
+		appendXmlRecord(sb, "customer", "客户："+cir.getCompany().getName());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		appendXmlRecord(sb, "date", "发货时间："+sdf.format(cir.getBillTime()));
 		sb.append("</Detail>");
 		sb.append("</xml>");
 		ResponseUtils.renderForGridReport(response, sb.toString());
