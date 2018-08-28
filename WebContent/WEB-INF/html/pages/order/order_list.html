@@ -110,7 +110,7 @@ function testOpen(){
 						</#if>
 					</#list>
 					<#if order.status gt 0 && order.status lt 3>
-					<a href="v_record_material_multi_list.do?orderId=${order.id}" target="dialog" rel="dialog_purchase_order_todo_select" title="<@s.m 'purchase.order.todo.select'/>" mask="true"><@s.m "purchase.order.todo.add"/></a>
+					<@berp_perm url="/o_purchase_order"><a href="v_record_material_multi_list.do?orderId=${order.id}" target="dialog" rel="dialog_purchase_order_todo_select" title="<@s.m 'purchase.order.todo.select'/>" mask="true"><@s.m "purchase.order.todo.add"/></a></@berp_perm>
 					</#if>
 				</td>
 				<td>
@@ -122,7 +122,7 @@ function testOpen(){
 						</#list>
 					</#list>
 					<#if order.status gt 0 && order.status lt 3>
-					<a href="v_record_multi_list.do?type=0&orderId=${order.id!}" target="dialog" rel="dialog_plan_todo_select" mask="true" title="<@s.m 'sell.order.selectProduct'/>"><@s.m "plan.todo.add"/></a>
+					<@berp_perm url="/o_plan"><a href="v_record_multi_list.do?type=0&orderId=${order.id!}" target="dialog" rel="dialog_plan_todo_select" mask="true" title="<@s.m 'sell.order.selectProduct'/>"><@s.m "plan.todo.add"/></a></@berp_perm>
 					</#if>
 				</td>
 				</#if>
