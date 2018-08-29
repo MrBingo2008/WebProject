@@ -215,6 +215,26 @@ public class MaterialAct {
 	//目前这个全都是sell
 	//type:0，表示加入购物车模式，1，选择模式
 	public String recordMultiList(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
+		/*List<OrderRecord> records = null;
+		if(type == 0){
+			Order order = orderDao.findById(orderId);
+			model.addAttribute("order", order);
+			records = order.getRecords();
+		}
+		else	
+			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
+		model.addAttribute("records", records);*/
+		model.addAttribute("type", type);
+		model.addAttribute("searchName", searchName);
+		//这个是为了选择窗口的预定数量label
+		model.addAttribute("orderType", "sell");
+		return "pages/data_setting/record_multi_list";
+	}
+	
+	@RequestMapping("/v_record_multi_list_more.do")
+	//目前这个全都是sell
+	//type:0，表示加入购物车模式，1，选择模式
+	public String recordMultiListMore(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
 		List<OrderRecord> records = null;
 		if(type == 0){
 			Order order = orderDao.findById(orderId);
@@ -228,7 +248,7 @@ public class MaterialAct {
 		model.addAttribute("searchName", searchName);
 		//这个是为了选择窗口的预定数量label
 		model.addAttribute("orderType", "sell");
-		return "pages/data_setting/record_multi_list";
+		return "pages/data_setting/record_multi_list_more";
 	}
 	
 	@RequestMapping("/v_record_material_multi_list.do")

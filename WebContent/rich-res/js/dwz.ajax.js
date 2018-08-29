@@ -288,6 +288,70 @@ function dialogPageBreak(args, rel){
 	dwzPageBreak({targetType:"dialog", rel:rel, data:args});
 }
 
+//stone
+/**
+ * 处理navTab中的分页和排序
+ * targetType: navTab 或 dialog
+ * rel: 可选 用于局部刷新div id号
+ * data: pagerForm参数 {pageNum:"n", numPerPage:"n", orderField:"xxx", orderDirection:""}
+ * callback: 加载完成回调函数
+ */
+function morePage(options){
+	var op = $.extend({ targetType:"navTab", rel:"", data:{pageNum:"", numPerPage:"", orderField:"", orderDirection:""}, callback:null}, options);
+	var $parent = op.targetType == "dialog" ? $.pdialog.getCurrent() : navTab.getCurrentPanel();
+
+    var $box = $parent.find("tbody");
+	var form = _getPagerForm($box, op.data);
+	if (form) {
+		$.ajax({
+			type: op.type || 'GET',
+			url: op.url,
+			data: op.data,
+			cache: false,
+			success: function(response){
+				var json = DWZ.jsonEval(response);
+				if (json[DWZ.keys.statusCode]==DWZ.statusCode.error){
+					if (json[DWZ.keys.message]) alertMsg.error(json[DWZ.keys.message]);
+				} else {
+					$(response).insertBefore($box.find("tr:last"));
+					//$this.html(response).initUI();
+					if ($.isFunction(op.callback)) op.callback(response);
+				}
+				
+				if (json[DWZ.keys.statusCode]==DWZ.statusCode.timeout){
+					if ($.pdialog) $.pdialog.checkTimeout();
+					if (navTab) navTab.checkTimeout();
+
+					alertMsg.error(json[DWZ.keys.message] || DWZ.msg("sessionTimout"), {okCall:function(){
+						DWZ.loadLogin();
+					}});
+				} 
+				
+			},
+			error: DWZ.ajaxError,
+			statusCode: {
+				503: function(xhr, ajaxOptions, thrownError) {
+					alert(DWZ.msg("statusCode_503") || thrownError);
+				}
+			}
+		});
+	}
+}
+/**
+ * 处理navTab中的分页和排序
+ * @param args {pageNum:"n", numPerPage:"n", orderField:"xxx", orderDirection:""}
+ * @param rel： 可选 用于局部刷新div id号
+ */
+function navTabMorePage(args, rel){
+	dwzPageBreak({targetType:"navTab", rel:rel, data:args});
+}
+/**
+ * 处理dialog中的分页和排序
+ * 参数同 navTabPageBreak 
+ */
+function dialogMorePage(args, rel){
+	dwzPageBreak({targetType:"dialog", rel:rel, data:args});
+}
 
 function ajaxTodo(url, callback){
 	var $callback = callback || navTabAjaxDone;

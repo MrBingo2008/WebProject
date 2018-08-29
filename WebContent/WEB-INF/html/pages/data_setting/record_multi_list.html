@@ -1,7 +1,7 @@
 <!-- record list 带有产品明细信息，用于+生产(type=0)，以及plan_detail和order_detail(type=1)的对应列表 -->
 <div id="recordContain">
 <div class="unitBox">
-	<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'recordContain');" action="v_record_multi_list.do?type=${type!}">
+	<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'recordContain');" action="v_record_multi_list_more.do?type=${type!}">
 		<input type="hidden" name="searchName" value="${searchName!}"/>
 	</form>
 	<div class="pageHeader" style="border:1px #B8D0D6 solid">
@@ -59,6 +59,7 @@
 					<td>${record.notFinishNumber!}</td>
 					<td>${record.material.unit!}</td>
 				</tr>
+				<tr><td><button onclick="callMorePage();">more...</button></td></tr>
 			</#list>
 			</tbody>
 		</table>
@@ -108,5 +109,9 @@ function closeAndSelect(){
 	$.pdialog.close("dialog_plan_todo_select");
 	$.pdialog.open("v_plan_todo_list.do?recordIdString="+recordIdString+"&numberString="+numberString, "dialog_plan_todo_list", "<@s.m 'plan.todo.list'/>", {width:300, height:200, align:"bottomLeft", close:"function(){ajaxTodo('o_plan_todo_clear.do');}"});
 	
+}
+
+function callMorePage(){
+	morePage({targetType:"", rel:"", data:{pageNum:20}});
 }
 </script>

@@ -1,0 +1,15 @@
+<#list records as record>
+	<tr target="sid_obj" rel="1">
+	    <td><input type="checkbox" name="checkboxIds" value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"/></td>
+		<td>${record.material.allSerial!}</td>
+		<td>${record.material.info!}</td>
+		<#if type != 1>
+			<td>${(record.surface.name)!}</td>
+		</#if>
+		<td>${record.ord.company.name!}</td>
+		<td>${record.ord.serial!}</td>
+		<td>${record.number!}</td>
+		<td>${record.notFinishNumber!}</td>
+		<td>${record.material.unit!}</td>
+	</tr>
+</#list>
