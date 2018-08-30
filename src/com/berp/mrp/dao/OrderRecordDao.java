@@ -55,7 +55,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 	}
 	
 	public List<OrderRecord> findByCompanyAndMaterial(Integer companyId, Integer materialId, String name, Integer orderType, Integer status1, Integer status2, Date start, Date end){
-		Finder f = Finder.create("select bean from OrderRecord bean where 1=1");
+		Finder f = Finder.create("select bean from OrderRecord bean where 1=1 and bean.id > 680 ");
 		if(companyId!=null)
 		{
 			f.append(" and bean.ord.company.id=:companyId");

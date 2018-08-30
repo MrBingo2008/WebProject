@@ -20,7 +20,7 @@ function testOpen(){
 
 <div class="pageHeader">
 	<!-- navTabSearch就是获取pageNum和numPerPage，然后提交 -->
-	<form rel="pagerForm" onsubmit="return <#if type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_${orderType}_order_list.do?type=${type}" method="post">
+	<form onsubmit="return <#if type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_${orderType}_order_list.do?type=${type}" method="post">
 	<div class="searchBar">
 		<ul class="searchContent">
 			<li>

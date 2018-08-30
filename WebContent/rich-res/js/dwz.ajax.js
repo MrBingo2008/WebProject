@@ -105,6 +105,7 @@ function _iframeResponse(iframe, callback, dataType){
 	});
 }
 
+//stone: 多用于detail html的form提交回调
 /**
  * navTabAjaxDone是DWZ框架中预定义的表单提交回调函数．
  * 服务器转回navTabId可以把那个navTab标记为reloadFlag=1, 下次切换到那个navTab时会重新载入内容. 
@@ -179,6 +180,7 @@ function dialogAjaxDone(json){
 	}
 }
 
+//stone: 也是一个form，用于list html的搜索，跟pagerForm可以说不相关
 /**
  * 处理navTab上的查询, 会重新载入当前navTab
  * @param {Object} form
@@ -221,6 +223,8 @@ function divSearch(form, rel){
 	}
 	return false;
 }
+
+//stone：主要用于分页
 /**
  * 
  * @param {Object} args {pageNum:"",numPerPage:"",orderField:"",orderDirection:""}
@@ -301,11 +305,11 @@ function morePage(options){
 	var $parent = op.targetType == "dialog" ? $.pdialog.getCurrent() : navTab.getCurrentPanel();
 
     var $box = $parent.find("tbody");
-	var form = _getPagerForm($box, op.data);
+	var form = _getPagerForm($parent, op.data);
 	if (form) {
 		$.ajax({
 			type: op.type || 'GET',
-			url: op.url,
+			url: $(form).attr("action"),
 			data: op.data,
 			cache: false,
 			success: function(response){
