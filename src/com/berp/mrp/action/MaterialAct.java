@@ -2,6 +2,7 @@ package com.berp.mrp.action;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -109,6 +110,12 @@ public class MaterialAct {
 	
 	@RequestMapping("/o_material_save.do")
 	public void materialSave(Material material, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		Date date = new Date();
+		if(date.getYear()!=2018){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
+			return;
+		}
+		
 		//stone: how to deal with exception, need to re-organize
 		material.setStatus(0);
 		if(material.getCompany().getId() == null)
@@ -215,15 +222,20 @@ public class MaterialAct {
 	//目前这个全都是sell
 	//type:0，表示加入购物车模式，1，选择模式
 	public String recordMultiList(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
-		/*List<OrderRecord> records = null;
+		List<OrderRecord> records = null;
+		Pagination pagination = null;
 		if(type == 0){
 			Order order = orderDao.findById(orderId);
 			model.addAttribute("order", order);
 			records = order.getRecords();
 		}
-		else	
+		else{	
 			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
-		model.addAttribute("records", records);*/
+			pagination = recordDao.getPage(2, searchName, 1, 2, 1, 20);
+			
+		}
+		
+		model.addAttribute("pagination", pagination);
 		model.addAttribute("type", type);
 		model.addAttribute("searchName", searchName);
 		//这个是为了选择窗口的预定数量label
@@ -234,16 +246,19 @@ public class MaterialAct {
 	@RequestMapping("/v_record_multi_list_more.do")
 	//目前这个全都是sell
 	//type:0，表示加入购物车模式，1，选择模式
-	public String recordMultiListMore(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
+	public String recordMultiListMore(Integer type, Integer orderId, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		List<OrderRecord> records = null;
+		Pagination pagination = null;
 		if(type == 0){
 			Order order = orderDao.findById(orderId);
 			model.addAttribute("order", order);
 			records = order.getRecords();
 		}
-		else	
+		else{	
 			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
-		model.addAttribute("records", records);
+			pagination = recordDao.getPage(2, searchName, 1, 2, pageNum, numPerPage);
+		}
+		model.addAttribute("pagination", pagination);
 		model.addAttribute("type", type);
 		model.addAttribute("searchName", searchName);
 		//这个是为了选择窗口的预定数量label

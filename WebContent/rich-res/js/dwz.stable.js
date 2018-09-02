@@ -48,8 +48,8 @@
 			//add id='gridScroller' by stone....
 			tbody.wrap("<div id='gridScroller' class='gridScroller'" + layoutStr + " style='width:" + $tc.width() + "px;'><div class='gridTbody'><table style='width:" + (tlength - 20) + "px;'></table></div></div>");
 			var ftr = $(">tr:first-child", tbody);
-			var $trs = tbody.find('>tr');
-			
+			var $trs = tbody.find('>tr').jTableTr(nowrapTD);
+			/*
 			$trs.hoverClass().each(function(){
 				var $tr = $(this);
 				var $ftds = $(">td", this);
@@ -70,7 +70,7 @@
 						$("#"+sTarget, $grid).val($tr.attr("rel"));
 					}
 				});
-			});
+			});*/
 			
 			$(">td",ftr).each(function(i){
 				if (i < aStyles.length) $(this).width(aStyles[i][0]);
@@ -159,6 +159,31 @@
 		});
 	};
 	
+	$.fn.jTableTr = function(nowrapTD){
+		$trs = $(this);
+		return this.hoverClass().each(function(nowrapTD){
+			var $tr = $(this);
+			var $ftds = $(">td", this);
+
+			for (var i=0; i < $ftds.size(); i++) {
+				var $ftd = $($ftds[i]);
+				if (nowrapTD != "false") $ftd.html("<div>" + $ftd.html() + "</div>");
+				//if (i < aStyles.length) $ftd.addClass(aStyles[i][1]);
+			}		
+			$tr.click(function(){
+				$trs.filter(".selected").removeClass("selected");
+				$tr.addClass("selected");
+				//stone，改成支持后来插入，但还有一些功能没有实现
+				/*var sTarget = $tr.attr("target");
+				if (sTarget) {
+					if ($("#"+sTarget, $grid).size() == 0) {
+						$grid.prepend('<input id="'+sTarget+'" type="hidden" />');
+					}
+					$("#"+sTarget, $grid).val($tr.attr("rel"));
+				}*/
+			});
+		});
+	};
 	
 	$.jTableTool = {
 		getLeft:function(obj) {

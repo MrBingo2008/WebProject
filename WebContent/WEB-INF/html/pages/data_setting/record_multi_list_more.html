@@ -1,5 +1,5 @@
-<#list records as record>
-	<tr target="sid_obj" rel="1">
+<#list pagination.list as record>
+	<tr>
 	    <td><input type="checkbox" name="checkboxIds" value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"/></td>
 		<td>${record.material.allSerial!}</td>
 		<td>${record.material.info!}</td>

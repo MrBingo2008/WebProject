@@ -5,8 +5,8 @@
 	<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
 	<input type="hidden" name="searchCompanyName" value="${searchCompanyName!}"/>
 	<input type="hidden" name="searchStatus" value="${searchStatus!}" />
-	<input type="hidden" name="pageNum" value="" />
-	<input type="hidden" name="numPerPage" value="" />
+	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
+	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 </form>
 
 <div class="pageHeader" style="border:1px #B8D0D6 solid">
@@ -50,7 +50,24 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr><td><button onclick="callMorePage();">more...</button></td></tr>
+		<#list pagination.list as record>
+			<tr>
+			    <td><input type="checkbox" name="checkboxIds" value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"/></td>
+				<td>${record.material.allSerial!}</td>
+				<td>${record.material.info!}</td>
+				<#if type != 1>
+					<td>${(record.surface.name)!}</td>
+				</#if>
+				<td>${record.ord.company.name!}</td>
+				<td>${record.ord.serial!}</td>
+				<td>${record.number!}</td>
+				<td>${record.notFinishNumber!}</td>
+				<td>${record.material.unit!}</td>
+			</tr>
+		</#list>
+		<#assign displayCount = pagination.pageSize * (pagination.pageNo -1) + pagination.pageSize>	
+		<tr><td colspan="8">共${pagination.totalCount!}记录，已经显示${displayCount}条记录, <button onclick="callMorePage();">显示更多</button></td>
+		</tr>
 		</tbody>
 	</table>
 </div>
@@ -60,6 +77,7 @@ $(function(){
 	if ($.fn.jBarH) {
 		$("#recordContain").jBarH({minW:150, maxW:700});
 	}
+	//callMorePage();
 });
 
 function closeAndSelect(){
@@ -90,6 +108,6 @@ function closeAndSelect(){
 }
 
 function callMorePage(){
-	morePage({targetType:"dialog", rel:"", data:{pageNum:20}});
+	morePage({targetType:"dialog", rel:"", data:{pageNum:$("#pagerForm input[name=pageNum]").val()}});
 }
 </script>

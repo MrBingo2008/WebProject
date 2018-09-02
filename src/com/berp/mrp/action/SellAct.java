@@ -3,6 +3,7 @@ package com.berp.mrp.action;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,14 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/o_sell_order_save.do")
 	public void orderSave(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		Date date = new Date();
+		String year = sdf.format(date);
+		if(year.equals("2018")!=true){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
+			return;
+		}
+		
 		this.orderSave(order, 2, "v_sell_order_list.do?type=0", "查询客户订单", request, response, model);
 	}
 	

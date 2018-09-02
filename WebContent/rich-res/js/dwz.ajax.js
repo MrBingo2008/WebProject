@@ -304,8 +304,14 @@ function morePage(options){
 	var op = $.extend({ targetType:"navTab", rel:"", data:{pageNum:"", numPerPage:"", orderField:"", orderDirection:""}, callback:null}, options);
 	var $parent = op.targetType == "dialog" ? $.pdialog.getCurrent() : navTab.getCurrentPanel();
 
-    var $box = $parent.find("tbody");
+    var $box = $parent.find("tbody:last");
+    
+    if(op.data.pageNum == "")
+    	op.data.pageNum = 1;
+    op.data.pageNum ++;
+    
 	var form = _getPagerForm($parent, op.data);
+	
 	if (form) {
 		$.ajax({
 			type: op.type || 'GET',
@@ -317,8 +323,8 @@ function morePage(options){
 				if (json[DWZ.keys.statusCode]==DWZ.statusCode.error){
 					if (json[DWZ.keys.message]) alertMsg.error(json[DWZ.keys.message]);
 				} else {
-					$(response).insertBefore($box.find("tr:last"));
-					//$this.html(response).initUI();
+					$(response).jTableTr("true").insertBefore($box.find("tr:last"));
+					
 					if ($.isFunction(op.callback)) op.callback(response);
 				}
 				
