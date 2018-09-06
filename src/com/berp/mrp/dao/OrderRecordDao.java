@@ -103,15 +103,18 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		return find(f);
 	}
 	
-	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Integer pageNo, Integer pageSize) {
+	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Integer maxId, Integer pageSize) {
 		
-		pageNo = pageNo == null?1:pageNo;
 		pageSize = pageSize == null?20:pageSize;
 		
 		Finder f = Finder.create("select bean from OrderRecord bean where 1=1");
 		if (type != null) {
 			f.append(" and bean.ord.type=:type");
 			f.setParam("type", type);
+		}
+		if (maxId != null) {
+			f.append(" and bean.id<:maxId");
+			f.setParam("maxId", maxId);
 		}
 		//notEmpty 包括null和""，notBlank还包括" "
 		if(StringUtils.isNotEmpty(name))
@@ -129,7 +132,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		}
 		
 		f.append(" order by bean.id desc");
-		return find(f, pageNo, pageSize);
+		return find(f, pageSize);
 	}
 	
 	//这个现在暂时不用

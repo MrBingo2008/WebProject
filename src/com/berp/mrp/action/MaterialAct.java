@@ -231,7 +231,7 @@ public class MaterialAct {
 		}
 		else{	
 			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
-			pagination = recordDao.getPage(2, searchName, 1, 2, 1, 20);
+			pagination = recordDao.getPage(2, searchName, 1, 2, null, 20);
 			
 		}
 		
@@ -246,7 +246,7 @@ public class MaterialAct {
 	@RequestMapping("/v_record_multi_list_more.do")
 	//目前这个全都是sell
 	//type:0，表示加入购物车模式，1，选择模式
-	public String recordMultiListMore(Integer type, Integer orderId, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+	public String recordMultiListMore(Integer type, Integer orderId, String searchName, Integer maxId, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		List<OrderRecord> records = null;
 		Pagination pagination = null;
 		if(type == 0){
@@ -256,7 +256,7 @@ public class MaterialAct {
 		}
 		else{	
 			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
-			pagination = recordDao.getPage(2, searchName, 1, 2, pageNum, numPerPage);
+			pagination = recordDao.getPage(2, searchName, 1, 2, maxId, numPerPage);
 		}
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("type", type);
