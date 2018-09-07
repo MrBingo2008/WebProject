@@ -198,7 +198,8 @@ var DWZ = {
 					if (json[DWZ.keys.statusCode]==DWZ.statusCode.error){
 						if (json[DWZ.keys.message]) alertMsg.error(json[DWZ.keys.message]);
 					} else {
-						$this.html(response).initUI();
+						$this.html(response);
+						$this.initUI();
 						if ($.isFunction(op.callback)) op.callback(response);
 					}
 					
