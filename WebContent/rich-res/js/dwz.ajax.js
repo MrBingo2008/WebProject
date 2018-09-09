@@ -323,8 +323,8 @@ function morePage(options){
 				if (json[DWZ.keys.statusCode]==DWZ.statusCode.error){
 					if (json[DWZ.keys.message]) alertMsg.error(json[DWZ.keys.message]);
 				} else {
-					$(response).jTableTr("true").insertBefore($box.find("tr:last"));
-					
+					$(response).insertBefore($box.find("tr:last")).jTableTr("true");
+					$("#displayNum", $box).html($("tr", $box).length-1);
 					if ($.isFunction(op.callback)) op.callback(response);
 				}
 				

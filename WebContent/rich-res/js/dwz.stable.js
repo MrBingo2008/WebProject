@@ -160,7 +160,10 @@
 	};
 	
 	$.fn.jTableTr = function(nowrapTD){
-		$trs = $(this);
+		//stone: 改成异步后，原来保留了这个，而且忘记加上var，那么这个$trs跟jTable里的是同一个吗？应该是（prototype的变量共享），因为点击新加载tr后，原来的click失效
+		//$trs = $(this);
+		//所以这里要重新加载
+		$trs = $(this).parent().find('tr');
 		return this.hoverClass().each(function(nowrapTD){
 			var $tr = $(this);
 			var $ftds = $(">td", this);
@@ -172,6 +175,8 @@
 			}		
 			$tr.click(function(){
 				$trs.filter(".selected").removeClass("selected");
+				//stone: 去掉$trs，重新搜索，效率肯定低了，所以在一开始那里（166行）重新加载
+				//$(this).parent().find("tr.selected").removeClass("selected");
 				$tr.addClass("selected");
 				//stone，改成支持后来插入，但还有一些功能没有实现
 				/*var sTarget = $tr.attr("target");

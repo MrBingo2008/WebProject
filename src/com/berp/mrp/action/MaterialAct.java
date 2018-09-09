@@ -230,9 +230,8 @@ public class MaterialAct {
 			records = order.getRecords();
 		}
 		else{	
-			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
+			//records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
 			pagination = recordDao.getPage(2, searchName, 1, 2, null, 20);
-			
 		}
 		
 		model.addAttribute("pagination", pagination);

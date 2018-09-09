@@ -103,6 +103,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		return find(f);
 	}
 	
+	//getPage不实现pageNum，只实现morePage
 	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Integer maxId, Integer pageSize) {
 		
 		pageSize = pageSize == null?20:pageSize;
@@ -119,7 +120,7 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		//notEmpty 包括null和""，notBlank还包括" "
 		if(StringUtils.isNotEmpty(name))
 		{
-			f.append(" and (bean.ord.name like :name or bean.ord.serial like :name) ");
+			f.append(" and (bean.ord.name like :name or bean.ord.serial like :name or bean.material.serial like :name or bean.material.customerSerial like :name or bean.material.name like :name) ");
 			f.setParam("name", "%" + name + "%");
 		}
 		if (status != null && status1 == null) {

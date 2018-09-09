@@ -10,7 +10,7 @@
 </form>
 
 <div class="pageHeader" style="border:1px #B8D0D6 solid">
-	<form onsubmit="return divSearch(this, 'recordContain');" action="v_record_multi_list.do?type=${type!}" method="post">
+	<form onsubmit="return dwzSearch(this, 'dialog');" action="v_record_multi_list.do?type=${type!}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -23,7 +23,7 @@
 				</td>
 				<td>
 					<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
-				    <div class="button"><div class="buttonContent"><button type="button" multLookup="checkboxIds" warn="请选择成品"><@s.m "global.select"/></button></div></div>
+				    <div class="button"><div class="buttonContent"><button type="button" multLookup="checkboxIds" warn="请选择产品"><@s.m "global.select"/></button></div></div>
 				</td>
 			</#if>
 			</tr>
@@ -52,7 +52,9 @@
 		<tbody>
 		<#list pagination.list as record>
 			<tr>
-			    <td><input type="checkbox" name="checkboxIds" value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"/></td>
+			    <td><input type="checkbox" name="checkboxIds" value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"/>
+			    <input type="hidden" name="recordId" value="${record.id}"/>
+			    </td>
 				<td>${record.material.allSerial!}</td>
 				<td>${record.material.info!}</td>
 				<#if type != 1>
@@ -66,7 +68,7 @@
 			</tr>
 		</#list>
 		<#assign displayCount = pagination.pageSize>	
-		<tr><td colspan="8">共${pagination.totalCount!}记录，已经显示${displayCount}条记录, <button onclick="callMorePage();">显示更多</button></td>
+		<tr><td colspan="8">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条   <button onclick="callMorePage();">显示更多</button></td>
 		</tr>
 		</tbody>
 	</table>
@@ -107,7 +109,9 @@ function closeAndSelect(){
 }
 
 function callMorePage(){
-
-	morePage({targetType:"dialog", rel:"", data:{}});
+	var $parent = $.pdialog.getCurrent();
+    var $box = $parent.find("tbody:last");
+    var maxRecordId = $box.find("input[name=recordId]:last").val();
+	morePage({targetType:"dialog", rel:"", data:{maxId:maxRecordId}});
 }
 </script>
