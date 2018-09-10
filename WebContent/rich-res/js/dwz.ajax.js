@@ -238,6 +238,8 @@ function _getPagerForm($parent, args) {
 		if (args["numPerPage"]) form[DWZ.pageInfo.numPerPage].value = args["numPerPage"];
 		if (args["orderField"]) form[DWZ.pageInfo.orderField].value = args["orderField"];
 		if (args["orderDirection"] && form[DWZ.pageInfo.orderDirection]) form[DWZ.pageInfo.orderDirection].value = args["orderDirection"];
+		//add by stone
+		if (args["maxId"]) form["maxId"].value = args["maxId"];
 	}
 	
 	return form;
@@ -306,17 +308,14 @@ function morePage(options){
 
     var $box = $parent.find("tbody:last");
     
-    if(op.data.pageNum == "")
-    	op.data.pageNum = 1;
-    op.data.pageNum ++;
-    
 	var form = _getPagerForm($parent, op.data);
+	var formData = $(form).serializeArray();
 	
 	if (form) {
 		$.ajax({
 			type: op.type || 'GET',
 			url: $(form).attr("action"),
-			data: op.data,
+			data: formData,
 			cache: false,
 			success: function(response){
 				var json = DWZ.jsonEval(response);

@@ -2,9 +2,6 @@
 
 <form id="pagerForm" method="post" action="v_record_multi_list_more.do?type=${type!}">
 	<input type="hidden" name="searchName" value="${searchName!}"/>
-	<input type="hidden" name="searchRecordName" value="${searchRecordName!}"/>
-	<input type="hidden" name="searchCompanyName" value="${searchCompanyName!}"/>
-	<input type="hidden" name="searchStatus" value="${searchStatus!}" />
 	<input type="hidden" id="maxId" name="maxId" value="" />
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 </form>
@@ -68,7 +65,7 @@
 			</tr>
 		</#list>
 		<#assign displayCount = pagination.pageSize>	
-		<tr><td colspan="8">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条   <button onclick="callMorePage();">显示更多</button></td>
+		<tr><td colspan="8">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button onclick="callMorePage();">显示更多</button> </#if></td>
 		</tr>
 		</tbody>
 	</table>
