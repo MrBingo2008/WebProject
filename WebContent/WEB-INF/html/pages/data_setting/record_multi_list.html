@@ -64,8 +64,8 @@
 				<td>${record.material.unit!}</td>
 			</tr>
 		</#list>
-		<#assign displayCount = pagination.pageSize>	
-		<tr><td colspan="8">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button onclick="callMorePage();">显示更多</button> </#if></td>
+		<#assign displayCount = pagination.list?size>	
+		<tr><td colspan="<#if type == 0>9<#else>8</#if>">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button id="morePageButton" onclick="callMorePage();">显示更多</button> </#if></td>
 		</tr>
 		</tbody>
 	</table>

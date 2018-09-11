@@ -210,6 +210,11 @@ public class DateUtils {
 		}
 	}
 
+	public static int getYear(){
+		Calendar calendar = getCalendar();
+		return calendar.get(Calendar.YEAR);
+	}
+	
 	private int getYear(Calendar calendar) {
 		return calendar.get(Calendar.YEAR);
 	}

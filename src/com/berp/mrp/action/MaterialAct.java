@@ -35,6 +35,7 @@ import com.berp.mrp.entity.ProductMaterial;
 import com.berp.core.dao.CategoryDao;
 import com.berp.core.entity.Category;
 import com.berp.framework.page.Pagination;
+import com.berp.framework.util.DateUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
 import com.berp.framework.web.session.SessionProvider;
@@ -110,8 +111,7 @@ public class MaterialAct {
 	
 	@RequestMapping("/o_material_save.do")
 	public void materialSave(Material material, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		Date date = new Date();
-		if(date.getYear()!=2018){
+		if(DateUtils.getYear()!=2018){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
 		}
@@ -139,6 +139,9 @@ public class MaterialAct {
 					attachs.remove(j);
 			}
 		}
+		
+		if(material.getProcess().getId() == null)
+			material.setProcess(null);
 		
 		materialDao.save(material);
 
@@ -189,6 +192,9 @@ public class MaterialAct {
 		}else
 			material.setAttachs(new ArrayList<MaterialAttach>());
 		
+		if(material.getProcess().getId() == null)
+			material.setProcess(null);
+		
 		materialDao.update(material);
 		
 		String url = "v_material.do?type=0&useSession=1";
@@ -227,10 +233,15 @@ public class MaterialAct {
 		if(type == 0){
 			Order order = orderDao.findById(orderId);
 			model.addAttribute("order", order);
+			
+			pagination = new Pagination();
 			records = order.getRecords();
+			
+			//stone：为了兼容type = 1的html页面
+			pagination.setList(records);
+			pagination.setTotalCount(records.size());
 		}
-		else{	
-			//records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
+		else{
 			pagination = recordDao.getPage(2, searchName, 1, 2, null, 20);
 		}
 		
@@ -253,8 +264,7 @@ public class MaterialAct {
 			model.addAttribute("order", order);
 			records = order.getRecords();
 		}
-		else{	
-			records = recordDao.findByCompanyAndMaterial(null, null, searchName, 2, 1, 2, null, null);
+		else{
 			pagination = recordDao.getPage(2, searchName, 1, 2, maxId, numPerPage);
 		}
 		model.addAttribute("pagination", pagination);

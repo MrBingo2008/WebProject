@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.berp.framework.util.DateUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
 import com.berp.framework.web.session.SessionProvider;
@@ -41,10 +42,10 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/o_sell_order_save.do")
 	public void orderSave(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-		Date date = new Date();
-		String year = sdf.format(date);
-		if(year.equals("2018")!=true){
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		//Date date = new Date();
+		//String year = sdf.format(date);
+		if(DateUtils.getYear()!=2018){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
 		}
