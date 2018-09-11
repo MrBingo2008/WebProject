@@ -74,7 +74,7 @@
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>
 							
 							<th type="lookup" name="assemblies[#index#].material.serial" size="20"
-								lookupGroup="assemblies[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=1" aTitle="<@s.m 'material'/>"
+								lookupGroup="assemblies[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=11" aTitle="<@s.m 'material'/>"
 								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "rawMaterial.serial"/></th>
 								
 							<th type="text" name="assemblies[#index#].material.nameSpec" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "rawMaterial.nameSpec"/></th>
@@ -97,7 +97,7 @@
 						    <input type="hidden" name="assemblies[${count}].id" value="${assembly.id}"></input></td>
 							<td>
 								<input type="text" name="assemblies[${count}].material.serial" value="${assembly.material.allSerial!}" size="20" class="textInput required" readonly>
-								<a class="btnLook" href="v_material.do?type=1" lookupgroup="assemblies[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>
+								<a class="btnLook" href="v_material.do?type=11" lookupgroup="assemblies[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>
 							</td>
 							<td><input type="text" name="assemblies[${count}].material.name" value="${assembly.material.nameSpec!}" size="12" class="textInput" readonly>
 							<input type="hidden" name="assemblies[${count}].material.id" value="${assembly.material.id!}" class="textInput"></td>

@@ -87,14 +87,14 @@ public class Cir extends BaseBill{
 		if(this.getType().equals(CirType.outsideIn.ordinal()) || this.getType().equals(CirType.outsideOut.ordinal())){
 			if(this.rawFlows != null && !this.rawFlows.isEmpty())
 				for(RawBatchFlow flow : this.rawFlows){
-					sb.append(String.format("%s - %.0f%s; ",flow.getMaterial().getInfo(), flow.getNumber(), flow.getMaterial().getUnit()));
+					sb.append(String.format("%s - %.0f%s; ",flow.getMaterial().getNameSpec(), flow.getNumber(), flow.getMaterial().getUnit()));
 				}
 			
 		}else
 		{
 			if(this.flows != null && !this.flows.isEmpty())
 				for(BatchFlow flow : this.flows){
-					sb.append(String.format("%s - %.0f%s; ",flow.getMaterial().getInfo(), flow.getNumber(), flow.getMaterial().getUnit()));
+					sb.append(String.format("%s - %.0f%s; ",flow.getMaterial().getNameSpec(), flow.getNumber(), flow.getMaterial().getUnit()));
 				}
 		}
 		return sb.toString();

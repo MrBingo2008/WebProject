@@ -220,10 +220,10 @@ public class OrderRecord {
 	}
 	
 	public String getInfo(){
-		return String.format("%s / %s", this.getMaterial().getInfo(), this.getOrd().getInfo());
+		return String.format("%s / %s", this.getMaterial().getNameSpec(), this.getOrd().getInfo());
 	}
 	
 	public String getFullInfo(){
-		return String.format("%s / %s%s / %s", this.getMaterial().getInfo(), StrUtils.doubleTrans(this.getNumber()), this.getMaterial().getUnit(), this.getOrd().getInfo());
+		return String.format("%s / %s%s / %s", this.getMaterial().getNameSpec(), StrUtils.doubleTrans(this.getNumber()), this.getMaterial().getUnit(), this.getOrd().getInfo());
 	}
 }

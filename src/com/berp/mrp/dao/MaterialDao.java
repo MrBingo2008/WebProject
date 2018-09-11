@@ -60,7 +60,7 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		if(number!=null){
 			Double leftNum = material.getLeftNumber();
 			if(leftNum + number < 0)
-				throw new Exception(material.getInfo() + "剩余数量不足");
+				throw new Exception(material.getNameSpec() + "剩余数量不足");
 			material.setLeftNumber(leftNum + number);
 		}
 		
@@ -77,7 +77,7 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		if(sellOutNumber!=null){
 			Double notSellOutNumber = material.getNotSellOutNumber();
 			if(notSellOutNumber - sellOutNumber < 0)
-				throw new Exception(material.getInfo() + "超出客户订单数量");
+				throw new Exception(material.getNameSpec() + "超出客户订单数量");
 			material.setNotSellOutNumber(notSellOutNumber - sellOutNumber);
 		}
 		return material;
@@ -96,7 +96,7 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		Material material = this.findById(materialId);
 		if(notSellOutNumber!=null){
 			if(material.getNotSellOutNumber() + notSellOutNumber < 0)
-				throw new Exception(material.getInfo() + "未发货数量为负.");
+				throw new Exception(material.getNameSpec() + "未发货数量为负.");
 			material.setNotSellOutNumber(material.getNotSellOutNumber()+ notSellOutNumber);
 		}
 		return material;

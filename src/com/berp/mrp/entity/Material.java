@@ -83,7 +83,7 @@ public class Material {
 		return String.format("%s / %s", this.customerSerial==null?"":this.customerSerial, this.serial==null?"":this.serial);
 	}
 	
-	public String getInfo(){
+	/*private String getInfo(){
 		if(!StringUtils.isBlank(this.name))
 			return this.getName();
 		if(!StringUtils.isBlank(this.spec))
@@ -93,12 +93,19 @@ public class Material {
 		if(!StringUtils.isBlank(this.customerSerial))
 			return customerSerial;
 		return "未命名";
-	}
+	}*/
 	
 	public String getNameSpec(){
 		if(!StringUtils.isBlank(this.spec))
 			return String.format("%s ( %s )", this.getName(),this.spec);
-		return this.getName();
+		
+		if(!StringUtils.isBlank(this.name))
+			return this.getName();
+		/*if(!StringUtils.isBlank(this.serial))
+			return this.serial;
+		if(!StringUtils.isBlank(this.customerSerial))
+			return customerSerial;*/
+		return "未命名";
 	}
 	
 	/*
@@ -287,7 +294,7 @@ public class Material {
 		StringBuilder sb = new StringBuilder();
 		if(assemblies != null)
 			for(ProductMaterial assembly : assemblies)
-				sb.append(assembly.getMaterial().getInfo() + " ");
+				sb.append(assembly.getMaterial().getNameSpec() + " ");
 		return sb.toString();
 	}
 	
