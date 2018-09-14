@@ -55,6 +55,23 @@ public final class DwzJsonUtils {
 		return object;
 	}
 	
+	public static JSONObject getSuccessJsonAndCloseCurrent(String text, String dialogId) {
+		JSONObject object = new JSONObject();
+		try {
+			object.put("statusCode", "200");
+			object.put("message", text);
+			object.put("dialogId", dialogId);
+			object.put("rel",dialogId);
+			object.put("callbackType", "closeCurrent");
+			object.put("forwardUrl", "");
+			object.put("confirmMsg", "");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return object;
+	}
+	
 	public static JSONObject getSuccessAndRedirectJson(String text, String url, String title) {
 		JSONObject object = new JSONObject();
 		try {

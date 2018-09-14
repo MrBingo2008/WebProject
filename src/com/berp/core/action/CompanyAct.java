@@ -66,9 +66,12 @@ public class CompanyAct {
 	}
 
 	@RequestMapping("/o_company_save.do")
-	public void companySave(Company company, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void companySave(Company company, Integer type, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		companyDao.save(company);
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存往来单位成功!", "v_company.do?type=0", "往来单位").toString());
+		if(type!=null && type >0)
+			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJsonAndCloseCurrent("保存往来单位成功!", "company_select_dialog").toString());
+		else
+			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存往来单位成功!", "v_company.do?type=0", "往来单位").toString());
 	}
 	
 	@RequestMapping("/v_company_edit.do")

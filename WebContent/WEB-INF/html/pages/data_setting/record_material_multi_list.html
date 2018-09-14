@@ -9,8 +9,10 @@
 			<table class="searchContent">
 				<tr>
 					<td><@s.m "sell.order"/>: ${order.info!}</td>
-					<td><div class="button"><div class="buttonContent"><button id="testButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td>
-					<td><span style="margin-left:20px;"><@s.m "rawMaterial"/>：</span><span style="color:#E36C0A">橙色(产品)</span><span style="margin-left:8px;">黑色(原材料)</span></td>
+					<td><div class="button"><div class="buttonContent"><button id="testButton" type="button" onclick="closeAndSelect();"><@s.m "global.confirm"/></button></div></td>
+				</tr>
+				<tr>
+					<td><@s.m "rawMaterial"/>：<span style="color:#E36C0A">产品-橙色</span><span style="margin-left:8px;">原材料-黑色</span></td>
 				</tr>
 			</table>
 		</div>
@@ -18,7 +20,7 @@
 	</div>
 	
 	<div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
-		<table class="table" width="99%" layoutH="66">
+		<table class="table" width="99%" layoutH="106">
 			<thead>
 				<tr>
 					<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>

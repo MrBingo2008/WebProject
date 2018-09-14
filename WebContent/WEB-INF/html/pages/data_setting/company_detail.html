@@ -8,8 +8,9 @@ $(function(){
 </script>
 
 <div class="pageContent">
-	<form method="post" action="o_company_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="o_company_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
+		<input type="hidden" name = "type" value="1" />
 			<p>
 				<label>ID:</label>
 				<input name="id" type="text" size="20" value="${company.id!}" readonly="readonly"/>
@@ -22,7 +23,7 @@ $(function(){
 				<label><@s.m "category.2.parent"/>:</label>
 				<input type="hidden" name="parent.id" value="${(company.parent.id)!}"/>
 				<input type="text" class="required" name="parent.name" value="${(company.parent.name)!}" readonly/>
-				<a class="btnLook" href="v_category_tree.do?parentId=2" lookupGroup="parent"><@s.m "category.2.parent"/></a>		
+				<a class="btnLook" href="v_category_tree.do?parentId=2" lookupGroup="parent" rel="company_category_dialog"><@s.m "category.2.parent"/></a>		
 			</p>
 			<p>
 				<label><@s.m "company.tel"/>:</label>

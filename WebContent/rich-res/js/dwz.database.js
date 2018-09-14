@@ -88,8 +88,8 @@
 						alertMsg.error($this.attr("warn") || DWZ.msg("alertSelectMsg"));
 						return false;
 					}
-					
-					$.pdialog.open(url, "_blank", $this.attr("title") || $this.text(), options);
+					//stone: add rel
+					$.pdialog.open(url, $this.attr("rel") || "_blank", $this.attr("title") || $this.text(), options);
 					return false;
 				});
 			});
