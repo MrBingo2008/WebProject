@@ -63,7 +63,7 @@ public final class DwzJsonUtils {
 			object.put("dialogId", dialogId);
 			object.put("rel",dialogId);
 			object.put("callbackType", "closeCurrent");
-			object.put("forwardUrl", "");
+			object.put("forwardUrl", "v_company.do?type=1");
 			object.put("confirmMsg", "");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

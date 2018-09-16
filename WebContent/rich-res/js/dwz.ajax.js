@@ -169,7 +169,11 @@ function dialogAjaxDone(json){
 	if (json[DWZ.keys.statusCode] == DWZ.statusCode.ok){
 		if (json.navTabId){
 			navTab.reload(json.forwardUrl, {navTabId: json.navTabId});
-		} else {
+		} 
+		//stone
+		else if(json.dialogId){
+			$.pdialog.reload(json.forwardUrl, {dialogId: json.dialogId});
+		}else {
 			var $pagerForm = $("#pagerForm", navTab.getCurrentPanel());
 			var args = $pagerForm.size()>0 ? $pagerForm.serializeArray() : {}
 			navTabPageBreak(args, json.rel);
