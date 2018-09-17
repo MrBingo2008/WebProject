@@ -13,6 +13,11 @@
 		},
 		lookupField: function(key){
 			return this.lookupPk(key);
+		},
+		//add by stone
+		lookupValue:function(key, lookup){
+			var strDot = lookup.currentGroup ? "." : "";
+			return lookup.currentGroup + strDot + key + lookup.suffix;
 		}
 	};
 	
@@ -20,9 +25,9 @@
 	var $curTable = null;
 	
 	$.extend({
-		bringBackSuggest: function(args){
+		bringBackSuggest: function(args, lookup){
 			//这个地方应该可以改进，不需要查找那么多
-			var $box = _lookup['$target'].parents(".unitBox:first");
+			var $box = lookup['$target'].parents(".unitBox:first");
 			$box.find(":input, select, div").each(function(){
 				var $input = $(this), inputName = $input.attr("name");
 				
@@ -31,7 +36,7 @@
 					if(key.indexOf(":") == 0)
 						name = key.substring(1, key.length);
 					else
-						name = (_lookup.pk == key) ? _util.lookupPk(key) : _util.lookupField(key);
+						name = (lookup.pk == key) ? _util.lookupValue(key, lookup) : _util.lookupValue(key, lookup);
 
 					if (name == inputName) {
 						
@@ -54,11 +59,17 @@
 					}
 				}
 			});
-			if(_lookup['onItemChange'] != null)
-				eval(_lookup['onItemChange']);
+			
+			//stone，lookup改为局部变量后，要看这里有没有bug
+			if(lookup['onItemChange'] != null)
+				eval(lookup['onItemChange']);
 		},
 		bringBack: function(args){
-			$.bringBackSuggest(args);
+			//stone: lookup不是公共变量了
+			var currentDialog = $.pdialog.getCurrent();
+			var lookup = currentDialog.data("lookup");
+			
+			$.bringBackSuggest(args, lookup);
 			$.pdialog.closeCurrent();
 		},
 		
@@ -74,14 +85,14 @@
 					resizable:eval($this.attr("resizable") || "true")
 				};
 				$this.click(function(event){
-					_lookup = $.extend(_lookup, {
+					var lookup = {
 						currentGroup: $this.attr("lookupGroup") || "",
 						suffix: $this.attr("suffix") || "",
 						$target: $this,
 						pk: $this.attr("lookupPk") || "id",
 						//added by stone, 为什么要加这个?
 						onItemChange: $this.attr("onItemChange") || null
-					});
+					};
 					
 					var url = unescape($this.attr("href")).replaceTmById($(event.target).parents(".unitBox:first"));
 					if (!url.isFinishedTm()) {
@@ -89,7 +100,9 @@
 						return false;
 					}
 					//stone: add rel
-					$.pdialog.open(url, $this.attr("rel") || "_blank", $this.attr("title") || $this.text(), options);
+					var dialog = $.pdialog.open(url, $this.attr("rel") || "_blank", $this.attr("title") || $this.text(), options);
+					//stone: add partial value: lookup
+					dialog.data("lookup", lookup);
 					return false;
 				});
 			});

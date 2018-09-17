@@ -138,6 +138,9 @@
 				//add a task to task bar
 				if(op.minable) $.taskBar.addDialog(dlgid,title);
 			}
+			
+			//stone
+			return dialog;
 		},
 		/**
 		 * 切换当前层
