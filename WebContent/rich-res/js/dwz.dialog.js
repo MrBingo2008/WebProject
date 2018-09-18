@@ -130,6 +130,20 @@
 				});
 			}
 			if (op.mask) {
+				
+				//stone: 800-900屏蔽 mask dialog，900为mask层，1000为最后一个显示的窗口
+				//把倒数第二个窗口屏蔽了
+				var lastZi = 800;
+				$("body").children(".dialog").each(function(){
+					var zi = $(this).css("zIndex");
+					if(zi>=800 && zi<=900)
+						lastZi = zi;
+					else if(zi == 1000){
+						//lastZi++;
+						$(this).css("zIndex", lastZi++);
+					}
+				});
+				
 				$(dialog).css("zIndex", 1000);
 				$("a.minimize",dialog).hide();
 				$(dialog).data("mask", true);
@@ -299,7 +313,18 @@
 			$(dialog).hide();
 			$("div.shadow").hide();
 			if($(dialog).data("mask")){
-				$("#dialogBackground").hide();
+				
+				//stone: 利用data mask和zIndex同时表示，重复了
+				var $lastDialog = null;
+				$("body").children(".dialog").each(function(){
+					if($(this).css("zIndex") >= 800 && $(this).css("zIndex") <= 900)
+						$lastDialog = $(this);
+				});
+				if($lastDialog != null)
+					$lastDialog.css("zIndex", 1000);
+				else
+					$("#dialogBackground").hide();
+				
 			} else{
 				if ($(dialog).data("id")) $.taskBar.closeDialog($(dialog).data("id"));
 			}
