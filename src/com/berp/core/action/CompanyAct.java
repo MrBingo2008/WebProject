@@ -59,9 +59,10 @@ public class CompanyAct {
 	}
 	
 	@RequestMapping("/v_company_add.do")
-	public String companyAdd(HttpServletRequest request, ModelMap model) {
+	public String companyAdd(Integer type, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("openMode", "add");
 		model.addAttribute("company", new Company());
+		model.addAttribute("type", type);
 		return "pages/data_setting/company_detail";
 	}
 

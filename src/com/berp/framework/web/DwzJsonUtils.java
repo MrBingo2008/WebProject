@@ -38,13 +38,18 @@ public final class DwzJsonUtils {
 		return object;
 	}
 	
+	//只有user change pwd的时候会调用到
 	public static JSONObject getSuccessJsonAndCloseCurrent(String text) {
 		JSONObject object = new JSONObject();
 		try {
 			object.put("statusCode", "200");
 			object.put("message", text);
+			
+			//navTabId和rel是同个if-else判断的，二取一, rel好像是本页面的某个区域
 			object.put("navTabId", "");
-			object.put("rel","main");
+			object.put("rel","");
+			
+			//callbackType=closeCurrent, forward(forwardUrl), forwardConfirm
 			object.put("callbackType", "closeCurrent");
 			object.put("forwardUrl", "");
 			object.put("confirmMsg", "");
@@ -55,15 +60,16 @@ public final class DwzJsonUtils {
 		return object;
 	}
 	
+	//
 	public static JSONObject getSuccessJsonAndCloseCurrent(String text, String dialogId) {
 		JSONObject object = new JSONObject();
 		try {
 			object.put("statusCode", "200");
 			object.put("message", text);
 			object.put("dialogId", dialogId);
-			object.put("rel",dialogId);
+			object.put("rel","");
 			object.put("callbackType", "closeCurrent");
-			object.put("forwardUrl", "v_company.do?type=1");
+			object.put("forwardUrl", "");
 			object.put("confirmMsg", "");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -77,8 +83,10 @@ public final class DwzJsonUtils {
 		try {
 			object.put("statusCode", "200");
 			object.put("message", text);
+			
 			object.put("navTabId", "");
-			object.put("rel","main");
+			object.put("rel","");
+			
 			object.put("callbackType", "forward");
 			object.put("forwardUrl", url);
 			object.put("confirmMsg", "");

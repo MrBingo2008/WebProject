@@ -13,6 +13,11 @@
 		reload:function(url, options){
 			var op = $.extend({data:{}, dialogId:"", callback:null}, options);
 			var dialog = (op.dialogId && $("body").data(op.dialogId)) || this._current;
+			
+			//stone
+			if(url == null)
+				url = $(dialog).data("url");
+			
 			if (dialog){
 				var jDContent = dialog.find(".dialogContent");
 				jDContent.ajaxUrl({

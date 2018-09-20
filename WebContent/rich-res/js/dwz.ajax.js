@@ -170,9 +170,9 @@ function dialogAjaxDone(json){
 		if (json.navTabId){
 			navTab.reload(json.forwardUrl, {navTabId: json.navTabId});
 		} 
-		//stone
+		//added by stone: 按navTab的做法, forwardUrl是用于redirect本身的, 所以这里统一一下做法
 		else if(json.dialogId){
-			$.pdialog.reload(json.forwardUrl, {dialogId: json.dialogId});
+			$.pdialog.reload(null, {dialogId: json.dialogId});
 		}else {
 			var $pagerForm = $("#pagerForm", navTab.getCurrentPanel());
 			var args = $pagerForm.size()>0 ? $pagerForm.serializeArray() : {}
