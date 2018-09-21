@@ -102,7 +102,7 @@ function test(){
 							<th type="label" name="records[#index#].id" size="2" display="#index#"><@s.m "global.number"/></th>
 							
 							<th type="lookup" name="records[#index#].material.serial" size="20"
-								lookupGroup="records[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=1" aTitle="<@s.m 'material'/>"
+								lookupGroup="records[#index#]" lookuppk="material.id" lookupUrl="v_material.do?type=1" aTitle="<@s.m 'material'/>" rel="material_select_dialog"
 								fieldAttrs="{readonly:'readonly'}" fieldClass="required"><@s.m "material.allSerial"/></th>
 								
 							<th type="text" name="records[#index#].material.nameSpec" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "material.nameSpec"/></th>
@@ -139,7 +139,7 @@ function test(){
 						    <input type="hidden" name="records[${count}].id" value="${record.id!}"></input></td>
 							<td>
 								<input type="text" name="records[${count}].material.serial" value="${record.material.allSerial!}" size="20" class="textInput required" readonly>
-								<a class="btnLook" href="v_material.do?type=1" lookupgroup="records[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>
+								<a class="btnLook" href="v_material.do?type=1" rel="material_select_dialog" lookupgroup="records[${count}]" lookuppk="material.id" title="<@s.m 'material'/>"><@s.m 'material'/></a>
 							</td>
 							<td><input type="text" name="records[${count}].material.nameSpec" value="${record.material.nameSpec!}" size="20" class="textInput" readonly>
 							<input type="hidden" name="records[${count}].material.id" value="${record.material.id!}" class="textInput"></td>

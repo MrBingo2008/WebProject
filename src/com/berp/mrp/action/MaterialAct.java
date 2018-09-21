@@ -110,8 +110,8 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/o_material_save.do")
-	public void materialSave(Material material, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		if(DateUtils.getYear()!=2018){
+	public void materialSave(Material material, Integer type, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		if(DateUtils.getYear()!=2019){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
 		}
@@ -145,7 +145,13 @@ public class MaterialAct {
 		
 		materialDao.save(material);
 
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
+		if(type!=null && type >0)
+			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJsonAndCloseCurrent("保存物料成功!", "material_select_dialog").toString());
+		else
+			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
+
+		
+		
 	}
 
 	@RequestMapping("/v_material_edit.do")

@@ -204,12 +204,13 @@
 						top:iTop+'px'
 					}).show();
 					
-					_lookup = $.extend(_lookup, {
+					//stone
+					var lookup = {
 						currentGroup: $input.attr("lookupGroup") || "",
 						suffix: $input.attr("suffix") || "",
 						$target: $input,
 						pk: $input.attr("lookupPk") || "id"
-					});
+					};
 
 					var url = unescape($input.attr("suggestUrl")).replaceTmById($(event.target).parents(".unitBox:first"));
 					if (!url.isFinishedTm()) {
@@ -260,8 +261,8 @@
 									if (jsonStr) jsonStr += ',';
 									jsonStr += suggestFields[i]+":''";
 								}
-								jsonStr = "{"+_lookup.pk+":''," + jsonStr +"}";
-								$.bringBackSuggest(DWZ.jsonEval(jsonStr));
+								jsonStr = "{"+lookup.pk+":''," + jsonStr +"}";
+								$.bringBackSuggest(DWZ.jsonEval(jsonStr), lookup);
 							}
 						},
 						error: function(){
@@ -343,6 +344,7 @@
 						aFieldAttrs: $th.attr("aFieldAttrs") || "",
 						lookupType: $th.attr("lookupType") || "",
 						aTitle: $th.attr("aTitle") || "",
+						rel:$th.attr("rel") || "",
 						onItemChange:$th.attr("onItemChange") || ""
 					};
 					fields.push(field);
@@ -533,7 +535,7 @@
 							temp = '<div name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
 							+ temp
-							+ '<a class="btnLook" href="'+field.lookupUrl+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag+'>'+field.aTitle+'</a>';
+							+ '<a class="btnLook" href="'+field.lookupUrl+'" rel="'+field.rel+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag+'>'+field.aTitle+'</a>';
 						break;
 					case 'attach':
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'

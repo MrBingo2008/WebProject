@@ -1,9 +1,10 @@
 <link rel="stylesheet" type="text/css" href="/berp/rich-res/webuploader/css/webuploader.css" />
 <link rel="stylesheet" type="text/css" href="/berp/rich-res/webuploader/css/style.css" />
 <div class="pageContent">
-	<form method="post" action="o_material_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="o_material_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, <#if type?? && type gt 0>dialogAjaxDone<#else>navTabAjaxDone</#if>);">
 		
 		<input type="hidden" name="parentId" value="${parentId!}" />
+		<input type="hidden" name = "type" value="${type!}" />
 		
 		<div class="pageFormContent" layoutH="56">
 			<p>
@@ -28,7 +29,7 @@
 				<label><@s.m "category.1.parent"/>:</label>
 				<input type="hidden" name="parent.id" value="${(material.parent.id)!}"/>
 				<input type="text" class="required" name="parent.name" value="${(material.parent.name)!}" readonly/>
-				<a class="btnLook" href="v_category_tree.do?parentId=1" lookupGroup="parent"><@s.m "category.1.parent"/></a>		
+				<a class="btnLook" width="250" height="350" href="v_category_tree.do?parentId=1" lookupGroup="parent"><@s.m "category.1.parent"/></a>		
 			</p>
 			<p>
 				<label><@s.m "company"/>:</label>
@@ -152,7 +153,13 @@
 		<div class="formBar">
 			<ul>
 				<@berp_perm url="/v_material_add.do"><li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li></@berp_perm>
-				<li><div class="button"><div class="buttonContent"><a href="v_material.do?type=0&useSession=1" target="navTab" rel="main"><button type="button">取消</button></a></div></div></li>
+				<li><div class="button"><div class="buttonContent">
+					<#if type?? && type == 1>
+					<button type="button" class="close">取消</button>
+					<#else>
+					<a href="v_material.do?type=0&useSession=1" target="navTab" rel="main"><button type="button">取消</button></a>
+					</#if>
+				</div></div></li>
 			</ul>
 		</div>
 	</form>

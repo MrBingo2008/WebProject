@@ -85,7 +85,7 @@ public final class DwzJsonUtils {
 			object.put("message", text);
 			
 			object.put("navTabId", "");
-			object.put("rel","");
+			object.put("rel","main");
 			
 			object.put("callbackType", "forward");
 			object.put("forwardUrl", url);

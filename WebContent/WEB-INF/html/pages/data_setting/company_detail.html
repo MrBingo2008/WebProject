@@ -8,7 +8,7 @@ $(function(){
 </script>
 
 <div class="pageContent">
-	<form method="post" action="o_company_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+	<form method="post" action="o_company_save.do" class="pageForm required-validate" onsubmit="return validateCallback(this, <#if type?? && type gt 0>dialogAjaxDone<#else>navTabAjaxDone</#if>);">
 		<div class="pageFormContent" layoutH="56">
 		<input type="hidden" name = "type" value="${type!}" />
 			<p>
@@ -23,7 +23,7 @@ $(function(){
 				<label><@s.m "category.2.parent"/>:</label>
 				<input type="hidden" name="parent.id" value="${(company.parent.id)!}"/>
 				<input type="text" class="required" name="parent.name" value="${(company.parent.name)!}" readonly/>
-				<a class="btnLook" width="200" height="300" href="v_category_tree.do?parentId=2" lookupGroup="parent" rel="company_category_dialog"><@s.m "category.2.parent"/></a>		
+				<a class="btnLook" width="250" height="350" href="v_category_tree.do?parentId=2" lookupGroup="parent" rel="company_category_dialog"><@s.m "category.2.parent"/></a>		
 			</p>
 			<p>
 				<label><@s.m "company.tel"/>:</label>

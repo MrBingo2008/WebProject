@@ -76,7 +76,7 @@ $("#saveButton").click(function(){
 				<label><@s.m "${cirType}.company"/>:</label>
 				<input type="hidden" name="company.id" value="${(cir.company.id)!}"/>
 				<input type="text" name="company.name" value="${(cir.company.name)!}" lookupGroup="company" class="required" readonly/>
-				<a class="btnLook" href="v_company.do?type=1" lookupGroup="company"><@s.m "company"/></a>	
+				<a class="btnLook" href="v_company.do?type=1" rel="company_select_dialog" lookupGroup="company"><@s.m "company"/></a>	
 			</p>
 			
 			<p>
