@@ -89,6 +89,7 @@ public class MaterialAct {
 		
 		Pagination pagination = materialDao.getPage(parentId, searchName, pageNum, numPerPage);
 		model.addAttribute("type", type);
+		
 		model.addAttribute("parentId", parentId);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("pagination", pagination);
@@ -103,15 +104,16 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/v_material_add.do")
-	public String materialAdd(HttpServletRequest request, ModelMap model) {
+	public String materialAdd(Integer type, HttpServletRequest request, ModelMap model) {
 		Material m = new Material();
 		model.addAttribute("material", m);
+		model.addAttribute("type", type);
 		return "pages/data_setting/material_detail";
 	}
 	
 	@RequestMapping("/o_material_save.do")
 	public void materialSave(Material material, Integer type, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		if(DateUtils.getYear()!=2019){
+		if(DateUtils.getYear()!=2018){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
 		}

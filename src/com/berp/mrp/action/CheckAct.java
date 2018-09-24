@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.berp.framework.util.DateUtils;
 import com.berp.framework.web.DwzJsonUtils;
 import com.berp.framework.web.ResponseUtils;
 import com.berp.mrp.entity.Cir;
@@ -29,8 +30,8 @@ public class CheckAct extends CirAct {
 	
 	@RequestMapping("/o_checkIn_save.do")
 	public void checkInSave(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		Date date = new Date();
-		if(date.getYear()!=2018){
+		
+		if(DateUtils.getYear()!=2018){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
 		}

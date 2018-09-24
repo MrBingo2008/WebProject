@@ -193,6 +193,9 @@
 				
 				var suggestFields=$input.attr('suggestFields').split(",");
 				
+				//stone： 原来使用_lookup，现在改为局部变量，同时在_show之外
+				var lookup = null;
+				
 				function _show(event){
 					var offset = $input.offset();
 					var iTop = offset.top+this.offsetHeight;
@@ -204,14 +207,14 @@
 						top:iTop+'px'
 					}).show();
 					
-					//stone
-					var lookup = {
+					//stone: lookup
+					lookup = {
 						currentGroup: $input.attr("lookupGroup") || "",
 						suffix: $input.attr("suffix") || "",
 						$target: $input,
 						pk: $input.attr("lookupPk") || "id"
 					};
-
+					
 					var url = unescape($input.attr("suggestUrl")).replaceTmById($(event.target).parents(".unitBox:first"));
 					if (!url.isFinishedTm()) {
 						alertMsg.error($input.attr("warn") || DWZ.msg("alertSelectMsg"));
@@ -276,7 +279,7 @@
 				function _select($item){
 					var jsonStr = "{"+ $item.attr('lookupAttrs') +"}";
 					
-					$.bringBackSuggest(DWZ.jsonEval(jsonStr));
+					$.bringBackSuggest(DWZ.jsonEval(jsonStr), lookup);
 				}
 				function _close(){
 					$(op.suggest$).html('').hide();

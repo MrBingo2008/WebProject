@@ -33,7 +33,8 @@ $(function(){
 <div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<@berp_perm url="/o_material"><li><a class="add" href="v_material_add.do"<#if type gt 0>target="dialog" mask="true" rel="material_add_dialog"<#else>target="navTab" rel="main"</#if>><span><@s.m "material.add"/></span></a></li></@berp_perm>
+		<!-- 因为addEnable很多地方都需要标明，所以用addDisable，而disable又不好判断非，所以只能判断是 -->
+			<@berp_perm url="/o_material"><#if type??><li><a class="add" href="v_material_add.do?type=${type!}"<#if type gt 0>target="dialog" mask="true" width="980" height="600" rel="material_add_dialog"<#else>target="navTab" rel="main"</#if>><span><@s.m "material.add"/></span></a></li></#if></@berp_perm>
 		</ul>
 	</div>
 	<table class="table" width="99%" layoutH="119" rel="jbsxBox">
@@ -89,6 +90,6 @@ $(function(){
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}条，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" rel="jbsxBox" targetType="<#if type == 1 || type ==2>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" rel="jbsxBox" targetType="<#if type gt 0>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>

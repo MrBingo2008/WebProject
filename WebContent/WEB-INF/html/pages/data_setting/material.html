@@ -10,6 +10,7 @@ function getTree(data){
     var selectClass = "";
     if(data.id=='${parentId!}')
     	selectClass = "class='selected'";
+    //这里不需要useSession吗
     tree += "<li " +selectClass+ "><a href='v_material_list.do?type=${type}&parentId="+data.id+"' target='ajax' rel='jbsxBox'>"+data.name+"</a>";   
     if(data.hasOwnProperty("children")){
     	tree += "<ul>";
