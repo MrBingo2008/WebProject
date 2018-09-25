@@ -160,10 +160,8 @@
 	};
 	
 	$.fn.jTableTr = function(nowrapTD){
-		//stone: 改成异步后，原来保留了这个，而且忘记加上var，那么这个$trs跟jTable里的是同一个吗？应该是（prototype的变量共享），因为点击新加载tr后，原来的click失效
-		//$trs = $(this);
-		//所以这里要重新加载
-		$trs = $(this).parent().find('tr');
+		//stone: 改成异步后，保留了这个，而且一开始没有加上var，不加var应该被提升为全局变量了，因为加载新的trs后，原来的click失效
+		var $allTrs = $(this).parent().find('tr');
 		return this.hoverClass().each(function(nowrapTD){
 			var $tr = $(this);
 			var $ftds = $(">td", this);
@@ -174,7 +172,7 @@
 				//if (i < aStyles.length) $ftd.addClass(aStyles[i][1]);
 			}		
 			$tr.click(function(){
-				$trs.filter(".selected").removeClass("selected");
+				$allTrs.filter(".selected").removeClass("selected");
 				//stone: 去掉$trs，重新搜索，效率肯定低了，所以在一开始那里（166行）重新加载
 				//$(this).parent().find("tr.selected").removeClass("selected");
 				$tr.addClass("selected");

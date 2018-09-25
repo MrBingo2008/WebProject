@@ -329,7 +329,7 @@ function morePage(options){
 					if(response == ""){
 						$("#morePageButton").css("display", "none");
 					}else{
-						$(response).insertBefore($box.find("tr:last")).jTableTr("true");
+						$(response).insertBefore($box.find("tr:last")).parent().find(">tr").jTableTr("true");
 						$("#displayNum", $box).html($("tr", $box).length-1);
 					}
 					if ($.isFunction(op.callback)) op.callback(response);

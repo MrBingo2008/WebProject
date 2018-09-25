@@ -43,7 +43,7 @@
 				<tr target="sid_obj" rel="1">
 				    <td>${record.id}</td>
 					<td>${record.material.allSerial!}</td>
-					<td>${record.material.info!}</td>
+					<td>${record.material.nameSpec!}</td>
 					<#if direction != 1>
 						<td>${(record.surface.name)!}</td>
 					</#if>
@@ -92,11 +92,11 @@ $(function(){
 		$("#recordContain").jBarH({minW:150, maxW:700});
 	}
 });
-
+/*
 function test(){
 	openBatchDetail();
 	setTimeout(function() {
 		$(".sidebarHeader").css("padding", "0px");
 		$("#sidebarContentH").css("padding", "0px");}, 20);
-}
+}*/
 </script>

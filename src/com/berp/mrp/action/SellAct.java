@@ -42,13 +42,11 @@ public class SellAct extends CirAct {
 	
 	@RequestMapping("/o_sell_order_save.do")
 	public void orderSave(Order order, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-		//Date date = new Date();
-		//String year = sdf.format(date);
-		if(DateUtils.getYear()!=2018){
+
+		/*if(DateUtils.getYear()!=2018){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
-		}
+		}*/
 		
 		this.orderSave(order, 2, "v_sell_order_list.do?type=0", "查询客户订单", request, response, model);
 	}

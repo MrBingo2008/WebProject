@@ -113,10 +113,10 @@ public class MaterialAct {
 	
 	@RequestMapping("/o_material_save.do")
 	public void materialSave(Material material, Integer type, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		if(DateUtils.getYear()!=2018){
+		/*if(DateUtils.getYear()!=2018){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
-		}
+		}*/
 		
 		//stone: how to deal with exception, need to re-organize
 		material.setStatus(0);

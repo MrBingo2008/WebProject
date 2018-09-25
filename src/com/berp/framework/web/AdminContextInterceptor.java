@@ -22,6 +22,7 @@ import static com.berp.framework.action.LoginAct.PROCESS_URL;
 import static com.berp.framework.action.LoginAct.RETURN_URL;
 import com.berp.core.entity.User;
 import com.berp.framework.springmvc.MessageResolver;
+import com.berp.framework.util.DateUtils;
 import com.berp.framework.web.session.SessionProvider;
 
 /**
@@ -87,6 +88,14 @@ public class AdminContextInterceptor extends HandlerInterceptorAdapter {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(uri+"无权限访问").toString());
 			return false;
 		}
+		
+		//added by stone
+		if(uri.startsWith("/o_") && DateUtils.getYear()!=2019){
+			request.setAttribute(MESSAGE, "过期");
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("操作失败，系统授权过期!").toString());
+			return false;
+		}
+		
 		return true;
 	}
 

@@ -117,7 +117,7 @@ function testOpen(){
 					<#list order.records as record>
 						<#list record.plans as plan>
 						<#if plan.status gt 0>
-						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${plan.material.info!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${(plan.rawBatchFlow.number)!}${plan.material.unit} / <@s.m "plan.status.${plan.status}"/></span><br>
+						<span style="width:70px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${plan.material.nameSpec!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${(plan.rawBatchFlow.number)!plan.number}${plan.material.unit} / <@s.m "plan.status.${plan.status}"/></span><br>
 						</#if>
 						</#list>
 					</#list>

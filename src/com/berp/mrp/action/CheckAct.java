@@ -31,10 +31,10 @@ public class CheckAct extends CirAct {
 	@RequestMapping("/o_checkIn_save.do")
 	public void checkInSave(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		
-		if(DateUtils.getYear()!=2018){
+		/*if(DateUtils.getYear()!=2018){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("保存失败，系统授权过期!").toString());
 			return;
-		}
+		}*/
 		this.cirSave(cir, Cir.CirType.checkIn.ordinal(), "v_checkIn_list.do", "查询盘点报溢单", request, response, model);
 	}
 
