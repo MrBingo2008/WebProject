@@ -1,10 +1,12 @@
+<form id="pagerForm" method="post" onsubmit="return dwzSearch(this, 'dialog');" action="v_record_list.do?direction=${direction!}">
+	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
+	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
+	<input type="hidden" name="searchName" value="${searchName!}"/>
+</form>
 <div id="recordContain">
 <div class="unitBox">
-	<form id="pagerForm" method="post" onsubmit="return divSearch(this, 'recordContain');" action="v_record_list.do?direction=${direction!}">
-		<input type="hidden" name="searchName" value="${searchName!}"/>
-	</form>
 	<div class="pageHeader" style="border:1px #B8D0D6 solid">
-		<form onsubmit="return divSearch(this, 'recordContain');" action="v_record_list.do?direction=${direction!}" method="post">
+		<form onsubmit="return dwzSearch(this, 'dialog');" action="v_record_list.do?direction=${direction!}" method="post">
 		<div class="searchBar">
 			<table class="searchContent">
 				<tr>
@@ -19,7 +21,7 @@
 	</div>
 	
 	<div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
-		<table class="table" width="99%" layoutH="66">
+		<table class="table" width="99%" layoutH="106">
 			<thead>
 				<tr>
 					<th width="40">ID</th>
@@ -37,7 +39,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			<#list records as record>
+			<#list pagination.list as record>
 				<tr target="sid_obj" rel="1">
 				    <td>${record.id}</td>
 					<td>${record.material.allSerial!}</td>
@@ -66,6 +68,10 @@
 			</#list>
 			</tbody>
 		</table>
+		<div class="panelBar">
+		<div class="pages"><span>每页显示${pagination.pageSize!}条，共${pagination.totalCount!}条</span></div>
+		<div class="pagination" targetType="dialog" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+	</div>
 	</div>
 </div>
 <div id="sidebarH" style="height:0px; display:none">

@@ -222,9 +222,9 @@ public class MaterialAct {
 	
 	@RequestMapping("/v_record_list.do")
 	//direction表示方向，1为进，2为出 0为生产选择
-	public String recordList(Integer direction, String searchName, HttpServletRequest request, ModelMap model) {
-		List<OrderRecord> records = recordDao.findByCompanyAndMaterial(null, null, searchName, direction==1?1:2, 1, 2, null, null);
-		model.addAttribute("records", records);
+	public String recordList(Integer direction, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+		Pagination pagination = recordDao.getPage(direction==1?1:2,searchName, 1, 2, null, pageNum, numPerPage);
+		model.addAttribute("pagination", pagination);
 		model.addAttribute("direction", direction);
 		model.addAttribute("searchName", searchName);
 		//这个是为了选择窗口的预定数量label
@@ -250,7 +250,7 @@ public class MaterialAct {
 			pagination.setTotalCount(records.size());
 		}
 		else{
-			pagination = recordDao.getPage(2, searchName, 1, 2, null, 20);
+			pagination = recordDao.getPage(2, searchName, 1, 2, null, null, 20);
 		}
 		
 		model.addAttribute("pagination", pagination);
@@ -273,7 +273,7 @@ public class MaterialAct {
 			records = order.getRecords();
 		}
 		else{
-			pagination = recordDao.getPage(2, searchName, 1, 2, maxId, numPerPage);
+			pagination = recordDao.getPage(2, searchName, 1, 2, maxId, null, numPerPage);
 		}
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("type", type);

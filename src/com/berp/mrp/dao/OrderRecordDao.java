@@ -103,8 +103,8 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		return find(f);
 	}
 	
-	//getPage不实现pageNum，只实现morePage
-	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Integer maxId, Integer pageSize) {
+	//maxId和pageNum，只能选一个，而且如果是maxId的话，有可能刚开始时是null，所以最后要判断pageNum, 这个设计不大合理
+	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Integer maxId, Integer pageNo, Integer pageSize) {
 		
 		pageSize = pageSize == null?20:pageSize;
 		
@@ -133,7 +133,10 @@ public class OrderRecordDao extends HibernateBaseDao<OrderRecord, Integer> {
 		}
 		
 		f.append(" order by bean.id desc");
-		return find(f, pageSize);
+		if(pageNo !=null)
+			return find(f, pageNo, pageSize);
+		else
+			return find(f, pageSize);
 	}
 	
 	//这个现在暂时不用
