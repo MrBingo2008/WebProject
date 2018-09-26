@@ -24,7 +24,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<@berp_perm url="/o_process"><li><a class="add" href="v_process_add.do" target="navTab" rel="main" title="<@s.m 'process.add'/>"><span><@s.m "process.add"/></span></a></li></@berp_perm>
+			<@berp_perm url="/o_process"><#if type?? && type == 0 ><li><a class="add" href="v_process_add.do" target="navTab" rel="main" title="<@s.m 'process.add'/>"><span><@s.m "process.add"/></span></a></li></#if></@berp_perm>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="138">

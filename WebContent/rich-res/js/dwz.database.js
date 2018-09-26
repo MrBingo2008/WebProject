@@ -148,6 +148,7 @@
 				});
 			});
 		},
+		//open dialog 选择按钮回调
 		multAddLookup: function(){
 			return this.each(function(){
 				var $this = $(this), selectNum = 0;
@@ -161,17 +162,17 @@
 						$tableAddButton.click();
 						var $curLookup = $tableParent.find("tr:last").find("a:first");
 						
-						_lookup = $.extend(_lookup, {
+						var lookup = {
 							currentGroup: $curLookup.attr("lookupGroup") || "",
 							suffix: $curLookup.attr("suffix") || "",
 							$target: $curLookup,
 							pk: $curLookup.attr("lookupPk") || "id",
 							//added by stone, 为什么要加这个?
 							onItemChange: $curLookup.attr("onItemChange") || null
-						});	
+						};	
 						
 						var tempArg = DWZ.jsonEval($(this).val());
-						$.bringBackSuggest(tempArg);
+						$.bringBackSuggest(tempArg, lookup);
 						selectNum ++;
 					});
 

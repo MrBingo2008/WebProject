@@ -5,7 +5,7 @@
 
 <script type="text/javascript">
 
-function getTree(data){   
+function getMaterialCategoryTree(data){   
     var tree = "";
     var selectClass = "";
     if(data.id=='${parentId!}')
@@ -16,7 +16,7 @@ function getTree(data){
     	tree += "<ul>";
     	var childrenVal = eval(data.children);
     	for(var i=0; i<childrenVal.length; i++){
-    		tree += getTree(childrenVal[i]);
+    		tree += getMaterialCategoryTree(childrenVal[i]);
     	}
     	tree += "</ul>";
     }
@@ -26,7 +26,7 @@ function getTree(data){
 
 $(function(){	
 	var data = ${tree};
-	$("#leftMaterialCategoryTree").html(getTree(data));
+	$("#leftMaterialCategoryTree").html(getMaterialCategoryTree(data));
 	//left_bar那里有用到，但用的是:first
 	setTimeout(function () {
 		//$("#leftMaterialCategoryTree a").first().trigger("click");

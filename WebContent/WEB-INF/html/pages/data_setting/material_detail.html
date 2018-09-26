@@ -58,7 +58,7 @@
 			<p>
 				<label><@s.m "material.process"/>:</label>
 				<input type="hidden" name="process.id" value="${(material.process.id)!}"></input>
-				<input type="text" name="processName" value="${(material.process.name)!}" size="20" class="textInput" readonly>
+				<input type="text" name="process.name" value="${(material.process.name)!}" size="20" class="textInput" readonly>
 				<a class="btnLook" href="v_process_list.do?type=1" lookupgroup="process" lookuppk="id" title="<@s.m 'material.process'/>"></a>
 			</p>
 			<p>
@@ -66,7 +66,6 @@
 				<input name="comment" type="text" value="${material.comment!}" size="20"/>
 			</p>
 			
-			<#if type == 0>
 			<div class="divider"></div>
 			<div class="panel" style="overflow: auto">
 	            <h1><@s.m "material.assemblies"/></h1>
@@ -151,7 +150,6 @@
 			    </div>
 		    </div>
 		    </div>
-		    </#if>  
 		</div>
 		<div class="formBar">
 			<ul>

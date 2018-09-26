@@ -34,7 +34,8 @@ $(function(){
 	<div class="panelBar">
 		<ul class="toolBar">
 		<!-- 因为addEnable很多地方都需要标明，所以用addDisable，而disable又不好判断非，所以只能判断是 -->
-			<@berp_perm url="/o_material"><#if type??><li><a class="add" href="v_material_add.do?type=${type!}"<#if type gt 0>target="dialog" mask="true" width="980" height="600" rel="material_add_dialog"<#else>target="navTab" rel="main"</#if>><span><@s.m "material.add"/></span></a></li></#if></@berp_perm>
+		<!-- 	<@berp_perm url="/o_material"><#if type??><li><a class="add" href="v_material_add.do?type=${type!}"<#if type gt 0>target="dialog" mask="true" width="980" height="600" rel="material_add_dialog"<#else>target="navTab" rel="main"</#if>><span><@s.m "material.add"/></span></a></li></#if></@berp_perm>  -->
+		<@berp_perm url="/o_material"><#if type == 0><li><a class="add" href="v_material_add.do?type=${type!}" target="navTab" rel="main"><span><@s.m "material.add"/></span></a></li></#if></@berp_perm>
 		</ul>
 	</div>
 	<table class="table" width="99%" layoutH="119" rel="jbsxBox">

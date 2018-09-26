@@ -54,3 +54,6 @@ material的dim改为comment，增加num_per_box
 material表，新建process_id，指向process id
 process表的category_id改为允许空
 删除已有的process
+
+2018-9-26：
+选择客户时，如果不存在可直接新建

@@ -90,8 +90,8 @@ public class AdminContextInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		//added by stone
-		if(uri.startsWith("/o_") && DateUtils.getYear()!=2019){
-			request.setAttribute(MESSAGE, "过期");
+		if(uri.startsWith("/o_") && DateUtils.getYear()!=2018){
+			request.setAttribute(MESSAGE, "授权过期");
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("操作失败，系统授权过期!").toString());
 			return false;
 		}
