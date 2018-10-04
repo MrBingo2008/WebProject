@@ -1,11 +1,11 @@
-<form id="pagerForm" method="post" action="v_process_list.do">
+<form id="pagerForm" method="post" action="v_process_list.do?type=${type!}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 	<input type="hidden" name="searchName" value="${searchName!}"/>
 </form>
 
 <div class="pageHeader">
-	<form rel="pagerForm" onsubmit="<#if type?? && type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_process_list.do?type=${type}" method="post">
+	<form rel="pagerForm" onsubmit="return <#if type?? && type gt 0>dwzSearch(this, 'dialog');<#else>navTabSearch(this);</#if>" action="v_process_list.do?type=${type}" method="post">
 		<div class="searchBar">
 		<ul class="searchContent">
 			<li>
@@ -16,6 +16,11 @@
 		<div class="subBar">
 			<ul>
 				<li><div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div></li>
+				<#if type?? && type gt 0>
+					<li><div class="buttonContent">
+					<a href="javascript:$.bringBack({serial:'', name:'', id:''})"><button type="button"><@s.m "global.delete"/></button></a>
+					</div></li>
+				</#if>
 			</ul>
 		</div>
 	</div>

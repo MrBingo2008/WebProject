@@ -217,7 +217,7 @@ public class MaterialAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_material.do?type=0", "物料").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_material.do?type=0&useSession=1", "物料").toString());
 	}
 	
 	@RequestMapping("/v_record_list.do")

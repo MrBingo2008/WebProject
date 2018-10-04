@@ -41,6 +41,11 @@ public class MaterialDao extends HibernateBaseDao<Material, Integer> {
 		updater.exclude("leftNumber");
 		updater.exclude("notPurchaseInNumber");
 		updater.exclude("notSellOutNumber");
+		
+		//stone: 因为有可能清空
+		updater.include("process");
+		updater.include("surface");
+		
 		bean = updateByUpdater(updater);
 		
 		String hql = "delete from ProductMaterial bean where bean.product.id is null";

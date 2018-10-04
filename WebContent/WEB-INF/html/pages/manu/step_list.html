@@ -16,6 +16,11 @@
 		<div class="subBar">
 			<ul>
 				<li><div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div></li>
+				<#if type?? && type gt 0>
+					<li><div class="buttonContent">
+					<a href="javascript:$.bringBack({serial:'', name:'', id:''})"><button type="button"><@s.m "global.delete"/></button></a>
+					</div></li>
+				</#if>
 			</ul>
 		</div>
 	</div>
@@ -51,6 +56,7 @@
 					<@berp_perm url="/o_step"><a title="<@s.m 'step.edit'/>" target="navTab" rel="main" href="v_step_edit.do?stepId=${step.id}"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" rel="main" href="o_step_delete.do?stepId=${step.id}"><@s.m "global.delete"/></a></@berp_perm>
 				<#else>
+					<!-- bring dType和dSurface是返回 外加工/本厂生产 和 是/否 的类型，用于生产任务的流程编辑-->
 					<a class="btnSelect" href="javascript:$.bringBack({serial:'${step.serial}', name:'${step.name!}', dType:'<@s.m 'step.type.${step.type}'/>', id:'${step.id}', dSurface:'<#if step.surface>是<#else>否</#if>'})">选择</a>
 				</#if>
 				</td>

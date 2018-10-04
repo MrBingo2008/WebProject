@@ -91,7 +91,7 @@ public class ProcessDao extends HibernateBaseDao<Process, Integer> {
 		if(name != null && name != "")
 		{
 			f.append(" and (bean.name like :name or bean.serial like :name) ");
-			f.setParam("name", name);
+			f.setParam("name", "%" + name + "%");
 		}
 		f.append(" order by bean.id desc");
 		return find(f, pageNo, pageSize);
