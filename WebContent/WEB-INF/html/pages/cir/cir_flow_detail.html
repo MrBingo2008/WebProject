@@ -146,6 +146,9 @@ function gridReport_start(report, data, type) {
 	            <h1><@s.m "${cirType}.items"/></h1>
 	            <div>
 				<table class="list nowrap itemDetail" addButton="<@s.m '${cirType}.addItem'/>"
+				 <#if cirType == 'purchaseIn'>
+				 addButtonDisplay="false" multiAddButton="<@s.m '${cirType}.addItem'/>(多选)" multiAddUrl="v_record_multi_list.do?type=2"
+				 </#if>
 				 buttonDisabled=<#if cir.status == 0 && cirType != 'view'>"false"<#else>"true"</#if> width="100%">
 					<thead>
 						<tr>
