@@ -31,11 +31,13 @@ import com.berp.framework.web.ResponseUtils;
 public class CompanyAct {
 	
 	@RequestMapping("/v_company.do")
-	public String company(Integer type, HttpServletRequest request, ModelMap model) {
+	//parentId用于默认打开某个类型的单位
+	public String company(Integer type, Integer parentId, HttpServletRequest request, ModelMap model) {
 		Category category = categoryDao.findById(2);
 		JSONObject object = categoryDao.getCategoryTree(category);
 		model.addAttribute("tree", object.toString());
 		model.addAttribute("type", type);
+		model.addAttribute("parentId", parentId);
 		
 		return "pages/data_setting/company";
 	}

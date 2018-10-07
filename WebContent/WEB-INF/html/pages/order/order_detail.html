@@ -77,7 +77,7 @@ function test(){
 				<label><@s.m "${orderType}.order.company"/>:</label>
 				<input type="hidden" name="company.id" value="${(order.company.id)!}"/>
 				<input type="text" name="company.name" value="${(order.company.name)!}" lookupGroup="company" class="required" size="20" readonly/>
-				<a class="btnLook" href="v_company.do?type=1" lookupGroup="company" rel="company_select_dialog"><@s.m "company"/></a>		
+				<a class="btnLook" href="v_company.do?type=1&parentId=<#if '${orderType}'=='sell'>12<#else>13</#if>" lookupGroup="company" rel="company_select_dialog"><@s.m "company"/></a>		
 			</p>
 			
 			<p>

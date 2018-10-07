@@ -25,7 +25,14 @@ $(function(){
 	$("#leftCompanyCategoryTree").html(getTree(data));
 	//因为这个函数先于<a target= rel=>的初始化函数运行，所以这是直接点击会在另外一个页面打开，无法实现在target中打开
 	//所以加个setTimeout，这是模仿index.html的
-	setTimeout(function () {$("#leftCompanyCategoryTree a").first().trigger("click");}, 20);
+	//setTimeout(function () {$("#leftCompanyCategoryTree a").first().trigger("click");}, 20);
+	setTimeout(function () {
+		//$("#leftMaterialCategoryTree a").first().trigger("click");
+		$("#jbsxBox").loadUrl("v_company_list.do?type=${type!}&parentId=${parentId!}", {}, function(){
+			//异步获取后，不会自动计算layoutH的高度
+			$("#jbsxBox").find("[layoutH]").layoutH();
+		});
+		}, 200);
 });
 </script>
 
