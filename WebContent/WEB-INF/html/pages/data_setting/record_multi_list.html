@@ -37,7 +37,7 @@
 				<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 				<th width="100" orderField="number" class="asc"><@s.m "product.serial"/></th>
 				<th width="100"><@s.m "product.name"/></th>
-				<#if type != 1>
+				<#if type !=2>
 					<th width="60"><@s.m "sell.order.surface"/></th>
 				</#if>
 				<th width="80"><@s.m "${orderType}.order.company"/></th>
@@ -64,7 +64,7 @@
 			    </td>
 				<td>${record.material.allSerial!}</td>
 				<td>${record.material.nameSpec!}</td>
-				<#if type != 1>
+				<#if type != 2>
 					<td>${(record.surface.name)!}</td>
 				</#if>
 				<td>${record.ord.company.name!}</td>

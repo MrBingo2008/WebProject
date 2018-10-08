@@ -232,8 +232,9 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/v_record_multi_list.do")
-	//目前这个全都是sell
-	//type:0，表示加入购物车模式，1，选择模式
+	//type=0, 用于+生产，type=1用于plan_detail和order_detail
+	//type=2用于purchaseIn
+	//type=0/1都是sell order,  type=2为purchaseIn
 	public String recordMultiList(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
 		List<OrderRecord> records = null;
 		Pagination pagination = null;
@@ -247,16 +248,24 @@ public class MaterialAct {
 			//stone：为了兼容type = 1的html页面
 			pagination.setList(records);
 			pagination.setTotalCount(records.size());
+			
+			model.addAttribute("orderType", "sell");
+		}
+		else if(type ==1){
+			pagination = recordDao.getPage(2, searchName, 1, 2, null, null, 20);
+			model.addAttribute("orderType", "sell");
 		}
 		else{
-			pagination = recordDao.getPage(2, searchName, 1, 2, null, null, 20);
+			pagination = recordDao.getPage(1, searchName, 1, 2, null, null, 20);
+			
+			model.addAttribute("orderType", "purchase");
 		}
 		
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("type", type);
 		model.addAttribute("searchName", searchName);
 		//这个是为了选择窗口的预定数量label
-		model.addAttribute("orderType", "sell");
+		
 		return "pages/data_setting/record_multi_list";
 	}
 	
