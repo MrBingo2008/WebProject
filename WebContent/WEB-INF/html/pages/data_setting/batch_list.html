@@ -1,7 +1,7 @@
 		<table class="table" width="99%">
 			<thead>
 				<tr>
-					<th width="20">序号</th>
+					<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 					<th width="60" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
 					<th width="40"><@s.m "material.nameSpec"/></th>
 					<th width="60"><@s.m "batch.serial"/></th>
@@ -17,7 +17,10 @@
 			<tbody>
 			<#list flows as flow> 
 				<tr target="sid_obj" rel="1">
-				    <td>${flow.id}</td>
+				    <td><input type="checkbox" name="checkboxIds" 
+					value="{'parent.id':'${flow.id}', 'material.serial':'${flow.material.allSerial!}', 'material.name':'${flow.material.name!}', 'material.nameSpec':'${flow.material.nameSpec!}', 'material.id':'${flow.material.id!}', ':company.id':'${(flow.material.company.id)!}' , ':company.name':'${(flow.material.company.name)!}',
+						'record.id':'${recordId!}', 'record.orderSerial':'${orderSerial!}', 'defaultSurfaceId':'${(flow.defaultSurface.id)!}', 'surface.id':'${(flow.surface.id)!}', 'serial':'${flow.serial!}', 'material.unit':'${flow.material.unit!}', number:'${flow.leftNumber!}' , numPerBox:'${flow.numPerBox!}', boxNum:'${flow.boxNum!}'}"/></td>
+				
 					<td>${flow.material.allSerial}</td>
 					<td>${flow.material.nameSpec!}</td>
 					<td>${flow.serial!}</td>
@@ -36,5 +39,6 @@
 					</td>
 				</tr>
 			</#list>
+			<tr><td><button type="button" multAddLookup="checkboxIds" warn="请选择工序"><@s.m "global.select"/></button></td></tr>
 			</tbody>
 		</table>

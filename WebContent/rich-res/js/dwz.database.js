@@ -107,6 +107,9 @@
 				});
 			});
 		},
+		//stone: 一共有三种选择：1单选， 2多选（结果放在一个框里），3多选（结果放在多行里, stable）
+		//这三种的打开窗口按钮（放大镜）都是一样的，都有lookup属性，通过上面的函数绑定事件，具体操作是将_lookup赋予打开的dialog
+		//回调的话，type=1是直接.bringBack，type=2是通过“选中”按钮multLookup属性绑定事件，type=3则是multAddLookup事件
 		//处理回调
 		multLookup: function(){
 			return this.each(function(){

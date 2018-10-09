@@ -236,7 +236,10 @@ function calFactor(numInput){
 				<h1><@s.m "plan.material"/><span style="margin:2px; color:red;"><#if plan.status gt 1>（已审核）<#else>（<@s.m "plan.status.${plan.status!}"/>）</#if></span></h1>
 				<div>
 				<!-- 因为是js生成button的，所以不大好在页面修改status，只能靠不同的url，在后台修改status -->
-				<table class="list nowrap itemDetail" addButton='<@s.m "plan.material.new"/>' buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if> 
+				<table class="list nowrap itemDetail" addButton='<@s.m "plan.material.new"/>' 
+				  buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if>
+				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=2" 
+				  
 				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_material_update.do' 
 				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_material_approval.do'
 				  cancelApplyButton='<@s.m "global.cancelApproval"/>' cancelApplyAction='o_plan_material_cancel_approval.do' 
