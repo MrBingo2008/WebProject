@@ -6,7 +6,7 @@
 		<input type="hidden" name="parentId" value="${parentId!}" />
 		<input type="hidden" name = "type" value="${type!}" />
 		
-		<div class="pageFormContent" layoutH="56">
+		<div id="formContent" class="pageFormContent" layoutH="56">
 			<p>
 				<label>ID:</label>
 				<input name="id" type="text" size="20" value="${material.id!}" readonly="readonly"/>
@@ -176,6 +176,10 @@ $(function(){
 	if('${openMode!}' == 'edit'){
 		var actionUrl = "o_material_update.do";
 		$("form").attr("action", actionUrl);
+	}else if('${openMode!}' == 'view'){
+		$("#formContent input").attr("disabled", "disabled");
+		$("#formContent a").css("display", "none");
+		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
 	}
 	
 	var wuFile;

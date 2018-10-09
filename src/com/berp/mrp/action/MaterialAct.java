@@ -74,6 +74,7 @@ public class MaterialAct {
 		return "pages/data_setting/material";
 	}
 	
+	//parentId参数为什么要单列出来，在session里也是会记忆这个parentId的，不过有树点击的操作，所以放在这里方便
 	@RequestMapping("/v_material_list.do")
 	public String materialList(Integer type, Integer parentId, Integer useSession, String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		
@@ -155,6 +156,17 @@ public class MaterialAct {
 		
 	}
 
+	@RequestMapping("/v_material_view.do")
+	public String materialView(Integer materialId, Integer parentId, HttpServletRequest request, ModelMap model) {
+		Material m = materialDao.findById(materialId);
+		model.addAttribute("material", m);
+		model.addAttribute("openMode", "view");
+		
+		model.addAttribute("parentId", parentId);
+		
+		return "pages/data_setting/material_detail";
+	}
+	
 	@RequestMapping("/v_material_edit.do")
 	public String materialEdit(Integer materialId, Integer parentId, HttpServletRequest request, ModelMap model) {
 		Material m = materialDao.findById(materialId);

@@ -72,6 +72,7 @@ $(function(){
 				<!-- type换成0为管理的list， 大于0为选择模式 -->
 				<#if type == 0>			
 					<td>
+					<@berp_perm url="/v_material"><a title="<@s.m 'material.view'/>" target="navTab" href="v_material_view.do?materialId=${m.id}" rel="main"><@s.m "global.view"/></a></@berp_perm>
 					<@berp_perm url="/o_material"><a title="<@s.m 'material.edit'/>" target="navTab" href="v_material_edit.do?materialId=${m.id}" rel="main"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_material_delete.do?materialId=${m.id}"><@s.m "global.delete"/></a></@berp_perm>
 					</td>
