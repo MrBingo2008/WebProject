@@ -51,6 +51,10 @@ public class MaterialAct {
 	@RequestMapping("/v_material.do")
 	//不用parentId，但是v_material.do也要用到，有两种情况会调用到v_material.do，一个是普通查询（包括navTab和dialog），一个是修改查看返回
 	//如果是普通查询的话，parentId在list那里登记到session，session主要是用于修改查看返回，然后从session里取出来
+	//type=0: navTab list
+	//type=1: dialog single lookup
+	//type=2: dialog batch list multi select
+	//type=3: navTab batch detai
 	public String material(Integer type, Integer useSession, HttpServletRequest request, ModelMap model) {
 		Category category = categoryDao.findById(1);
 		JSONObject object = categoryDao.getCategoryTree(category);
