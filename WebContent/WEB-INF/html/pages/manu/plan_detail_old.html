@@ -30,6 +30,48 @@ $(function(){
 			$("#basicInfo a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
 			actionUrl="o_plan_material_update.do";
+			break;
+		//下料完成，未生产完成
+		case '2':
+			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
+			$("#planMaterial a").css("display", "none");
+			$("#planMaterial input").attr("readonly", "readonly");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
+			actionUrl="o_plan_step_update.do";
+			break;
+		//委外？
+		case '3':
+			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
+			$("#planMaterial a").css("display", "none");
+			$("#planMaterial input").attr("readonly", "readonly");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
+			actionUrl="o_plan_step_update.do";
+			break;
+		//生产完成，未入库完成
+		case '4':
+			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
+			$("#planMaterial a").css("display", "none");
+			$("#planMaterial input").attr("readonly", "readonly");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
+			actionUrl="o_plan_finish_package.do";
+			break;
+		//入库完成
+		case '5':
+			$("#basicInfo input").attr("readonly", "readonly");
+			$("#basicInfo a").css("display", "none");
+			
+			$("#planMaterial a").css("display", "none");
+			$("#planMaterial input").attr("readonly", "readonly");
+			$("#planIn a").css("display", "none");
+			$("#planIn input").attr("readonly", "readonly");
+			$("#saveButton, #approvalButton, #cancelApprovalButton").attr("disabled","disabled");
+			actionUrl="o_plan_finish_package.do";
 			break;	
 		default:
 			break;
@@ -191,14 +233,18 @@ function calFactor(numInput){
 			<div class="divider"></div> 
             
             <div id="planMaterial" class="panel" style="overflow: auto;">
-				<h1><@s.m "plan.material"/></h1>
+				<h1><@s.m "plan.material"/><span style="margin:2px; color:red;"><#if plan.status gt 1>（已审核）<#else>（<@s.m "plan.status.${plan.status!}"/>）</#if></span></h1>
 				<div>
 				<!-- 因为是js生成button的，所以不大好在页面修改status，只能靠不同的url，在后台修改status -->
 				<table class="list nowrap itemDetail" addButton='<@s.m "plan.material.new"/>' 
 				  buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if>
 				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=2" 
 				  
-				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_material_update.do' width="100%">
+				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_material_update.do' 
+				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_material_approval.do'
+				  cancelApplyButton='<@s.m "global.cancelApproval"/>' cancelApplyAction='o_plan_material_cancel_approval.do' 
+				  cancelButtonDisabled=<#if plan.status gt 1 && plan.status lt 4 && openMode != 'view'>"false"<#else>"true"</#if>
+				   width="100%">
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
@@ -246,14 +292,12 @@ function calFactor(numInput){
             
             <!-- 工艺流程 -->
             <div id="process" class="panel" style="overflow: auto;">
-	            <h1><@s.m "process"/></h1>
+	            <h1><@s.m "process"/><span style="margin:2px; color:red;"><#if plan.status gt 3>（已审核）<#elseif plan.status gt 1>（<@s.m "plan.status.${plan.status!}"/>）</#if></span></h1>
 	            <div>
 	            <!-- 因为table里的button无法在该文件头的js进行判断，所以在这里判断 -->
-	            <!-- 有两种方式控制是否显示，一是加变量，一个是直接判断 -->
-				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" addButtonDisplay="false" 
-				<#if plan.status == 0>multiAddButton="<@s.m 'plan.step.new'/>(多选)" multiAddUrl="v_step_multi_list.do"
-				<#elseif plan.status == 1>saveButton="<@s.m 'global.save'/>" saveAction=".do"</#if>
-				buttonDisabled=<#if openMode == 'view'>"true"<#else>"false"</#if> width="100%">
+				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" addButtonDisplay="false" multiAddButton="<@s.m 'plan.step.new'/>(多选)" multiAddUrl="v_step_multi_list.do"
+				buttonDisabled=<#if plan.status gt 0 || openMode == 'view'>"true"<#else>"false"</#if>
+				 width="100%">
 					<thead>
 						<tr>
 						<!-- process steps那里没有name=priority这个  name="steps[#index#].priority"-->
@@ -268,8 +312,8 @@ function calFactor(numInput){
 							<!-- 审核后出现 status>0 -->
 							<#if plan.status gt 0>
 							<th type="date" format="yyyy-MM-dd HH:mm:ss"
-								name="steps[#index#].finishTime" size="12"><@s.m "plan.accNumber"/></th>
-							<th type="text" name="steps[#index#].number" size="12" fieldClass="number"><@s.m "plan.accNumberDetail"/></th>
+								name="steps[#index#].finishTime" size="12"><@s.m "step.endTime"/></th>
+							<th type="text" name="steps[#index#].number" size="12" fieldClass="number"><@s.m "material.manuNumber"/></th>
 							<th type="label" name="steps[#index#].status" display='<@s.m "plan.step.status.0"/>' value="0" size="12"><@s.m "plan.step.status"/></th>
 							</#if>							
 							<th type="del" size="12">操作</th>
@@ -277,7 +321,7 @@ function calFactor(numInput){
 					</thead>
 					<tbody id="processItems">
 						<#if plan.steps??>
-						<#assign count=0 />
+						<#assign count=0 /><#assign hasButton=0 />
 						<#list plan.steps as step>
 						<tr class="unitBox">
 						    <td>
@@ -304,13 +348,45 @@ function calFactor(numInput){
 							</#if>
 							
 							<!-- 这是表格的右半部分，用料完成后才出现  status >= 2-->
-							<#if plan.status gt 0>
+							<#if plan.status gt 1 && step.status == 1 && hasButton == 0>
 								<td><input type="text" name="steps[${count}].finishTime" value="${(step.finishTime?string('yyyy-MM-dd'))!}" class="textInput" size="12" readonly></td>
 								<td><input type="text" name="steps[${count}].number" value="${step.number!}" size="12" class="positiveNumber textInput required" readonly></td>
 								<td><span><@s.m "plan.step.status.${step.status}"/></span></td>
 								<td>
-									
+									<!-- 如果是plan.status大于等于5（入库完成）就不需要了 -->
+									<#if plan.status lt 5 && step.isLastApply && step.step.type == 0>
+									<div class="button"><div class="buttonContent"><a href="o_plan_step_cancel_approval.do?stepId=${step.id}&${listPara!}" target="ajaxTodo" rel="main" title="<@s.m 'global.confirm.cancelApproval'/>"><button type="button"><@s.m "global.cancelApproval"/></button></a></div></div>
+									</#if>
 								</td>
+							<#elseif plan.status gt 1 && step.status == 0 && hasButton == 0>
+								<#if plan.status == 2>
+								<td>
+									<input type="text" name="steps[${count}].finishTime" value="${(step.finishTime?string('yyyy-MM-dd'))!(nowDate?string('yyyy-MM-dd'))!}" class="date textInput" datefmt="yyyy-MM-dd" size="12">
+									<a class="inputDateButton">选择</a>
+								</td>
+								<td><input type="text" name="steps[${count}].number" value="${step.number!plan.currentNumber!}" size="12" class="positiveNumber textInput required"></td>
+								<td>
+									<input id="stepStatus" type="hidden" name="steps[${count}].status" value="${step.status!'0'}"
+									<span><@s.m "plan.step.status.${step.status}"/></span>
+								</td>
+								<td>
+									<input type="hidden" name="stepNo" value="${count}" />
+									<div class="button"><div class="buttonContent"><button type="submit"><@s.m "global.save"/></button></div></div>
+									<div class="button"><div class="buttonContent"><button id="stepApproval" type="button"><@s.m "global.approval"/></button></div></div>
+								</td>
+								<#elseif plan.status == 3 >
+								<td><@s.m "plan.status.3"/></td>
+								<td>${plan.rawBatchFlow.arriveNumber!}</td>
+								<td><@s.m "plan.step.status.${step.status}"/></td><td></td>
+								</#if>
+								<#assign hasButton = 1/>
+							<#elseif plan.status gt 1>
+								<td></td>
+								<td></td>
+								<td>
+									<span><@s.m "plan.step.status.${step.status}"/></span>
+								</td>
+								<td></td>
 							</#if>
 						</tr>
 						<#assign count=count+1/>
@@ -323,10 +399,14 @@ function calFactor(numInput){
 			
             <!-- 生产入库  如果是add plan，这个也会加载，也会用到plan.material，只不过不显示而已，好像不大合理-->
             <div id="planIn" class="panel" style="overflow: auto;">
-				<h1><@s.m "plan.in"/></h1>
+				<h1><@s.m "plan.in"/><span style="margin:2px; color:red;"><#if plan.status gt 4>（已审核）<#elseif plan.status == 4>（<@s.m "plan.status.4"/>）</#if></span></h1>
 				<div>
-				<table class="list nowrap itemDetail" addButton='<@s.m "plan.in.new"/>' buttonDisabled=<#if openMode != 'view'>"false"<#else>"true"</#if> 
-				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_in_update.do' width="100%">
+				<table class="list nowrap itemDetail" addButton='<@s.m "plan.in.new"/>' buttonDisabled=<#if plan.status == 4 && openMode != 'view'>"false"<#else>"true"</#if> 
+				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_in_update.do' 
+				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_in_approval.do'
+				  cancelApplyButton='<@s.m "global.cancelApproval"/>' cancelApplyAction='o_plan_in_cancel_approval.do' 
+				  cancelButtonDisabled=<#if plan.status == 5 && openMode != 'view'>"false"<#else>"true"</#if>
+				  width="100%">
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
