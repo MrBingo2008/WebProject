@@ -225,6 +225,18 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		return plan;
 	}
 	
+	//update step number
+	public Plan updateStepNumber(Plan bean) throws Exception{
+		
+		Updater<Plan> updater = new Updater<Plan>(bean);
+		updater.setUpdateMode(Updater.UpdateMode.MIN);
+		updater.include("steps");
+		
+		bean = updateByUpdater(updater);
+		
+		return bean;
+	}
+	
 	public Plan updatePlanIn(Plan bean) throws Exception{
 
 		bean.setFlows(new ArrayList<BatchFlow>());

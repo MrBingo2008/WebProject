@@ -492,6 +492,18 @@ public class ManuAct {
 		}
 	}
 
+	//step numbers update
+	@RequestMapping("/o_plan_step_number_update.do")
+	public void stepNumberUpdate(PageListPara listPara, Plan plan, Integer stepNo, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
+		try{
+			planDao.updateStepNumber(plan);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
+			return;
+		}
+		reload(response, "保存成功", plan.getId(), listPara);
+	}
+	
 	//package
 	@RequestMapping("/o_plan_in_update.do")
 	public void planInUpdate(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {		

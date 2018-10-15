@@ -252,7 +252,7 @@ function calFactor(numInput){
 	            <!-- 有两种方式控制是否显示，一是加变量，一个是直接判断 -->
 				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" addButtonDisplay="false" 
 				<#if plan.status == 0>multiAddButton="<@s.m 'plan.step.new'/>(多选)" multiAddUrl="v_step_multi_list.do"
-				<#elseif plan.status == 1>saveButton="<@s.m 'global.save'/>" saveAction=".do"</#if>
+				<#elseif plan.status == 1>saveButton="<@s.m 'global.save'/>" saveAction="o_plan_step_number_update.do"</#if>
 				buttonDisabled=<#if openMode == 'view'>"true"<#else>"false"</#if> width="100%">
 					<thead>
 						<tr>
@@ -300,9 +300,15 @@ function calFactor(numInput){
 								<td>${(step.step.name)!}</td>
 								<td><@s.m "step.type.${step.step.type}"/></td>
 								<td><#if step.step.surface>是<#else>否</#if></td>
-								<td><input type="text" name="steps[${count}].number" value="${(step.number)!}" class="textInput" size="12"></td>
-								<td></td>
-								<td><a href="v_plan_manuNumber_edit.do"><@s.m 'global.edit'/>数量</a></td>
+								<td>
+								</td>
+								<td>
+									<input type="hidden" name="steps[${count}].stepNumbers[0].step.id" value="${(step.id)!}">
+									<input type="text" name="steps[${count}].stepNumbers[0].number" value="${(step.stepNumbers[0].number)!}" class="textInput" size="12">
+									<input type="text" name="steps[${count}].stepNumbers[0].endTime" value="" class="date textInput" datefmt="yyyy-MM-dd" size="12">
+									<a class="inputDateButton">选择</a>
+								</td>
+								<td><a href="v_plan_manuNumber_edit.do">编辑数量</a></td>
 							</#if>
 						</tr>
 						<#assign count=count+1/>
