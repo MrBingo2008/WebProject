@@ -17,5 +17,11 @@
 			<one-to-many class="com.berp.mrp.entity.RawBatchFlow"/>
 		</set>
 		
+		<list name="stepNumbers" inverse="false" cascade="all">
+			<key column="step_id"/>
+			<index column="priority" type="integer"></index>
+			<one-to-many class="com.berp.mrp.entity.PlanStepNumber"/>
+		</list> 
+		
 	</class>
 </hibernate-mapping>

@@ -21,6 +21,7 @@ public class PlanStep {
 	private Double number;
 	
 	private Set<RawBatchFlow> rawFlows;
+	private List<PlanStepNumber> stepNumbers;
 
 	public static enum Status{notFinish, finish};
 	
@@ -139,6 +140,15 @@ public class PlanStep {
 
 	public void setRawFlows(Set<RawBatchFlow> rawFlows) {
 		this.rawFlows = rawFlows;
+	}
+	
+	//plan step numbers
+	public List<PlanStepNumber> getStepNumbers() {
+		return stepNumbers;
+	}
+
+	public void setStepNumbers(List<PlanStepNumber> stepNumbers) {
+		this.stepNumbers = stepNumbers;
 	}
 
 }

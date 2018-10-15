@@ -266,12 +266,11 @@ function calFactor(numInput){
 							<th type="text" name="steps[#index#].step.dSurface" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "step.isSurface"/></th>						
 							
 							<!-- 审核后出现 status>0 -->
-							<#if plan.status gt 0>
-							<th type="date" format="yyyy-MM-dd HH:mm:ss"
-								name="steps[#index#].finishTime" size="12"><@s.m "plan.accNumber"/></th>
-							<th type="text" name="steps[#index#].number" size="12" fieldClass="number"><@s.m "plan.accNumberDetail"/></th>
-							<th type="label" name="steps[#index#].status" display='<@s.m "plan.step.status.0"/>' value="0" size="12"><@s.m "plan.step.status"/></th>
-							</#if>							
+							<#if plan.status gt 0>							
+								<th type="date" format="yyyy-MM-dd HH:mm:ss" name="steps[#index#].finishTime" size="12"><@s.m "plan.accNumber"/></th>
+								<th type="text" name="steps[#index#].number" size="12" fieldClass="number"><@s.m "plan.accNumberDetail"/></th>
+							</#if>
+							
 							<th type="del" size="12">操作</th>
 						</tr>
 					</thead>
@@ -301,16 +300,9 @@ function calFactor(numInput){
 								<td>${(step.step.name)!}</td>
 								<td><@s.m "step.type.${step.step.type}"/></td>
 								<td><#if step.step.surface>是<#else>否</#if></td>
-							</#if>
-							
-							<!-- 这是表格的右半部分，用料完成后才出现  status >= 2-->
-							<#if plan.status gt 0>
-								<td><input type="text" name="steps[${count}].finishTime" value="${(step.finishTime?string('yyyy-MM-dd'))!}" class="textInput" size="12" readonly></td>
-								<td><input type="text" name="steps[${count}].number" value="${step.number!}" size="12" class="positiveNumber textInput required" readonly></td>
-								<td><span><@s.m "plan.step.status.${step.status}"/></span></td>
-								<td>
-									
-								</td>
+								<td><input type="text" name="steps[${count}].number" value="${(step.number)!}" class="textInput" size="12"></td>
+								<td></td>
+								<td><a href="v_plan_manuNumber_edit.do"><@s.m 'global.edit'/>数量</a></td>
 							</#if>
 						</tr>
 						<#assign count=count+1/>
