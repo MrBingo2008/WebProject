@@ -252,7 +252,7 @@ function calFactor(numInput){
 	            <!-- 有两种方式控制是否显示，一是加变量，一个是直接判断 -->
 				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" addButtonDisplay="false" 
 				<#if plan.status == 0>multiAddButton="<@s.m 'plan.step.new'/>(多选)" multiAddUrl="v_step_multi_list.do"
-				<#elseif plan.status == 1>saveButton="<@s.m 'global.save'/>" saveAction="o_plan_step_number_update.do"</#if>
+				<#else>saveButton="<@s.m 'global.save'/>" saveAction="o_plan_step_number_update.do"</#if>
 				buttonDisabled=<#if openMode == 'view'>"true"<#else>"false"</#if> width="100%">
 					<thead>
 						<tr>
@@ -283,10 +283,11 @@ function calFactor(numInput){
 						    	<!-- display=index这个一定要，删除时就是靠这个来重新计数 -->
 						    	<span class="label" display="#index#">${count+1}</span>
 						    	<input type="hidden" name="steps[${count}].id" value="${(step.id)!}"/>
+						    	<input type="hidden" name="steps[${count}].step.id" value="${(step.step.id)!}">
+						    	<input type="hidden" name="steps[${count}].plan.id" value="${(step.plan.id)!}">
 						    </td>
 						    <#if plan.status == 0>
 								<td>
-									<input type="hidden" name="steps[${count}].step.id" value="${step.step.id}">
 									<input type="text" name="steps[${count}].step.name" value="${step.step.name!}" size="12" class="textInput required" readonly>
 									<a class="btnLook" href="v_step_list.do?type=1" lookupgroup="steps[${count}].step" lookuppk="id" title="<@s.m 'step'/>"><@s.m 'step'/></a>
 								</td>
@@ -298,17 +299,47 @@ function calFactor(numInput){
 								<td><a href="javascript:void(0)" class="btnDel ">删除</a></td>
 							<#else>
 								<td>${(step.step.name)!}</td>
-								<td><@s.m "step.type.${step.step.type}"/></td>
+								<td></td>
 								<td><#if step.step.surface>是<#else>否</#if></td>
 								<td>
 								</td>
 								<td>
-									<input type="hidden" name="steps[${count}].stepNumbers[0].step.id" value="${(step.id)!}">
-									<input type="text" name="steps[${count}].stepNumbers[0].number" value="${(step.stepNumbers[0].number)!}" class="textInput" size="12">
-									<input type="text" name="steps[${count}].stepNumbers[0].endTime" value="" class="date textInput" datefmt="yyyy-MM-dd" size="12">
-									<a class="inputDateButton">选择</a>
+									<table class="list nowrap itemDetail" addButton="增加数量">
+									<thead style="display:none">
+										<tr>							
+											<th type="hidden" name="steps[${count}].stepNumbers[#index#].step.id" defaultVal="${(step.id)!}"></th>
+											<th type="text" name="steps[${count}].stepNumbers[#index#].number"></th>
+											<th type="date" name="steps[${count}].stepNumbers[#index#].endTime"></th>
+											<th type="del"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<#assign numberIndex=0 />
+										<#list step.stepNumbers as number>
+										<tr>
+											<td>
+											<input type="hidden" name="steps[${count}].stepNumbers[${numberIndex}].id" value="${(number.id)!}">
+											<input type="hidden" name="steps[${count}].stepNumbers[${numberIndex}].step.id" value="${(step.id)!}">
+											<input type="text" name="steps[${count}].stepNumbers[${numberIndex}].number" value="${(number.number)!}" class="textInput"></td>
+											<td><input type="text" name="steps[${count}].stepNumbers[${numberIndex}].endTime" value="" class="date textInput" datefmt="yyyy-MM-dd">
+											<a class="inputDateButton">选择</a></td>
+											<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
+										</tr>
+										<#assign numberIndex=numberIndex+1 />
+										</#list>
+										<#if numberIndex == 0>
+											<tr>
+												<td>
+												<input type="hidden" name="steps[${count}].stepNumbers[0].step.id" value="${(step.id)!}">
+												<input type="text" name="steps[${count}].stepNumbers[0].number" value="" class="textInput"></td>
+												<td><input type="text" name="steps[${count}].stepNumbers[0].endTime" value="" class="date textInput" datefmt="yyyy-MM-dd">
+												<a class="inputDateButton">选择</a></td>
+												<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>	
+											</tr>
+										</#if>
+										</tbody>
+									</table>
 								</td>
-								<td><a href="v_plan_manuNumber_edit.do">编辑数量</a></td>
 							</#if>
 						</tr>
 						<#assign count=count+1/>

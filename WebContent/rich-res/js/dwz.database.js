@@ -338,7 +338,7 @@
 						name: $th.attr("name") || "",
 						display:$th.attr("display")||"",
 						defaultVal: $th.attr("defaultVal") || "",
-						size: $th.attr("size") || "12",
+						size: $th.attr("size"),
 						enumUrl: $th.attr("enumUrl") || "",
 						lookupGroup: $th.attr("lookupGroup") || "",
 						lookupUrl: $th.attr("lookupUrl") || "",
@@ -391,19 +391,24 @@
 				if(butDisabled ==null || butDisabled == "false"){
 					var addButTxt = $table.attr('addButton');
 					if (addButTxt) {
-
-						//var $rowNum = $('<input type="text" name="dwz_rowNum" class="textInput" style="margin:2px;" value="1" size="2"/>').insertBefore($table);
-						var $addBut = null;
-						var $addButDiv = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>');
-						var addButDisplay = $table.attr('addButtonDisplay');
-						if(addButDisplay != null && addButDisplay == "false")
-							$addButDiv.css("display", "none");
 						
+						var $addBut = null;
+						
+						var $addButDiv = $('<div class="button"><div class="buttonContent"><button type="button"'+butDisabledTxt+'>'+addButTxt+'</button></div></div>');
+						
+						var buttonLeft = $table.attr('buttonLeft');
 						var buttonTop = $table.attr('buttonTop');
-						if(buttonTop!=null && buttonTop=="true")
+						if(buttonLeft !=null && buttonLeft =="true"){
+							$addButDiv = $('<td><a href="javascript:"'+butDisabledTxt+'>'+addButTxt+'</a></td>');
+							$addBut = $addButDiv.insertAfter($table.parent()).find("a");
+						}else if(buttonTop!=null && buttonTop=="true")
 						    $addBut = $addButDiv.insertAfter($table.parent().parent().find("span:first")).find("button");
 						else
 							$addBut = $addButDiv.insertBefore($table).find("button");
+						
+						var addButDisplay = $table.attr('addButtonDisplay');
+						if(addButDisplay != null && addButDisplay == "false")
+							$addButDiv.css("display", "none");
 						
 						var trTm = "";
 						$addBut.click(function(){

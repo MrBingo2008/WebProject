@@ -278,6 +278,11 @@ public class ManuAct {
 		model.addAttribute("openMode", "edit");
 		
 		Plan plan = planDao.findById(planId);
+		
+		List<PlanStep> steps = plan.getSteps();
+		for(PlanStep step : steps){
+			step.getStep().getType();
+		}
 		model.addAttribute("plan", plan);
 		model.addAttribute("nowDate", new Date());
 		return "pages/manu/plan_detail";
