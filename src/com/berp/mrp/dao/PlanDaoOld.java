@@ -36,7 +36,7 @@ import com.jeecms.core.entity.CmsUser;*/
 @Service
 @Transactional(rollbackFor=Exception.class)
 //默认是propagation = Propagation.REQUIRED, 全部只用一个transaction,而且好像要高版本的spring-tx才支持自定义
-public class PlanDao extends HibernateBaseDao<Plan, Integer> {
+public class PlanDaoOld extends HibernateBaseDao<Plan, Integer> {
 
 	public Plan findById(Integer id) { 
 		Plan entity = get(id);
@@ -117,6 +117,112 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
 		return bean;
+	}
+	
+	//弃核（生产下料）
+	public void cancelPlanMaterial(Integer planId) throws Exception{
+		Plan plan = this.findById(planId);
+		List<PlanStep> steps = plan.getSteps();
+		if(steps!=null && steps.size()>0){
+			PlanStep firstStep= steps.get(0);
+			if(firstStep.getType() == 0 && firstStep.getStatus() == 1)
+				throw new Exception("请先弃核生产流程");
+			else if(firstStep.getType() == 1 && firstStep.getRawFlows()!=null && firstStep.getRawFlows().size()>0)
+				throw new Exception(String.format("请先弃核外加工'%s'单据", firstStep.getStep().getName()));
+		}
+		
+		List<BatchFlow> materialFlows = plan.getMaterialFlows();
+		for(BatchFlow flow: materialFlows){
+			flow.setStatus(0);
+			//注意，这里两个方向是不一样的
+			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getDirect() * flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
+		}
+
+		plan.setStatus(Plan.Status.approval.ordinal());
+		rawFlowDao.deleteById(plan.getRawBatchFlow().getId());
+	}
+	
+	//处理plan_detail里的，与outsideIn区分
+	public Plan updateStep(Plan bean, Integer stepIndex){
+		List<PlanStep> steps = bean.getSteps();
+		PlanStep step = steps.get(stepIndex);
+		//审核步骤
+		if(step.getStatus() == 1){
+			
+			//因为前台传过来的bean step信息不全，所以要重新获取，考虑重新修改前台页面
+			Plan plan = this.findById(bean.getId());
+			
+			RawBatchFlow rawFlow = plan.getRawBatchFlow();
+			//从plan获取rawFlow，这里rawFlow只要做set的动作就会反映到数据库吧？
+			rawFlow.setNumber(step.getNumber());
+			rawFlow.setLeftNumber(step.getNumber());
+			if(stepIndex == steps.size()-1)
+				bean.setStatus(Plan.Status.manuFinish.ordinal());
+			//step type = 1表示委外
+			else if(stepIndex < steps.size() - 1 && plan.getSteps().get(stepIndex+1).getStep().getType() == 1){
+				//因为有可能之前有委外而且已经处理了
+				//rawFlow的状态 0未审核 1已经审核 2部分到货 3全部到货
+				rawFlow.setStatus(1);
+				rawFlow.setArriveNumber(0.00);
+				rawFlow.setLeftNumber(rawFlow.getNumber());
+				bean.setStatus(Plan.Status.outside.ordinal());
+			}
+		}
+		
+		Updater<Plan> updater = new Updater<Plan>(bean);
+		updater.setUpdateMode(Updater.UpdateMode.MIN);
+		updater.include("status");
+		bean = updateByUpdater(updater);
+		
+		stepDao.updateFinish(step, stepIndex);
+		
+		return bean;
+	}
+	
+	//弃核（生产流程）
+	public Plan cancelPlanStep(Integer stepId) throws Exception{
+		PlanStep step = stepDao.findById(stepId);
+		Plan plan = step.getPlan();
+		
+		//这个其实可以不要，因为cancel plan step是本厂生产的
+		if(step.getStep().getType() == 1 && step.getRawFlows()!=null)
+			throw new Exception("请先删除相关的外加工单据");
+		
+		PlanStep nextStep = plan.getNextStep(step);
+		if(nextStep!=null){
+			if(nextStep.getStatus() == 1)
+				throw new Exception(String.format("请先弃核工序'%s'", nextStep.getStep().getName()));
+			else{
+				if(nextStep.getStep().getType() == 1 && nextStep.getRawFlows()!=null&& nextStep.getRawFlows().size()>0)
+					throw new Exception(String.format("请先弃核外加工'%s'相关的单据", nextStep.getStep().getName()));
+			}
+		}
+			
+		step.setStatus(0);
+		
+		//重设生产数量 ，如果是外加工的，不需要重设，因为它改不了数量
+		PlanStep preStep = plan.getPreStep(step);
+		if(preStep!=null){
+			plan.getRawBatchFlow().setNumber(preStep.getNumber());
+			plan.getRawBatchFlow().setLeftNumber(preStep.getNumber());
+			plan.getRawBatchFlow().setArriveNumber(0.00);
+		}else
+		{
+			plan.getRawBatchFlow().setNumber(plan.getNumber());
+			plan.getRawBatchFlow().setLeftNumber(plan.getNumber());
+			plan.getRawBatchFlow().setArriveNumber(0.00);
+		}
+		//先要删除package flows
+		//这个地方如果先setFlows(null)，再add(flowDao.find(materialFlowType, planId))，这样是不行的，set null会反映到持久层，导致所有materialFlows和planInFlows都清空，使用flowDao查找出来都是空的
+		plan.setFlows(plan.getMaterialFlows());
+		
+		plan.setStatus(Plan.Status.materialFinish.ordinal());
+		
+		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
+		getSession().createQuery(hql).executeUpdate();
+		
+		return plan;
 	}
 	
 	//update step number

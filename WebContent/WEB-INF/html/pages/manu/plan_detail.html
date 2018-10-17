@@ -252,7 +252,7 @@ function calFactor(numInput){
 	            <!-- 有两种方式控制是否显示，一是加变量，一个是直接判断 -->
 				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" addButtonDisplay="false" 
 				<#if plan.status == 0>multiAddButton="<@s.m 'plan.step.new'/>(多选)" multiAddUrl="v_step_multi_list.do"
-				<#else>saveButton="<@s.m 'global.save'/>" saveAction="o_plan_step_number_update.do"</#if>
+				<#else>saveButton="<@s.m 'global.save'/>" saveAction="o_plan_step_number_update.do" editDisabled == "true"</#if>
 				buttonDisabled=<#if openMode == 'view'>"true"<#else>"false"</#if> width="100%">
 					<thead>
 						<tr>
@@ -304,7 +304,7 @@ function calFactor(numInput){
 								<td>
 								</td>
 								<td>
-									<table class="list nowrap itemDetail" addButton="增加数量">
+									<table class="list nowrap itemDetail" addButton="增加数量" buttonLeft="true">
 									<thead style="display:none">
 										<tr>							
 											<th type="hidden" name="steps[${count}].stepNumbers[#index#].step.id" defaultVal="${(step.id)!}"></th>

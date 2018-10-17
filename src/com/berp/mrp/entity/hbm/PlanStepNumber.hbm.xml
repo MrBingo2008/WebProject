@@ -7,6 +7,6 @@
 		<property name="endTime" column="end_time" type="timestamp" length="19"/>
 		<property name="number" column="number" type="double" length="11"/>
 		<property name="priority" column="priority" type="integer" length="10"/>
-		<many-to-one name="step" column="step_id" class="com.berp.mrp.entity.PlanStep"/>
+		<many-to-one name="step" column="plan_step_id" class="com.berp.mrp.entity.PlanStep"/>
 	</class>
 </hibernate-mapping>

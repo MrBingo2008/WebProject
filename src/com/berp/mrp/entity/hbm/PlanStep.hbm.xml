@@ -18,7 +18,7 @@
 		</set>
 		
 		<list name="stepNumbers" inverse="false" cascade="all">
-			<key column="step_id"/>
+			<key column="plan_step_id"/>
 			<index column="priority" type="integer"></index>
 			<one-to-many class="com.berp.mrp.entity.PlanStepNumber"/>
 		</list> 

@@ -357,34 +357,38 @@
 					fields.push(field);
 				});
 				
-				$tbody.find("a.btnDel").click(function(){
-					var $btnDel = $(this);
-					
-					if ($btnDel.is("[href^=javascript:]")){
-						$btnDel.parents("tr:first").remove();
-						initSuffix($tbody);
+				//stone:嵌套table会产生的问题：
+				//比如table2嵌套在table1里面，那么table1做itemDetail时，就是连同table2的btnDel进行绑定事件
+				var editDisabled = $table.attr('editDisabled');
+				if(editDisabled == null || editDisabled == "" || editDisabled == "false")
+					$tbody.find("a.btnDel").click(function(){
+						var $btnDel = $(this);
+						
+						if ($btnDel.is("[href^=javascript:]")){
+							$btnDel.parents("tr:first").remove();
+							initSuffix($tbody);
+							return false;
+						}
+						
+						function delDbData(){
+							$.ajax({
+								type:'POST', dataType:"json", url:$btnDel.attr('href'), cache: false,
+								success: function(){
+									$btnDel.parents("tr:first").remove();
+									initSuffix($tbody);
+								},
+								error: DWZ.ajaxError
+							});
+						}
+						
+						if ($btnDel.attr("title")){
+							alertMsg.confirm($btnDel.attr("title"), {okCall: delDbData});
+						} else {
+							delDbData();
+						}
+						
 						return false;
-					}
-					
-					function delDbData(){
-						$.ajax({
-							type:'POST', dataType:"json", url:$btnDel.attr('href'), cache: false,
-							success: function(){
-								$btnDel.parents("tr:first").remove();
-								initSuffix($tbody);
-							},
-							error: DWZ.ajaxError
-						});
-					}
-					
-					if ($btnDel.attr("title")){
-						alertMsg.confirm($btnDel.attr("title"), {okCall: delDbData});
-					} else {
-						delDbData();
-					}
-					
-					return false;
-				});
+					});
 
 				var butDisabled = $table.attr('buttonDisabled');
 				var butDisabledTxt = "";
@@ -489,8 +493,17 @@
 						if(display) 
 							$this.html(display.replace('#index#', i+1));
 
-						if (name) 
-							$this.attr('name', name.replaceSuffix(i));
+						if (name){
+							var lastIndex = name.lastIndexOf("[");
+							var back = name, front="";
+							if(lastIndex >= 0){ 
+								front = name.substring(0, lastIndex);
+								back = name.substring(lastIndex);
+							}
+							back = back.replaceSuffix(i);	
+							
+							$this.attr('name', front+back);
+						}
 						
 						var lookupGroup = $this.attr('lookupGroup');
 						if (lookupGroup) {$this.attr('lookupGroup', lookupGroup.replaceSuffix(i));}

@@ -61,7 +61,7 @@ import com.berp.framework.web.session.SessionProvider;
 
 
 @Controller
-public class ManuAct {
+public class ManuActOld {
 	public static final String PLAN_TODO_RECORD_LIST = "planTodoRecordList";
 	
 	@RequestMapping("/v_plan_list.do")
@@ -462,6 +462,41 @@ public class ManuAct {
 		reload(response, "审核成功", plan.getId(), listPara);
 	}
 	
+	@RequestMapping("/o_plan_material_cancel_approval.do")
+	public void planMaterialCancelApproval(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		try{
+			if(plan.getStatus() == Plan.Status.materialFinish.ordinal() || plan.getStatus() == Plan.Status.outside.ordinal())
+				planDao.cancelPlanMaterial(plan.getId());
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+		
+		reload(response, "弃核成功", plan.getId(), listPara);
+	}
+	
+	//step update
+	@RequestMapping("/o_plan_step_update.do")
+	public void stepUpdate(PageListPara listPara, Plan plan, Integer stepNo, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
+		
+		planDao.updateStep(plan, stepNo);
+		reload(response, "保存成功", plan.getId(), listPara);
+	}
+
+	@RequestMapping("/o_plan_step_cancel_approval.do")
+	public void planStepCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
+			Integer stepId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		try{
+			Plan plan = planDao.cancelPlanStep(stepId);
+			PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+			reload(response, "弃核成功", plan.getId(), listPara);
+		}catch(Exception ex){
+			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
+			return;
+		}
+	}
+
 	//step numbers update
 	@RequestMapping("/o_plan_step_number_update.do")
 	public void stepNumberUpdate(PageListPara listPara, Plan plan, Integer stepNo, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
