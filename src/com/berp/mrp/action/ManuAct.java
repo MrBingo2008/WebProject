@@ -463,10 +463,10 @@ public class ManuAct {
 	}
 	
 	//step numbers update
-	@RequestMapping("/o_plan_step_number_update.do")
-	public void stepNumberUpdate(PageListPara listPara, Plan plan, Integer stepNo, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
+	@RequestMapping("/o_plan_schedule_update.do")
+	public void planScheduleUpdate(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
 		try{
-			planDao.updateStepNumber(plan);
+			planDao.updateSchedule(plan);
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;

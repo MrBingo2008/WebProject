@@ -120,13 +120,36 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 	}
 	
 	//update step number
-	public Plan updateStepNumber(Plan bean) throws Exception{
+	public Plan updateSchedule(Plan bean) throws Exception{
+		Plan oldPlan = this.findById(bean.getId());
+		
+		List<BatchFlow> materialFlows = oldPlan.getMaterialFlows();
+		for(BatchFlow flow: materialFlows){
+			//注意，这里两个方向是不一样的
+			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getDirect() * flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
+		}
+		
+		bean.setFlows(new ArrayList<BatchFlow>());
+		bean.getFlows().addAll(bean.getMaterialFlows());
+		
+		List<BatchFlow> flows = bean.getMaterialFlows();
+		for(BatchFlow flow : flows){
+			flow.setStatus(1);
+			flow.setDirect(-1);
+			//flow.setPlan();
+			flow.setType(BatchFlow.Type.planMaterial.ordinal());
+			flowDao.updateLeftNumber(flow.getParent().getId(), (Double)flow.getNumber());
+			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
+		}
 		
 		Updater<Plan> updater = new Updater<Plan>(bean);
 		updater.setUpdateMode(Updater.UpdateMode.MIN);
-		updater.include("steps");
-		
+		updater.include("flows");
 		bean = updateByUpdater(updater);
+		
+		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
+		getSession().createQuery(hql).executeUpdate();
 		
 		return bean;
 	}

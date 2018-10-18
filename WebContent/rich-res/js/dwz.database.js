@@ -403,8 +403,8 @@
 						var buttonLeft = $table.attr('buttonLeft');
 						var buttonTop = $table.attr('buttonTop');
 						if(buttonLeft !=null && buttonLeft =="true"){
-							$addButDiv = $('<td><a href="javascript:"'+butDisabledTxt+'>'+addButTxt+'</a></td>');
-							$addBut = $addButDiv.insertAfter($table.parent()).find("a");
+							//$addButDiv = $('<td><a href="javascript:"'+butDisabledTxt+'>'+addButTxt+'</a></td>');
+							$addBut = $addButDiv.insertAfter($table.parent()).find("button");
 						}else if(buttonTop!=null && buttonTop=="true")
 						    $addBut = $addButDiv.insertAfter($table.parent().parent().find("span:first")).find("button");
 						else

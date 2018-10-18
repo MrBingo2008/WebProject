@@ -9,7 +9,7 @@ $(function(){
 	var actionUrl;
 	if('${openMode}'=='add'){
 		$("#planMaterial, #package, #planIn").css("display","none");
-		$("#cancelApprovalButton").attr("disabled", "disabled");
+		$("#cancelApprovalButton, #saveScheduleButton").attr("disabled", "disabled");
 		actionUrl = "o_plan_save.do";
 		$("#ids").change();
 		
@@ -21,7 +21,7 @@ $(function(){
 		//未审核
 		case '0':
 			$("#planMaterial, #planIn").css("display","none");
-			$("#cancelApprovalButton").attr("disabled", "disabled");
+			$("#cancelApprovalButton, #saveScheduleButton").attr("disabled", "disabled");
 			actionUrl = "o_plan_update.do";
 			break;
 		//审核，未下料完成
@@ -29,7 +29,7 @@ $(function(){
 			$("#basicInfo input").attr("readonly", "readonly");
 			$("#basicInfo a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
-			actionUrl="o_plan_material_update.do";
+			actionUrl="o_plan_schedule_update.do";
 			break;	
 		default:
 			break;
@@ -76,10 +76,6 @@ $(function(){
 		$("#statusInput").val("1");
 		$("form").submit();
 	});
-	$("#stepApproval").click(function(){
-		$("#stepStatus").val("1");
-		$("form").submit();
-	});
 	//因为可能要传status和packageFlows、steps等信息，所以改成form submit，而不用a link
 	$("#cancelApprovalButton").click(function(){
 		//修改action后应该不需要再改回去，因为弃核后会重新加载
@@ -90,6 +86,11 @@ $(function(){
 				$("form").submit();
 			}
 		});
+	});
+	$("#saveScheduleButton").click(function(){
+		//修改action后应该不需要再改回去，因为弃核后会重新加载
+		$("form").attr("action", "o_plan_schedule_update.do");
+		$("form").submit();
 	});
 	
 
@@ -196,9 +197,7 @@ function calFactor(numInput){
 				<!-- 因为是js生成button的，所以不大好在页面修改status，只能靠不同的url，在后台修改status -->
 				<table class="list nowrap itemDetail" addButton='<@s.m "plan.material.new"/>' 
 				  buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if>
-				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=2" 
-				  
-				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_material_update.do' width="100%">
+				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=2" width="100%">
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
@@ -252,7 +251,7 @@ function calFactor(numInput){
 	            <!-- 有两种方式控制是否显示，一是加变量，一个是直接判断 -->
 				<table id="processTable" class="list nowrap itemDetail" addButton="<@s.m 'plan.step.new'/>" addButtonDisplay="false" 
 				<#if plan.status == 0>multiAddButton="<@s.m 'plan.step.new'/>(多选)" multiAddUrl="v_step_multi_list.do"
-				<#else>saveButton="<@s.m 'global.save'/>" saveAction="o_plan_step_number_update.do" editDisabled == "true"</#if>
+				<#else>editDisabled == "true"</#if>
 				buttonDisabled=<#if openMode == 'view'>"true"<#else>"false"</#if> width="100%">
 					<thead>
 						<tr>
@@ -354,8 +353,7 @@ function calFactor(numInput){
             <div id="planIn" class="panel" style="overflow: auto;">
 				<h1><@s.m "plan.in"/></h1>
 				<div>
-				<table class="list nowrap itemDetail" addButton='<@s.m "plan.in.new"/>' buttonDisabled=<#if openMode != 'view'>"false"<#else>"true"</#if> 
-				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_in_update.do' width="100%">
+				<table class="list nowrap itemDetail" addButton='<@s.m "plan.in.new"/>' buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if> width="100%">
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
@@ -405,6 +403,7 @@ function calFactor(numInput){
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
+				<li id="saveScheduleButtonLi"><div class="button"><div class="buttonContent"><button id="saveScheduleButton" type="button"><@s.m "global.save"/>(生产进度)</button></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do?${listPara}" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>
