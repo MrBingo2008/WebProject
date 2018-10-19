@@ -51,7 +51,7 @@ public class StatAct {
 		}
 
 		List<BatchFlow> flows = flowDao.getListByCir(1, startDate, endDate);
-		flows.addAll(flowDao.getListByPlan(1, startDate, endDate));
+		flows.addAll(flowDao.getListByPlan(null, 1, startDate, endDate));
 		
 		for(BatchFlow flow : flows){
 			Material material = flow.getMaterial();

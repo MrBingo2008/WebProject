@@ -121,18 +121,18 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 	
 	//update step number
 	public Plan updateSchedule(Plan bean) throws Exception{
-		Plan oldPlan = this.findById(bean.getId());
+		Plan plan = this.findById(bean.getId());
 		
-		List<BatchFlow> materialFlows = oldPlan.getMaterialFlows();
+		List<BatchFlow> materialFlows = plan.getMaterialFlows();
+		
 		for(BatchFlow flow: materialFlows){
 			//注意，这里两个方向是不一样的
 			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getDirect() * flow.getNumber());
 			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
+			flowDao.deleteById(flow.getId());
 		}
 		
-		bean.setFlows(new ArrayList<BatchFlow>());
-		bean.getFlows().addAll(bean.getMaterialFlows());
-		
+		plan.setFlows(new ArrayList<BatchFlow>());
 		List<BatchFlow> flows = bean.getMaterialFlows();
 		for(BatchFlow flow : flows){
 			flow.setStatus(1);
@@ -141,17 +141,15 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			flow.setType(BatchFlow.Type.planMaterial.ordinal());
 			flowDao.updateLeftNumber(flow.getParent().getId(), (Double)flow.getNumber());
 			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
+			flowDao.save(flow);
 		}
 		
-		Updater<Plan> updater = new Updater<Plan>(bean);
-		updater.setUpdateMode(Updater.UpdateMode.MIN);
-		updater.include("flows");
-		bean = updateByUpdater(updater);
-		
+		plan.getFlows().addAll(bean.getMaterialFlows());
+		/*
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
-		getSession().createQuery(hql).executeUpdate();
+		getSession().createQuery(hql).executeUpdate();*/
 		
-		return bean;
+		return plan;
 	}
 	
 	public Plan updatePlanIn(Plan bean) throws Exception{

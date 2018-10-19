@@ -29,12 +29,20 @@ import com.jeecms.core.entity.CmsUser;*/
 public class BatchFlowDao extends HibernateBaseDao<BatchFlow, Integer> {
 	
 	public BatchFlow save(BatchFlow bean) {
-		getSession().save(bean);
+		getSession().saveOrUpdate(bean);
 		return bean;
 	}
 	
 	public BatchFlow findById(Integer id) { 
 		BatchFlow entity = get(id);
+		return entity;
+	}
+	
+	public BatchFlow deleteById(Integer id) {
+		BatchFlow entity = get(id);
+		if (entity != null) {
+			getSession().delete(entity);
+		}
 		return entity;
 	}
 	
@@ -102,8 +110,14 @@ public class BatchFlowDao extends HibernateBaseDao<BatchFlow, Integer> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<BatchFlow> getListByPlan(Integer status, Date start, Date end) {
+	public List<BatchFlow> getListByPlan(Integer planId, Integer status, Date start, Date end) {
 		Finder f = Finder.create("select bean from BatchFlow bean where bean.plan !=null ");
+
+		if(planId!=null){
+			f.append(" and bean.plan.id=:id");
+			f.setParam("id", planId);
+		}
+		
 		if(status!=null){
 			f.append(" and bean.status=:status");
 			f.setParam("status", status);

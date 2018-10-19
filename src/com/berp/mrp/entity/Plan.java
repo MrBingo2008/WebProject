@@ -158,6 +158,8 @@ public class Plan extends BaseBill {
 	}
 	
 	//materialFlows
+	//主要用于plan_detail.html获取和设置materialFlows，以及updateMaterial时用于获取旧的flow
+	//如果materialFlows有值，优先考虑，否则再考虑flows的
 	public List<BatchFlow> getMaterialFlows(){
 		if(materialFlows == null && flows!=null){
 			materialFlows = new ArrayList<BatchFlow>();
