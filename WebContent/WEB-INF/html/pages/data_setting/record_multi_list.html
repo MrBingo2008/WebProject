@@ -50,6 +50,7 @@
 		<tbody>
 		<#list pagination.list as record>
 			<tr>
+				<!-- ids应该是在database.js那里写死设为累加 -->
 			    <td><input type="checkbox" name="checkboxIds" 
 			    <#if type == 2>
 			    <#assign boxNum = "" />

@@ -116,38 +116,116 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
+		
 		return bean;
+	}
+	
+	private BatchFlow getFlow(List<BatchFlow> flows, Integer flowId){
+		if(flows == null || flows.size() == 0)
+			return null;
+		
+		for(BatchFlow flow:flows)
+			if(flow.getId().equals(flowId))
+				return flow;
+		return null;
 	}
 	
 	//update step number
 	public Plan updateSchedule(Plan bean) throws Exception{
+		
+		//从session里获取的plan，如果对它set的话，是会反映到数据库的,updater也是利用这个原理
+		//这里涉及到先分析原来的数据，然后再更新数据
+		
+		//session save的话，如果有会忽略id，如果是saveUpdate的话，id有值，如果session没有find一个出来的话，就没问题，否则会出现session同一标识有不同对象的问题
+		//plan set flows也会有这样的问题，如果find plan flows出来后， set plan flows null的话，再把detail.html带的flows付给plan.flows的话，也会出现这样的错误
+		//但是如果不find plan flows，而直接set plan flows就不会出现这样的错误，以前也通过这样来更新flows
+		
 		Plan plan = this.findById(bean.getId());
 		
-		List<BatchFlow> materialFlows = plan.getMaterialFlows();
+		//更新plan material
+		List<BatchFlow> oldMaterialFlows = plan.getMaterialFlows();
+		List<BatchFlow> newMaterialFlows = bean.getMaterialFlows();
 		
-		for(BatchFlow flow: materialFlows){
-			//注意，这里两个方向是不一样的
-			flowDao.updateLeftNumber(flow.getParent().getId(), flow.getDirect() * flow.getNumber());
-			materialDao.updateNumber(flow.getMaterial().getId(), - flow.getDirect() * flow.getNumber(), null, null);
-			flowDao.deleteById(flow.getId());
-		}
+		//遍历newflows主要是新增和修改
+		if(newMaterialFlows !=null && newMaterialFlows.size()>0)
+			for(BatchFlow newFlow: newMaterialFlows){
+				BatchFlow matchFlow = this.getFlow(oldMaterialFlows, newFlow.getId());
+				//这种情况是不是直接判断newFlow.getId==null?
+				if(matchFlow == null){
+					
+					newFlow.setStatus(1);
+					newFlow.setDirect(-1);
+					newFlow.setType(BatchFlow.Type.planMaterial.ordinal());
+					flowDao.updateLeftNumber(newFlow.getParent().getId(), (Double)newFlow.getNumber());
+					materialDao.updateNumber(newFlow.getMaterial().getId(), -newFlow.getNumber(), null, null);
+					
+					plan.getFlows().add(newFlow);
+					
+				}else if(newFlow.getNumber().equals(matchFlow.getNumber()) == false)
+				{
+					flowDao.updateLeftNumber(newFlow.getParent().getId(), newFlow.getNumber()-matchFlow.getNumber());
+					materialDao.updateNumber(newFlow.getMaterial().getId(), - newFlow.getNumber() + matchFlow.getNumber(), null, null);
+					matchFlow.setNumber(newFlow.getNumber());
+				}
+			}
 		
-		plan.setFlows(new ArrayList<BatchFlow>());
-		List<BatchFlow> flows = bean.getMaterialFlows();
-		for(BatchFlow flow : flows){
-			flow.setStatus(1);
-			flow.setDirect(-1);
-			//flow.setPlan();
-			flow.setType(BatchFlow.Type.planMaterial.ordinal());
-			flowDao.updateLeftNumber(flow.getParent().getId(), (Double)flow.getNumber());
-			materialDao.updateNumber(flow.getMaterial().getId(), -flow.getNumber(), null, null);
-			flowDao.save(flow);
-		}
+		//遍历oldFlows主要是删除
+		if(oldMaterialFlows !=null && oldMaterialFlows.size()>0)
+			for(BatchFlow oldFlow : oldMaterialFlows){
+				if(this.getFlow(newMaterialFlows, oldFlow.getId()) == null){
+					flowDao.updateLeftNumber(oldFlow.getParent().getId(), -oldFlow.getNumber());
+					materialDao.updateNumber(oldFlow.getMaterial().getId(), oldFlow.getNumber(), null, null);
+					plan.getFlows().remove(oldFlow);
+				}
+			}
 		
-		plan.getFlows().addAll(bean.getMaterialFlows());
-		/*
+		//更新steps
+		plan.setSteps(bean.getSteps());
+		
+		//更新plan in
+		List<BatchFlow> oldPackageFlows = plan.getPackageFlows();
+		List<BatchFlow> newPackageFlows = bean.getPackageFlows();
+			
+		if(newPackageFlows !=null && newPackageFlows.size()>0)
+			for(BatchFlow newFlow: newPackageFlows){
+				BatchFlow matchFlow = this.getFlow(oldPackageFlows, newFlow.getId());
+				if(matchFlow == null){
+					newFlow.setStatus(1);
+					newFlow.setDirect(1);
+					newFlow.setMaterial(plan.getMaterial());
+					newFlow.setType(BatchFlow.Type.planIn.ordinal());
+					materialDao.updateNumber(plan.getMaterial().getId(), newFlow.getNumber(), null, null);
+					plan.getFlows().add(newFlow);
+				}else if(matchFlow.getNumber() - matchFlow.getLeftNumber() <= newFlow.getNumber()){
+					matchFlow.setNumber(newFlow.getNumber());
+					matchFlow.setBoxNum(newFlow.getBoxNum());
+					matchFlow.setNumPerBox(newFlow.getNumPerBox());
+					matchFlow.setLeftNumber(newFlow.getNumber() - (matchFlow.getNumber() - matchFlow.getLeftNumber()));
+					//这个是增加的，所以跟material方向相反
+					materialDao.updateNumber(plan.getMaterial().getId(), newFlow.getNumber() - matchFlow.getNumber(), null, null);
+				}else{
+					throw new Exception(String.format("批次%s新修改数量小于被使用过的数量，请删除相关使用数量", matchFlow.getSerial()));
+				}
+			}
+				
+			
+		if(oldPackageFlows !=null && oldPackageFlows.size()>0)
+			for(BatchFlow oldFlow : oldPackageFlows){
+				if(this.getFlow(newPackageFlows, oldFlow.getId()) == null){
+					if(oldFlow.getFlows()!=null && oldFlow.getFlows().size()>0)
+						throw new Exception(String.format("批次%s被使用过，无法删除，请删除相关使用记录", oldFlow.getSerial()));
+					else{
+						materialDao.updateNumber(plan.getMaterial().getId(), -oldFlow.getNumber(), null, null);
+						plan.getFlows().remove(oldFlow);
+					}
+				}
+			}
+				
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
-		getSession().createQuery(hql).executeUpdate();*/
+		getSession().createQuery(hql).executeUpdate();
+		
+		hql = "delete from PlanStepNumber bean where bean.step.id is null";
+		getSession().createQuery(hql).executeUpdate();
 		
 		return plan;
 	}

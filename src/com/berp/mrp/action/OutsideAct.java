@@ -13,6 +13,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.berp.mrp.dao.CirDao;
+import com.berp.mrp.dao.PlanDao;
+import com.berp.mrp.dao.PlanStepDao;
 import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.mrp.web.PageListPara;
 import com.berp.mrp.entity.Cir;
@@ -26,6 +28,13 @@ import com.berp.framework.web.ResponseUtils;
 
 @Controller
 public class OutsideAct extends CirAct {
+	
+	@RequestMapping("/v_outsideOut_toDo_multi_list.do")
+	public String rawBatchList(HttpServletRequest request, ModelMap model) {
+		Pagination pagination = planStepDao.getPage(1, null, 1, 2, null, 1, 20);
+		model.addAttribute("pagination", pagination);
+		return "pages/cir/outsideOut_todo_multi_list";
+	}
 	
 	@RequestMapping("/v_outsideOut_add.do")
 	public String outsideOutAdd(HttpServletRequest request, ModelMap model) {
@@ -279,4 +288,7 @@ public class OutsideAct extends CirAct {
 	public String outsideInList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "outsideIn", Cir.CirType.outsideIn.ordinal(), request, model);
 	}
+	
+	@Autowired
+	private PlanStepDao planStepDao;
 }

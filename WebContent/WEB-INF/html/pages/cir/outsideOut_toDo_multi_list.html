@@ -1,0 +1,61 @@
+<form id="pagerForm" method="post" action="v_outsideOut_toDo_multi_list_more.do">
+	<input type="hidden" name="searchName" value="${searchName!}"/>
+	<input type="hidden" id="maxId" name="maxId" value="" />
+	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
+</form>
+
+<div class="pageHeader" style="border:1px #B8D0D6 solid">
+	<form onsubmit="return dwzSearch(this, 'dialog');" action="v_outsideOut_toDo_multi_list.do" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					<label><@s.m "orderOrMaterial"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
+				</td>
+				<td>
+					<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
+				    <div class="button"><div class="buttonContent"><button type="button" multAddLookup="checkboxIds" warn="请选择产品"><@s.m "global.select"/></button></div></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
+</div>
+
+<div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
+	<table class="table" width="99%" layoutH="66">
+		<thead>
+			<tr>
+				<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
+				<th width="100"><@s.m "material.nameSpec"/></th>
+				<th width="100"><@s.m "step.name"/></th>
+				<th width="60"><@s.m "step.isSurface"/></th>		
+			</tr>
+		</thead>
+		<tbody>
+		<#list pagination.list as step>
+			<tr>
+			    <td><input type="checkbox" name="checkboxIds"
+			    value="{'material.id':'${step.plan.material.id}', 'material.nameSpec':'${step.plan.material.nameSpec!}'}" />
+			    <input type="hidden" name="stepId" value="${step.id}"/>
+			    </td>
+				<td>${step.plan.material.nameSpec!}</td>
+				<td>${(step.step.name)!}</td>
+				<td><#if step.step.surface>是</#if></td>
+			</tr>
+		</#list>
+		<#assign displayCount = pagination.list?size>	
+		<tr><td colspan="3">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button id="morePageButton" onclick="callMorePage();">显示更多</button> </#if></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<script type="text/javascript">
+function callMorePage(){
+	var $parent = $.pdialog.getCurrent();
+    var $box = $parent.find("tbody:last");
+    var maxRecordId = $box.find("input[name=recordId]:last").val();
+	morePage({targetType:"dialog", rel:"", data:{maxId:maxRecordId}});
+}
+</script>

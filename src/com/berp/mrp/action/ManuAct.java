@@ -466,8 +466,7 @@ public class ManuAct {
 	@RequestMapping("/o_plan_schedule_update.do")
 	public void planScheduleUpdate(PageListPara listPara, Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {				
 		try{
-			planDao.delMaterialFlows(plan.getId());
-			planDao.addMaterialFlows(plan);
+			planDao.updateSchedule(plan);
 			
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());

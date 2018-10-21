@@ -2,6 +2,7 @@ package com.berp.mrp.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.berp.framework.hibernate3.Finder;
 import com.berp.framework.hibernate3.HibernateBaseDao;
 import com.berp.framework.hibernate3.Updater;
+import com.berp.framework.page.Pagination;
 import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.Plan;
@@ -40,19 +42,44 @@ public class PlanStepDao extends HibernateBaseDao<PlanStep, Integer> {
 		updater.include("weight");
 		updater.include("status");
 		bean = updateByUpdater(updater);
-		/*
-		Plan plan = bean.getPlan();
-		
-		if(stepIndex == 0){
-			Batch batch = new Batch(plan.getSerial(), bean.getNumber(), plan.getMaterial(), plan);
-			batchDao.save(batch);
-		}else
-		{
-			Batch batch = batchDao.findByPlan(plan);
-			batch.setNumber(bean.getNumber());
-		}*/
 		
 		return bean;
+	}
+	
+	//maxId和pageNum，只能选一个，而且如果是maxId的话，有可能刚开始时是null，所以最后要判断pageNum, 这个设计不大合理
+	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Integer maxId, Integer pageNo, Integer pageSize) {
+		
+		pageSize = pageSize == null?20:pageSize;
+		
+		Finder f = Finder.create("select bean from PlanStep bean where 1=1");
+		if (type != null) {
+			f.append(" and bean.type=:type");
+			f.setParam("type", type);
+		}
+		if (maxId != null) {
+			f.append(" and bean.id<:maxId");
+			f.setParam("maxId", maxId);
+		}
+		//notEmpty 包括null和""，notBlank还包括" "
+		if(StringUtils.isNotEmpty(name))
+		{
+			f.append(" and (bean.plan.name like :name or bean.plan.serial like :name or bean.plan.material.serial like :name or bean.plan.material.customerSerial like :name or bean.plan.material.name like :name) ");
+			f.setParam("name", "%" + name + "%");
+		}
+		if (status != null && status1 == null) {
+			f.append(" and bean.status=:status");
+			f.setParam("status", status);
+		}else if(status!=null && status1!=null){
+			f.append(" and bean.status>=:status and bean.status <=:status1");
+			f.setParam("status", status);
+			f.setParam("status1", status1);
+		}
+		
+		f.append(" order by bean.id desc");
+		if(pageNo !=null)
+			return find(f, pageNo, pageSize);
+		else
+			return find(f, pageSize);
 	}
 	
 	@Override

@@ -89,7 +89,8 @@ $("#saveButton").click(function(){
 			<div class="panel" style="overflow: auto">
 	            <h1><@s.m "${cirType}.items"/></h1>
 	            <div>
-				<table class="list nowrap itemDetail" addButton="<@s.m '${cirType}.addItem'/>" width="100%" buttonDisabled=<#if cir.status == 1>"true"<#else>"false"</#if>>
+				<table class="list nowrap itemDetail" addButton="<@s.m '${cirType}.addItem'/>" width="100%" buttonDisabled=<#if cir.status == 1>"true"<#else>"false"</#if>
+				addButtonDisplay="false" multiAddButton="<@s.m '${cirType}.addItem'/>(多选)" multiAddUrl="v_${cirType}_toDo_multi_list.do" >
 					<thead>
 						<tr>
 							<th type="label" size="2"  display="#index#"><@s.m "global.number"/></th>
