@@ -53,7 +53,7 @@ public class PlanStepDao extends HibernateBaseDao<PlanStep, Integer> {
 		
 		Finder f = Finder.create("select bean from PlanStep bean where 1=1");
 		if (type != null) {
-			f.append(" and bean.type=:type");
+			f.append(" and bean.step.type=:type");
 			f.setParam("type", type);
 		}
 		if (maxId != null) {

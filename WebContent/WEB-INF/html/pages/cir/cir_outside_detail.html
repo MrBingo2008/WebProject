@@ -21,13 +21,13 @@ $(function(){
 	}	
 });
 
-$("#approvalButton").click(function(){
-	$("#statusInput").val("1");
+$("#saveButton").click(function(){
+	$("#statusInput").val("0");
 	$("#cirForm").submit();
 });
 
-$("#saveButton").click(function(){
-	$("#statusInput").val("0");
+$("#approvalButton").click(function(){
+	$("#statusInput").val("1");
 	
 	alertMsg.confirm("您是否确定审核?", {
 		okCall: function(){
@@ -101,10 +101,11 @@ $("#saveButton").click(function(){
 							
 							<th type="text" name="rawFlows[#index#].material.nameSpec" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "product.name"/></th>
 							<!-- 一般出去的，只需要库存的批次号，但是对于外加工的，还是重新编号，因为回收时还要用到 -->
-							<th type="text" name="rawFlows[#index#].serial" defaultVal="${cir.serial!}" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "rawFlow.serial"/></th>
-							
-							<th type="hidden" name="rawFlows[#index#].parent.id" style="display:none"></th>
-							<th type="text" name="rawFlows[#index#].parent.info" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.for"/></th>
+							<th type="text" name="rawFlows[#index#].serial" defaultVal="${cir.serial!}" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.batchSerial"/></th>
+							<!-- parent也是rawFlow，info是获取plan的信息 -->
+							<#if cirType == 'outsideIn'>
+							<th type="hidden" name="rawFlows[#index#].parent.id" style="display:none"></th></#if>
+							<th type="text" name="rawFlows[#index#].parentInfo" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.for"/></th>
 							
 							<th type="hidden" name="rawFlows[#index#].planStep.id" style="display:none"></th>
 							<th type="text" name="rawFlows[#index#].planStep.name" size="10" fieldAttrs="{readonly:'readonly'}"><@s.m "step.outside"/></th>
@@ -129,10 +130,12 @@ $("#saveButton").click(function(){
 								<input type="hidden" name="rawFlows[${count}].material.id" value="${rawFlow.material.id!}">
 							</td>
 							<td><input type="text" name="rawFlows[${count}].material.nameSpec" value="${rawFlow.material.nameSpec!}" size="12" class="textInput" readonly=readonly>
+							
 							<td><input type="text" name="rawFlows[${count}].serial" value="${rawFlow.serial!}" size="20" class="textInput" readonly=readonly></td>
 							
-							<input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}"></td>
-							<td><input type="text" name="rawFlows[${count}].parent.info" value="${(rawFlow.parent.info)!}" size="20" class="textInput" readonly=readonly></td>
+							<td>
+							<#if cirType == 'outsideIn'><input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}"></#if>
+							<input type="text" name="rawFlows[${count}].parentInfo" value="${(rawFlow.parent.info)!}" size="20" class="textInput" readonly=readonly></td>
 							
 							<input type="hidden" name="rawFlows[${count}].planStep.id" value="${rawFlow.planStep.id}"></td>
 							<td><input type="text" name="rawFlows[${count}].planStep.name" value="${(rawFlow.planStep.step.name)!}" size="10" class="textInput" readonly=readonly></td>

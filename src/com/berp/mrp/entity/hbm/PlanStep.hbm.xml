@@ -11,6 +11,7 @@
 		<many-to-one name="step" column="step_id" class="com.berp.mrp.entity.Step"/>
 		<property name="finishTime" column="finish_time" type="timestamp" length="19"/>
 		<property name="number" column="number" type="double" length="11"/>
+		<property name="notArriveNumber" column="notArriveNumber" type="double" length="11"/>
 		
 		<set name="rawFlows" inverse="true" cascade="none">
 			<key column="plan_step_id"/>

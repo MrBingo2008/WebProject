@@ -19,7 +19,8 @@ public class PlanStep {
 	
 	private java.util.Date finishTime;
 	private Double number;
-	
+	private Double notArriveNumber;
+
 	private Set<RawBatchFlow> rawFlows;
 	private List<PlanStepNumber> stepNumbers;
 
@@ -103,7 +104,15 @@ public class PlanStep {
 		this.number = number;
 	}
 	
+	//for outside step
+	public Double getNotArriveNumber() {
+		return notArriveNumber;
+	}
 
+	public void setNotArriveNumber(Double notArriveNumber) {
+		this.notArriveNumber = notArriveNumber;
+	}
+	
 	//step
 	public Step getStep() {
 		return step;

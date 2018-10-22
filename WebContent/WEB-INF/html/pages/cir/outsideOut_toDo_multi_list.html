@@ -28,20 +28,28 @@
 			<tr>
 				<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 				<th width="100"><@s.m "material.nameSpec"/></th>
-				<th width="100"><@s.m "step.name"/></th>
-				<th width="60"><@s.m "step.isSurface"/></th>		
+				<th width="100"><@s.m "plan.serial"/></th>
+				<th width="100"><@s.m "step.outside"/></th>
+				<th width="100"><@s.m "material.manuNumber"/></th> 
+				<th width="100"><@s.m "rawFlow.arriveNumber"/></th>
+				<th width="100"><@s.m "rawFlow.notArriveNumber"/></th>		
 			</tr>
 		</thead>
 		<tbody>
 		<#list pagination.list as step>
 			<tr>
 			    <td><input type="checkbox" name="checkboxIds"
-			    value="{'material.id':'${step.plan.material.id}', 'material.nameSpec':'${step.plan.material.nameSpec!}'}" />
+			    value="{'material.id':'${step.plan.material.id}', 'material.nameSpec':'${step.plan.material.nameSpec!}', 'material.unit':'${step.plan.material.unit}', 
+			    'planStep.id':'${(step.id)!}', 'planStep.name':'${(step.step.name)!}',
+			    'parentInfo':'${step.plan.serial}'}" />
 			    <input type="hidden" name="stepId" value="${step.id}"/>
 			    </td>
 				<td>${step.plan.material.nameSpec!}</td>
+				<td>${step.plan.serial!}</td>
 				<td>${(step.step.name)!}</td>
-				<td><#if step.step.surface>是</#if></td>
+				<td>${(step.plan.number)!}</td>
+				<td>${(step.number)!}</td>
+				<td>${(step.notArriveNumber)!}</td>
 			</tr>
 		</#list>
 		<#assign displayCount = pagination.list?size>	

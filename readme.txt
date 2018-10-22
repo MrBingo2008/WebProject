@@ -57,3 +57,4 @@ process表的category_id改为允许空
 
 2018-10-15：
 新增表格plan_step_number
+表格plan_step新增not
