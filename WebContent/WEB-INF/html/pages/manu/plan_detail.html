@@ -301,6 +301,7 @@ function calFactor(numInput){
 								<td></td>
 								<td><#if step.step.surface>是<#else>否</#if></td>
 								<td>
+								<#if step.step.type == 0>${step.number!}<#else>${step.number!}/${step.notArriveNumber!}</#if>
 								</td>
 								<td>
 									<table class="list nowrap itemDetail" addButton="增加数量" buttonLeft="true">

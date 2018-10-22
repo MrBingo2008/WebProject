@@ -232,8 +232,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 	private void outsideOutUpdate(Cir bean) throws Exception{
 		List<RawBatchFlow> rawFlows = bean.getRawFlows();
 		for(RawBatchFlow rawFlow : rawFlows){
-			//rawFlow.setStatus(1);
-			rawFlowDao.updateLeftNumber(rawFlow.getParent().getId(), rawFlow.getNumber());
+			planStepDao.updateNumber(rawFlow.getPlanStep().getId(), 0.00, rawFlow.getNumber());
 		}
 	}
 	
@@ -510,7 +509,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 	}
 	
 	@Autowired
-	private OrderDao orderDao;
+	private PlanStepDao planStepDao;
 	
 	@Autowired
 	private OrderRecordDao recordDao;

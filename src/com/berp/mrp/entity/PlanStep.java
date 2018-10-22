@@ -97,6 +97,7 @@ public class PlanStep {
 	
 	//number
 	public java.lang.Double getNumber() {
+		//如果加if(number==null) number = 0.00,这样会反映到数据库
 		return number;
 	}
 
