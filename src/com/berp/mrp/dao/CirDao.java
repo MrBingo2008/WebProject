@@ -421,7 +421,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		pageSize = pageSize == null?20:pageSize;
 		
 		Finder f = Finder.create("select distinct bean from Cir bean left join bean.flows flow where 1=1");
-		if(type == Cir.CirType.outsideIn.ordinal() || type == Cir.CirType.outsideOut.ordinal())
+		if(type !=null && (type == Cir.CirType.outsideIn.ordinal() || type == Cir.CirType.outsideOut.ordinal()))
 			f = Finder.create("select distinct bean from Cir bean left join bean.rawFlows flow where 1=1");
 		
 		if (type != null) {

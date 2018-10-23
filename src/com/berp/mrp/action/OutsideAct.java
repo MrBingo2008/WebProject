@@ -289,6 +289,11 @@ public class OutsideAct extends CirAct {
 		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "outsideIn", Cir.CirType.outsideIn.ordinal(), request, model);
 	}
 	
+	@RequestMapping("/v_outside_list.do")
+	public String outsideList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, null, null, request, model);
+	}
+	
 	@Autowired
 	private PlanStepDao planStepDao;
 }

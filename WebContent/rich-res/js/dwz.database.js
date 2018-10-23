@@ -343,6 +343,7 @@
 						lookupGroup: $th.attr("lookupGroup") || "",
 						lookupUrl: $th.attr("lookupUrl") || "",
 						lookupPk: $th.attr("lookupPk") || "id",
+						lookupDisable: $th.attr("lookupDisable") || "",
 						suggestUrl: $th.attr("suggestUrl"),
 						suggestFields: $th.attr("suggestFields"),
 						postField: $th.attr("postField") || "",
@@ -558,9 +559,11 @@
 						var temp = '<input type="text" name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" size="'+field.size+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
 						if(field.lookupType == "div")
 							temp = '<div name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
+						var tempA = field.aTitle;
+						if(field.lookupDisable == "true")
+							tempA = "";
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
-							+ temp
-							+ '<a class="btnLook" href="'+field.lookupUrl+'" rel="'+field.rel+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag+'>'+field.aTitle+'</a>';
+							+ temp + '<a class="btnLook" href="'+field.lookupUrl+'" rel="'+field.rel+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag+'>'+tempA+'</a>';
 						break;
 					case 'attach':
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'

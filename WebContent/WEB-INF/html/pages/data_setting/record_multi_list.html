@@ -1,5 +1,8 @@
 <!-- record list 带有产品明细信息，
-	type=0, 用于+生产，type=1用于plan_detail和order_detail, type=2用于purchaseIn，sellOut需要选择批次，所以不适用-->
+	type=0, 用于+生产, 有专门的closeAndSelect实现
+	type=1, 用于plan_detail和order_detail, multiLookup 
+	type=2, 用于purchaseIn, multAddLookup
+	type=3, 用于sellOut, 通过链接选择批次, 需要选择批次，所以不适用-->
 
 <form id="pagerForm" method="post" action="v_record_multi_list_more.do?type=${type!}">
 	<input type="hidden" name="searchName" value="${searchName!}"/>
@@ -7,81 +10,101 @@
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
 </form>
 
-<div class="pageHeader" style="border:1px #B8D0D6 solid">
-	<form onsubmit="return dwzSearch(this, 'dialog');" action="v_record_multi_list.do?type=${type!}" method="post">
-	<div class="searchBar">
-		<table class="searchContent">
-			<tr>
-			<#if type == 0>
-				<td><@s.m "sell.order"/>: ${order.info!}</td>
-				<td><div class="button"><div class="buttonContent"><button id="selectButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td>
-			<#else>
-				<td>
-					<label><@s.m "orderOrMaterial"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
-				</td>
-				<td>
-					<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
-				    <div class="button"><div class="buttonContent"><button type="button" <#if type == 1>multLookup<#else>multAddLookup</#if>="checkboxIds" warn="请选择产品"><@s.m "global.select"/></button></div></div>
-				</td>
-			</#if>
+<div id="recordContain">
+<div class="unitBox">
+
+	<div class="pageHeader" style="border:1px #B8D0D6 solid">
+		<form onsubmit="return dwzSearch(this, 'dialog');" action="v_record_multi_list.do?type=${type!}" method="post">
+		<div class="searchBar">
+			<table class="searchContent">
+				<tr>
+				<#if type == 0>
+					<td><@s.m "sell.order"/>: ${order.info!}</td>
+					<td><div class="button"><div class="buttonContent"><button id="selectButton" type="button" onclick="closeAndSelect();"><@s.m "global.select"/></button></div></td>
+				<#else>
+					<td><label><@s.m "orderOrMaterial"/>：</label><input type="text" name="searchName" value="${searchName!}"/></td>
+					<td>
+						<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
+						<#if type == 1><div class="button"><div class="buttonContent"><button type="button" multLookup="checkboxIds" warn="请选择产品"><@s.m "global.select"/></button></div></div>
+						<#elseif type == 2><div class="button"><div class="buttonContent"><button type="button" multAddLookup="checkboxIds" warn="请选择产品"><@s.m "global.select"/></button></div></div>
+						</#if>
+					</td>
+				</#if>
+				</tr>
+			</table>
+		</div>
+		</form>
+	</div>
+	
+	<div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
+		<table class="table" width="99%" layoutH="66">
+			<thead>
+				<tr>
+					<#if type lt 3><th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th></#if>
+					<th width="100" orderField="number" class="asc"><@s.m "product.serial"/></th>
+					<th width="100"><@s.m "product.name"/></th>
+					<!-- 除了采购，其他都要surface -->
+					<#if type !=2><th width="60"><@s.m "sell.order.surface"/></th></#if>
+					<th width="80"><@s.m "${orderType}.order.company"/></th>
+					<th width="140"><@s.m "${orderType}.order.serial"/></th>
+					<th width="100"><@s.m "${orderType}.order.number"/></th>
+					<th width="100"><@s.m "${orderType}.order.notFinishNumber"/></th>
+					<th width="40"><@s.m "material.unit"/></th>
+					<#if type == 3><th width="60"><@s.m "global.operate"/></th></#if>			
+				</tr>
+			</thead>
+			<tbody>
+			<#list pagination.list as record>
+				<tr>
+					<!-- ids应该是在database.js那里写死设为累加 -->
+					<#if type lt 3>
+				    <td>
+				    <input type="checkbox" name="checkboxIds" 
+				    <#if type == 2>
+				    <#assign boxNum = "" />
+					<#if record.material.numPerBox?? && record.material.numPerBox != 0><#assign boxNum = record.notFinishNumber / record.material.numPerBox /></#if>
+							
+				    value="{'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.nameSpec':'${record.material.nameSpec!}', numPerBox:'${record.material.numPerBox!}', 'material.unit':'${record.material.unit!}', ':company.id':'${(record.material.company.id)!}' , ':company.name':'${(record.material.company.name)!}', 
+							 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', boxNum: '${boxNum}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'}"
+				    <#else>
+				    value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"
+				    </#if>/>
+				    </td>
+				    </#if>
+				    <input type="hidden" name="recordId" value="${record.id}"/>
+					<td>${record.material.allSerial!}</td>
+					<td>${record.material.nameSpec!}</td>
+					<#if type != 2><td>${(record.surface.name)!}</td></#if>
+					<td>${record.ord.company.name!}</td>
+					<td>${record.ord.serial!}</td>
+					<td>${record.number!}</td>
+					<td>${record.notFinishNumber!}</td>
+					<td>${record.material.unit!}</td>
+					<#if type == 3>
+					<td><a href="v_batch_list.do?materialId=${record.material.id}&recordId=${record.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
+					</#if>
+				</tr>
+			</#list>
+			<#assign displayCount = pagination.list?size>	
+			<tr><td colspan="<#if type == 2>8<#else>9</#if>">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button id="morePageButton" onclick="callMorePage();">显示更多</button> </#if></td>
 			</tr>
+			</tbody>
 		</table>
 	</div>
-	</form>
 </div>
 
-<div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
-	<table class="table" width="99%" layoutH="66">
-		<thead>
-			<tr>
-				<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
-				<th width="100" orderField="number" class="asc"><@s.m "product.serial"/></th>
-				<th width="100"><@s.m "product.name"/></th>
-				<#if type !=2>
-					<th width="60"><@s.m "sell.order.surface"/></th>
-				</#if>
-				<th width="80"><@s.m "${orderType}.order.company"/></th>
-				<th width="140"><@s.m "${orderType}.order.serial"/></th>
-				<th width="100"><@s.m "${orderType}.order.number"/></th>
-				<th width="100"><@s.m "${orderType}.order.notFinishNumber"/></th>
-				<th width="40"><@s.m "material.unit"/></th>			
-			</tr>
-		</thead>
-		<tbody>
-		<#list pagination.list as record>
-			<tr>
-				<!-- ids应该是在database.js那里写死设为累加 -->
-			    <td><input type="checkbox" name="checkboxIds" 
-			    <#if type == 2>
-			    <#assign boxNum = "" />
-						<#if record.material.numPerBox?? && record.material.numPerBox != 0><#assign boxNum = record.notFinishNumber / record.material.numPerBox /></#if>
-						
-			    value="{'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.nameSpec':'${record.material.nameSpec!}', numPerBox:'${record.material.numPerBox!}', 'material.unit':'${record.material.unit!}', ':company.id':'${(record.material.company.id)!}' , ':company.name':'${(record.material.company.name)!}', 
-						 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', boxNum: '${boxNum}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'}"
-			    <#else>
-			    value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"
-			    </#if>/>
-			    <input type="hidden" name="recordId" value="${record.id}"/>
-			    </td>
-				<td>${record.material.allSerial!}</td>
-				<td>${record.material.nameSpec!}</td>
-				<#if type != 2>
-					<td>${(record.surface.name)!}</td>
-				</#if>
-				<td>${record.ord.company.name!}</td>
-				<td>${record.ord.serial!}</td>
-				<td>${record.number!}</td>
-				<td>${record.notFinishNumber!}</td>
-				<td>${record.material.unit!}</td>
-			</tr>
-		</#list>
-		<#assign displayCount = pagination.list?size>	
-		<tr><td colspan="<#if type == 0>9<#else>8</#if>">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button id="morePageButton" onclick="callMorePage();">显示更多</button> </#if></td>
-		</tr>
-		</tbody>
-	</table>
+<div id="sidebarH" style="height:0px; display:none">
+	<div class="sidebarHeader">
+		<div class="sidebarHeaderContent">
+			<h1 style="">物料批次</h1>
+			<a class="icon-button close"></a>
+		</div>
+	</div>
+	<div id="sidebarContentH" class="sidebarContentH" style="height: 155px">
+	</div>
 </div>
 
+</div>
 <script type="text/javascript">
 $(function(){
 	if ($.fn.jBarH) {

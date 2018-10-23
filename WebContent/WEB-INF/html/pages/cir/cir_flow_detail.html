@@ -145,10 +145,12 @@ function gridReport_start(report, data, type) {
 			<div class="panel" style="overflow: auto">
 	            <h1><@s.m "${cirType}.items"/></h1>
 	            <div>
-				<table class="list nowrap itemDetail" addButton="<@s.m '${cirType}.addItem'/>"
-				 <#if cirType == 'purchaseIn'>
-				 addButtonDisplay="false" multiAddButton="<@s.m '${cirType}.addItem'/>(多选)" multiAddUrl="v_record_multi_list.do?type=2"
-				 </#if>
+				<table class="list nowrap itemDetail" addButton="<@s.m '${cirType}.addItem'/>" 
+					<#if cirType == 'purchaseIn'>
+					addButtonDisplay="false" multiAddButton="<@s.m '${cirType}.addItem'/>(多选)" multiAddUrl="v_record_multi_list.do?type=2"
+					<#elseif cirType == 'sellOut'>
+					addButtonDisplay="false" multiAddButton="<@s.m '${cirType}.addItem'/>(多选)" multiAddUrl="v_record_multi_list.do?type=3"
+					</#if>
 				 buttonDisabled=<#if cir.status == 0 && cirType != 'view'>"false"<#else>"true"</#if> width="100%">
 					<thead>
 						<tr>
@@ -159,7 +161,7 @@ function gridReport_start(report, data, type) {
 								<#if direction == 2>
 									aFieldAttrs="{width:'900', height:'600', resizable:'false'}" </#if>
 								<#if cirType == 'purchaseIn' || cirType =='sellOut'>
-									lookupUrl="v_record_list.do?direction=${direction}"
+									lookupUrl="v_record_list.do?direction=${direction}" lookupDisable="true"
 								<#else>	
 									lookupUrl="v_material.do?type=${direction}"
 								</#if>

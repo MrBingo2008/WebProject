@@ -1,3 +1,4 @@
+<!-- 差不多可以考虑把这个删除 -->
 <form id="pagerForm" method="post" onsubmit="return dwzSearch(this, 'dialog');" action="v_record_list.do?direction=${direction!}">
 	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
 	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
@@ -92,11 +93,4 @@ $(function(){
 		$("#recordContain").jBarH({minW:150, maxW:700});
 	}
 });
-/*
-function test(){
-	openBatchDetail();
-	setTimeout(function() {
-		$(".sidebarHeader").css("padding", "0px");
-		$("#sidebarContentH").css("padding", "0px");}, 20);
-}*/
 </script>
