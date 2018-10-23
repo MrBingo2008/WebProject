@@ -559,11 +559,13 @@
 						var temp = '<input type="text" name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" size="'+field.size+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
 						if(field.lookupType == "div")
 							temp = '<div name="'+field.name+'"'+suggestFrag+' lookupPk="'+field.lookupPk+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
-						var tempA = field.aTitle;
+						
+						//lookupGroup这几个还是要保留，因为这个主要用于multiAddLookup，在initSuffix和bringBack的时候会获取a的lookupGroup这些信息来做匹配
+						var aDisplay = '';
 						if(field.lookupDisable == "true")
-							tempA = "";
+							aDisplay = ' style="display:none"';
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
-							+ temp + '<a class="btnLook" href="'+field.lookupUrl+'" rel="'+field.rel+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag+'>'+tempA+'</a>';
+							+ temp + '<a class="btnLook" href="'+field.lookupUrl+'" rel="'+field.rel+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" onItemChange="'+ field.onItemChange +'" title="'+field.aTitle+'" '+aAttrFrag + aDisplay +'>'+field.aTitle+'</a>';
 						break;
 					case 'attach':
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
