@@ -159,8 +159,8 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_outsideOut_list.do")
-	public String outsideOutList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "outsideOut", Cir.CirType.outsideOut.ordinal(), request, model);
+	public String outsideOutList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "outsideOut", Cir.CirType.outsideOut.ordinal(), null, request, response, model);
 	}
 	
 	//outsideIn
@@ -285,13 +285,13 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_outsideIn_list.do")
-	public String outsideInList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "outsideIn", Cir.CirType.outsideIn.ordinal(), request, model);
+	public String outsideInList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request,HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "outsideIn", Cir.CirType.outsideIn.ordinal(), null, request, response, model);
 	}
 	
 	@RequestMapping("/v_outside_list.do")
-	public String outsideList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, null, null, request, model);
+	public String outsideList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "outside", Cir.CirType.outsideOut.ordinal(), Cir.CirType.outsideIn.ordinal(), request, response, model);
 	}
 	
 	@Autowired

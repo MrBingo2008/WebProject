@@ -415,7 +415,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		return entity;
 	}
 	
-	public Pagination getPage(Integer type, String name, String itemName, Integer status, Integer pageNo, Integer pageSize) {
+	public Pagination getPage(Integer type, Integer type1,  String name, String itemName, Integer status, Integer pageNo, Integer pageSize) {
 		
 		pageNo = pageNo == null?1:pageNo;
 		pageSize = pageSize == null?20:pageSize;
@@ -424,7 +424,12 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		if(type !=null && (type == Cir.CirType.outsideIn.ordinal() || type == Cir.CirType.outsideOut.ordinal()))
 			f = Finder.create("select distinct bean from Cir bean left join bean.rawFlows flow where 1=1");
 		
-		if (type != null) {
+		if(type != null && type1!=null){
+			f.append(" and bean.type>=:type and bean.type<=:type1");
+			f.setParam("type", type);
+			f.setParam("type1", type1);
+		}
+		else if (type != null ) {
 			f.append(" and bean.type=:type");
 			f.setParam("type", type);
 		}

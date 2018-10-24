@@ -81,8 +81,8 @@ public class SellAct extends CirAct {
 	
 	//sell out
 	@RequestMapping("/v_sellOut_list.do")
-	public String sellOutList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sellOut", Cir.CirType.sellOut.ordinal(), request, model);	
+	public String sellOutList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sellOut", Cir.CirType.sellOut.ordinal(), null, request, response, model);	
 	}
 	
 	@RequestMapping("/v_sellOut_add.do")
@@ -207,8 +207,8 @@ public class SellAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_sellBack_list.do")
-	public String sellBackList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sellBack", Cir.CirType.sellBack.ordinal(), request, model);
+	public String sellBackList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request,HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "sellBack", Cir.CirType.sellBack.ordinal(), null, request, response, model);
 	}
 	
 	@RequestMapping("/o_sellBack_delete.do")

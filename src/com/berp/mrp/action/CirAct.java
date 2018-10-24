@@ -48,6 +48,12 @@ public class CirAct {
 	public static final String ORDER_PAGE_NUM = "order_page_num";
 	public static final String ORDER_NUM_PER_PAGE = "order_num_per_page";
 	
+	public static final String CIR_SEARCH_NAME = "cir_search_name";
+	public static final String CIR_SEARCH_RECORD_NAME = "cir_search_record_name";
+	public static final String CIR_SEARCH_STATUS = "cir_search_status";
+	public static final String CIR_PAGE_NUM = "cir_page_num";
+	public static final String CIR_NUM_PER_PAGE = "cir_num_per_page";
+	
 	public String orderList(Integer useSession, String searchName, String searchRecordName, String searchCompanyName, Integer searchStatus, Integer pageNum, Integer numPerPage, 
 			String orderType, Integer type,
 			HttpServletRequest request, HttpServletResponse response, ModelMap model) {
@@ -396,19 +402,36 @@ public class CirAct {
 		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", returnUrl, returnTitle).toString());
 	}
 	
-	public String cirList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, 
-			String cirType, Integer type,
-			HttpServletRequest request, ModelMap model) {
+	//采用session的做法就是在list时，保存好search和page等一些信息，在detail页面返回list时，可以使用
+	//其实search和page几个参数应该还要保留，因为dwz的pagination应该还会通过form以及参数来提交
+	public String cirList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, 
+			String cirType, Integer type, Integer type1, 
+			HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		if(useSession !=null && useSession == 1){
+			searchName = (String)sessionProvider.getAttribute(request, CIR_SEARCH_NAME);
+			searchRecordName = (String)sessionProvider.getAttribute(request, CIR_SEARCH_RECORD_NAME);
+			searchStatus = (Integer)sessionProvider.getAttribute(request, CIR_SEARCH_STATUS);
+			pageNum = (Integer)sessionProvider.getAttribute(request, CIR_PAGE_NUM);
+			numPerPage = (Integer)sessionProvider.getAttribute(request, CIR_NUM_PER_PAGE);
+		}
+		
 		model.addAttribute("cirType", cirType);
-		Pagination pagination = cirDao.getPage(type, searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+		Pagination pagination = cirDao.getPage(type, type1, searchName, searchRecordName, searchStatus, pageNum, numPerPage);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		model.addAttribute("searchRecordName", searchRecordName);
 		model.addAttribute("searchStatus", searchStatus);
+		
+		sessionProvider.setAttribute(request, response, CIR_SEARCH_NAME, searchName);
+		sessionProvider.setAttribute(request, response, CIR_SEARCH_RECORD_NAME, searchRecordName);
+		sessionProvider.setAttribute(request, response, CIR_SEARCH_STATUS, searchStatus);
+		sessionProvider.setAttribute(request, response, CIR_PAGE_NUM, pageNum);
+		sessionProvider.setAttribute(request, response, CIR_NUM_PER_PAGE, numPerPage);
 		return "pages/cir/cir_list";
 	}
 
-	protected String getUrlPara(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage){		
+	/*protected String getUrlPara(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage){		
 		StringBuilder sb = new StringBuilder();
 		if(StringUtils.isEmpty(searchName) == false)
 			sb.append("&searchName="+searchName);
@@ -421,7 +444,7 @@ public class CirAct {
 		if(numPerPage != null)
 			sb.append("&numPerPage="+numPerPage);
 		return sb.toString();
-	}
+	}*/
 	
 	@Autowired
 	protected CirDao cirDao;

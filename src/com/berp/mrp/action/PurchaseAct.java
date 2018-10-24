@@ -192,8 +192,8 @@ public class PurchaseAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_purchaseIn_list.do")
-	public String purchaseInList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchaseIn", Cir.CirType.purchaseIn.ordinal(), request, model);	
+	public String purchaseInList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchaseIn", Cir.CirType.purchaseIn.ordinal(), null, request, response, model);	
 	}
 	
 	@RequestMapping("/o_purchaseIn_delete.do")
@@ -204,8 +204,8 @@ public class PurchaseAct extends CirAct {
 	//purchase back
 	
 	@RequestMapping("/v_purchaseBack_list.do")
-	public String purchaseBackList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchaseBack", Cir.CirType.purchaseBack.ordinal(), request, model);
+	public String purchaseBackList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "purchaseBack", Cir.CirType.purchaseBack.ordinal(), null, request, response, model);
 	}
 	
 	@RequestMapping("/v_purchaseBack_add.do")

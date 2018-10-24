@@ -321,7 +321,7 @@ function calFactor(numInput){
 												<input type="hidden" name="steps[${count}].stepNumbers[${numberIndex}].id" value="${(number.id)!}">
 												<input type="hidden" name="steps[${count}].stepNumbers[${numberIndex}].step.id" value="${(step.id)!}">
 												<input type="text" name="steps[${count}].stepNumbers[${numberIndex}].number" value="${(number.number)!}" class="positiveNumber required textInput"></td>
-												<td><input type="text" name="steps[${count}].stepNumbers[${numberIndex}].endTime" value="(number.endTime?string('yyyy-MM-dd hh:mm:ss'))!" class="date textInput" datefmt="yyyy-MM-dd">
+												<td><input type="text" name="steps[${count}].stepNumbers[${numberIndex}].endTime" value="${(number.endTime?string('yyyy-MM-dd'))!}" class="date textInput" datefmt="yyyy-MM-dd">
 												<a class="inputDateButton">选择</a></td>
 												<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
 											</tr>
