@@ -435,7 +435,7 @@
 					
 					var multiAddButTxt = $table.attr('multiAddButton');
 					if(multiAddButTxt) {
-						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="'+$table.attr('multiAddUrl')+'" lookupGroup=""><button type="button">' + multiAddButTxt + '</button></a></div></div>').initUI().insertBefore($table).find("button");
+						var $multiAddBut = $('<div class="button"><div class="buttonContent"><a href="'+$table.attr('multiAddUrl')+'" lookupGroup="" width="800" height="600"><button type="button">' + multiAddButTxt + '</button></a></div></div>').initUI().insertBefore($table).find("button");
 						//var $multiAddBut = $('<a href="'+$table.attr('multiAddUrl')+'" lookupGroup="">' + multiAddButTxt + '</a>').insertBefore($table).find("a");
 						$multiAddBut.click(function(){
 							$curTable = $table;

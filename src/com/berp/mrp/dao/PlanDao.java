@@ -17,6 +17,7 @@ import com.berp.mrp.entity.Order;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.Plan;
 import com.berp.mrp.entity.PlanStep;
+import com.berp.mrp.entity.PlanStepNumber;
 import com.berp.mrp.entity.Batch;
 import com.berp.mrp.entity.BatchFlow;
 import com.berp.mrp.entity.Cir;
@@ -180,7 +181,22 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			}
 		
 		//更新steps
-		plan.setSteps(bean.getSteps());
+		int i=0;
+		
+		for(;plan.getSteps().size() > 0 && i<plan.getSteps().size();i++){
+			Double total = 0.00;
+			PlanStep planStep = plan.getSteps().get(i);
+			PlanStep beanStep = bean.getSteps().get(i);
+			if(beanStep.getStepNumbers()!=null){
+				for(PlanStepNumber number:beanStep.getStepNumbers())
+					total += number.getNumber();
+				planStep.setNumber(total);
+			}else{
+				planStep.setNumber(0.00);
+			}
+			//一定要planStep.setStepNumbers，要不然如果用plan.setSteps(bean.getSteps)不能删除stepNumber
+			planStep.setStepNumbers(beanStep.getStepNumbers());
+		}
 		
 		//更新plan in
 		List<BatchFlow> oldPackageFlows = plan.getPackageFlows();

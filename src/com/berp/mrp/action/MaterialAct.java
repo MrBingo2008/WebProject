@@ -316,24 +316,24 @@ public class MaterialAct {
 		return "pages/data_setting/record_material_multi_list";
 	}
 	
-	//recordId不合理
+	//recordId不合理, 在sellOut的v_record_multi_list.do showBatch里要用到
+	//type=0：全部，type=1库存大于0
 	@RequestMapping("/v_batch_list.do")
-	public String batchAvailableList(Integer materialId, Integer recordId, HttpServletRequest request, ModelMap model) {
-		List<BatchFlow> flows = flowDao.getList(materialId, 1, 1, 0.00, null, null);
-		model.addAttribute("flows", flows);
-		model.addAttribute("type", "lib");
-		model.addAttribute("recordId", recordId);
-		if(recordId!=null){
-			model.addAttribute("orderSerial", recordDao.findById(recordId).getOrd().getInfo());
+	public String batchAvailableList(Integer type, Integer materialId, Integer recordId, HttpServletRequest request, ModelMap model) {
+		List<BatchFlow> flows = null;
+		if(type != null && type == 0){
+			flows = flowDao.getList(materialId, null, 1, null, null, null);
+			model.addAttribute("type", "all");
 		}
-		return "pages/data_setting/batch_list";
-	}
-	
-	@RequestMapping("/v_batch_all_list.do")
-	public String batchList(Integer materialId, HttpServletRequest request, ModelMap model) {
-		List<BatchFlow> flows = flowDao.getList(materialId, null, 1, null, null, null);
+		else{
+			flows = flowDao.getList(materialId, 1, 1, 0.00, null, null);
+			model.addAttribute("type", "lib");
+			model.addAttribute("recordId", recordId);
+			if(recordId!=null){
+				model.addAttribute("orderSerial", recordDao.findById(recordId).getOrd().getInfo());
+			}
+		}
 		model.addAttribute("flows", flows);
-		model.addAttribute("type", "all");
 		return "pages/data_setting/batch_list";
 	}
 	

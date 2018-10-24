@@ -302,13 +302,13 @@ function calFactor(numInput){
 								<td><#if step.step.surface>是<#else>否</#if></td>
 								<!-- 区分自己生产或外加工. -->
 								<#if step.step.type == 0>
-									<td>${step.number!}</td>
+									<td>${step.number!0}</td>
 									<td>
 										<table class="list nowrap itemDetail" addButton="增加数量" buttonLeft="true">
 										<thead style="display:none">
 											<tr>							
 												<th type="hidden" name="steps[${count}].stepNumbers[#index#].step.id" defaultVal="${(step.id)!}"></th>
-												<th type="text" name="steps[${count}].stepNumbers[#index#].number"></th>
+												<th type="text" name="steps[${count}].stepNumbers[#index#].number" fieldClass="positiveNumber required"></th>
 												<th type="date" name="steps[${count}].stepNumbers[#index#].endTime"></th>
 												<th type="del"></th>
 											</tr>
@@ -320,28 +320,18 @@ function calFactor(numInput){
 												<td>
 												<input type="hidden" name="steps[${count}].stepNumbers[${numberIndex}].id" value="${(number.id)!}">
 												<input type="hidden" name="steps[${count}].stepNumbers[${numberIndex}].step.id" value="${(step.id)!}">
-												<input type="text" name="steps[${count}].stepNumbers[${numberIndex}].number" value="${(number.number)!}" class="textInput"></td>
-												<td><input type="text" name="steps[${count}].stepNumbers[${numberIndex}].endTime" value="" class="date textInput" datefmt="yyyy-MM-dd">
+												<input type="text" name="steps[${count}].stepNumbers[${numberIndex}].number" value="${(number.number)!}" class="positiveNumber required textInput"></td>
+												<td><input type="text" name="steps[${count}].stepNumbers[${numberIndex}].endTime" value="(number.endTime?string('yyyy-MM-dd hh:mm:ss'))!" class="date textInput" datefmt="yyyy-MM-dd">
 												<a class="inputDateButton">选择</a></td>
 												<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>
 											</tr>
 											<#assign numberIndex=numberIndex+1 />
 											</#list>
-											<#if numberIndex == 0>
-												<tr>
-													<td>
-													<input type="hidden" name="steps[${count}].stepNumbers[0].step.id" value="${(step.id)!}">
-													<input type="text" name="steps[${count}].stepNumbers[0].number" value="" class="textInput"></td>
-													<td><input type="text" name="steps[${count}].stepNumbers[0].endTime" value="" class="date textInput" datefmt="yyyy-MM-dd">
-													<a class="inputDateButton">选择</a></td>
-													<td><a href="javascript:void(0)" class="btnDel"><@s.m "global.delete"/></a></td>	
-												</tr>
-											</#if>
 											</tbody>
 										</table>
 									</td>
 								<#else>
-									<td>已回收${step.number!} / 未回收${step.notArriveNumber!}</td>
+									<td>已回收${step.number!0} / 未回收${step.notArriveNumber!0}</td>
 									<td><a href="v_outside_list.do" target="navTab">查看外加工单据</a></td>
 									<td></td>
 								</#if>
@@ -366,7 +356,7 @@ function calFactor(numInput){
 							<th type="text" name="packageFlows[#index#].serial" size="20" defaultVal="${plan.serial!}-#index#" fieldAttrs="{readonly:'readonly'}"><@s.m "batch.serial"/></th>
 							<th type="text" name="packageFlows[#index#].numPerBox" size="12" defaultVal="${(plan.material.numPerBox)!}" fieldClass="positiveNumber" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.numPerBox"/></th>
 							<th type="text" name="packageFlows[#index#].boxNum" size="12"  fieldClass="digits" fieldAttrs="{onkeyup:'calSum(this)', onpaste:'calSum(this)', oncut:'calSum(this)', ondrop:'calSum(this);'}"><@s.m "package.boxNum"/></th>
-							<th type="text" name="packageFlows[#index#].number" size="12" defaultVal="${(plan.rawBatchFlow.number)!}" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
+							<th type="text" name="packageFlows[#index#].number" size="12" defaultVal="${(plan.number)!}" fieldClass="positiveNumber required" fieldAttrs="{onkeyup:'calFactor(this)', onpaste:'calFactor(this)', oncut:'calFactor(this)', ondrop:'calFactor(this);'}"><@s.m "material.sum"/></th>
 							<th type="text" name="packageFlows[#index#].material.unit" size="12" defaultVal="${(plan.material.unit)!}" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							<th type="lookup" name="packageFlows[#index#].room.name" size="12"
 								lookupGroup="packageFlows[#index#].room" lookuppk="id" fieldClass="required" fieldAttrs="{readonly:'readonly'}" 
@@ -409,7 +399,7 @@ function calFactor(numInput){
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
-				<li id="saveScheduleButtonLi"><div class="button"><div class="buttonContent"><button id="saveScheduleButton" type="button"><@s.m "global.save"/>(生产进度)</button></div></div></li>
+				<li id="saveScheduleButtonLi" style="margin-left:40px;"><div class="button"><div class="buttonContent"><button id="saveScheduleButton" type="button"><@s.m "global.save"/>(生产进度)</button></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do?${listPara}" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>
