@@ -5,21 +5,24 @@
 					<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 					</#if>
 					
-					<th width="60" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
+					<th width="60"><@s.m "material.allSerial"/></th>
 					<th width="40"><@s.m "material.nameSpec"/></th>
 					<th width="60"><@s.m "batch.serial"/></th>
 					<th width="40"><@s.m "step.surface"/></th>
 					<th width="40"><@s.m "batch.type"/></th>
-					<#if type=='all'><th width="40"><@s.m "material.number"/></th><#else>
-					<th width="40"><@s.m "material.leftNumber"/></th></#if>
+					<#if type=='all'>
+					<th width="40"><@s.m "material.number"/></th>
+					<#else>
+					<th width="40"><@s.m "material.leftNumber"/></th>
+					</#if>
 					<th width="20"><@s.m "material.unit"/></th>
-					<th width="40"><@s.m "room"/></th>
+					<th width="20"><@s.m "room"/></th>
 					<#if type=='lib_single'><th width="20"><@s.m "global.operate"/></th></#if>				
 				</tr>
 			</thead>
 			<tbody>
 			<#list flows as flow> 
-				<tr target="sid_obj" rel="1">
+				<tr>
 					
 					<#if type == "lib_multi">
 				    <td><input type="checkbox" name="checkboxIds" 
@@ -48,7 +51,8 @@
 				</tr>
 			</#list>
 			<#if type == "lib_multi">
-			<tr><td colspan="10"><button type="button" multAddLookup="checkboxIds" warn="请选择批次"><@s.m "global.select"/></button></td></tr>
+			<!-- 如果colspan写大了，会导致前面的tr无法对齐 -->
+			<tr><td colspan="9"><button type="button" multAddLookup="checkboxIds" warn="请选择批次"><@s.m "global.select"/></button></td></tr>
 			</#if>
 			</tbody>
 		</table>

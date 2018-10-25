@@ -201,13 +201,13 @@ function gridReport_start(report, data, type) {
 							<td>
 								<input type="hidden" name="flows[${count}].material.id" value="${flow.material.id}">
 								<input type="text" name="flows[${count}].material.serial" value="${flow.material.allSerial!}" size="18" class="textInput required" readonly>
-								<a class="btnLook" lookupgroup="flows[${count}]" lookuppk="material.id" title="<@s.m '${cirType}.selectMaterial'/>"
+								<!-- <a class="btnLook" lookupgroup="flows[${count}]" lookuppk="material.id" title="<@s.m '${cirType}.selectMaterial'/>" 
 								<#if direction == 2>width='900' height='700' resizable:'false'</#if> 
 								<#if cirType == 'purchaseIn' || cirType =='sellOut'>
 									href="v_record_list.do?direction=${direction}"
 								<#else>	
 									href="v_material.do?type=${direction}"
-								</#if>><@s.m "batch.serial"/></a>
+								</#if>><@s.m "batch.serial"/></a> -->
 							</td>
 							
 							<#if direction == 2><input type="hidden" name="flows[${count}].parent.id" value="${(flow.parent.id)!}"></input></#if>

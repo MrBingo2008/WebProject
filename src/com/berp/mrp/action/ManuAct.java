@@ -387,8 +387,22 @@ public class ManuAct {
 	public void planCancelApproval(PageListPara listPara,
 			Plan plan, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
-			if(plan.getStatus() == Plan.Status.approval.ordinal())
-				planDao.cancelBasic(plan.getId());
+			Plan bean = planDao.findById(plan.getId());
+			if(bean.getMaterialFlows()!=null && bean.getMaterialFlows().size()>0)
+				throw new Exception("请先删除下料信息");
+			for(PlanStep step: bean.getSteps()){
+				if(step.getType() == 0){
+					if(step.getStepNumbers()!=null && step.getStepNumbers().size()>0)
+						throw new Exception("请先删除生产信息");
+				}else{
+					if(step.getRawFlows()!=null && step.getRawFlows().size()>0)
+						throw new Exception("请先删除外加工单据");
+				}
+			}
+			if(bean.getPackageFlows()!=null &&  bean.getPackageFlows().size()>0)
+				throw new Exception("请先删除入库信息");
+			
+			planDao.cancelBasic(plan.getId());
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;

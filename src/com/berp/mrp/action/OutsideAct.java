@@ -31,7 +31,7 @@ public class OutsideAct extends CirAct {
 	
 	@RequestMapping("/v_outsideOut_toDo_multi_list.do")
 	public String rawBatchList(HttpServletRequest request, ModelMap model) {
-		Pagination pagination = planStepDao.getPage(1, null, 0, 2, null, 1, 20);
+		Pagination pagination = planStepDao.getPage(1, null, 0, 2, true, null, 1, 20);
 		model.addAttribute("pagination", pagination);
 		return "pages/cir/outsideOut_todo_multi_list";
 	}

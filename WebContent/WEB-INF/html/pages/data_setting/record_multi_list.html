@@ -81,7 +81,7 @@
 					<td>${record.notFinishNumber!}</td>
 					<td>${record.material.unit!}</td>
 					<#if type == 3>
-					<td><a href="v_batch_list.do?materialId=${record.material.id}&recordId=${record.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
+					<td><a href="v_batch_list.do?type=3&materialId=${record.material.id}&recordId=${record.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
 					</#if>
 				</tr>
 			</#list>

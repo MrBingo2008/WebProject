@@ -54,8 +54,9 @@ public class MaterialAct {
 	//如果是普通查询的话，parentId在list那里登记到session，session主要是用于修改查看返回，然后从session里取出来
 	//type=0: navTab list
 	//type=1: dialog single lookup
-	//type=2: dialog batch list multi select
-	//type=3: navTab batch detail
+	//type=2: dialog batch list single select
+	//type=3: dialog batch list multi select
+	//type=4: navTab batch detail
 	public String material(Integer type, Integer useSession, HttpServletRequest request, ModelMap model) {
 		Category category = categoryDao.findById(1);
 		JSONObject object = categoryDao.getCategoryTree(category);

@@ -74,9 +74,9 @@ $(function(){
 				<td>${cir.id}</td>
 				<td>${cir.serial}</td>
 				<td>${cir.name}</td>
-				<#if cirType == 'outside'><td><@s.m "outside.type.${cir.type}"/></td></#if>
+				<#if cir.type == 4 || cir.type == 5><td><@s.m "outside.type.${cir.type}"/></td></#if>
 				<td>
-					<#if cirType != 'outsideOut' && cirType != 'outsideIn' && cirType != 'outside'>
+					<#if cir.type != 4 && cir.type != 5>
 						<#list cir.flows as flow>
 						<span style="width:130px;display:inline-block;overflow:hidden;line-height:21px;margin-right:12px;">${flow.material.nameSpec!}</span><span style="display:inline-block;overflow:hidden;line-height:21px;">${flow.number}${flow.material.unit}</span><br>
 						</#list>
@@ -91,10 +91,8 @@ $(function(){
 				<td <#if cir.status==0> style="color:red"</#if>><@s.m "cir.status.${cir.status}"/></td>
 				<td>${(cir.createUser.name)!}</td>
 				<td>
-					<#if cirType == 'outside'>
 					<#if cir.type == 4><#assign cirType = 'outsideOut' />
-					<#else><#assign cirType = 'outsideIn' />
-					</#if>
+					<#elseif cir.type == 5><#assign cirType = 'outsideIn' />
 					</#if>
 					<@berp_perm url="/v_${cirType}"><a title="<@s.m '${cirType}.view'/>" target="navTab" rel="main" href="v_${cirType}_view.do?cirId=${cir.id}"><@s.m "global.view"/></a></@berp_perm>
 					<@berp_perm url="/o_${cirType}"><a title="<@s.m '${cirType}.edit'/>" target="navTab" rel="main" href="v_${cirType}_edit.do?cirId=${cir.id}"><@s.m "global.edit"/></a>

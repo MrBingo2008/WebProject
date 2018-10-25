@@ -238,7 +238,7 @@ function calFactor(numInput){
 				<!-- 因为是js生成button的，所以不大好在页面修改status，只能靠不同的url，在后台修改status -->
 				<table class="list nowrap itemDetail" addButton='<@s.m "plan.material.new"/>' 
 				  buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if>
-				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=2" 
+				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=3" 
 				  
 				  saveButton='<@s.m "global.save"/>' saveAction='o_plan_material_update.do' 
 				  applyButton='<@s.m "global.approval"/>' applyAction='o_plan_material_approval.do'

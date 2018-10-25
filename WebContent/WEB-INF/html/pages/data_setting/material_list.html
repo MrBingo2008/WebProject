@@ -84,6 +84,8 @@ $(function(){
 				<#elseif type == 2>
 					<td><a href="v_batch_list.do?materialId=${m.id}&type=1" onclick="openBatchDetail()" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
 				<#elseif type == 3>
+					<td><a href="v_batch_list.do?materialId=${m.id}&type=2" onclick="openBatchDetail()" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
+				<#elseif type == 4>
 					<td><a href="v_batch_list.do?materialId=${m.id}&type=0" title="<@s.m 'material.detail'/>" width="800" height="600" target="dialog" mask="true"><@s.m "material.showDetail"/></a></td>
 				</#if>
 			</tr>
@@ -92,6 +94,6 @@ $(function(){
 	</table>
 	<div class="panelBar">
 		<div class="pages"><span>每页显示${pagination.pageSize!}条，共${pagination.totalCount!}条</span></div>
-		<div class="pagination" rel="jbsxBox" targetType="<#if type gt 0>dialog<#else>navTab</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+		<div class="pagination" rel="jbsxBox" targetType="<#if type == 0 || type == 4>navTab<#else>dialog</#if>" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
 	</div>
 </div>

@@ -59,7 +59,7 @@ public class PlanStepDao extends HibernateBaseDao<PlanStep, Integer> {
 	}
 	
 	//maxId和pageNum，只能选一个，而且如果是maxId的话，有可能刚开始时是null，所以最后要判断pageNum, 这个设计不大合理
-	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Integer maxId, Integer pageNo, Integer pageSize) {
+	public Pagination getPage(Integer type, String name, Integer status, Integer status1, Boolean notFinish, Integer maxId, Integer pageNo, Integer pageSize) {
 		
 		pageSize = pageSize == null?20:pageSize;
 		
@@ -72,6 +72,11 @@ public class PlanStepDao extends HibernateBaseDao<PlanStep, Integer> {
 			f.append(" and bean.id<:maxId");
 			f.setParam("maxId", maxId);
 		}
+		
+		if(notFinish != null && notFinish == true){
+			f.append(" and bean.number + bean.notArriveNumber < bean.plan.number");
+		}
+		
 		//notEmpty 包括null和""，notBlank还包括" "
 		if(StringUtils.isNotEmpty(name))
 		{

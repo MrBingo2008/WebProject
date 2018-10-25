@@ -17,22 +17,15 @@ $(function(){
 		var status = '${(plan.status)!}';
 		if(status == null || status=='')
 			status = '0';
-		switch(status){
-		//未审核
-		case '0':
+		if(status =='0'){
 			$("#planMaterial, #planIn").css("display","none");
 			$("#cancelApprovalButton, #saveScheduleButton").attr("disabled", "disabled");
 			actionUrl = "o_plan_update.do";
-			break;
-		//审核，未下料完成
-		case '1':
+		}else{
 			$("#basicInfo input").attr("readonly", "readonly");
 			$("#basicInfo a").css("display", "none");
 			$("#saveButton, #approvalButton").attr("disabled","disabled");
 			actionUrl="o_plan_schedule_update.do";
-			break;	
-		default:
-			break;
 		}
 	}
 	//view采用的方式更加简单，edit是否也可以参考
@@ -46,10 +39,10 @@ $(function(){
 		$("#basicInfo a").css("display", "none");
 		
 		if(status == 0)
-			$("#planMaterial").css("display", "none");
+			$("#planMaterial, #planIn").css("display", "none");
 		else{
-			$("#planMaterial a").css("display", "none");
-			$("#planMaterial input").attr("readonly", "readonly");
+			$("#planMaterial a, #planIn a").css("display", "none");
+			$("#planMaterial input, #planIn input").attr("readonly", "readonly");
 		}
 		
 		$("#process a").css("display", "none");
@@ -57,14 +50,7 @@ $(function(){
 		$("#process input").attr("disabled", "disabled");
 		$("#process .button").css("display", "none");
 		
-		//如果审核过的，下料和入库都显示
-		if(status == 0)
-			$("#planIn a").css("display", "none");
-		else{
-			$("#planIn a").css("display", "none");
-			$("#planIn input").attr("readonly", "readonly");
-			$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi").css("display", "none");
-		}
+		$("#saveButtonLi, #approvalButtonLi, #cancelApprovalButtonLi, #saveScheduleButtonLi").css("display", "none");
 	}
 	
 	$("form").attr("action", actionUrl);
@@ -197,13 +183,13 @@ function calFactor(numInput){
 				<!-- 因为是js生成button的，所以不大好在页面修改status，只能靠不同的url，在后台修改status -->
 				<table class="list nowrap itemDetail" addButton='<@s.m "plan.material.new"/>' 
 				  buttonDisabled=<#if plan.status == 1 && openMode != 'view'>"false"<#else>"true"</#if>
-				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=2" width="100%">
+				  addButtonDisplay="false" multiAddButton="<@s.m 'plan.material.new'/>(多选)" multiAddUrl="v_material.do?type=3" width="100%">
 					<thead>
 						<tr>
 							<th type="label" size="2" display="#index#"><@s.m "global.number"/></th>							
 							<th type="lookup" name="materialFlows[#index#].material.serial" size="20" fieldClass="required" 
 							fieldAttrs="{readonly:'readonly'}" aFieldAttrs="{width:'900', height:'700', resizable:'false'}" aTitle="<@s.m 'material.batch'/>"
-							lookupGroup="materialFlows[#index#]" lookupUrl="v_material.do?type=2" lookuppk="material.id"><@s.m "material.allSerial"/></th>
+							lookupGroup="materialFlows[#index#]" lookupUrl="v_material.do?type=3" lookuppk="material.id" lookupDisable="true"><@s.m "material.allSerial"/></th>
 								
 							<th type="hidden" name="materialFlows[#index#].parent.id" style="display:none"></th>
 							<th type="text" name="materialFlows[#index#].material.nameSpec" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.nameSpec"/></th>
@@ -225,7 +211,7 @@ function calFactor(numInput){
 							<td>
 								<input type="text" name="materialFlows[${count}].material.serial" value="${flow.material.allSerial!}" lookuppk="material.id" size="20" class="textInput required" readonly=readonly>
 								<input type="hidden" name="materialFlows[${count}].material.id" value="${flow.material.id!}">
-								<a class="btnLook" href="v_material.do?type=2" lookupgroup="materialFlows[${count}]" lookuppk="material.id" width="900" height="700" resizable="false" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a>
+								<!-- <a class="btnLook" href="v_material.do?type=2" lookupgroup="materialFlows[${count}]" lookuppk="material.id" width="900" height="700" resizable="false" title="<@s.m 'material.batch'/>"><@s.m "material.batch"/></a> -->
 							</td>
 							<input type="hidden" name="materialFlows[${count}].parent.id" value="${(flow.parent.id)!}">
 							<td><input type="text" name="materialFlows[${count}].material.nameSpec" value="${flow.material.nameSpec!}" size="12" class="textInput" readonly=readonly></td>
@@ -304,7 +290,7 @@ function calFactor(numInput){
 								<#if step.step.type == 0>
 									<td>${step.number!0}</td>
 									<td>
-										<table class="list nowrap itemDetail" addButton="增加数量" buttonLeft="true">
+										<table class="list nowrap itemDetail" addButton="增加数量" buttonLeft="true" buttonDisabled=<#if openMode == 'view'>"true"<#else>"false"</#if> >
 										<thead style="display:none">
 											<tr>							
 												<th type="hidden" name="steps[${count}].stepNumbers[#index#].step.id" defaultVal="${(step.id)!}"></th>
@@ -332,7 +318,7 @@ function calFactor(numInput){
 									</td>
 								<#else>
 									<td>已回收${step.number!0} / 未回收${step.notArriveNumber!0}</td>
-									<td><a href="v_outside_list.do" target="navTab" rel="main"><@s.m 'outside.list'/></a></td>
+									<td><a href="v_outside_list.do?searchRecordName=${plan.material.customerSerial!}" target="navTab" rel="main"><@s.m 'outside.list'/></a></td>
 									<td></td>
 								</#if>
 							</#if>
@@ -399,7 +385,7 @@ function calFactor(numInput){
 				<li id="saveButtonLi"><div class="buttonActive"><div class="buttonContent"><button id="saveButton" type="button"><@s.m "global.submit"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="approvalButtonLi"><div class="button"><div class="buttonContent"><button id="approvalButton" type="button"><@s.m "global.approval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
 				<li id="cancelApprovalButtonLi"><div class="button"><div class="buttonContent"><button id="cancelApprovalButton" type="button"><@s.m "global.cancelApproval"/>(<@s.m "plan.basic"/>)</button></div></div></li>
-				<li id="saveScheduleButtonLi" style="margin-left:40px;"><div class="button"><div class="buttonContent"><button id="saveScheduleButton" type="button"><@s.m "global.save"/>(生产进度)</button></div></div></li>
+				<li id="saveScheduleButtonLi" style="margin-left:40px;"><div class="button"><div class="buttonContent"><button id="saveScheduleButton" type="button"><@s.m "global.save"/>(生产信息)</button></div></div></li>
 				<li><div class="button"><div class="buttonContent"><a href="v_plan_list.do?${listPara}" title="<@s.m 'plan.list'/>" rel="main" target="navTab"><button id="cancelButton" type="button"><@s.m "global.cancel"/></button></a></div></div></li>
 			</ul>
 		</div>

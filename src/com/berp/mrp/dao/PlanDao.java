@@ -201,8 +201,9 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		//更新plan in
 		List<BatchFlow> oldPackageFlows = plan.getPackageFlows();
 		List<BatchFlow> newPackageFlows = bean.getPackageFlows();
-			
-		if(newPackageFlows !=null && newPackageFlows.size()>0)
+		Double newPackageTotal = 0.00;
+		
+		if(newPackageFlows !=null && newPackageFlows.size()>0){
 			for(BatchFlow newFlow: newPackageFlows){
 				BatchFlow matchFlow = this.getFlow(oldPackageFlows, newFlow.getId());
 				if(matchFlow == null){
@@ -220,23 +221,30 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 					//这个是增加的，所以跟material方向相反
 					materialDao.updateNumber(plan.getMaterial().getId(), newFlow.getNumber() - matchFlow.getNumber(), null, null);
 				}else{
-					throw new Exception(String.format("批次%s新修改数量小于被使用过的数量，请删除相关使用数量", matchFlow.getSerial()));
+					Double useNumber = matchFlow.getNumber() - matchFlow.getLeftNumber();
+					throw new Exception(String.format("批次%s新修改数量小于被使用过的数量。请保证新修改数量大于已使用数量(%s)，或者删除相关使用记录%s", matchFlow.getSerial(), useNumber.toString(), matchFlow.getFlowsParentSerial()));
 				}
+				newPackageTotal += newFlow.getNumber();
 			}
-				
+		}
 			
 		if(oldPackageFlows !=null && oldPackageFlows.size()>0)
 			for(BatchFlow oldFlow : oldPackageFlows){
 				if(this.getFlow(newPackageFlows, oldFlow.getId()) == null){
 					if(oldFlow.getFlows()!=null && oldFlow.getFlows().size()>0)
-						throw new Exception(String.format("批次%s被使用过，无法删除，请删除相关使用记录", oldFlow.getSerial()));
+						throw new Exception(String.format("批次%s被使用过，无法删除，请删除相关使用记录%s", oldFlow.getSerial(), oldFlow.getFlowsParentSerial()));
 					else{
 						materialDao.updateNumber(plan.getMaterial().getId(), -oldFlow.getNumber(), null, null);
 						plan.getFlows().remove(oldFlow);
 					}
 				}
 			}
-				
+		
+		if(plan.getNumber() <= newPackageTotal)
+			plan.setStatus(2);
+		else
+			plan.setStatus(1);
+		
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
 		
