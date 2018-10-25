@@ -85,6 +85,7 @@
 					</#if>
 				</tr>
 			</#list>
+			<!-- 调用more后会更新displayCount -->
 			<#assign displayCount = pagination.list?size>	
 			<tr><td colspan="<#if type == 2>8<#else>9</#if>">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button id="morePageButton" onclick="callMorePage();">显示更多</button> </#if></td>
 			</tr>

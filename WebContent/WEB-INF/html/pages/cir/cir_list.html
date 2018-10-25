@@ -57,6 +57,9 @@ $(function(){
 				<th width="20"><@s.m "global.id"/></th>
 				<th width="80"><@s.m "${cirType}.serial"/></th>
 				<th width="80"><@s.m "${cirType}.name"/></th>
+				<#if cirType == 'outside'>
+					<th width="80"><@s.m "outside.type"/></th>
+				</#if>
 				<th width="100"><@s.m "${cirType}.items"/></th>
 				<#if cirType != "checkIn" && cirType != "checkOut"><th width="80"><@s.m "${cirType}.company"/></th></#if>
 				<th width="80"><@s.m "${cirType}.time"/></th>
@@ -71,6 +74,7 @@ $(function(){
 				<td>${cir.id}</td>
 				<td>${cir.serial}</td>
 				<td>${cir.name}</td>
+				<#if cirType == 'outside'><td><@s.m "outside.type.${cir.type}"/></td></#if>
 				<td>
 					<#if cirType != 'outsideOut' && cirType != 'outsideIn' && cirType != 'outside'>
 						<#list cir.flows as flow>
@@ -87,10 +91,15 @@ $(function(){
 				<td <#if cir.status==0> style="color:red"</#if>><@s.m "cir.status.${cir.status}"/></td>
 				<td>${(cir.createUser.name)!}</td>
 				<td>
-					<#assign listPara = "cirId=${cir.id}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}" />
-					<@berp_perm url="/v_${cirType}"><a title="<@s.m '${cirType}.view'/>" target="navTab" rel="main" href="v_${cirType}_view.do?${listPara!}"><@s.m "global.view"/></a></@berp_perm>
-					<@berp_perm url="/o_${cirType}"><a title="<@s.m '${cirType}.edit'/>" target="navTab" rel="main" href="v_${cirType}_edit.do?${listPara!}"><@s.m "global.edit"/></a>
+					<#if cirType == 'outside'>
+					<#if cir.type == 4><#assign cirType = 'outsideOut' />
+					<#else><#assign cirType = 'outsideIn' />
+					</#if>
+					</#if>
+					<@berp_perm url="/v_${cirType}"><a title="<@s.m '${cirType}.view'/>" target="navTab" rel="main" href="v_${cirType}_view.do?cirId=${cir.id}"><@s.m "global.view"/></a></@berp_perm>
+					<@berp_perm url="/o_${cirType}"><a title="<@s.m '${cirType}.edit'/>" target="navTab" rel="main" href="v_${cirType}_edit.do?cirId=${cir.id}"><@s.m "global.edit"/></a>
 					<a title="<@s.m 'global.confirm.delete'/>" target="ajaxTodo" href="o_${cirType}_delete.do?cirId=${cir.id}"><@s.m "global.delete"/></a></@berp_perm>
+				
 				</td>
 			</tr>
 			</#list>

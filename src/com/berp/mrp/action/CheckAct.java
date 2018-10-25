@@ -19,8 +19,8 @@ import com.berp.mrp.web.PageListPara;
 public class CheckAct extends CirAct {
 	//check in
 	@RequestMapping("/v_checkIn_list.do")
-	public String checkInList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "checkIn", Cir.CirType.checkIn.ordinal(), request, model);	
+	public String checkInList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "checkIn", Cir.CirType.checkIn.ordinal(), null, request, response, model);	
 	}
 	
 	@RequestMapping("/v_checkIn_add.do")
@@ -79,8 +79,8 @@ public class CheckAct extends CirAct {
 	
 	//check out
 	@RequestMapping("/v_checkOut_list.do")
-	public String checkOutList(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		return this.cirList(searchName, searchRecordName, searchStatus, pageNum, numPerPage, "checkOut", Cir.CirType.checkOut.ordinal(), request, model);
+	public String checkOutList(Integer useSession, String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return this.cirList(useSession, searchName, searchRecordName, searchStatus, pageNum, numPerPage, "checkOut", Cir.CirType.checkOut.ordinal(), null, request, response, model);
 	}
 	
 	@RequestMapping("/v_checkOut_add.do")

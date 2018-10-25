@@ -332,7 +332,7 @@ function calFactor(numInput){
 									</td>
 								<#else>
 									<td>已回收${step.number!0} / 未回收${step.notArriveNumber!0}</td>
-									<td><a href="v_outside_list.do" target="navTab">查看外加工单据</a></td>
+									<td><a href="v_outside_list.do" target="navTab" rel="main"><@s.m 'outside.list'/></a></td>
 									<td></td>
 								</#if>
 							</#if>

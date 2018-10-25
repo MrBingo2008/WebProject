@@ -49,12 +49,13 @@ public class MaterialAct {
 	public static final String MATERIAL_NUM_PER_PAGE = "material_num_per_page";
 	
 	@RequestMapping("/v_material.do")
-	//不用parentId，但是v_material.do也要用到，有两种情况会调用到v_material.do，一个是普通查询（包括navTab和dialog），一个是修改查看返回
+	//不用parentId，但是v_material.do也要用到
+	//有两种情况会调用到v_material.do，一个是普通查询（包括navTab和dialog），一个是修改查看返回
 	//如果是普通查询的话，parentId在list那里登记到session，session主要是用于修改查看返回，然后从session里取出来
 	//type=0: navTab list
 	//type=1: dialog single lookup
 	//type=2: dialog batch list multi select
-	//type=3: navTab batch detai
+	//type=3: navTab batch detail
 	public String material(Integer type, Integer useSession, HttpServletRequest request, ModelMap model) {
 		Category category = categoryDao.findById(1);
 		JSONObject object = categoryDao.getCategoryTree(category);
@@ -151,13 +152,11 @@ public class MaterialAct {
 		
 		materialDao.save(material);
 
+		//type=1应该是用于dialog的add
 		if(type!=null && type >0)
 			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessJsonAndCloseCurrent("保存物料成功!", "material_select_dialog").toString());
 		else
-			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0", "物料").toString());
-
-		
-		
+			ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("保存物料成功!", "v_material.do?type=0&useSession=1", "物料").toString());
 	}
 
 	@RequestMapping("/v_material_view.do")
@@ -248,9 +247,10 @@ public class MaterialAct {
 	}
 	
 	@RequestMapping("/v_record_multi_list.do")
-	//type=0, 用于+生产，type=1用于plan_detail和order_detail
-	//type=2用于purchaseIn
-	//type=0/1都是sell order,  type=2为purchaseIn
+	//type=0, 用于+生产
+	//type=1用于plan_detail和order_detail, multiLookup
+	//type=2用于purchaseIn, multiAddLookup
+	//type=3用于sellOut, multiAddLookup
 	public String recordMultiList(Integer type, Integer orderId, String searchName, HttpServletRequest request, ModelMap model) {
 		List<OrderRecord> records = null;
 		Pagination pagination = null;
@@ -267,11 +267,11 @@ public class MaterialAct {
 			
 			model.addAttribute("orderType", "sell");
 		}
-		else if(type ==1){
+		else if(type ==1 || type == 3){
 			pagination = recordDao.getPage(2, searchName, 1, 2, null, null, 20);
 			model.addAttribute("orderType", "sell");
 		}
-		else{
+		else if(type == 2){
 			pagination = recordDao.getPage(1, searchName, 1, 2, null, null, 20);
 			
 			model.addAttribute("orderType", "purchase");
@@ -280,30 +280,22 @@ public class MaterialAct {
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("type", type);
 		model.addAttribute("searchName", searchName);
-		//这个是为了选择窗口的预定数量label
 		
 		return "pages/data_setting/record_multi_list";
 	}
 	
 	@RequestMapping("/v_record_multi_list_more.do")
-	//目前这个全都是sell
-	//type:0，表示加入购物车模式，1，选择模式
 	public String recordMultiListMore(Integer type, Integer orderId, String searchName, Integer maxId, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		List<OrderRecord> records = null;
 		Pagination pagination = null;
-		if(type == 0){
-			Order order = orderDao.findById(orderId);
-			model.addAttribute("order", order);
-			records = order.getRecords();
-		}
-		else{
+		if(type == 1 || type == 3){
 			pagination = recordDao.getPage(2, searchName, 1, 2, maxId, null, numPerPage);
+		}
+		else if(type == 2){
+			pagination = recordDao.getPage(1, searchName, 1, 2, maxId, null, numPerPage);
 		}
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("type", type);
 		model.addAttribute("searchName", searchName);
-		//这个是为了选择窗口的预定数量label
-		model.addAttribute("orderType", "sell");
 		return "pages/data_setting/record_multi_list_more";
 	}
 	
@@ -317,17 +309,23 @@ public class MaterialAct {
 	}
 	
 	//recordId不合理, 在sellOut的v_record_multi_list.do showBatch里要用到
-	//type=0：全部，type=1库存大于0
+	//type=0：全部，type=1库存大于0, type=2表示multi
 	@RequestMapping("/v_batch_list.do")
 	public String batchAvailableList(Integer type, Integer materialId, Integer recordId, HttpServletRequest request, ModelMap model) {
 		List<BatchFlow> flows = null;
-		if(type != null && type == 0){
+		if(type == null)
+			type = 0;
+		
+		if(type == 0){
 			flows = flowDao.getList(materialId, null, 1, null, null, null);
 			model.addAttribute("type", "all");
 		}
 		else{
 			flows = flowDao.getList(materialId, 1, 1, 0.00, null, null);
-			model.addAttribute("type", "lib");
+			if(type == 1)
+				model.addAttribute("type", "lib_single");
+			else
+				model.addAttribute("type", "lib_multi");
 			model.addAttribute("recordId", recordId);
 			if(recordId!=null){
 				model.addAttribute("orderSerial", recordDao.findById(recordId).getOrd().getInfo());

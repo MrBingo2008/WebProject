@@ -1,7 +1,7 @@
 		<table class="table" width="99%">
 			<thead>
 				<tr>
-					<#if type == "lib">
+					<#if type == "lib_multi">
 					<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 					</#if>
 					
@@ -14,14 +14,14 @@
 					<th width="40"><@s.m "material.leftNumber"/></th></#if>
 					<th width="20"><@s.m "material.unit"/></th>
 					<th width="40"><@s.m "room"/></th>
-					<#if type=='lib'><th width="20"><@s.m "global.operate"/></th></#if>				
+					<#if type=='lib_single'><th width="20"><@s.m "global.operate"/></th></#if>				
 				</tr>
 			</thead>
 			<tbody>
 			<#list flows as flow> 
 				<tr target="sid_obj" rel="1">
 					
-					<#if type == "lib">
+					<#if type == "lib_multi">
 				    <td><input type="checkbox" name="checkboxIds" 
 					value="{'parent.id':'${flow.id}', 'material.serial':'${flow.material.allSerial!}', 'material.name':'${flow.material.name!}', 'material.nameSpec':'${flow.material.nameSpec!}', 'material.id':'${flow.material.id!}', ':company.id':'${(flow.material.company.id)!}' , ':company.name':'${(flow.material.company.name)!}',
 						'record.id':'${recordId!}', 'record.orderSerial':'${orderSerial!}', 'defaultSurfaceId':'${(flow.defaultSurface.id)!}', 'surface.id':'${(flow.surface.id)!}', 'serial':'${flow.serial!}', 'material.unit':'${flow.material.unit!}', number:'${flow.leftNumber!}' , numPerBox:'${flow.numPerBox!}', boxNum:'${flow.boxNum!}'}"/></td>
@@ -38,7 +38,7 @@
 					<#if type == "all"><td>${flow.number*flow.direct}</td><#else><td>${flow.leftNumber!}</td></#if>
 					<td>${flow.material.unit!}</td>			
 					<td>${(flow.room.name)!}</td>
-					<#if type == "lib">
+					<#if type == "lib_single">
 					<td>
 						<!-- 返回record是为了传递参数而已 -->
 						<a class="btnSelect" href="javascript:$.bringBack({'parent.id':'${flow.id}', 'material.serial':'${flow.material.allSerial!}', 'material.name':'${flow.material.name!}', 'material.nameSpec':'${flow.material.nameSpec!}', 'material.id':'${flow.material.id!}', ':company.id':'${(flow.material.company.id)!}' , ':company.name':'${(flow.material.company.name)!}',
@@ -47,7 +47,7 @@
 					</#if>
 				</tr>
 			</#list>
-			<#if type == "lib">
+			<#if type == "lib_multi">
 			<tr><td colspan="10"><button type="button" multAddLookup="checkboxIds" warn="请选择批次"><@s.m "global.select"/></button></td></tr>
 			</#if>
 			</tbody>
