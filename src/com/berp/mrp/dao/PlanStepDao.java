@@ -35,12 +35,12 @@ public class PlanStepDao extends HibernateBaseDao<PlanStep, Integer> {
 	
 	//采用id, findById(id)来更新，比较合理
 	//如果采用PlanStep bean, Updater的话，那调用这个函数时可能先findById，那么session里会不会有两个bean，从而造成冲突
-	public PlanStep updateNumber(Integer id, Double number, Double notArriveNumber){
+	public PlanStep updateNumber(Integer id, Double deltaNumber, Double deltaArriveNumber){
 		
 		PlanStep bean = this.findById(id);
 		
-		bean.setNumber(bean.getNumber()==null?0:bean.getNumber() + number);
-		bean.setNotArriveNumber(bean.getNotArriveNumber()==null?0:bean.getNotArriveNumber() + notArriveNumber);
+		bean.setNumber(bean.getNumber() + deltaNumber);
+		bean.setArriveNumber(bean.getArriveNumber() + deltaArriveNumber);
 		
 		return bean;
 	}
@@ -74,7 +74,7 @@ public class PlanStepDao extends HibernateBaseDao<PlanStep, Integer> {
 		}
 		
 		if(notFinish != null && notFinish == true){
-			f.append(" and bean.number + bean.notArriveNumber < bean.plan.number");
+			f.append(" and bean.arriveNumber < bean.plan.number");
 		}
 		
 		//notEmpty 包括null和""，notBlank还包括" "

@@ -97,7 +97,7 @@ $("#approvalButton").click(function(){
 							
 							<th type="lookup" name="rawFlows[#index#].material.serial" size="20"
 								lookupGroup="rawFlows[#index#]" lookuppk="material.id"  fieldAttrs="{readonly:'readonly'}"
-								lookupUrl="v_raw_batch_list.do?type=${type}" aTitle="<@s.m '${cirType}.selectRaw'/>"><@s.m "product.allSerial"/></th>
+								lookupUrl="v_raw_batch_list.do?type=${type}" aTitle="<@s.m '${cirType}.selectRaw'/>"  lookupDisable="true"><@s.m "product.allSerial"/></th>
 							
 							<th type="text" name="rawFlows[#index#].material.nameSpec" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "product.name"/></th>
 							<!-- 一般出去的，只需要库存的批次号，但是对于外加工的，还是重新编号，因为回收时还要用到 -->
@@ -106,9 +106,10 @@ $("#approvalButton").click(function(){
 							<#if cirType == 'outsideIn'>
 							<th type="hidden" name="rawFlows[#index#].parent.id" style="display:none"></th></#if>
 							<th type="text" name="rawFlows[#index#].parentInfo" size="20" fieldAttrs="{readonly:'readonly'}"><@s.m "${cirType}.for"/></th>
-							
-							<th type="hidden" name="rawFlows[#index#].planStep.id" style="display:none"></th>
-							<th type="text" name="rawFlows[#index#].planStep.name" size="10" fieldAttrs="{readonly:'readonly'}"><@s.m "step.outside"/></th>
+							<#if cirType == 'outsideOut'>
+							<th type="hidden" name="rawFlows[#index#].planStep.id" style="display:none"></th></#if>
+							<!-- outsideIn的话step为空，所以要改个名字，要不然会生产个step -->
+							<th type="text" name="rawFlows[#index#].planStepName" size="10" fieldAttrs="{readonly:'readonly'}"><@s.m "step.outside"/></th>
 							
 							<th type="text" name="rawFlows[#index#].material.unit" size="12" fieldAttrs="{readonly:'readonly'}"><@s.m "material.unit"/></th>
 							
@@ -134,11 +135,15 @@ $("#approvalButton").click(function(){
 							<td><input type="text" name="rawFlows[${count}].serial" value="${rawFlow.serial!}" size="20" class="textInput" readonly=readonly></td>
 							
 							<td>
-							<#if cirType == 'outsideIn'><input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}"></#if>
-							<input type="text" name="rawFlows[${count}].parentInfo" value="${(rawFlow.parent.info)!}" size="20" class="textInput" readonly=readonly></td>
-							
-							<input type="hidden" name="rawFlows[${count}].planStep.id" value="${rawFlow.planStep.id}"></td>
-							<td><input type="text" name="rawFlows[${count}].planStep.name" value="${(rawFlow.planStep.step.name)!}" size="10" class="textInput" readonly=readonly></td>
+							<#if cirType == 'outsideIn'><input type="hidden" name="rawFlows[${count}].parent.id" value="${rawFlow.parent.id}">
+							<input type="text" name="rawFlows[${count}].parentInfo" value="${(rawFlow.parent.info)!}" size="20" class="textInput" readonly=readonly>
+							<#else>
+							<input type="text" name="rawFlows[${count}].parentInfo" value="${(rawFlow.step.plan.serial)!}" size="20" class="textInput" readonly=readonly>
+							</#if>
+							</td>
+							<#if cirType == 'outsideOut'>
+							<input type="hidden" name="rawFlows[${count}].planStep.id" value="${rawFlow.planStep.id}"></#if>
+							<td><input type="text" name="rawFlows[${count}].planStepName" value="${(rawFlow.planStep.step.name)!}" size="10" class="textInput" readonly=readonly></td>
 							
 							<td><input type="text" name="rawFlows[${count}].material.unit" value="${rawFlow.material.unit!}" size="12" class="textInput" readonly=readonly></td>
 							<td><input type="text" name="rawFlows[${count}].number" value="${rawFlow.number!}" size="12" class="positiveNumber textInput required"></td>

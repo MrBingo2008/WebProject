@@ -232,7 +232,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 	private void outsideOutUpdate(Cir bean) throws Exception{
 		List<RawBatchFlow> rawFlows = bean.getRawFlows();
 		for(RawBatchFlow rawFlow : rawFlows){
-			planStepDao.updateNumber(rawFlow.getPlanStep().getId(), 0.00, rawFlow.getNumber());
+			planStepDao.updateNumber(rawFlow.getPlanStep().getId(), rawFlow.getNumber(), 0.00);
 		}
 	}
 	
@@ -263,45 +263,10 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			if(flowCompany.getId().equals(bean.getCompany().getId()) == false){
 				throw new Exception(String.format("出货批次%s的外加工单位为%s，与本到货单%s不一致。", rawFlow.getCir().getSerial(), flowCompany.getName(), bean.getCompany().getName()));	
 			}
-			//rawFlow.setStatus(1);
 			
 			//更新前两级的flow
 			RawBatchFlow parentFlow = rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), rawFlow.getNumber());
 			
-			Plan plan = parentFlow.getPlan();
-			PlanStep planStep = plan.getCurrentStep();
-			
-			//实时用step.number去更新raw batch flow
-			planStep.setNumber(parentFlow.getArriveNumber());
-			
-			if(parentFlow.getArriveNumber().equals(parentFlow.getNumber())){
-				
-				if(planStep.getStep().getType() != 1)
-					throw new Exception("生产数据不一致");
-				planStep.setFinishTime(bean.getCreateTime());
-				//planStep.setNumber(parentFlow.getNumber());
-				planStep.setStatus(PlanStep.Status.finish.ordinal());
-				
-				//外加工完成，归零，弃核时又要重设回去
-				parentFlow.setLeftNumber(parentFlow.getNumber());
-				parentFlow.setArriveNumber(0.00);
-				
-				//下一步有三种情况，第一是结束了，第二是仍然为委外，第三是self manu
-				List<PlanStep> steps = plan.getSteps();
-				if(steps.indexOf(planStep) == steps.size()-1){
-					plan.setStatus(Plan.Status.manuFinish.ordinal());
-				}
-				else if(steps.get(steps.indexOf(planStep)+1).getStep().getType() == 1){
-					//这是重设outside的一套动作
-					parentFlow.setArriveNumber(0.00);
-					parentFlow.setLeftNumber(parentFlow.getNumber());
-					parentFlow.setStatus(1);
-					plan.setStatus(Plan.Status.outside.ordinal());
-				}
-				else{
-					plan.setStatus(Plan.Status.materialFinish.ordinal());
-				}
-			}
 		}
 	}
 

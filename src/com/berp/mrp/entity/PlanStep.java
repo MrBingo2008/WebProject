@@ -19,7 +19,7 @@ public class PlanStep {
 	
 	private java.util.Date finishTime;
 	private Double number;
-	private Double notArriveNumber;
+	private Double arriveNumber;
 
 	private Set<RawBatchFlow> rawFlows;
 	private List<PlanStepNumber> stepNumbers;
@@ -98,6 +98,8 @@ public class PlanStep {
 	//number
 	public java.lang.Double getNumber() {
 		//如果加if(number==null) number = 0.00,这样会反映到数据库
+		if(number==null) 
+			number = 0.00;
 		return number;
 	}
 
@@ -106,12 +108,18 @@ public class PlanStep {
 	}
 	
 	//for outside step
-	public Double getNotArriveNumber() {
-		return notArriveNumber;
+	public Double getArriveNumber() {
+		if(arriveNumber == null)
+			arriveNumber = 0.00;
+		return arriveNumber;
 	}
 
-	public void setNotArriveNumber(Double notArriveNumber) {
-		this.notArriveNumber = notArriveNumber;
+	public void setArriveNumber(Double arriveNumber) {
+		this.arriveNumber = arriveNumber;
+	}
+	
+	public Double getNotArriveNumber(){
+		return this.getNumber() - this.getArriveNumber();
 	}
 	
 	//step

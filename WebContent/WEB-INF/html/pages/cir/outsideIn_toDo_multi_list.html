@@ -1,0 +1,63 @@
+<!-- type=2为出货单，1为到货单 -->
+<form id="pagerForm" method="post" onsubmit="return dwzSearch(this, 'dialog');" action="v_outsideIn_toDo_multi_list.do">
+	<input type="hidden" name="pageNum" value="${pagination.pageNo!}" />
+	<input type="hidden" name="numPerPage" value="${pagination.pageSize!}" />
+	<input type="hidden" name="searchName" value="${searchName!}"/>
+</form>
+<div class="pageHeader" style="border:1px #B8D0D6 solid">
+	<form onsubmit="return dwzSearch(this, 'dialog');" action="v_outsideIn_toDo_multi_list.do" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					<label><@s.m "material.serialOrName"/>：</label><input type="text" name="searchName" value="${searchName!}"/>
+				</td>
+				<td>
+					<div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.m "global.query"/></button></div></div>
+					<div class="button"><div class="buttonContent"><button type="button" multAddLookup="checkboxIds" warn="请选择产品"><@s.m "global.select"/></button></div></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
+</div>
+
+<div class="pageContent" style="border-left:1px #B8D0D6 solid;border-right:1px #B8D0D6 solid;border-bottom:1px #B8D0D6 solid">
+	<table class="table" width="99%" layoutH="117" rel="jbsxBox">
+		<thead>
+			<tr>
+				<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
+				<th width="100" orderField="number" class="asc"><@s.m "material.allSerial"/></th>
+				<th width="100"><@s.m "material.nameSpec"/></th>
+				<th width="160"><@s.m "outsideOut.serial"/></th>
+				<th width="40"><@s.m "material.unit"/></th>
+				<th width="100"><@s.m "step.outside"/></th>
+				<th width="100"><@s.m "outsideOut.number"/></th>
+				<th width="100"><@s.m "rawFlow.notArriveNumber"/></th>			
+			</tr>
+		</thead>
+		<tbody>
+		<#list pagination.list as rawFlow>
+			<tr>
+			    <td><input type="checkbox" name="checkboxIds"
+			    value="{'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'material.nameSpec':'${rawFlow.material.nameSpec!}', 'material.unit':'${rawFlow.material.unit!}',
+					':company.id':'${(rawFlow.cir.company.id)!}' , ':company.name':'${(rawFlow.cir.company.name)!}',
+					 number:'${rawFlow.leftNumber!}', 'planStep.id':'${(rawFlow.step.id)!}', 'planStep.name':'${(rawFlow.step.name)!}',
+					 'parent.info':'${rawFlow.info!}', 'parent.id':'${rawFlow.id}'}" />
+			    </td>
+				<td>${rawFlow.material.allSerial!}</td>
+				<td>${rawFlow.material.nameSpec!}</td>
+				<td>${rawFlow.serial!}</td>
+				<td>${rawFlow.material.unit!}</td>
+				<td>${(rawFlow.step.name)!}</td>
+				<td>${rawFlow.number!}</td>
+				<td>${rawFlow.notArriveNumber!}</td>
+			</tr>
+		</#list>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages"><span>每页显示${pagination.pageSize!}条，共${pagination.totalCount!}条</span></div>
+		<div class="pagination" targetType="dialog" totalCount="${pagination.totalCount!}" numPerPage="${pagination.pageSize!}" pageNumShown="10" currentPage="${pagination.pageNo!}"></div>
+	</div>
+</div>

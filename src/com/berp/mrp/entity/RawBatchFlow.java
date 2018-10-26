@@ -49,7 +49,7 @@ public class RawBatchFlow extends BaseBatchFlow {
 	
 	public Double getNotArriveNumber(){
 		//对于type=0，也适用于type=1， leftNumber=0
-		return this.getNumber() - this.getArriveNumber() - this.getLeftNumber();
+		return this.getNumber() - this.getArriveNumber();
 	}
 	
 	//children
@@ -88,5 +88,4 @@ public class RawBatchFlow extends BaseBatchFlow {
 	public void setPlanStep(PlanStep planStep) {
 		this.planStep = planStep;
 	}
-	
 }

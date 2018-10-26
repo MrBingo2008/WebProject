@@ -337,7 +337,7 @@ public class MaterialAct {
 	}
 	
 	//type=1 out; type=2 in，0预留，只用type作为参数就可以，cirType根据type再定
-	@RequestMapping("/v_raw_batch_list.do")
+	/*@RequestMapping("/v_raw_batch_list.do")
 	public String rawBatchList(Integer type, String searchName, Integer parentId, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
 		pageNum = pageNum == null?1:pageNum;
 		numPerPage = numPerPage == null?20:numPerPage;
@@ -349,7 +349,7 @@ public class MaterialAct {
 		model.addAttribute("type", type);
 		model.addAttribute("cirType", type==2?"outsideIn":"outsideOut");
 		return "pages/data_setting/raw_batch_list";
-	}
+	}*/
 	
 	@RequestMapping("/v_material_unit.do")
 	public void materialUnit(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
@@ -377,9 +377,6 @@ public class MaterialAct {
 
 	@Autowired
 	private BatchFlowDao flowDao;
-	
-	@Autowired
-	private RawBatchFlowDao rawFlowDao;
 	
 	@Autowired
 	private MaterialDao materialDao;

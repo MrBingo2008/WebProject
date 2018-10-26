@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.berp.mrp.dao.CirDao;
 import com.berp.mrp.dao.PlanDao;
 import com.berp.mrp.dao.PlanStepDao;
+import com.berp.mrp.dao.RawBatchFlowDao;
 import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.mrp.web.PageListPara;
 import com.berp.mrp.entity.Cir;
@@ -30,10 +31,22 @@ import com.berp.framework.web.ResponseUtils;
 public class OutsideAct extends CirAct {
 	
 	@RequestMapping("/v_outsideOut_toDo_multi_list.do")
-	public String rawBatchList(HttpServletRequest request, ModelMap model) {
+	public String outsideOutToDoMultiList(HttpServletRequest request, ModelMap model) {
 		Pagination pagination = planStepDao.getPage(1, null, 0, 2, true, null, 1, 20);
 		model.addAttribute("pagination", pagination);
 		return "pages/cir/outsideOut_todo_multi_list";
+	}
+	
+	@RequestMapping("/v_outsideIn_toDo_multi_list.do")
+	public String outsideInToDoMultiList(String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
+		pageNum = pageNum == null?1:pageNum;
+		numPerPage = numPerPage == null?20:numPerPage;
+		
+		//type=1 out：选择leftNumber大于0，in：只需要status = 1 2就可以
+		Pagination pagination = rawFlowDao.getPage(1, 1,2, searchName, 0.00, pageNum, numPerPage);
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("searchName", searchName);
+		return "pages/cir/outsideIn_todo_multi_list";
 	}
 	
 	@RequestMapping("/v_outsideOut_add.do")
@@ -76,7 +89,7 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideOut_list.do", "查询外加工出货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outside_list.do?useSession=1", "查询外加工单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 
@@ -130,7 +143,7 @@ public class OutsideAct extends CirAct {
 			return;
 		}
 		
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideOut_list.do?"+listPara.getUrlPara(), "查询外加工出货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outside_list.do?useSession=1", "查询外加工单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 	
@@ -155,7 +168,7 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outsideOut_list.do", "查询外加工出货单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outside_list.do?useSession=1", "查询外加工单").toString());
 	}
 	
 	@RequestMapping("/v_outsideOut_list.do")
@@ -204,7 +217,7 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson(ex.getMessage()).toString());
 			return;
 		}
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideIn_list.do", "查询外加工到货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outside_list.do?useSession=1", "查询外加工单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 	
@@ -256,7 +269,7 @@ public class OutsideAct extends CirAct {
 			return;
 		}
 		
-		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outsideIn_list.do?"+listPara.getUrlPara(), "查询外加工到货单");
+		JSONObject object = DwzJsonUtils.getSuccessAndRedirectJson("保存成功!", "v_outside_list.do?useSession=1", "查询外加工单");
 		ResponseUtils.renderJson(response, object.toString());
 	}
 
@@ -281,7 +294,7 @@ public class OutsideAct extends CirAct {
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("删除错误，数据可能在其他地方引用.").toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outsideIn_list.do", "查询外加工到货单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("删除成功!", "v_outside_list.do?useSession=1", "查询外加工单").toString());
 	}
 	
 	@RequestMapping("/v_outsideIn_list.do")
@@ -296,4 +309,7 @@ public class OutsideAct extends CirAct {
 	
 	@Autowired
 	private PlanStepDao planStepDao;
+	
+	@Autowired
+	private RawBatchFlowDao rawFlowDao;
 }

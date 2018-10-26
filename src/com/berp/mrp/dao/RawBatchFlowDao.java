@@ -16,6 +16,7 @@ import com.berp.mrp.entity.Cir;
 import com.berp.mrp.entity.Material;
 import com.berp.mrp.entity.OrderRecord;
 import com.berp.mrp.entity.Plan;
+import com.berp.mrp.entity.PlanStep;
 import com.berp.mrp.entity.RawBatch;
 import com.berp.mrp.entity.RawBatchFlow;
 
@@ -53,11 +54,11 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		{
 			f.append(" and bean.type=:type");
 			f.setParam("type", type);
-			
+			/*
 			if(type == 0)
 				f.append(" and bean.plan.status=3");
 			else
-				f.append(" and bean.parent.plan.status=3");
+				f.append(" and bean.parent.plan.status=3");*/
 		}
 		if(status1!=null && status2 ==null){
 			f.append(" and bean.status = :statuts1");
@@ -73,10 +74,11 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 			f.append(" and (bean.material.name like :name or bean.material.serial like :name) ");
 			f.setParam("name", "%" + name + "%");
 		}
+		/*
 		if(lessLeftNumber!=null){
 			f.append(" and bean.leftNumber > :lessLeftNumber");
 			f.setParam("lessLeftNumber", lessLeftNumber);
-		}
+		}*/
 		
 		f.append(" order by bean.id desc");
 		
@@ -207,7 +209,7 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		cirDao.updateStatusByRawFlow(flow.getCir().getId());
 				
 		//更新爷爷节点flow的状态
-	    RawBatchFlow flowParent = flow.getParent(); 
+	    /*RawBatchFlow flowParent = flow.getParent(); 
 		flowParent.setArriveNumber(flowParent.getArriveNumber() + arriveNumber);
 		//两个Double的对比要用equal...
 		if(flowParent.getArriveNumber().equals(flowParent.getNumber()))
@@ -215,9 +217,20 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		else if(flowParent.getArriveNumber()<flowParent.getNumber()&&flowParent.getArriveNumber()>0)
 			flowParent.setStatus(2);
 		else
-			flowParent.setStatus(1);
+			flowParent.setStatus(1);*/
 		
-		return flowParent;
+		PlanStep step = flow.getPlanStep(); 
+		step.setNumber(step.getNumber() + arriveNumber);
+		step.setArriveNumber(step.getArriveNumber() + arriveNumber);
+		//两个Double的对比要用equal...
+		if(step.getNumber().equals(step.getPlan().getNumber()))
+			step.setStatus(3);
+		else if(step.getNumber()<step.getPlan().getNumber()&&step.getNumber()>0)
+			step.setStatus(2);
+		else
+			step.setStatus(1);
+		
+		return flow;
 	}
 	
 	@Override
