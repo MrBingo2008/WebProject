@@ -1,18 +1,31 @@
 <#list pagination.list as record>
 	<tr>
+		<!-- ids应该是在database.js那里写死设为累加 -->
+		<#if type lt 3>
 	    <td>
-	    <input type="checkbox" name="checkboxIds" value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"/>
-	    <input type="hidden" name="recordId" value="${record.id}"/>
+	    <input type="checkbox" name="checkboxIds" 
+	    <#if type == 2>
+		    <#assign boxNum = "" />
+			<#if record.material.numPerBox?? && record.material.numPerBox != 0><#assign boxNum = record.notFinishNumber / record.material.numPerBox />
+			</#if>		
+	    	value="{'material.id':'${record.material.id}', 'material.serial':'${record.material.allSerial!}', 'material.nameSpec':'${record.material.nameSpec!}', numPerBox:'${record.material.numPerBox!}', 'material.unit':'${record.material.unit!}', ':company.id':'${(record.material.company.id)!}' , ':company.name':'${(record.material.company.name)!}', 
+				 'record.order.info':'${record.ord.info!}', 'record.orderSerial': '${record.ord.info!}', 'record.id':'${record.id}', 'record.number':'${record.number!}' , number:'${record.notFinishNumber!}', boxNum: '${boxNum}', 'record.surface.name':'${(record.surface.name)!}', 'record.id':'${record.id}'}"
+	    <#else>
+	    	value="{'ids':'${record.id}', infos:'${record.fullInfo!}', number:${record.notFinishNumber!}, 'material.id':'${record.material.id}', 'material.nameSpec':'${record.material.nameSpec!}'}"
+	    </#if>/>
 	    </td>
+	    </#if>
+	    <input type="hidden" name="recordId" value="${record.id}"/>
 		<td>${record.material.allSerial!}</td>
 		<td>${record.material.nameSpec!}</td>
-		<#if type != 2>
-			<td>${(record.surface.name)!}</td>
-		</#if>
+		<#if type != 2><td>${(record.surface.name)!}</td></#if>
 		<td>${record.ord.company.name!}</td>
 		<td>${record.ord.serial!}</td>
 		<td>${record.number!}</td>
 		<td>${record.notFinishNumber!}</td>
 		<td>${record.material.unit!}</td>
+		<#if type == 3>
+		<td><a href="v_batch_list.do?type=3&materialId=${record.material.id}&recordId=${record.id}" onclick="openBatchDetail();" target="ajax" rel="sidebarContentH"><@s.m "material.showBatch"/></a></td>
+		</#if>
 	</tr>
 </#list>

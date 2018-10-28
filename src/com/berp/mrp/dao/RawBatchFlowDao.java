@@ -47,7 +47,7 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 		return entity;
 	}
 	
-	public Pagination getPage(Integer type, Integer status1, Integer status2, String name, Double lessLeftNumber, Integer pageNo, Integer pageSize) {
+	public Pagination getPage(Integer type, Integer status1, Integer status2, String name, Integer maxId, Integer pageNo, Integer pageSize) {
 		Finder f = Finder.create("select bean from RawBatchFlow bean  where 1=1");
 	
 		if(type!=null)
@@ -74,15 +74,17 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 			f.append(" and (bean.material.name like :name or bean.material.serial like :name) ");
 			f.setParam("name", "%" + name + "%");
 		}
-		/*
-		if(lessLeftNumber!=null){
-			f.append(" and bean.leftNumber > :lessLeftNumber");
-			f.setParam("lessLeftNumber", lessLeftNumber);
-		}*/
+		
+		if (maxId != null) {
+			f.append(" and bean.id<:maxId");
+			f.setParam("maxId", maxId);
+		}
 		
 		f.append(" order by bean.id desc");
-		
-		return find(f, pageNo, pageSize);
+		if(maxId == null && pageNo !=null)
+			return find(f, pageNo, pageSize);
+		else
+			return find(f, pageSize);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -184,6 +186,8 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 	//更新到达数量
 	//注意下跟cirDao的分工，cirDao可能主要处理他底下的flow的更新，以及plan和step的更新，而rawBatchFlowDao处理相关联flow的更新
 	//arriveNumber可以为负数，支持cancelApproval
+	
+	//主要用于outsideIn更新， 更新parent和step
 	public RawBatchFlow updateArriveNumber (Integer parentFlowId, Double arriveNumber) throws Exception{
 		
 		//更新发货单记录
@@ -220,12 +224,12 @@ public class RawBatchFlowDao extends HibernateBaseDao<RawBatchFlow, Integer> {
 			flowParent.setStatus(1);*/
 		
 		PlanStep step = flow.getPlanStep(); 
-		step.setNumber(step.getNumber() + arriveNumber);
+		//step.setNumber(step.getNumber() + arriveNumber);
 		step.setArriveNumber(step.getArriveNumber() + arriveNumber);
 		//两个Double的对比要用equal...
-		if(step.getNumber().equals(step.getPlan().getNumber()))
+		if(step.getArriveNumber().equals(step.getNumber()) && step.getArriveNumber()>= step.getPlan().getNumber())
 			step.setStatus(3);
-		else if(step.getNumber()<step.getPlan().getNumber()&&step.getNumber()>0)
+		else if(step.getArriveNumber()>0)
 			step.setStatus(2);
 		else
 			step.setStatus(1);

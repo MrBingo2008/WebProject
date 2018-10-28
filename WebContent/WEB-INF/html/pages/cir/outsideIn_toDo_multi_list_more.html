@@ -1,0 +1,18 @@
+<#list pagination.list as rawFlow>
+	<tr>
+	    <td><input type="checkbox" name="checkboxIds"
+	    value="{'material.id':'${rawFlow.material.id}', 'material.serial':'${rawFlow.material.allSerial!}', 'material.name':'${rawFlow.material.name!}', 'material.nameSpec':'${rawFlow.material.nameSpec!}', 'material.unit':'${rawFlow.material.unit!}',
+			':company.id':'${(rawFlow.cir.company.id)!}' , ':company.name':'${(rawFlow.cir.company.name)!}',
+			 number:'${rawFlow.notArriveNumber!}', 'planStepName':'${(rawFlow.planStep.step.name)!}',
+			 'parentInfo':'${rawFlow.info!}', 'parent.id':'${rawFlow.id}'}" />
+	    <input type="hidden" name="rawFlowId" value="${rawFlow.id}"/>
+	    </td>
+		<td>${rawFlow.material.allSerial!}</td>
+		<td>${rawFlow.material.nameSpec!}</td>
+		<td>${rawFlow.serial!}</td>
+		<td>${rawFlow.material.unit!}</td>
+		<td>${(rawFlow.planStep.step.name)!}</td>
+		<td>${(rawFlow.cir.company.name)!}</td>
+		<td>${rawFlow.notArriveNumber!}</td>
+	</tr>
+</#list>

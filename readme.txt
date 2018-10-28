@@ -60,3 +60,4 @@ process表的category_id改为允许空
 表格plan_step新增arriveNumber
 表格plan_step的number和arriveNumber设为非空
 表格raw_batch_flow的几个number也设为非空
+plan_step表格status以及raw_batch_flow status的注释

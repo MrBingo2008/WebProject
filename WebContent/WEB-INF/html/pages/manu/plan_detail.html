@@ -317,7 +317,7 @@ function calFactor(numInput){
 										</table>
 									</td>
 								<#else>
-									<td>已回收${step.number!0} / 未回收${step.notArriveNumber!0}</td>
+									<td>已外送${step.number!0} / 已回收${step.arriveNumber!0}</td>
 									<td><a href="v_outside_list.do?searchRecordName=${plan.material.customerSerial!}" target="navTab" rel="main"><@s.m 'outside.list'/></a></td>
 									<td></td>
 								</#if>

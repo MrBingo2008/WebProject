@@ -19,6 +19,7 @@ import com.berp.mrp.dao.RawBatchFlowDao;
 import com.berp.mrp.entity.RawBatchFlow;
 import com.berp.mrp.web.PageListPara;
 import com.berp.mrp.entity.Cir;
+import com.berp.mrp.entity.Order;
 import com.berp.core.dao.UserDao;
 import com.berp.core.entity.User;
 import com.berp.framework.page.Pagination;
@@ -31,22 +32,37 @@ import com.berp.framework.web.ResponseUtils;
 public class OutsideAct extends CirAct {
 	
 	@RequestMapping("/v_outsideOut_toDo_multi_list.do")
-	public String outsideOutToDoMultiList(HttpServletRequest request, ModelMap model) {
-		Pagination pagination = planStepDao.getPage(1, null, 0, 2, true, null, 1, 20);
+	public String outsideOutToDoMultiList(String searchName, HttpServletRequest request, ModelMap model) {
+		Pagination pagination = planStepDao.getPage(1, searchName, 1, 2, true, null, 1, 20);
 		model.addAttribute("pagination", pagination);
+		model.addAttribute("searchName", searchName);
 		return "pages/cir/outsideOut_todo_multi_list";
 	}
 	
+	@RequestMapping("/v_outsideOut_toDo_multi_list_more.do")
+	public String outsideOutToDoMultiListMore(String searchName, Integer maxId, HttpServletRequest request, ModelMap model) {
+		Pagination pagination = planStepDao.getPage(1, searchName, 1, 2, true, maxId, null, 20);
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("searchName", searchName);
+		return "pages/cir/outsideOut_todo_multi_list_more";
+	}
+	
 	@RequestMapping("/v_outsideIn_toDo_multi_list.do")
-	public String outsideInToDoMultiList(String searchName, Integer pageNum, Integer numPerPage, HttpServletRequest request, ModelMap model) {
-		pageNum = pageNum == null?1:pageNum;
-		numPerPage = numPerPage == null?20:numPerPage;
-		
+	public String outsideInToDoMultiList(String searchName, HttpServletRequest request, ModelMap model) {		
 		//type=1 out：选择leftNumber大于0，in：只需要status = 1 2就可以
-		Pagination pagination = rawFlowDao.getPage(1, 1,2, searchName, 0.00, pageNum, numPerPage);
+		Pagination pagination = rawFlowDao.getPage(1, 1,2, searchName, null, 1, 20);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchName", searchName);
 		return "pages/cir/outsideIn_todo_multi_list";
+	}
+	
+	@RequestMapping("/v_outsideIn_toDo_multi_list_more.do")
+	public String outsideInToDoMultiListMore(String searchName, Integer maxId, HttpServletRequest request, ModelMap model) {		
+		//type=1 out：选择leftNumber大于0，in：只需要status = 1 2就可以
+		Pagination pagination = rawFlowDao.getPage(1, 1,2, searchName, maxId, null, 20);
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("searchName", searchName);
+		return "pages/cir/outsideIn_todo_multi_list_more";
 	}
 	
 	@RequestMapping("/v_outsideOut_add.do")
@@ -94,11 +110,7 @@ public class OutsideAct extends CirAct {
 	}
 
 	@RequestMapping("/v_outsideOut_view.do")
-	public String outsideOutView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer cirId, HttpServletRequest request, ModelMap model) {
-		
-		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
-		listPara.addToModel(model);
+	public String outsideOutView(Integer cirId, HttpServletRequest request, ModelMap model) {
 		
 		model.addAttribute("cirType", "outsideOut");
 		model.addAttribute("type", 1);
@@ -109,11 +121,7 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_outsideOut_edit.do")
-	public String outsideOutEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer cirId, HttpServletRequest request, ModelMap model) {
-		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
-		listPara.addToModel(model);
-		
+	public String outsideOutEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideOut");
 		model.addAttribute("type", 1);
 		
@@ -124,7 +132,7 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/o_outsideOut_update.do")
-	public void outsideOutUpdate(PageListPara listPara,Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void outsideOutUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(cir.getRawFlows()==null || cir.getRawFlows().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("明细不能为空").toString());
 			return;
@@ -148,16 +156,14 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/o_outsideOut_cancelApproval.do")
-	public void outsideOutCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+	public void outsideOutCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
 			cirDao.outsideOutCancelApproval(cirId);
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_outsideOut_edit.do?cirId=%d&%s", cirId, listPara.getUrlPara()), "编辑外加工出货单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_outsideOut_edit.do?cirId=%d", cirId), "编辑外加工出货单").toString());
 	}
 	
 	@RequestMapping("/o_outsideOut_delete.do")
@@ -222,11 +228,7 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_outsideIn_view.do")
-	public String outsideInView(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer cirId, HttpServletRequest request, ModelMap model) {
-		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
-		listPara.addToModel(model);
-		
+	public String outsideInView(Integer cirId, HttpServletRequest request, ModelMap model) {
 		model.addAttribute("cirType", "outsideIn");
 		model.addAttribute("type", 2);
 		model.addAttribute("openMode", "view");
@@ -236,10 +238,7 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/v_outsideIn_edit.do")
-	public String purchaseInEdit(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer cirId, HttpServletRequest request, ModelMap model) {
-		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
-		listPara.addToModel(model);
+	public String purchaseInEdit(Integer cirId, HttpServletRequest request, ModelMap model) {
 		
 		model.addAttribute("cirType", "outsideIn");
 		model.addAttribute("type", 2);
@@ -251,7 +250,7 @@ public class OutsideAct extends CirAct {
 	}
 	
 	@RequestMapping("/o_outsideIn_update.do")
-	public void outsideInUpdate(PageListPara listPara,Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+	public void outsideInUpdate(Cir cir, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		if(cir.getRawFlows()==null || cir.getRawFlows().size()<=0){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("明细不能为空").toString());
 			return;
@@ -274,16 +273,14 @@ public class OutsideAct extends CirAct {
 	}
 
 	@RequestMapping("/o_outsideIn_cancelApproval.do")
-	public void outsideInCancelApproval(String searchName, String searchRecordName, Integer searchStatus, Integer pageNum, Integer numPerPage,
-			Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		PageListPara listPara = new PageListPara(searchName, searchRecordName, searchStatus, pageNum, numPerPage);
+	public void outsideInCancelApproval(Integer cirId, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		try{
 			cirDao.outsideInCancelApproval(cirId);
 		}catch(Exception ex){
 			ResponseUtils.renderJson(response, DwzJsonUtils.getFailedJson("弃核失败." + ex.getMessage()).toString());
 			return;
 		}
-		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_outsideIn_edit.do?cirId=%d&%s", cirId, listPara.getUrlPara()), "编辑外加工到货单").toString());
+		ResponseUtils.renderJson(response, DwzJsonUtils.getSuccessAndRedirectJson("弃核成功!", String.format("v_outsideIn_edit.do?cirId=%d", cirId), "编辑外加工到货单").toString());
 	}
 	
 	@RequestMapping("/o_outsideIn_delete.do")

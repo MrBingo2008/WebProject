@@ -352,6 +352,7 @@ public class ManuAct {
 		
 		for(PlanStep step : plan.getSteps()){
 			step.setPlan(plan);
+			step.setStatus(plan.getStatus());
 		}
 		plan = planDao.save(plan);
 		String message = this.saveProcess(plan);
@@ -375,6 +376,7 @@ public class ManuAct {
 		
 		for(PlanStep step : plan.getSteps()){
 			step.setPlan(plan);
+			step.setStatus(plan.getStatus());
 		}
 		//这样获取的newPlan，里面的material.process一样是空的，所以还是要重新获取
 		Plan newPlan = planDao.update(plan);
@@ -391,12 +393,12 @@ public class ManuAct {
 			if(bean.getMaterialFlows()!=null && bean.getMaterialFlows().size()>0)
 				throw new Exception("请先删除下料信息");
 			for(PlanStep step: bean.getSteps()){
-				if(step.getType() == 0){
+				if(step.getStep().getType() == 0){
 					if(step.getStepNumbers()!=null && step.getStepNumbers().size()>0)
 						throw new Exception("请先删除生产信息");
 				}else{
 					if(step.getRawFlows()!=null && step.getRawFlows().size()>0)
-						throw new Exception("请先删除外加工单据");
+						throw new Exception("请先删除外相关加工单据");
 				}
 			}
 			if(bean.getPackageFlows()!=null &&  bean.getPackageFlows().size()>0)

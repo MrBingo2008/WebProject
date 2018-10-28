@@ -118,6 +118,10 @@ public class PlanStep {
 		this.arriveNumber = arriveNumber;
 	}
 	
+	public Double getNotOutNumber(){
+		return this.getPlan().getNumber() - this.getNumber();
+	}
+	
 	public Double getNotArriveNumber(){
 		return this.getNumber() - this.getArriveNumber();
 	}

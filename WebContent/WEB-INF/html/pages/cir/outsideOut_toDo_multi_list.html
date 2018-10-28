@@ -28,20 +28,25 @@
 			<tr>
 				<th width="30"><input type="checkbox" class="checkboxCtrl" group="checkboxIds" /></th>
 				<th width="100"><@s.m "material.nameSpec"/></th>
-				<th width="100"><@s.m "plan.serial"/></th>
-				<th width="100"><@s.m "step.outside"/></th>
-				<th width="100"><@s.m "material.manuNumber"/></th> 
-				<th width="100"><@s.m "rawFlow.arriveNumber"/></th>
-				<th width="100"><@s.m "rawFlow.notArriveNumber"/></th>		
+				<th width="120"><@s.m "plan.serial"/></th>
+				<th width="60"><@s.m "step.outside"/></th>
+				<th width="60"><@s.m "material.manuNumber"/></th> 
+				<th width="60"><@s.m "outside.number"/></th>
+				<th width="60"><@s.m "outside.arriveNumber"/></th>
+				<th width="60"><@s.m "outside.notOutNumber"/></th>
+						
 			</tr>
 		</thead>
 		<tbody>
 		<#list pagination.list as step>
 			<tr>
+				<!-- outsideIn的raw batch flow不需要plan step，所以设planStepName,但也需要显示step name
+				同理， outsideOut不需要parent，但也需要显示plan.serial -->
 			    <td><input type="checkbox" name="checkboxIds"
-			    value="{'material.id':'${step.plan.material.id}', 'material.nameSpec':'${step.plan.material.nameSpec!}', 'material.unit':'${step.plan.material.unit}', 
-			    'planStep.id':'${(step.id)!}', 'planStep.name':'${(step.step.name)!}',
+			    value="{'material.id':'${step.plan.material.id}', 'material.nameSpec':'${step.plan.material.nameSpec!}', 'material.serial':'${step.plan.material.allSerial!}', 'material.unit':'${step.plan.material.unit}', 
+			    'planStep.id':'${(step.id)!}', 'planStepName':'${(step.step.name)!}', number:'${step.notOutNumber!}',
 			    'parentInfo':'${step.plan.serial}'}" />
+			    <!-- 这个是为了more -->
 			    <input type="hidden" name="stepId" value="${step.id}"/>
 			    </td>
 				<td>${step.plan.material.nameSpec!}</td>
@@ -49,11 +54,13 @@
 				<td>${(step.step.name)!}</td>
 				<td>${(step.plan.number)!}</td>
 				<td>${(step.number)!}</td>
-				<td>${(step.notArriveNumber)!}</td>
+				<td>${(step.arriveNumber)!}</td>
+				<td>${(step.notOutNumber)!}</td>
+				
 			</tr>
 		</#list>
 		<#assign displayCount = pagination.list?size>	
-		<tr><td colspan="3">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button id="morePageButton" onclick="callMorePage();">显示更多</button> </#if></td>
+		<tr><td colspan="8">共<span id="totalNum">${pagination.totalCount!}</span>条，已显示<span id="displayNum">${displayCount}</span>条  <#if pagination.totalCount gt displayCount> <button id="morePageButton" onclick="callMorePage();">显示更多</button> </#if></td>
 		</tr>
 		</tbody>
 	</table>
@@ -63,7 +70,7 @@
 function callMorePage(){
 	var $parent = $.pdialog.getCurrent();
     var $box = $parent.find("tbody:last");
-    var maxRecordId = $box.find("input[name=recordId]:last").val();
-	morePage({targetType:"dialog", rel:"", data:{maxId:maxRecordId}});
+    var maxId = $box.find("input[name=stepId]:last").val();
+	morePage({targetType:"dialog", rel:"", data:{maxId:maxId}});
 }
 </script>

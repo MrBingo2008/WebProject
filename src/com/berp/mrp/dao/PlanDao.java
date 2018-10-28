@@ -77,6 +77,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 		plan.setFlows(new ArrayList<BatchFlow>());
 		plan.setStatus(Plan.Status.edit.ordinal());
 		
+		//这个可以不要吧？
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
 	}
@@ -240,7 +241,10 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 				}
 			}
 		
-		if(plan.getNumber() <= newPackageTotal)
+		//缺少考虑outside的情况
+		if(newPackageTotal >= plan.getNumber())
+			plan.setStatus(3);
+		else if(newPackageTotal >0 )
 			plan.setStatus(2);
 		else
 			plan.setStatus(1);

@@ -244,7 +244,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			if(rawFlow.getChildren()!=null && rawFlow.getChildren().size()>0)
 				throw new Exception(String.format("请先删除相关联的到货批次'%s'", rawFlow.getChildrenString()));
 			rawFlow.setStatus(0);
-			rawFlowDao.updateLeftNumber(rawFlow.getParent().getId(), -rawFlow.getNumber());
+			planStepDao.updateNumber(rawFlow.getPlanStep().getId(), -rawFlow.getNumber(), 0.00);
 		}
 		
 		cir.setStatus(0);
@@ -265,7 +265,7 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 			}
 			
 			//更新前两级的flow
-			RawBatchFlow parentFlow = rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), rawFlow.getNumber());
+			rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), rawFlow.getNumber());
 			
 		}
 	}
@@ -276,51 +276,17 @@ public class CirDao extends HibernateBaseDao<Cir, Integer> {
 		List<RawBatchFlow> rawFlows = cir.getRawFlows();
 		
 		for(RawBatchFlow rawFlow : rawFlows){
-			Plan plan = rawFlow.getParent().getParent().getPlan();
-			if(plan.getStatus() == Plan.Status.packageFinish.ordinal())
-				throw new Exception(String.format("生产任务'%s'已入库, 请先弃核入库.", plan.getSerial()));
-			
-			PlanStep currentStep = rawFlow.getPlanStep();
-			//两种情况：1，处于当前的step，2，处于最后一个apply的step：接下来要不就是没有step了，有step的话，分两种情况
-			boolean isCurrentStep = currentStep.equals(plan.getCurrentStep());
-			boolean isLastApply = currentStep.getIsLastApply();
-			PlanStep nextStep = plan.getNextStep(rawFlow.getPlanStep());
-			
-			if(isCurrentStep || 
-					isLastApply && ( nextStep ==null || nextStep.getStep().getType() == 0 && nextStep.getStatus() == 0 || nextStep.getStep().getType() == 1 && nextStep.getStatus() ==0 && (nextStep.getRawFlows()==null || nextStep.getRawFlows().size() == 0) ) ){
-			
-				//删除plan in
-				plan.setFlows(plan.getMaterialFlows());
-				
-				rawFlow.setStatus(0);
-				
-				//这里有问题，如果完成的数量跟预计的数量不一致就麻烦
-				if(currentStep.getStatus() == 1){
-					plan.getRawBatchFlow().setNumber(currentStep.getNumber());
-					plan.getRawBatchFlow().setArriveNumber(currentStep.getNumber());
-					plan.getRawBatchFlow().setLeftNumber(0.00);
-				}
-				
-				//更新所关联的发货单和生产任务
-				rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), -rawFlow.getNumber());
-				
-				//更新生产工序，不能在updateArriveNumber的函数里实现，因为他是个通用函数
-				//这个判断只是排除currentStep.getNumber =0的情况
-				if(plan.getRawBatchFlow().getNumber() > plan.getRawBatchFlow().getArriveNumber()){
-					rawFlow.getPlanStep().setStatus(0);
-					rawFlow.getPlanStep().setNumber(plan.getRawBatchFlow().getArriveNumber());
-					plan.setStatus(Plan.Status.outside.ordinal());
-				}
-				
-			}else
-				throw new Exception(String.format("目前生产任务'%s'的状态不处于该外加工'%s'，请将生产任务退回到该状态后，再弃核。", plan.getSerial(), rawFlow.getPlanStep().getStep().getName()));
+			rawFlow.setStatus(0);
+			rawFlowDao.updateArriveNumber(rawFlow.getParent().getId(), -rawFlow.getNumber());
 		}
 		
 		cir.setStatus(0);
 		
+		//这里应该还要修改plan status
+		
 		//不合理，需要改
-		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
-		getSession().createQuery(hql).executeUpdate();
+		//String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
+		//getSession().createQuery(hql).executeUpdate();
 	}
 	
 	private void checkInUpdate(Cir bean) throws Exception{

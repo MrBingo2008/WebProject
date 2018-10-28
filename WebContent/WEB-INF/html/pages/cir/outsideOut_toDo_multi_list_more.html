@@ -1,0 +1,19 @@
+<#list pagination.list as step>
+	<tr>
+	    <td><input type="checkbox" name="checkboxIds"
+	    value="{'material.id':'${step.plan.material.id}', 'material.nameSpec':'${step.plan.material.nameSpec!}', 'material.serial':'${step.plan.material.allSerial!}', 'material.unit':'${step.plan.material.unit}', 
+	    'planStep.id':'${(step.id)!}', 'planStepName':'${(step.step.name)!}', number:'${step.notOutNumber!}',
+	    'parentInfo':'${step.plan.serial}'}" />
+	    <!-- 这个是为了more吧？ -->
+	    <input type="hidden" name="stepId" value="${step.id}"/>
+	    </td>
+		<td>${step.plan.material.nameSpec!}</td>
+		<td>${step.plan.serial!}</td>
+		<td>${(step.step.name)!}</td>
+		<td>${(step.plan.number)!}</td>
+		<td>${(step.number)!}</td>
+		<td>${(step.arriveNumber)!}</td>
+		<td>${(step.notOutNumber)!}</td>
+		
+	</tr>
+</#list>
