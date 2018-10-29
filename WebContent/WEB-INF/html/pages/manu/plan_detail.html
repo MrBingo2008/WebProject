@@ -161,7 +161,7 @@ function calFactor(numInput){
 				</p>
 				<p>
 					<label><@s.m "plan.status"/>:</label>
-					<span class="viewLabel"><@s.m "plan.status.${plan.status!0}"/></span>
+					<span class="viewLabel"><#if plan.status==0>未审核<#else>已审核, ${plan.packageNumber!}已入库</#if></span>
 				</p>
 				<p>
 					<label><@s.m "product.info"/>:</label>

@@ -76,7 +76,11 @@ $(function(){
 				<td>${plan.number!}</td>
 				<td>${(plan.rawBatchFlow.number)!}</td>
 				<td>${(plan.createTime?string('yyyy-MM-dd'))!}</td>
-				<td<#if plan.status==0> style="color:red"</#if>><@s.m "plan.status.${plan.status}"/></td>
+				<#if plan.status==0>
+				<td style="color:red">未审核</td>
+				<#else>
+				<td>已审核, ${plan.packageNumber!}已入库</td>
+				</#if>
 				<td>
 				<#assign listPara = "planId=${plan.id}&searchName=${searchName!}&searchRecordName=${searchRecordName!}&searchStatus=${searchStatus!}&pageNum=${pagination.pageNo!}&numPerPage=${pagination.pageSize!}" />
 					<@berp_perm url="/v_plan"><a title="<@s.m 'plan.view'/>" target="navTab" rel="main" href="v_plan_view.do?${listPara}"><@s.m "global.view"/></a></@berp_perm>

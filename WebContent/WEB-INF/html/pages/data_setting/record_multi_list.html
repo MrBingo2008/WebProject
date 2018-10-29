@@ -47,6 +47,7 @@
 					<#if type !=2><th width="60"><@s.m "sell.order.surface"/></th></#if>
 					<th width="80"><@s.m "${orderType}.order.company"/></th>
 					<th width="140"><@s.m "${orderType}.order.serial"/></th>
+					<th width="100"><@s.m "material.libNumber"/></th>
 					<th width="100"><@s.m "${orderType}.order.number"/></th>
 					<th width="100"><@s.m "${orderType}.order.notFinishNumber"/></th>
 					<th width="40"><@s.m "material.unit"/></th>
@@ -77,6 +78,7 @@
 					<#if type != 2><td>${(record.surface.name)!}</td></#if>
 					<td>${record.ord.company.name!}</td>
 					<td>${record.ord.serial!}</td>
+					<td>${record.material.leftNumber!}</td>
 					<td>${record.number!}</td>
 					<td>${record.notFinishNumber!}</td>
 					<td>${record.material.unit!}</td>

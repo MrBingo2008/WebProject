@@ -17,7 +17,8 @@ public class Plan extends BaseBill {
 	
 	private Material material;
 	private Double number;
-	
+	private Double packageNumber = 0.00;
+
 	private List<PlanStep> steps;
 	
 	protected List<BatchFlow> flows;
@@ -55,6 +56,15 @@ public class Plan extends BaseBill {
 	
 	public java.lang.Double getNumber () {
 		return number;
+	}
+	
+	//pacakge number
+	public Double getPackageNumber() {
+		return packageNumber;
+	}
+
+	public void setPackageNumber(Double packageNumber) {
+		this.packageNumber = packageNumber;
 	}
 	
 	public Double getCurrentNumber(){
@@ -211,5 +221,12 @@ public class Plan extends BaseBill {
 	
 	public String getDetail(){
 		return String.format("%s:%s:%s", this.getMaterial().getAllSerial(), this.getStatus(), this.getNumber());
+	}
+	
+	public String getStatusShow(){
+		if(this.getStatus() > 0)
+			return String.format("已审核, %f入库", this.getPackageNumber());
+		else
+			return "未审核";
 	}
 }

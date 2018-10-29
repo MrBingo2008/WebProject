@@ -15,6 +15,7 @@
 		
 		<many-to-one name="material" column="material_id" class="com.berp.mrp.entity.Material"/>
 		<property name="number" column="num" type="java.lang.Double" length="10"/>
+		<property name="packageNumber" column="package_number" type="java.lang.Double" length="10"/>
 		
 		<set name="sellRecords" table="plan_record" inverse="false">
 			<key column="plan_id"/>

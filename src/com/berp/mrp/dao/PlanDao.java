@@ -188,15 +188,17 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			Double total = 0.00;
 			PlanStep planStep = plan.getSteps().get(i);
 			PlanStep beanStep = bean.getSteps().get(i);
-			if(beanStep.getStepNumbers()!=null){
-				for(PlanStepNumber number:beanStep.getStepNumbers())
-					total += number.getNumber();
-				planStep.setNumber(total);
-			}else{
-				planStep.setNumber(0.00);
+			if(planStep.getStep().getType() == 0){
+				if(beanStep.getStepNumbers()!=null){
+					for(PlanStepNumber number:beanStep.getStepNumbers())
+						total += number.getNumber();
+					planStep.setNumber(total);
+				}else{
+					planStep.setNumber(0.00);
+				}
+				//一定要planStep.setStepNumbers，要不然如果用plan.setSteps(bean.getSteps)不能删除stepNumber
+				planStep.setStepNumbers(beanStep.getStepNumbers());
 			}
-			//一定要planStep.setStepNumbers，要不然如果用plan.setSteps(bean.getSteps)不能删除stepNumber
-			planStep.setStepNumbers(beanStep.getStepNumbers());
 		}
 		
 		//更新plan in
@@ -210,6 +212,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 				if(matchFlow == null){
 					newFlow.setStatus(1);
 					newFlow.setDirect(1);
+					newFlow.setLeftNumber(newFlow.getNumber());
 					newFlow.setMaterial(plan.getMaterial());
 					newFlow.setType(BatchFlow.Type.planIn.ordinal());
 					materialDao.updateNumber(plan.getMaterial().getId(), newFlow.getNumber(), null, null);
@@ -248,6 +251,7 @@ public class PlanDao extends HibernateBaseDao<Plan, Integer> {
 			plan.setStatus(2);
 		else
 			plan.setStatus(1);
+		plan.setPackageNumber(newPackageTotal);
 		
 		String hql = "delete from BatchFlow bean where bean.plan.id is null and bean.cir.id is null";
 		getSession().createQuery(hql).executeUpdate();
